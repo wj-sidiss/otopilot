@@ -101,7 +101,7 @@ test("nasa: kamu mali, ~orig/~large/~medium yedekleri, telifli aciklama ve kara 
 const bos = () => Promise.resolve();
 test("KaynakYonetici: 429 kaynagi kapatir (nedenle), sayilir, digerleri calisir; rapor kaynak bazli", async () => {
   const mesajlar = [];
-  const y = new kaynak.KaynakYonetici({ getir: {}, anahtarlar: { pexels: "k" }, etkin: { pixabay: false }, log: m => mesajlar.push(m), uyari: m => mesajlar.push("UYARI " + m), bekle: bos, aralik: {},
+  const y = new kaynak.KaynakYonetici({ getir: {}, anahtarlar: { pexels: "k" }, etkin: { pixabay: false, met: false, aic: false, cleveland: false }, log: m => mesajlar.push(m), uyari: m => mesajlar.push("UYARI " + m), bekle: bos, aralik: {},
     istemciler: {
       pexels: async () => { throw new ag.AgHatasi("HTTP 429", 429, { bekleSn: 1800 }); },
       wikimedia: async () => [{ kaynak: "wikimedia", url: "u", baslik: "b", sira: 0 }],
@@ -124,7 +124,7 @@ test("KaynakYonetici: 429 kaynagi kapatir (nedenle), sayilir, digerleri calisir;
 
 test("KaynakYonetici: 3 ardisik hata kaynagi kapatir; basarili cagri sayaci sifirlar; 401 hemen kapatir", async () => {
   let n = 0;
-  const y = new kaynak.KaynakYonetici({ getir: {}, anahtarlar: {}, etkin: { pexels: false, pixabay: false, openverse: false, nasa: false }, bekle: bos, aralik: {}, log: () => {}, uyari: () => {},
+  const y = new kaynak.KaynakYonetici({ getir: {}, anahtarlar: {}, etkin: { pexels: false, pixabay: false, openverse: false, nasa: false, met: false, aic: false, cleveland: false }, bekle: bos, aralik: {}, log: () => {}, uyari: () => {},
     istemciler: { wikimedia: async () => { n++; if (n === 2) return []; throw new ag.AgHatasi("HTTP 502", 502); } } });
   await y.ara("wikimedia", "a", {}); await y.ara("wikimedia", "b", {});     // hata, basari (sayac sifirlanir)
   assert.equal(y.durum.wikimedia.ardisik, 0);
@@ -133,7 +133,7 @@ test("KaynakYonetici: 3 ardisik hata kaynagi kapatir; basarili cagri sayaci sifi
   await y.ara("wikimedia", "e", {});
   assert.equal(y.acikMi("wikimedia"), false);
   assert.match(y.durum.wikimedia.kapaliNeden, /3 ardışık hata/);
-  const y2 = new kaynak.KaynakYonetici({ getir: {}, anahtarlar: { pexels: "yanlis" }, etkin: { pixabay: false, wikimedia: false, openverse: false, nasa: false }, bekle: bos, aralik: {}, log: () => {}, uyari: () => {},
+  const y2 = new kaynak.KaynakYonetici({ getir: {}, anahtarlar: { pexels: "yanlis" }, etkin: { pixabay: false, wikimedia: false, openverse: false, nasa: false, met: false, aic: false, cleveland: false }, bekle: bos, aralik: {}, log: () => {}, uyari: () => {},
     istemciler: { pexels: async () => { throw new ag.AgHatasi("HTTP 401", 401); } } });
   await y2.ara("pexels", "a", {});
   assert.equal(y2.acikMi("pexels"), false);
