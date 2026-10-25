@@ -256,7 +256,7 @@ test(".env hijyeni: .gitignore .env/uretim/panel-ayar.json'u yok sayar; .env.orn
   for (const a of atamalar) assert.ok(a[2].trim() === "" || !gercekGibiMi(a[2].trim()), ".env.ornek icinde gercek gibi deger: " + a[1]);
   for (const ad of ["ANTHROPIC_API_KEY", "ANTHROPIC_MODEL", "VIDIQ_KEY", "PEXELS_KEY", "PIXABAY_KEY", "AZURE_SPEECH_KEY", "AZURE_SPEECH_REGION", "PIPER_YOL", "PIPER_MODEL"])
     assert.match(ornek, new RegExp("^#?\\s*" + ad + "=", "m"), ad + " .env.ornek'te yok");
-  assert.doesNotMatch(ornek, /UNSPLASH_KEY\s*=/, "Unsplash kaldirildi");
+  assert.match(ornek, /^UNSPLASH_KEY=\s*$/m, "Unsplash anahtari bos yer tutucu olmali");
   const git = spawnSync("git", ["ls-files"], { cwd: KOK, encoding: "utf8", windowsHide: true });
   if (git.status === 0 && git.stdout.trim()) {
     const izlenen = git.stdout.split(/\r?\n/).filter(Boolean);

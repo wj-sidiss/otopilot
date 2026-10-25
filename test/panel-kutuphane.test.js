@@ -203,14 +203,14 @@ test("yeni-is: gecersiz girdide KLASOR ACILMAZ", () => {
 
 // ---------------------------------------------------------------- anahtarlar
 test("anahtar: izinli adlar, maskeleme, govde cozumu (yeni ve eski bicim)", () => {
-  assert.ok(!anahtar.IZINLI.includes("UNSPLASH_KEY"));
+  assert.ok(anahtar.IZINLI.includes("UNSPLASH_KEY") && anahtar.IZINLI.includes("SMITHSONIAN_KEY"));
   assert.equal(anahtar.maskele("PEXELS_KEY", "abcdef1234"), "••••••1234");
   assert.equal(anahtar.maskele("ANTHROPIC_MODEL", "claude-x"), "claude-x");
   assert.equal(anahtar.maskele("AZURE_SPEECH_REGION", "westeurope"), "westeurope");
   assert.equal(anahtar.maskele("PEXELS_KEY", ""), "");
   assert.deepEqual(anahtar.govdeCoz({ ayarla: { PEXELS_KEY: " k " }, sil: ["HF_TOKEN"] }), { ayarla: { PEXELS_KEY: "k" }, sil: ["HF_TOKEN"] });
   assert.deepEqual(anahtar.govdeCoz({ PEXELS_KEY: "k", VIDIQ_KEY: "" }), { ayarla: { PEXELS_KEY: "k" }, sil: [] });
-  assert.throws(() => anahtar.govdeCoz({ ayarla: { UNSPLASH_KEY: "x" } }), e => e.kod === "anahtar_adi");
+  assert.throws(() => anahtar.govdeCoz({ ayarla: { BILINMEYEN_KEY: "x" } }), e => e.kod === "anahtar_adi");
   assert.throws(() => anahtar.govdeCoz({ ayarla: { PATH: "x" } }), e => e.kod === "anahtar_adi");
   assert.throws(() => anahtar.govdeCoz({ ayarla: { PEXELS_KEY: "a\nB=c" } }), e => e.kod === "deger");
   assert.throws(() => anahtar.govdeCoz({ sil: ["LD_PRELOAD"] }), e => e.kod === "anahtar_adi");

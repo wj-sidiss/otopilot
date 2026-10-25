@@ -151,27 +151,27 @@ test("/api/ayarlar: birlestirir, dogrular, bilinmeyen anahtari reddeder; bozuk d
 });
 
 test("/api/anahtarlar: maskeli GET, yorumlari koruyan POST, sil, izinsiz ad 400, eski duz bicim", async () => {
-  fs.writeFileSync(ortam.env, "# not\nUNSPLASH_KEY=eski-bos\n");
+  fs.writeFileSync(ortam.env, "# not\nBILINMEYEN_KEY=eski-bos\n");
   let r = await c.post("/api/anahtarlar", { ayarla: { PEXELS_KEY: "pexels-secret-9876", ANTHROPIC_MODEL: "claude-opus-5", AZURE_SPEECH_REGION: "westeurope", AZURE_SPEECH_KEY: "azure-secret-5555" } });
   assert.equal(r.durum, 200); assert.deepEqual(r.json.test, {});
   const g = (await c.get("/api/anahtarlar")).json;
   assert.equal(g.PEXELS_KEY, "••••••9876"); assert.equal(g.AZURE_SPEECH_KEY, "••••••5555");
   assert.equal(g.ANTHROPIC_MODEL, "claude-opus-5"); assert.equal(g.AZURE_SPEECH_REGION, "westeurope");
-  assert.equal(g.VIDIQ_KEY, ""); assert.equal("UNSPLASH_KEY" in g, false);
+  assert.equal(g.VIDIQ_KEY, ""); assert.equal("BILINMEYEN_KEY" in g, false);
   assert.ok(!JSON.stringify(g).includes("pexels-secret"));
   const env = fs.readFileSync(ortam.env, "utf8");
-  assert.match(env, /^# not\nUNSPLASH_KEY=eski-bos\n/); assert.match(env, /PEXELS_KEY=pexels-secret-9876/);
+  assert.match(env, /^# not\nBILINMEYEN_KEY=eski-bos\n/); assert.match(env, /PEXELS_KEY=pexels-secret-9876/);
   r = await c.post("/api/anahtarlar", { sil: ["PEXELS_KEY"] });
   assert.equal(r.durum, 200); assert.equal((await c.get("/api/anahtarlar")).json.PEXELS_KEY, ""); assert.ok(!fs.readFileSync(ortam.env, "utf8").includes("PEXELS_KEY"));
   r = await c.post("/api/anahtarlar", { PIXABAY_KEY: "eski-duz-bicim-1111" });
   assert.equal(r.durum, 200); assert.equal((await c.get("/api/anahtarlar")).json.PIXABAY_KEY, "••••••1111");
-  assert.equal((await c.post("/api/anahtarlar", { ayarla: { UNSPLASH_KEY: "x" } })).json.kod, "anahtar_adi");
+  assert.equal((await c.post("/api/anahtarlar", { ayarla: { BILINMEYEN_KEY: "x" } })).json.kod, "anahtar_adi");
   assert.equal((await c.post("/api/anahtarlar", { ayarla: { PATH: "x" } })).durum, 400);
   assert.equal((await c.post("/api/anahtarlar", { ayarla: { PEXELS_KEY: "a\nVIDIQ_KEY=sizdir" } })).durum, 400);
   assert.ok(!/VIDIQ_KEY=sizdir/.test(fs.readFileSync(ortam.env, "utf8")), "satir enjeksiyonu engellenmeli");
   assert.equal((await c.post("/api/anahtarlar", { ayarla: { PEXELS_KEY: "  " } })).durum, 200, "bos deger: dokunma");
   assert.equal((await c.get("/api/anahtar-test?anahtar=hepsi")).json.claude.ok, false, "ag testi testte kapali");
-  assert.equal((await c.get("/api/anahtar-test?anahtar=UNSPLASH_KEY")).durum, 400);
+  assert.equal((await c.get("/api/anahtar-test?anahtar=BILINMEYEN_KEY")).durum, 400);
 });
 
 test("is listesi/detay/sahneler/gorseller: ses durumu, uyarilar, manifest eslemesi, sayisal siralama (100+ sahne)", async () => {
