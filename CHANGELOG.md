@@ -2,6 +2,12 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.6.0] — 2026-10-25 — vidIQ ile AI klip aracı
+
+### Eklenenler
+- **`node vidiq-klip.js <iş>`:** vidIQ'nun Seedance, Veo, MiniMax, Kling modelleriyle AI video klibi üretir (`Voice/KLIPLER.txt` ya da `--istem`). KREDİ HARCAR, bu yüzden sıkı korumalı: varsayılan **kuru çalışma** (maliyeti yazar, hiçbir şey başlatmaz), harcama için `--onay`; `--butce` zorunlu ve tahmin bütçeyi aşarsa iş hiç başlamaz; çalışırken GERÇEK bakiye farkı izlenir, bütçe dolunca durur; aynı istem ikinci kez üretilmez (`Clips/klipler.json`), yarım kalan iş yeniden başlatılmaz. Varsayılan model en ucuz ailedir (MiniMax-H3 768p). Ücretler üst sınır tahminidir, kesin ücret gönderimde belli olur.
+- Not: canlı üretim yolu henüz gerçek kredi ile denenmedi (testler sahte vidIQ kullanır); ilk kullanımda tek bir 4 sn'lik klipten başla.
+
 ## [1.5.0] — 2026-10-25 — Her makinede çalışan ses, canlı kaynak yoklaması
 
 ### Eklenenler

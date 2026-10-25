@@ -196,7 +196,9 @@ Uçlar `ai-infapp/server.js` ve `ai-infapp/src/studios/*/index.js` içindedir. P
 
 Bu yol **yalnızca kullanıcı isterse** kullanılır (ör. "vidIQ ile üret", "Seedance ile şu promptla klip yap", prompt verip AI video isterse).
 İstemedikçe ücretli yola girme; varsayılan, ücretsiz hattır (bölüm 1). Kullanıcının vidIQ hesabı ve vidIQ MCP bağlantısı ajanında kuruluysa
-(`vidiq_*` araçları görünür) videoyu depodaki hat yerine doğrudan vidIQ'nun araçlarıyla üretebilirsin. **Bu yol bu depoda henüz uçtan uca denenmedi:** ilk kullanımda 2-3 saniyelik tek bir klipten başla.
+(`vidiq_*` araçları görünür) videoyu depodaki hat yerine doğrudan vidIQ'nun araçlarıyla üretebilirsin. **Bu yol bu depoda henüz gerçek kredi ile uçtan uca denenmedi:** ilk kullanımda 4 saniyelik tek bir klipten başla.
+
+**Hazır araç (önerilen):** `node vidiq-klip.js <is> --butce 300` klipleri `Voice/KLIPLER.txt` dosyasından (her satır bir istem, `istem | 6` ile süre) okur, tahmini maliyeti yazar ve BAŞLATMAZ (kuru çalışma). Kullanıcı maliyeti onaylayınca `--onay` ekleyerek çalıştır; `--model`, `--cozunurluk`, `--sure`, `--oran` ayarlanabilir. Bütçe aşılmaz, aynı istem tekrar üretilmez, çıktı `uretim/<is>/Clips/` içine yazılır.
 
 1. `vidiq_balance` (ücretsiz): kalan krediyi kullanıcıya söyle.
 2. Senaryo: kendin yaz (ücretsiz) ya da `vidiq_generate_script` (dakika başına 1 kredi).
