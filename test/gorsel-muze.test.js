@@ -67,3 +67,23 @@ test("unsplash: anahtarsiz bos; Client-ID basligi, atif", async () => {
   const r = await kaynak.unsplashAra("x", {}, { getir: g, anahtar: "K" });
   assert.equal(ust.basliklar.Authorization, "Client-ID K"); assert.match(r[0].atif, /Ayse/);
 });
+
+test("rijks: Linked Art zinciri; yalniz PDM/CC0 iiif gorseli, 1920 genislik, Ingilizce ad", async () => {
+  const nesne = pd => ({ identified_by: [{ type: "Name", content: "De molen", language: [{ id: "http://vocab.getty.edu/aat/300388256" }] }, { type: "Name", content: "The windmill", language: [{ id: "http://vocab.getty.edu/aat/300388277" }] }],
+    subject_of: [{ digitally_carried_by: [{ access_point: [{ id: "https://iiif.micr.io/XWEFp/full/max/0/default.jpg" }], referred_to_by: [{ content: pd }] }] }] });
+  const g = sahte(u => u.includes("/search/") ? { orderedItems: [{ id: "https://id.rijksmuseum.nl/1" }, { id: "https://id.rijksmuseum.nl/2" }] }
+    : u.endsWith("/1") ? nesne("https://creativecommons.org/publicdomain/mark/1.0/") : nesne("https://rightsstatements.org/vocab/InC/1.0/"));
+  const r = await kaynak.rijksAra("windmill", {}, { getir: g });
+  assert.equal(r.length, 1); assert.equal(r[0].baslik, "The windmill");
+  assert.equal(r[0].url, "https://iiif.micr.io/XWEFp/full/1920,/0/default.jpg"); assert.equal(r[0].lisansKodu, "pdm");
+});
+
+test("europeana: anahtarsiz bos; yalniz acik lisans (NC/ND/InC elenir)", async () => {
+  assert.deepEqual(await kaynak.europeanaAra("x", {}, { getir: sahte(() => ({})) }), []);
+  const it = (rights, id) => ({ rights: [rights], edmIsShownBy: ["https://e/" + id + ".jpg"], title: [id], guid: "https://eu/" + id });
+  const g = sahte(() => ({ items: [it("http://creativecommons.org/publicdomain/zero/1.0/", "a"), it("http://creativecommons.org/licenses/by-nc/4.0/", "b"),
+    it("http://rightsstatements.org/vocab/InC/1.0/", "c"), it("http://creativecommons.org/licenses/by/4.0/", "d")] }));
+  const r = await kaynak.europeanaAra("x", {}, { getir: g, anahtar: "K" });
+  assert.deepEqual(r.map(x => x.baslik), ["a", "d"]); assert.equal(r[1].atifGerekli, true);
+  assert.match(g.cagrilar[0], /reusability=open/);
+});

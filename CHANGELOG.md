@@ -2,6 +2,12 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.4.1] — 2026-10-25 — Rijksmuseum ve Europeana
+
+### Eklenenler
+- **Rijksmuseum** (anahtarsız): yalnızca kamu malı / CC0 işaretli görseller, 1920 px IIIF.
+- **Europeana** (`EUROPEANA_KEY`, ücretsiz): yalnızca açık lisanslı eserler (CC0, kamu malı, CC BY, CC BY-SA); NC/ND ve "telif saklı" kayıtlar elenir. Sanat/tarih sahnelerinde devreye girer; panelde Kaynaklar'dan açılıp kapatılır.
+
 ## [1.4.0] — 2026-10-25 — Müze ve fotoğraf kaynakları
 
 ### Eklenenler

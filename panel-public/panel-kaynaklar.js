@@ -15,7 +15,8 @@
       { ad: "PEXELS_KEY", etiket: "Pexels", test: "pexels", not: "pexels.com/api · ücretsiz. Pexels görselleri için kaynak göstermek gerekir; atıf listesi otomatik hazırlanır." },
       { ad: "PIXABAY_KEY", etiket: "Pixabay", test: "pixabay", not: "pixabay.com/api/docs · ücretsiz." },
       { ad: "SMITHSONIAN_KEY", etiket: "Smithsonian (CC0)", not: "api.data.gov/signup · ücretsiz. Yalnız CC0 işaretli eserler alınır; sanat/tarih sahnelerinde kullanılır." },
-      { ad: "UNSPLASH_KEY", etiket: "Unsplash", not: "unsplash.com/developers · ücretsiz (Access Key). Fotoğrafçı atfı açıklamaya eklenir." }] },
+      { ad: "UNSPLASH_KEY", etiket: "Unsplash", not: "unsplash.com/developers · ücretsiz (Access Key). Fotoğrafçı atfı açıklamaya eklenir." },
+      { ad: "EUROPEANA_KEY", etiket: "Europeana", not: "pro.europeana.eu/page/get-api · ücretsiz. Yalnız açık lisanslı (CC0, kamu malı, CC BY, CC BY-SA) eserler alınır." }] },
     { baslik: "Yapay zekâ görsel üretimi", aciklama: "İsteğe bağlı. Anahtarsız kullanımda Pollinations denenir; aşağıdakilerden biri varsa yedek olarak kullanılır.", anahtarlar: [
       { ad: "CF_ACCOUNT_ID", etiket: "Cloudflare hesap kimliği", acik: false, not: "Cloudflare Workers AI (ücretsiz kademe) için; API jetonuyla birlikte." },
       { ad: "CF_API_TOKEN", etiket: "Cloudflare API jetonu" },

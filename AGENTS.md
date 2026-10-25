@@ -47,7 +47,7 @@ Aşağıdakilerin hepsi anahtarsız ve ücretsizdir (hepsi gerçek bir işte den
 | İş | Ücretsiz yol | Not |
 |---|---|---|
 | Senaryo | **sen (ajan) yazarsın** | Claude/vidIQ anahtarı gerekmez |
-| Görsel (video) | Wikimedia Commons, Openverse, NASA; sanat/tarih sahnelerinde ayrıca The Met, Art Institute of Chicago, Cleveland (CC0) | lisans süzülür, atıf `ATIF.txt`'e yazılır |
+| Görsel (video) | Wikimedia Commons, Openverse, NASA; sanat/tarih sahnelerinde ayrıca The Met, Art Institute of Chicago, Cleveland, Rijksmuseum (CC0 / kamu malı) | lisans süzülür, atıf `ATIF.txt`'e yazılır |
 | Ses | Edge sesli okuma (`seslendir.js`) | resmî API değil, ticari hakkı belirsiz; yerel alternatif Piper (internetsiz, `.env.ornek`) |
 | Doğal Türkçe ses (isteğe bağlı) | yerel VoxCPM2: `sesler/voxcpm2/` içindeki 14 hazır yapay ses | ekran kartı ister (NVIDIA ≥4 GB); kurulum aşağıda "Yerel VoxCPM2 sesi" |
 | Kurgu | ffmpeg (yerel) | |
@@ -56,7 +56,7 @@ Aşağıdakilerin hepsi anahtarsız ve ücretsizdir (hepsi gerçek bir işte den
 | Etsy tasarımı, reklam, fotoroman sayfası | yerel vektör, API yok | PNG/PDF için Chrome ya da Edge |
 
 **Ücretsiz kayıtla kaliteyi artıran anahtarlar** (hepsi isteğe bağlı; ücretsiz kademelerin sınırları değişir, kayıt sayfasından doğrula):
-Pexels, Pixabay, Unsplash, Smithsonian (daha isabetli stok görsel: `PEXELS_KEY`, `PIXABAY_KEY`, `UNSPLASH_KEY`, `SMITHSONIAN_KEY`), Cloudflare Workers AI / Together / Hugging Face (AI görsel:
+Pexels, Pixabay, Unsplash, Smithsonian (daha isabetli stok görsel: `PEXELS_KEY`, `PIXABAY_KEY`, `UNSPLASH_KEY`, `SMITHSONIAN_KEY`, `EUROPEANA_KEY`), Cloudflare Workers AI / Together / Hugging Face (AI görsel:
 `CF_ACCOUNT_ID`+`CF_API_TOKEN`, `TOGETHER_KEY`, `HF_TOKEN`), Leonardo (günlük ücretsiz kredi, Ai Infapp sağlayıcısı), vidIQ (ücretsiz planda kredi verir; aşağıdaki "vidIQ ile video üret").
 Claude (Anthropic) anahtarı ücretlidir; gerekmez, çünkü senaryoyu sen yazarsın.
 

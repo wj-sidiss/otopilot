@@ -5,7 +5,7 @@
   "use strict";
   var P = window.P;
   var ui = {}, kirli = false, imza = "";
-  var KAYNAKLAR = [["nasa", "NASA (uzay, kamu malı)"], ["wikimedia", "Wikimedia Commons"], ["openverse", "Openverse"], ["pexels", "Pexels (anahtar ister)"], ["pixabay", "Pixabay (anahtar ister)"], ["met", "The Met (sanat, CC0)"], ["aic", "Art Institute of Chicago (sanat, CC0)"], ["cleveland", "Cleveland Müzesi (sanat, CC0)"], ["smithsonian", "Smithsonian (CC0, anahtar ister)"], ["unsplash", "Unsplash (anahtar ister)"]];
+  var KAYNAKLAR = [["nasa", "NASA (uzay, kamu malı)"], ["wikimedia", "Wikimedia Commons"], ["openverse", "Openverse"], ["pexels", "Pexels (anahtar ister)"], ["pixabay", "Pixabay (anahtar ister)"], ["met", "The Met (sanat, CC0)"], ["aic", "Art Institute of Chicago (sanat, CC0)"], ["cleveland", "Cleveland Müzesi (sanat, CC0)"], ["smithsonian", "Smithsonian (CC0, anahtar ister)"], ["unsplash", "Unsplash (anahtar ister)"], ["rijks", "Rijksmuseum (sanat, kamu malı)"], ["europeana", "Europeana (açık lisans, anahtar ister)"]];
 
   function isaretle(k) { kirli = k; ui.cubuk.hidden = !k; if (k) P.kirli.add("kanal"); else P.kirli.delete("kanal"); }
   var sesDeger = function () { return ui.ses.value === "__diger" ? ui.sesDiger.value.trim() : ui.ses.value; };
