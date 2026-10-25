@@ -59,11 +59,11 @@ Panel her yazmadan önce `konu.json.bak` yedeği alır. Bilinmeyen alanlar korun
 
 | Alan | Tür / aralık | Varsayılan | Açıklama |
 |---|---|---|---|
-| `dil` | iki küçük harf (`en`, `tr`, `es`, `de`, `fr`…) | `ses` önekinden, yoksa `panel-ayar`, yoksa `en` | Senaryo, ses ve görsel arama dili. |
+| `dil` | iki küçük harf (`en`, `tr`, `es`, `de`, `fr`…) | `ses` önekinden (VoxCPM hazır sesinde ses kartının dilinden: `voxcpm:anlatici_en` → `en`), yoksa `panel-ayar`, yoksa `en` | Senaryo, ses ve görsel arama dili. |
 | `altyaziDili` | iki küçük harf | `dil` | `dil`'den farklıysa zincire **altyazı çevirisi** adımı eklenir; çeviri `Voice/ALTYAZI-<XX>.txt` olur. |
-| `ses` | metin | dile göre (`en-US-ChristopherNeural`, `tr-TR-AhmetNeural`, `es-ES-AlvaroNeural`, `de-DE-ConradNeural`, `fr-FR-HenriNeural`) | Ses adı (Edge/Azure ortak katalog). |
+| `ses` | metin | dile göre (`en-US-ChristopherNeural`, `tr-TR-AhmetNeural`, `es-ES-AlvaroNeural`, `de-DE-ConradNeural`, `fr-FR-HenriNeural`) | Ses adı (Edge/Azure ortak katalog) ya da **`voxcpm:<ad>`**: yerel VoxCPM2 motorunun hazır yapay sesi (`voxcpm:tok_anlatici`, `voxcpm:belgesel_hanim`, `voxcpm:anlatici_en` …; liste `sesler/voxcpm2/README.md`, `node seslendir.js --liste-sesler`). `voxcpm:<ad>/<çeşit>`: VoxCPM klasöründe kendi tasarladığın ses. Ad yalnız küçük harf, rakam, alt çizgi; geçersizse çıkış kodu 2. |
 | `sesHizi` | `+7%` / `-10%` (−50..+50) | `+7%` | Konuşma hızı. |
-| `sesMotoru` | `otomatik` `edge` `azure` `piper` | `otomatik` | `otomatik`: Edge dener; bir paragraf başarısız olursa **tüm iş** sıradaki motorla baştan seslendirilir (ses tutarlılığı için karışık motor yok). |
+| `sesMotoru` | `otomatik` `edge` `azure` `piper` `voxcpm` | `otomatik` | `otomatik`: Edge dener; bir paragraf başarısız olursa **tüm iş** sıradaki motorla baştan seslendirilir (ses tutarlılığı için karışık motor yok). `ses` bir `voxcpm:<ad>` ise VoxCPM (kuruluysa, `VOXCPM_KOK`) en başta denenir; kurulu değilse Edge'in o dildeki sesine düşülür. VoxCPM bazı paragrafları bitirip bazılarında düşerse Edge'e geçilmez: biten paragraflar korunur, çıkış kodu 4, aynı komut kaldığı yerden devam eder. `voxcpm`: yalnız VoxCPM; ses adı verilmezse dile göre varsayılan (`tr` → `tok_anlatici`, `en`/`de`/`es`/`fr`/`ja`/`ru`/`zh` → `anlatici_<dil>`); kurulu değilse çıkış kodu 2 ve kurulum adımları. VoxCPM rakam okumaz: Türkçe ve İngilizce sayılar otomatik yazıya çevrilir, diğer dillerde sayıları yazıyla yaz. |
 | `okunus` | `{"GPU":"G P U", …}` ≤200 giriş | — | **Yalnız seslendirme metnine** uygulanan okunuş sözlüğü; altyazı özgün kalır. |
 
 Kelime hızı: `en` 151, `tr` 113 (ölçüldü), diğer diller 140 (tahmin — ses sonrası gerçek süre esas alınır).

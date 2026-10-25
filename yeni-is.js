@@ -4,7 +4,7 @@
 //   node yeni-is.js <is-adi> --baslik "Video basligi" [--nis "konu notu"] [--format long|short|reels|tiktok]
 //                    [--sure 15] [--dil tr] [--ses tr-TR-AhmetNeural] [--sesHizi +7%] [--altyaziDili en]
 //                    [--tur belgesel] [--ton "..."] [--kanal "AD"] [--slogan "..."] [--acilis hizli|sinematik]
-//                    [--kaynak "araştırma metni"] [--katki "kişisel katkı"] [--sesMotoru otomatik|edge|azure|piper]
+//                    [--kaynak "araştırma metni"] [--katki "kişisel katkı"] [--sesMotoru otomatik|edge|azure|piper|voxcpm]
 //                    [--trendRapor trend/<ad>.json]   (trend/viral raporunun hook ve süre kalıpları senaryoya örnek olur)
 //
 // Sonra: node senaryo-claude.js <is-adi>  (ya da senaryo-yaz.js)  ->  gorsel-bul.js  ->  seslendir.js  ->  video-yap.js
@@ -16,7 +16,7 @@ function yardim() {
   console.log("Kullanım: node yeni-is.js <is-adi> --baslik \"Başlık\" [--nis \"not\"] [--format long|short|reels|tiktok] [--sure dakika]");
   console.log("          [--dil tr] [--ses ...] [--sesHizi +7%] [--altyaziDili en] [--tur belgesel] [--ton \"...\"]");
   console.log("          [--kanal \"AD\"] [--slogan \"...\"] [--acilis hizli|sinematik] [--kaynak \"metin\"] [--katki \"metin\"]");
-  console.log("          [--sesMotoru otomatik|edge|azure|piper] [--trendRapor trend/<ad>.json]");
+  console.log("          [--sesMotoru otomatik|edge|azure|piper|voxcpm] [--trendRapor trend/<ad>.json]");
 }
 
 function ana() {

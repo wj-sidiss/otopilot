@@ -1,3 +1,8 @@
 # Windows toplu is dosyalari CRLF satir sonu ister (LF olunca goto/etiketler bazen bulunamaz)
 *.bat text eol=crlf
 *.cmd text eol=crlf
+# Ikili ses dosyalari: satir sonu donusumu ve metin farki uygulanmaz
+*.flac binary
+*.mp3 binary
+# VoxCPM2 hazir sesleri kaynaktan DEGISTIRILMEDEN kopyalandi (ses.json, metin, lisans): satir sonu donusumu yok
+sesler/voxcpm2/** -text

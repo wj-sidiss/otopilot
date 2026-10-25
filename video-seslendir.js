@@ -8,12 +8,12 @@
 //   node video-seslendir.js <video.mp4> <senaryo.txt> [cikti.mp4]
 //
 // Secenekler:
-//   --ses tr-TR-AhmetNeural     erkek (varsayilan) · tr-TR-EmelNeural kadin
+//   --ses tr-TR-AhmetNeural     erkek (varsayilan) · tr-TR-EmelNeural kadin · voxcpm:tok_anlatici (yerel VoxCPM2)
 //   --hiz +0%                   konusma hizi
 //   --orijinal 0.12             orijinal sesin seviyesi (0 = tamamen kapat)
 //   --altyazi 0                 altyaziyi gomme
 //   --punto 22                  altyazi boyutu
-//   --motor otomatik|edge|azure|piper   ses motoru (varsayilan otomatik: Edge, olmazsa yedek)
+//   --motor otomatik|edge|azure|piper|voxcpm   ses motoru (varsayilan otomatik: Edge, olmazsa yedek)
 //   --srt                       altyazi SRT'sini de <cikti>.srt olarak kaydet
 //
 // SENARYO DOSYASI: duz metin, paragraflar bos satirla ayrilir.
@@ -95,10 +95,11 @@ async function ana(argv, secenek) {
     throw new ortak.OrtakHata("orijinal_gecersiz", "--orijinal 0 ile 1 arasında olmalı.", { cikis: 2 });
   if (!Number.isFinite(PUNTO) || PUNTO < 8 || PUNTO > 72)
     throw new ortak.OrtakHata("punto_gecersiz", "--punto 8 ile 72 arasında olmalı.", { cikis: 2 });
-  const dil = /^[a-z]{2}[-_]/i.test(SES) ? SES.slice(0, 2).toLowerCase() : "en";
+  // dil: Edge adinin onekinden (tr-TR-...), VoxCPM sesinin ("voxcpm:<ad>") kartindan
+  const dil = require("./lib/ses-uret.js").sesDili(SES).toLowerCase();
 
   const env = ek.env || ortak.envOku;
-  const sira = M.motorSirasi(MOTOR, env, ek.enjekte);
+  const sira = M.motorSirasi(MOTOR, env, ek.enjekte, SES);
 
   uyari("Bu araç yalnızca KENDİ videoların ya da kullanma iznin olan videolar içindir; başkasının videosunu izinsiz seslendirip yeniden yüklemek telif ihlalidir.");
   uyari("Yapay (sentetik) ses kullanıyorsun; YouTube Studio'da gerekiyorsa 'değiştirilmiş/sentetik içerik' kutusunu işaretle.");

@@ -1,0 +1,9 @@
+# Boş (şablonsuz) issue kapalı: her başlık ya aşağıdaki formlardan biriyle açılır ya da hiç açılmaz.
+blank_issues_enabled: false
+contact_links:
+  - name: "Video siparişi değil / Not a video ordering service"
+    url: https://github.com/wj-sidiss/otopilot#readme
+    about: "TR: Otopilot, kendi bilgisayarında çalıştırdığın açık kaynak bir araçtır; burada video yapılmaz, sipariş alınmaz. Kendi videonu üretmek için README'deki kurulumu izle ve depoyu Claude Code ya da Codex'e ver. EN: Otopilot is an open-source tool you run on your own computer. Videos are not made or ordered here. To make your own video, follow the README setup and give the repo to Claude Code or Codex."
+  - name: "Kurulum ve güncelleme / Setup and update"
+    url: https://github.com/wj-sidiss/otopilot#kurulum
+    about: "TR: Hata bildirmeden önce son sürüme geç: npm run guncelle. Çoğu sorun orada çoktan düzeltilmiştir. EN: Before reporting a bug, update to the latest version with npm run guncelle. Many problems are already fixed there."

@@ -3,9 +3,18 @@
 // KONU BAGIMSIZ gorsel bulucu. Spor, yemek, reklam, uzay — fark etmez.
 //
 // Arama kelimeleri (oncelik sirasiyla):
-//   1. konu.json > sahneKelimeleri[sahne-1]       (elle, en yuksek oncelik; "uret: ..." = AI gorseli)
-//   2. Voice/gorsel-aramalari.json                (senaryo motoru uretir; senaryo degistiyse yok sayilir)
-//   3. otomatik cikarim                           (yalnizca yedek)
+//   0. --sahne N --ara "ifade"                    (elle duzeltme, her seyden once; yalniz o sahne)
+//   1. konu.json > sahneKelimeleri[sahne-1]       (elle; "uret: ..." = AI gorseli)
+//   2. Voice/ARAMALAR.txt                         (senaryoyu yazan ajan: her paragraf icin bir satir INGILIZCE arama,
+//                                                  sira paragraflarla ayni, "|" ile yedekler: "full moon | moon surface";
+//                                                  satir sayisi tutmazsa uyarir, eslesen kadarini kullanir)
+//   3. Voice/gorsel-aramalari.json                (senaryo motoru uretir; senaryo degistiyse yok sayilir)
+//   4. otomatik cikarim                           (yalnizca yedek; dolgu kelimeleri secmez, Turkce somut isimleri ve gok
+//                                                  cisimlerini Ingilizceye cevirir: "Ay'ın" -> Moon)
+// ALAKA SUZGECI: Wikimedia/Openverse/NASA adayinin baslik/aciklama/etiketinde aramanin anlamli kelimelerinden hicbiri
+// yoksa aday ancak alakali aday yetmezse (sahne bos kalmasin) alinir; manifestte "alakaZayif": true + uyari. Ingilizce
+// olmayan aramada (metadata cogunlukla Ingilizce) eslesmemek kanit sayilmaz: sahne gerekirse eskisi gibi hedef adede dek dolar.
+// --sahne N --ara ile elle aranan sahne sonraki calismalarda da kendi aramasini korur (dosyaya donmek: --sahne N).
 //
 // Kaynaklar: Pexels, Pixabay (anahtar varsa), Wikimedia Commons, Openverse, NASA (uzay konularinda ONCELIKLI).
 // LISANS: kanal para kazanabilir; NC (ticari degil) ve ND (turetilemez) lisanslar ELENIR. Sira: CC0/kamu mali/NASA/
@@ -23,6 +32,7 @@
 const ortak = require("./lib/ortak.js");
 const sorgu = require("./lib/gorsel-sorgu.js");
 const akis = require("./lib/gorsel-akis.js");
+const man = require("./lib/gorsel-manifest.js");
 
 // Testler ve diger betikler icin saf fonksiyonlar
 module.exports = {
@@ -33,6 +43,7 @@ module.exports = {
   ifadeCikar: sorgu.ifadeCikar,
   kozmikMi: sorgu.kozmikMi,
   sahnePlan: sorgu.sahnePlan,
+  aramaSatirlariCoz: man.aramaSatirlariCoz,
 };
 
 // Degerli bayrak degersiz yazildiysa (argumanCoz bunu `true` yapar; sondaysa ya da sonraki bir "--bayrak" ise) ya da deger

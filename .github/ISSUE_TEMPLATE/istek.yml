@@ -1,0 +1,51 @@
+name: "Özellik isteği / Feature request"
+description: "Araca yeni bir şey eklenmesini öner / Suggest something new for the tool"
+title: "[İstek] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **TR:** Otopilot bir hizmet değil, kendi bilgisayarında çalıştırdığın bir araçtır. Bu form aracın kendisi için özellik önermek içindir. "Şu konuda video yap" gibi sipariş talepleri burada karşılanmaz: kendi videonu, depoyu Claude Code ya da Codex'e vererek üretirsin (README).
+
+        **EN:** Otopilot is not a service; it is a tool you run on your own computer. This form is for suggesting features of the tool itself. Requests like "make a video about X" cannot be handled here: you make your own video by giving the repo to Claude Code or Codex (README).
+  - type: textarea
+    id: sorun
+    attributes:
+      label: "Hangi sorunu çözmek istiyorsun? / What problem do you want to solve?"
+      description: "Şu an neyi yapamıyorsun ya da zor yapıyorsun? / What can you not do, or find hard to do, today?"
+    validations:
+      required: true
+  - type: textarea
+    id: cozum
+    attributes:
+      label: "Önerdiğin çözüm / Your proposed solution"
+      description: "Nasıl çalışmasını istersin? Örnek komut ya da ekran tarifi yazabilirsin / How should it work? An example command or screen is welcome"
+    validations:
+      required: true
+  - type: textarea
+    id: alternatif
+    attributes:
+      label: "Denediğin alternatifler / Alternatives you considered"
+  - type: dropdown
+    id: alan
+    attributes:
+      label: "Hangi bölüm? / Which area?"
+      options:
+        - "Video hattı (senaryo, görsel, ses, kurgu) / Video pipeline"
+        - "Panel / Panel"
+        - "Video indirici / Video downloader"
+        - "Ai Infapp (AI influencer, Etsy, fotoroman, reklam)"
+        - "Belgeler / Documentation"
+        - "Diğer / Other"
+    validations:
+      required: true
+  - type: checkboxes
+    id: kontrol
+    attributes:
+      label: "Kontrol / Checklist"
+      options:
+        - label: "Bu bir video sipariş talebi değil, aracın kendisi için bir öneri / This is not a video order, it is a suggestion for the tool itself"
+          required: true
+        - label: "Açık issue'larda aynı isteği aradım / I searched the open issues for the same request"
+          required: true

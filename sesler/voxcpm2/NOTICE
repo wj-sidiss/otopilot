@@ -1,0 +1,58 @@
+Otopilot — sesler/voxcpm2 (VoxCPM2 hazır sesleri / bundled VoxCPM2 voices)
+
+Bu klasördeki ses kartları, referans kayıtları, örnek okumalar, örnek metinler ve okunuş sözlüğü şu projeden alındı:
+The voice cards, reference recordings, sample readings, sample texts and the pronunciation dictionary in this folder
+come from:
+
+  voxcpm2-turkce-ses-tasarimi
+  https://github.com/alexturkey/voxcpm2-turkce-ses-tasarimi  (commit 1b9ec4c)
+  Copyright 2026 Ali Haydar Ozturk
+  Licensed under the Apache License, Version 2.0 (see LICENSE in this folder).
+
+Kaynak projenin NOTICE dosyası / NOTICE file of the source project:
+
+  voxcpm2-turkce-ses-tasarimi
+
+  Copyright 2026 Ali Haydar Ozturk
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+Kopyalanan dosyalar DEĞİŞTİRİLMEDEN (bayt bayt aynı) kopyalandı:
+The following files were copied UNCHANGED (byte for byte):
+  hazir_sesler/<ad>/ses.json, referans.flac, ornek_okuma.mp3, ornek_okuma_metni.txt  ->  sesler/voxcpm2/<ad>/
+  (14 ses / voices: anlatici_de, anlatici_en, anlatici_es, anlatici_fr, anlatici_ja, anlatici_ru, anlatici_zh,
+   belgesel_hanim, cekici_spiker, gizemli_bilge, haber_spikeri, masal_cadisi, tok_anlatici, yasli_bilge)
+  ayarlar/okunus_sozlugu.tsv  ->  sesler/voxcpm2/okunus_sozlugu.tsv
+  LICENSE  ->  sesler/voxcpm2/LICENSE
+Bu klasördeki README.md ve bu NOTICE dosyası Otopilot tarafından yazıldı.
+README.md and this NOTICE file in this folder were written for Otopilot.
+
+Sesler yapaydır: VoxCPM2 modeliyle yalnızca metin tariflerinden tasarlandı (tarifler her ses.json dosyasında);
+hiçbir gerçek kişinin kaydı kullanılmadı ya da klonlanmadı. Bu sesler gerçek bir kişi değildir ve gerçek bir kişiyi
+temsil etmez. Yayımlanan içerikte yapay zekâ ile üretildiği belirtilmelidir.
+The voices are synthetic: designed with VoxCPM2 from text descriptions only (the prompts are in each ses.json); no
+recording of a real person was used or cloned. They are not real people and do not represent any real person.
+Published content made with them should be labelled as AI-generated.
+
+Üretimde kullanılan bileşenler (bu depoda YOKTUR; kullanıcının bilgisayarına ayrıca kurulur):
+Components used to create and read these voices (NOT included in this repository; installed separately by the user):
+  VoxCPM2 (OpenBMB / ModelBest) — TTS model, Apache-2.0 — https://github.com/OpenBMB/VoxCPM
+  VoxCPM2 GGUF conversion (audio.cpp project) — https://huggingface.co/audio-cpp/audio.cpp-gguf
+  audio.cpp (ShugoAI LLC) — inference engine, Apache-2.0 — https://github.com/0xShug0/audio.cpp
+VoxCPM2 model kartı: VoxCPM'i taklit, dolandırıcılık ya da dezenformasyon için kullanmak kesinlikle yasaktır ve yapay
+zekâ ile üretilen içerik açıkça etiketlenmelidir.
+VoxCPM2 model card: using VoxCPM for impersonation, fraud or disinformation is strictly forbidden, and AI-generated
+content should be clearly labeled.
+
+Otopilot; OpenBMB, ModelBest, audio.cpp projesi ve kaynak deponun yazarıyla bağlantılı değildir.
+Otopilot is an independent project: it has no connection with OpenBMB, ModelBest, the audio.cpp project or the author of the source repository.

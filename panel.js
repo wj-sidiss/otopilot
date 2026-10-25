@@ -371,15 +371,18 @@ GET["/api/performans"] = async () => yayin.performansOzeti();
 POST["/api/ses-testi"] = async c => {
   const ayar = ortak.ayarOku();
   const motor = c.b.motor || "otomatik";
-  if (!["otomatik", "edge", "azure", "piper"].includes(motor)) throw new HttpHata(400, "motor", "Motor otomatik, edge, azure ya da piper olmalı.");
+  if (!["otomatik", "edge", "azure", "piper", "voxcpm"].includes(motor)) throw new HttpHata(400, "motor", "Motor otomatik, edge, azure, piper ya da voxcpm olmalı.");
   const dil = c.b.dil || ayar.dil || "en";
   if (typeof dil !== "string" || !/^[a-z]{2}$/.test(dil)) throw new HttpHata(400, "dil", "Dil iki küçük harf olmalı.");
   const ses = c.b.ses || (dil === ayar.dil ? ayar.ses : ortak.varsayilanSes(dil));
-  if (typeof ses !== "string" || !/^[A-Za-z0-9._-]{1,80}$/.test(ses)) throw new HttpHata(400, "ses", "Ses adı geçersiz.");
+  // Edge/Azure/Piper ses adı ya da yerel VoxCPM2 sesi: voxcpm:<ad> / voxcpm:<ad>/<çeşit>
+  if (typeof ses !== "string" || !(/^[A-Za-z0-9._-]{1,80}$/.test(ses) || /^voxcpm:[a-z0-9_]{1,60}(\/\d{1,3})?$/.test(ses))) throw new HttpHata(400, "ses", "Ses adı geçersiz.");
   const id = crypto.randomBytes(12).toString("hex");
   fs.mkdirSync(SESTESTI_DIZIN, { recursive: true });
   const cikti = path.join(SESTESTI_DIZIN, id + ".mp3");
-  const r = await kisaCalistir("seslendir.js", ["--test", cikti, "--ses", ses, "--motor", motor, "--metin", ORNEK_METIN[dil] || ORNEK_METIN.en], 70000);
+  // VoxCPM2 her çağrıda modeli ekran kartına yükler (10-20 sn); kısa bir örnek için bile daha uzun süre tanınır
+  const voxcpm = motor === "voxcpm" || ses.startsWith("voxcpm:");
+  const r = await kisaCalistir("seslendir.js", ["--test", cikti, "--ses", ses, "--motor", motor, "--metin", ORNEK_METIN[dil] || ORNEK_METIN.en], voxcpm ? 240000 : 70000);
   if (r.kod !== 0 || !fs.existsSync(cikti)) {
     try { fs.unlinkSync(cikti); } catch (e) {}
     const c2 = ortak.hataCevir(r.cikti);

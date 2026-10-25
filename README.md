@@ -2,6 +2,8 @@
 
 > **Claude Code ya da Codex ile kullanacaksan:** depoyu klasör olarak aç, ajanı başlat, isteğini yaz ("şu konuda 40 saniyelik Shorts yap", "bir fitness influencer yarat ve 3 foto üret"). [`AGENTS.md`](AGENTS.md) (Claude Code için `CLAUDE.md` üzerinden) kendiliğinden okunur; ajan kurulumu, komutları ve akışı oradan bilir, sana tekrar sormaz.
 
+> **Bu bir hizmet değil / This is not a service.** Otopilot, kendi bilgisayarında çalıştırdığın açık kaynaklı bir araçtır; burada video yapılmaz ve sipariş alınmaz (issue'lar yalnızca hata bildirimi ve özellik isteği içindir). Kendi videonu üretmek için depoyu Claude Code ya da Codex'e ver. / Otopilot is an open-source tool you run on your own computer. Videos are not made or ordered here (issues are for bug reports and feature requests only). To make your own video, give the repo to Claude Code or Codex.
+
 Bir konu yaz, başlık yaz, **ÜRET**'e bas. Senaryoyu yazar, görselleri bulur, seslendirir, videoyu kurar. Bitmiş MP4, altyazı, kapak resmi ve YouTube yayın paketi çıkar.
 
 Kurgu programı yok. Her şey kendi bilgisayarında çalışır (panel yalnızca `localhost`'ta açılır). Ücretli adımlar (senaryo yazımı) için **Claude (Anthropic) veya vidIQ anahtarı gerekir** — ya da senaryoyu kendin yazıp panele yapıştırırsın; geri kalan her şey anahtarsız çalışır.
@@ -12,7 +14,7 @@ konu + başlık (+ isteğe bağlı: kaynak metni, kişisel katkın)
 senaryo yazımı      → Claude (Anthropic) ya da vidIQ   ·  ya da kendin yaz
    ↓  ⏸ onay durağı: senaryoyu oku, düzenle, ONAYLA (varsayılan açık)
 görsel bulma        → Pexels · Pixabay · Wikimedia · Openverse · NASA   (isteğe bağlı AI görsel)
-seslendirme         → Edge sesli okuma (ücretsiz, resmî değil) · Azure Speech · Piper (yerel)
+seslendirme         → Edge sesli okuma (ücretsiz, resmî değil) · Azure Speech · Piper (yerel) · VoxCPM2 (yerel, 14 hazır doğal ses)
 video kurulumu      → ffmpeg
    ↓
 bitmiş MP4 + SRT + kapak (JPG) + YAYIN-PAKETI.md (başlık, açıklama, bölümler, atıflar)
@@ -57,6 +59,8 @@ ffmpeg gerekir: `brew install ffmpeg` veya `sudo apt install ffmpeg`.
 
 Paketler `package-lock.json` ile sabitlenmiştir (`npm ci` herkese aynı sürümleri kurar).
 
+**Güncelleme / Update:** `npm run guncelle` (git ile klonladıysan; yerel değişikliğin varsa durur, hiçbir şeyi silmez, paket listesi değiştiyse paketleri yeniden kurar). Ajan kullanıyorsan ona "Otopilot'u güncelle" demen yeter. ZIP ile indirdiysen yeni ZIP'i indirip `uretim/` klasörünü ve `.env` dosyasını taşı.
+
 ## Eğitim PDF'leri
 
 `egitim/` klasöründe dört eğitim PDF'i var: YouTube içerik üretimi (seri 1), Instagram büyüme yol haritası, TikTok algoritması rehberi ve büyüme haritası, TikTok AI influencer rehberi. Panel terminalde ilk kez açılınca bunları masaüstünde **Otopilot Eğitim** klasörüne kendisi kopyalar (var olan dosyaya dokunmaz). Elle: `npm run egitim`.
@@ -73,6 +77,7 @@ Panelin **Kaynaklar** sekmesinden girilir (kaydedince otomatik test edilir, sili
 | `CF_ACCOUNT_ID`+`CF_API_TOKEN`, `TOGETHER_KEY`, `HF_TOKEN` | AI görsel üretimi (hiçbiri yoksa Pollinations) | hayır |
 | `AZURE_SPEECH_KEY`+`AZURE_SPEECH_REGION` | resmî Azure Speech sesi (Edge sesi başarısız olursa yedek) | hayır |
 | `PIPER_YOL`+`PIPER_MODEL` | yerel, internetsiz ses (Piper) | hayır |
+| `VOXCPM_KOK` (isteğe bağlı `VOXCPM_PYTHON`) | yerel VoxCPM2 sesi: `sesler/voxcpm2/` içindeki 14 hazır yapay ses (7 Türkçe + İngilizce, Almanca, İspanyolca, Fransızca, Japonca, Rusça, Çince anlatıcı). NVIDIA ekran kartı (≥4 GB) ister; kurulum ve lisans: [`sesler/voxcpm2/README.md`](sesler/voxcpm2/README.md) | hayır |
 
 **Edge sesli okuma hakkında:** varsayılan ses motoru Microsoft Edge tarayıcısının sesli okuma servisidir. Anahtar istemez ve ücretsizdir ama **resmî, sözleşmeli bir API değildir**: servis değişirse çalışmayabilir ve ticari kullanım hakkı belirsizdir. Gelir getiren kanal için resmî Azure Speech'i tanımla; `otomatik` motor modunda Edge hata verirse iş yedek motorla **baştan** seslendirilir.
 
@@ -88,6 +93,7 @@ Aşağıdakiler `.env` dosyasına (ya da ortam değişkeni olarak) yazılabilir:
 |---|---|
 | `VIDEO_KODEK=cpu` | GPU kodlayıcıyı hiç deneme, x264 kullan (sürücü sorunlarında) |
 | `RENDER_ONCELIK=normal` | Render sürecini normal öncelikle çalıştır (varsayılan: bilgisayar kasmasın diye düşük öncelik) |
+| `RENDER_DUSUK_BELLEK=1` | Render'ı baştan düşük bellek moduyla kur: klipler tek tek, az iş parçacığı, kısa x264 ön-bakışı; daha yavaş, ama çözünürlük, kare hızı ve kalite aynı. `2` = en az bellek, `0` = kendiliğinden açmayı kapat. Boş bırakılırsa boş bellek 3 GB'ın altındayken kendiliğinden açılır; bellek hatasında adım bu modla bir kez yeniden denenir |
 | `FFMPEG_YOLU`, `FFPROBE_YOLU` | ffmpeg/ffprobe'un tam yolu (otomatik bulunamazsa) |
 | `GORSEL_LIMIT_BEKLE_SN=3600` | Pexels/Pixabay istek sınırına (429) takılınca kaynağı kapatmak yerine en çok bu kadar saniye bekle. Panel kuyruğu ve `toplu-uret*.cjs` gece çalışırken bunu kendiliğinden kullanır |
 | `GORSEL_YEREL_AG_IZIN=1` | Görsel/API adresi "yerel ağ adresine çözülen ad" diye reddediliyorsa (kurumsal DNS, bazı VPN'ler) ad çözümleme denetimini kapatır. Clash/Surge gibi proxy "fake-ip" modu zaten sorun çıkarmaz; doğrudan IP olarak yazılan yerel adresler (127.0.0.1, 192.168.x.x…) yine reddedilir |
@@ -178,7 +184,7 @@ Manifest bir iş dizisidir ya da `{ "kanal": "AD", "varsayilan": { "dil": "tr" }
 
 ## Görseller sahneyle nasıl eşlenir
 
-`gorsel-bul.js` senaryoyu **sahnelere** böler (her paragraf tam bir sahnede), her sahne için `Visuals/NNN-kelime/` klasörü açar ve `Visuals/manifest.json` yazar (hangi görsel hangi paragrafa, kaynak, lisans, atıf). Video kurulurken her sahnenin süresi **o paragrafların gerçek ses aralığı**dır: anlatıcı Einstein'dan söz ederken Einstein'ın fotoğrafı akar. Aramalar şu sırayla seçilir: `konu.json › sahneKelimeleri` (elle; `"uret: …"` = AI görseli ister) > senaryo motorunun yazdığı `Voice/gorsel-aramalari.json` > otomatik çıkarım.
+`gorsel-bul.js` senaryoyu **sahnelere** böler (her paragraf tam bir sahnede), her sahne için `Visuals/NNN-kelime/` klasörü açar ve `Visuals/manifest.json` yazar (hangi görsel hangi paragrafa, kaynak, lisans, atıf). Video kurulurken her sahnenin süresi **o paragrafların gerçek ses aralığı**dır: anlatıcı Einstein'dan söz ederken Einstein'ın fotoğrafı akar. Aramalar şu sırayla seçilir: `--sahne N --ara` (elle düzeltme) > `konu.json › sahneKelimeleri` (elle; `"uret: …"` = AI görseli ister) > `Voice/ARAMALAR.txt` (her paragraf için bir satır İngilizce, somut arama; ajan senaryoyla birlikte yazar, `|` ile yedek arama) > senaryo motorunun yazdığı `Voice/gorsel-aramalari.json` > otomatik çıkarım (dolgu kelimeler — "aynı", "hep", "neden" gibi — arama terimi seçilmez). Başlığı/açıklaması aramayla hiç eşleşmeyen görseller elenir; sahne boş kalmasın diye yine alınırsa manifestte `"alakaZayif": true` olarak işaretlenir ve uyarıda listelenir.
 
 - **Kendi görselini eklemek** için dosyayı sahnenin klasörüne at (`Visuals/003-einstein/`); manifestte olmasa da videoya girer (sahnenin başına konur).
 - **Formül/prompt kartları** `hedef` verilirse o sahne klasörüne, verilmezse `Visuals/14-formuller` / `Visuals/90-promptlar` klasörüne yazılır; sonuncular sahne numarası gibi okunup en yakın sahneye eklenir (video kurulumu uyarır).

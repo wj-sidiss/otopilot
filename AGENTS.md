@@ -34,6 +34,11 @@ bu konularda soru gelirse PDF'lerin masaüstünde olduğunu hatırlat.
 - Her şey yalnızca `127.0.0.1`'de çalışır. Dışarı açma.
 - Geçici dosyaları (istek gövdeleri vb.) depo köküne değil sistem geçici klasörüne yaz.
 
+**Güncelleme:** kullanıcı "Otopilot'u güncelle" derse `npm run guncelle` çalıştır. Komut yerel değişiklik varsa durur ve hiçbir şey
+silmez; mesajını kullanıcıya aynen aktar, `git stash` ya da commit önerisini kullanıcı onaylamadan UYGULAMA. Çıkış kodları: `0` tamam ya da
+zaten güncel, `2` elle müdahale gerek (ZIP ile indirilmiş, git yok, yerel değişiklik, dal ayrışmış), `3` internet/GitHub (30 sn bekleyip en çok
+2 kez tekrar dene), `5` disk. Sonunda sürümü ve CHANGELOG başlığını kullanıcıya söyle; panel açıksa yeniden açmasını hatırlat.
+
 ## Para vermeden başla (anahtar gerekmez) ve anahtarlar
 
 Kullanıcının hiç parası/anahtarı yoksa da bu depo çalışır; en azından ilk videoyu ve ilk karakteri üretebilirsin.
@@ -44,6 +49,7 @@ Aşağıdakilerin hepsi anahtarsız ve ücretsizdir (hepsi gerçek bir işte den
 | Senaryo | **sen (ajan) yazarsın** | Claude/vidIQ anahtarı gerekmez |
 | Görsel (video) | Wikimedia Commons, Openverse, NASA | lisans süzülür, atıf `ATIF.txt`'e yazılır |
 | Ses | Edge sesli okuma (`seslendir.js`) | resmî API değil, ticari hakkı belirsiz; yerel alternatif Piper (internetsiz, `.env.ornek`) |
+| Doğal Türkçe ses (isteğe bağlı) | yerel VoxCPM2: `sesler/voxcpm2/` içindeki 14 hazır yapay ses | ekran kartı ister (NVIDIA ≥4 GB); kurulum aşağıda "Yerel VoxCPM2 sesi" |
 | Kurgu | ffmpeg (yerel) | |
 | AI influencer görseli | Pollinations (Ai Infapp varsayılanı) | küçük, filigranlı, ara sıra yavaş/`402`; tam ücretsiz ve sınırsız seçenek: kendi bilgisayarında AUTOMATIC1111/Forge ya da ComfyUI (GPU ister) |
 | Karakter, sahne, prompt, paylaşım metni | yerel, API yok | |
@@ -82,14 +88,36 @@ node yeni-is.js <is> --baslik "Başlık" --dil en --format short
   İlk cümle kanca olsun, son cümle takip çağrısı. Doğru bilgi yaz; emin olmadığın rakam/iddiayı yazma.
 - (Claude/vidIQ anahtarı varsa alternatif: `node senaryo-claude.js <is>`; ücretlidir, önce maliyeti söyle.)
 
+**Görsel aramalarını da SEN yaz:** senaryodan hemen sonra, `gorsel-bul.js`'ten önce `uretim/<is>/Voice/ARAMALAR.txt` dosyasını oluştur.
+- Senaryodaki her paragraf için bir satır yaz, sıra paragraflarla aynı olsun. Boş satırlar ve `#` ile başlayan satırlar sayılmaz. Dosyayı UTF-8 yaz.
+- Her satır **İngilizce, somut, görselleştirilebilir** bir arama olsun. Video Türkçe olsa da İngilizce yaz: kaynakların başlıkları İngilizcedir
+  (Türkçe "Dünya" araması Dünya Kupası bileti getirir).
+- Soyut ya da dolgu kelime yazma ("why", "same", "secret" olmaz). Nesne, yer, kişi ya da olay yaz: `full moon night sky`, `Galata Tower Istanbul`.
+- `|` ile 1-2 yedek arama ekleyebilirsin. Örnek: `full moon night sky | moon surface closeup` / `Earth and Moon from space` / `far side of the Moon | Luna 3 probe`.
+- Öncelik: `--sahne N --ara` > konu.json `sahneKelimeleri` > `ARAMALAR.txt` > otomatik. Satır sayısı tutmazsa ya da satır Türkçe görünürse uyarı verilir.
+
 ```bash
 node gorsel-bul.js <is>       # ücretsiz kaynaklardan (Wikimedia, Openverse, NASA…) görsel bulur, lisans süzer
 node seslendir.js <is>        # ücretsiz Edge sesi, paragraf paragraf (+ zamanlama)
 node video-yap.js <is>        # kurgu + altyazı + kapak + yayın paketi
 ```
 
-**Görselleri KONTROL ET** (atlama): `uretim/<is>/Visuals/manifest.json` her sahne için aranan ifadeyi (`aramalar`) ve
-paragrafı (`paragraflar`) gösterir. Otomatik arama bazen alakasız çıkar (ör. "Billions" kelimesinden dizi karesi).
+**Yerel VoxCPM2 sesi (isteğe bağlı, ücretsiz, ekran kartı ister).** `sesler/voxcpm2/` içinde 14 hazır yapay ses var. 7'si Türkçe:
+`tok_anlatici`, `belgesel_hanim`, `cekici_spiker`, `gizemli_bilge`, `haber_spikeri`, `masal_cadisi`, `yasli_bilge`. 7'si yerli anlatıcı:
+`anlatici_en`, `anlatici_de`, `anlatici_es`, `anlatici_fr`, `anlatici_ja`, `anlatici_ru`, `anlatici_zh`. Lisans Apache-2.0
+(kaynak: https://github.com/alexturkey/voxcpm2-turkce-ses-tasarimi). Motor bu depoda yok; bir kez ve **kullanıcı onayıyla** kurulur
+(NVIDIA ekran kartı ≥4 GB, 64-bit Python 3.10–3.13, ~10 dk, ~3,7 GB indirme):
+`git clone https://github.com/alexturkey/voxcpm2-turkce-ses-tasarimi.git C:\voxcpm2`, o klasörde
+`powershell -NoProfile -ExecutionPolicy Bypass -File scripts\kur.ps1 -Kok C:\vox` (son satır `KURULUM_OK` olmalı), sonra `.env` dosyasına
+`VOXCPM_KOK=C:\voxcpm2` (klonlanan klasör; `-Kok` klasörü değil). Kontrol: `node seslendir.js --liste-sesler`.
+Kullanım: `node seslendir.js <is> --ses voxcpm:tok_anlatici`, `--motor voxcpm` (dile göre varsayılan ses) ya da `konu.json` içinde
+`"ses": "voxcpm:anlatici_en"`. Kurulu değilken `--motor voxcpm` çıkış `2` ve kurulum adımlarını verir; `otomatik` motor Edge'e düşer.
+Yavaştır (eski kartta 1 sn ses ≈ 2 sn) ve aynı anda tek iş çalıştırır. Türkçe ve İngilizce sayılar yazıya çevrilir; diğer dillerde sayıları
+yazıyla yaz. Sesler yapaydır, gerçek kişi taklidi değildir; yayında yapay zekâ sesi olduğunu belirtmesini öner.
+
+**Görselleri KONTROL ET** (atlama): `uretim/<is>/Visuals/manifest.json` her sahne için aranan ifadeyi (`aramalar`), aramanın
+nereden geldiğini (`aramaKaynagi`) ve paragrafı (`paragraflar`) gösterir. `"alakaZayif": true` işaretli görseller, başlığı aramayla eşleşmediği
+hâlde sahne boş kalmasın diye alınmıştır. Otomatik arama bazen alakasız çıkar (ör. "Billions" kelimesinden dizi karesi).
 Zayıf sahneyi düzelt, sonra `video-yap.js` çalıştır:
 
 ```bash
@@ -100,7 +128,10 @@ Görüntü okuyabiliyorsan `Visuals/NNN-*/01.jpg` dosyalarına bak. Tüm videoyu
 
 **Hata olursa** (mesaj Türkçe ve çözümü söyler): çıkış `3` (ağ/servis) → 30 sn bekleyip aynı komutu en çok 2 kez yeniden çalış, ilerleme korunur;
 `4` (yetersiz sonuç) → mesajdaki çözümü uygula (görsel azsa `--sahne N --ara`; paragraf düştüyse `seslendir.js`'i yeniden çalıştır);
-`2` (girdi/ayar) → dosyayı düzelt; `5` disk; `6` aynı iş zaten çalışıyor; `7` maliyet sınırı. Tam liste: `README.md` "Panelsiz kullanım".
+`2` (girdi/ayar) → dosyayı düzelt; `5` disk ya da bellek; `6` aynı iş zaten çalışıyor; `7` maliyet sınırı. Tam liste: `README.md` "Panelsiz kullanım".
+Bellek hatasında (`bellek_yetersiz`, "Cannot allocate memory") render o adımı düşük bellek moduyla zaten bir kez kendiliğinden denemiştir:
+kullanıcıya açık programları kapatmasını söyle, `.env`'e `RENDER_DUSUK_BELLEK=1` (yine olmazsa `2`) yaz ve aynı `video-yap.js` komutunu
+tekrar çalıştır; biten ara dosyalar korunur.
 Ayar alanlarının tam listesi: `KONU-JSON.md` (geçiş, müzik, altyazı biçimi, ses vb. `uretim/<is>/konu.json`).
 
 Seslendirmede `403` alırsan: `npm install msedge-tts@latest --ignore-scripts --no-save` çalıştır (Microsoft'un ücretsiz sesi

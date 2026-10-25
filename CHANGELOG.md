@@ -2,6 +2,20 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.3.0] — 2026-10-25 — Doğal sesler, isabetli görsel, zayıf bilgisayar
+
+### Eklenenler
+- **14 hazır yapay ses (VoxCPM2, yerel).** `sesler/voxcpm2/`: 7 Türkçe ses (`tok_anlatici`, `belgesel_hanim`, `cekici_spiker`, `gizemli_bilge`, `haber_spikeri`, `masal_cadisi`, `yasli_bilge`) ve 7 yerli anlatıcı (`anlatici_en/de/es/fr/ja/ru/zh`). Kaynak: [alexturkey/voxcpm2-turkce-ses-tasarimi](https://github.com/alexturkey/voxcpm2-turkce-ses-tasarimi) (Apache-2.0; dosyalar değiştirilmeden kopyalandı, `LICENSE` ve `NOTICE` yanında). Sesler metin tarifinden tasarlanmış yapay seslerdir, gerçek kişi değildir.
+- **Yeni ses motoru `voxcpm`** (`lib/ses-motor-voxcpm.js`): kullanıcının bilgisayarında kurulu VoxCPM2'yi çağırır (`VOXCPM_KOK`). `--ses voxcpm:<ad>`, `--motor voxcpm` (dile göre varsayılan ses) ya da `konu.json › "ses": "voxcpm:<ad>"`. Rakamlar yazıya çevrilir (Türkçe ve İngilizce), cümle zamanlarından altyazı oturur, aynı anda tek GPU işi çalışır. Kurulu değilken açık istekte çıkış 2 ve kurulum adımları; `otomatik` motorda Edge'e düşülür. `node seslendir.js --liste-sesler` sesleri ve kurulum durumunu gösterir. Panelin ses testi `voxcpm:` seslerini kabul eder.
+- **`Voice/ARAMALAR.txt`:** ajan her paragraf için İngilizce, somut görsel araması yazar; `gorsel-bul.js` bunları kullanır (`|` ile yedek arama). Manifestte `aramaKaynagi` alanı.
+- **`npm run guncelle`** (`lib/guncelle.js`): tek komutla güvenli güncelleme (`git pull --ff-only`; yerel değişiklik varsa durur, hiçbir şey silmez; paket listesi değiştiyse `npm ci`). ZIP ile indirilmiş kopyada yönerge verir.
+- **GitHub şablonları:** iki dilli hata bildirimi ve özellik isteği formu, PR kontrol listesi; boş issue kapalı. "Bu bir video sipariş servisi değil" açıklaması README'nin başında.
+- `RENDER_DUSUK_BELLEK` (`.env`): render'ı baştan düşük bellek moduyla kurar.
+
+### Düzeltilenler
+- **Görsel arama isabeti.** Türkçe dolgu kelimeler ("aynı", "hep", "neden"…) artık sahne terimi ya da konu çapası seçilmiyor; Türkçe terimler küçük bir sözlükle İngilizceye çevriliyor; başlığı/açıklaması aramayla hiç eşleşmeyen görseller eleniyor (sahne boş kalmasın diye alınanlar `alakaZayif` ile işaretlenip uyarılıyor). Örnek: "Ay neden hep aynı yüzünü gösterir?" Shorts'unda Ay yerine adam portresi, nehir ve Dünya Kupası bileti geliyordu.
+- **Düşük bellekte render çökmesi.** ffmpeg/x264 bellek hatasında ("Cannot allocate memory", "malloc failed") adım düşük bellek profiliyle (az iş parçacığı, kısa ön-bakış, tek tek klip) kendiliğinden bir kez yeniden deneniyor; boş bellek 3 GB'ın altındaysa baştan bu profille başlanıyor. Çözünürlük, kare hızı ve kalite değişmez. İkinci denemede de düşerse çıkış 5 (`bellek_yetersiz`) ve çözüm.
+
 ## [1.2.0] — 2026-10-15 — Ai Infapp birleştirildi
 
 Ayrı bir proje olan **Ai Infapp** (AI influencer, fotoroman, Etsy baskı tasarımı ve reklam stüdyosu; sıfır bağımlılıklı Node sunucusu) `ai-infapp/` klasörü olarak bu depoya alındı: tek depo, tek ürün. `video-indirici/` ile aynı kalıptır: kendi sunucusu olan bir alt klasör, panelden düğmeyle başlar. Masaüstü uygulaması yoktur; her şey yerelde, `127.0.0.1` üzerinde çalışan web paneli olarak kalır. Yeni npm bağımlılığı eklenmedi.
