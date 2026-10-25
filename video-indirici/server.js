@@ -1073,6 +1073,13 @@ async function istekIsle(req, res) {
     });
     return res.end(html);
   }
+  // arayuz dili: /dil.js ve /diller/<kod>.js (lib/dil-yay.js uretir)
+  if (yontem === 'GET' && (yol === '/dil.js' || /^\/diller\/[a-z]{2}\.js$/.test(yol))) {
+    let dosya;
+    try { dosya = fs.readFileSync(path.join(KOK, 'public', yol.slice(1))); } catch (e) { return hataYaz(res, 404, 'yok', 'Bulunamadı.'); }
+    res.writeHead(200, { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'no-cache' });
+    return res.end(dosya);
+  }
   if (yontem === 'GET' && STATIK[yol]) {
     const [dosya, tip] = STATIK[yol];
     res.writeHead(200, { 'Content-Type': tip, 'Cache-Control': 'no-cache' });

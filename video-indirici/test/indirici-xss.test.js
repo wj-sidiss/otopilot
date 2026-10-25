@@ -26,9 +26,11 @@ test('index.html: satır içi script ve olay özniteliği yok; script yalnız /u
   const html = oku('index.html');
   assert.ok(!/\son[a-z]+\s*=/i.test(html.replace(/<svg[\s\S]*?<\/svg>/g, '')), 'satır içi olay özniteliği (onclick=...) olmamalı');
   const scriptler = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
-  assert.equal(scriptler.length, 1);
+  // yalniz iki DIS betik: uygulama ve arayuz dili (/dil.js); ikisi de ayni kaynaktan, govdesiz
+  assert.equal(scriptler.length, 2);
   assert.match(scriptler[0][1], /src="\/uygulama\.js"/);
-  assert.equal(scriptler[0][2].trim(), '', 'satır içi script gövdesi olmamalı');
+  assert.match(scriptler[1][1], /src="\/dil\.js"/);
+  for (const sc of scriptler) assert.equal(sc[2].trim(), '', 'satır içi script gövdesi olmamalı');
   assert.ok(!/javascript:/i.test(html));
   assert.ok(!/<(iframe|object|embed|base)\b/i.test(html));
   assert.ok(html.includes('__PANEL_JETON__'), 'sunucu jetonu bu yer tutucuya enjekte eder');

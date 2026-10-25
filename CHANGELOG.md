@@ -2,6 +2,14 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.8.0] — 2026-10-25 — 15 dilde arayüz
+
+### Eklenenler
+- **Arayüz 15 dilde:** Türkçe, İngilizce, İspanyolca, Almanca, Fransızca, İtalyanca, Portekizce, Rusça, Felemenkçe, Lehçe, Japonca, Korece, Arapça (yerleşim soldan sağa kalır, metin sağdan sola çizilir), Hintçe ve Çince. Panel, Video indirici ve Ai Infapp sayfalarının sağ altındaki dil kutusundan seçilir; ilk açılışta tarayıcı dili desteklenen bir dilse o seçilir, değilse İngilizce. Seçim tarayıcıda hatırlanır.
+- Çeviri **çalışma zamanında, metnin kendisiyle eşleşerek** yapılır (`panel-public/dil.js`): kaynak kodda sarmalayıcı yoktur. Metin düğümleri, `placeholder`/`title`/`aria-label`/`alt` nitelikleri, sayfa başlığı, `alert/confirm/prompt` ve sunucudan gelen hata/çözüm mesajları çevrilir. Başında ya da sonunda sayı olan metinler ("11 görsel") ve sayı içeren şablonlar ("Ölçü 3 adı") da çevrilir. Çeviri yoksa Türkçe kaynak görünür.
+- Sözlükler: `diller/<kod>.json` (kaynak katalog) ve her uygulamanın `diller/<kod>.js` dosyası. `npm run dil:cikar` metinleri çıkarır, `npm run dil:yay` uygulamalara dağıtır.
+- Kapsam: arayüz metinleri ve panelde görünen sunucu mesajları. Komut satırı betiklerinin mesajları, `uretim/` çıktıları ve belgeler (README, AGENTS) Türkçe kalır; senaryo ve video dili zaten `--dil` ile ayrıca seçilir.
+
 ## [1.7.0] — 2026-10-25 — Stok video klipleri
 
 ### Eklenenler
