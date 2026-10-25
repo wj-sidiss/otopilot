@@ -42,9 +42,28 @@ test("cleveland: cc0 olmayan eser elenir", async () => {
 
 test("yonetici: muze kaynaklari kayitli, anahtarsiz acik; sanatSahneMi yonlendirir", () => {
   const y = new kaynak.KaynakYonetici({ getir: sahte(() => ({})), anahtarlar: {}, etkin: {} });
-  for (const a of kaynak.MUZE) assert.ok(y.acikMi(a), a);
+  for (const a of ["met", "aic", "cleveland"]) assert.ok(y.acikMi(a), a);
+  assert.ok(!y.acikMi("smithsonian"), "anahtar yok");
   assert.equal(lisansCoz("met").kabul, true);
   assert.ok(sorgu.sanatSahneMi("Renaissance painters in Florence"));
   assert.ok(sorgu.sanatSahneMi("Firavunların mezarları"));
   assert.ok(!sorgu.sanatSahneMi("A dog running on the beach"));
+});
+
+test("smithsonian: anahtarsiz bos; yalniz CC0 medya", async () => {
+  assert.deepEqual(await kaynak.smithsonianAra("x", {}, { getir: sahte(() => ({})) }), []);
+  const g = sahte(() => ({ response: { rows: [
+    { title: "A", content: { descriptiveNonRepeating: { record_link: "https://si/1", online_media: { media: [{ type: "Images", content: "https://si/a.jpg", usage: { access: "CC0" } }] } } } },
+    { title: "B", content: { descriptiveNonRepeating: { online_media: { media: [{ type: "Images", content: "https://si/b.jpg", usage: { access: "Usage conditions apply" } }] } } } }] } }));
+  const r = await kaynak.smithsonianAra("x", {}, { getir: g, anahtar: "K" });
+  assert.equal(r.length, 1); assert.equal(r[0].lisansKodu, "cc0");
+});
+
+test("unsplash: anahtarsiz bos; Client-ID basligi, atif", async () => {
+  assert.deepEqual(await kaynak.unsplashAra("x", {}, { getir: sahte(() => ({})) }), []);
+  let ust;
+  const g = sahte(() => ({ results: [{ urls: { regular: "https://u/a.jpg" }, user: { name: "Ayse" }, width: 4000, height: 3000, links: { html: "https://unsplash.com/p/1" } }] }));
+  const j = g.json; g.json = (u, o) => { ust = o; return j(u, o); };
+  const r = await kaynak.unsplashAra("x", {}, { getir: g, anahtar: "K" });
+  assert.equal(ust.basliklar.Authorization, "Client-ID K"); assert.match(r[0].atif, /Ayse/);
 });

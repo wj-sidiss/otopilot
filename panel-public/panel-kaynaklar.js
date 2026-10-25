@@ -13,7 +13,9 @@
       { ad: "VIDIQ_KEY", etiket: "vidIQ MCP anahtarı", test: "vidiq", ucretli: true, not: "app.vidiq.com/account/settings/mcp · vidIQ üyeliği gerekir. Başlık puanı, trend, viral analiz ve (Claude yoksa) senaryo bununla çalışır; krediyle ücretlenir." }] },
     { baslik: "Görsel kaynakları", aciklama: "NASA, Wikimedia Commons ve Openverse anahtarsız çalışır. Pexels ve Pixabay ücretsiz anahtarla gerçek dünya fotoğrafları ekler (mekân, yemek, insan).", anahtarlar: [
       { ad: "PEXELS_KEY", etiket: "Pexels", test: "pexels", not: "pexels.com/api · ücretsiz. Pexels görselleri için kaynak göstermek gerekir; atıf listesi otomatik hazırlanır." },
-      { ad: "PIXABAY_KEY", etiket: "Pixabay", test: "pixabay", not: "pixabay.com/api/docs · ücretsiz." }] },
+      { ad: "PIXABAY_KEY", etiket: "Pixabay", test: "pixabay", not: "pixabay.com/api/docs · ücretsiz." },
+      { ad: "SMITHSONIAN_KEY", etiket: "Smithsonian (CC0)", not: "api.data.gov/signup · ücretsiz. Yalnız CC0 işaretli eserler alınır; sanat/tarih sahnelerinde kullanılır." },
+      { ad: "UNSPLASH_KEY", etiket: "Unsplash", not: "unsplash.com/developers · ücretsiz (Access Key). Fotoğrafçı atfı açıklamaya eklenir." }] },
     { baslik: "Yapay zekâ görsel üretimi", aciklama: "İsteğe bağlı. Anahtarsız kullanımda Pollinations denenir; aşağıdakilerden biri varsa yedek olarak kullanılır.", anahtarlar: [
       { ad: "CF_ACCOUNT_ID", etiket: "Cloudflare hesap kimliği", acik: false, not: "Cloudflare Workers AI (ücretsiz kademe) için; API jetonuyla birlikte." },
       { ad: "CF_API_TOKEN", etiket: "Cloudflare API jetonu" },
