@@ -2,7 +2,7 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
-## [Yayınlanmadı] — Müze ve fotoğraf kaynakları
+## [1.4.0] — 2026-10-25 — Müze ve fotoğraf kaynakları
 
 ### Eklenenler
 - **Müze kaynakları (sanat/tarih sahneleri):** The Met, Art Institute of Chicago, Cleveland Müzesi (anahtarsız) ve Smithsonian (`SMITHSONIAN_KEY`, ücretsiz). Yalnızca CC0 / kamu malı eserler alınır; lisans istemcide ikinci kez denetlenir. Sanat, tarih ve antik dönem sahnelerinde otomatik devreye girer (`sanatSahneMi`), diğer sahnelerde sorgulanmaz.
