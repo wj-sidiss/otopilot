@@ -3,7 +3,7 @@
 // Kullanim:
 //   node seslendir.js <is> [ses] [hiz]            senaryoyu seslendir
 //   node seslendir.js <is> --yeniden              guncel olsa bile bastan uret
-//   node seslendir.js <is> --motor edge|azure|piper|voxcpm|otomatik
+//   node seslendir.js <is> --motor edge|azure|piper|voxcpm|sistem|otomatik
 //   node seslendir.js <is> --ses voxcpm:tok_anlatici      VoxCPM2 hazir sesi (yerel GPU; sesler/voxcpm2/)
 //   node seslendir.js --test <cikti.mp3> [--ses X] [--metin "..."] [--motor M]    5 sn ornek
 //   node seslendir.js --liste-sesler                      VoxCPM2 sesleri + kurulum durumu, dile gore Edge sesleri

@@ -2,6 +2,18 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.5.0] — 2026-10-25 — Her makinede çalışan ses, canlı kaynak yoklaması
+
+### Eklenenler
+- **Sistem sesi motoru (`--motor sistem`).** Windows (System.Speech), macOS (`say`) ve Linux (`espeak-ng`) sesi: kurulum, anahtar ve internet gerektirmez. `otomatik` sırada EN SONDA durur: Edge sesi servisi kapanırsa (25 Ekim 2026'da Microsoft tarafında WebSocket el sıkışması reddediliyordu, `msedge-tts` son sürümüyle de) video artık sessiz kalmak yerine sistem sesiyle biter. Kalite orta; daha iyisi için VoxCPM2, Piper ya da Azure.
+- **`npm run kaynak-dene`:** her görsel kaynağına gerçek bir arama yapıp çalışıp çalışmadığını gösterir. Servis API'sini değiştirdiğinde sorun iş ortasında değil burada yakalanır.
+
+### Düzeltilenler
+- The Met: eski `v1/search` ucu 1 Ekim 2026'da kapanmıştı (HTTP 410); `v1.1/search`'e geçildi.
+- Art Institute of Chicago `AIC-User-Agent` başlığı olmadan 403 veriyordu.
+- Müze aramaları "Rembrandt Night Watch painting" gibi uzun ifadelerde sonuç vermiyordu (tüm kelimeleri VE ile ister): dolgu kelimeler atılıp en çok 3 kelime aranır.
+- Rijksmuseum ve Europeana kaynak kaydına eklenmemiş, akışta hiç çalışmıyordu; kayıt bütünlüğü testi eklendi.
+
 ## [1.4.1] — 2026-10-25 — Rijksmuseum ve Europeana
 
 ### Eklenenler

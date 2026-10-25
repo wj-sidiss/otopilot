@@ -305,6 +305,7 @@ test("kurulum denetimi: eksik her parca icin anlasilir neden", () => {
 });
 
 test("kurulu degilken: acik secim cikis 2 + kurulum adimlari; otomatikte sessizce Edge; celisen motor cikis 2", () => {
+  const SISTEM = M.motorHazirMi("sistem").ok ? ["sistem"] : [];
   const edge = { msedge: S.sahteEdge() };
   try { M.motorSirasi("voxcpm", envDen({}), {}); assert.fail("hata bekleniyordu"); }
   catch (e) {
@@ -313,10 +314,10 @@ test("kurulu degilken: acik secim cikis 2 + kurulum adimlari; otomatikte sessizc
     assert.match(e.message, /'voxcpm' ses motoru kullanılamıyor: VOXCPM_KOK/);
     for (const k of ["git clone", "kur.ps1", "VOXCPM_KOK=", V.KAYNAK_REPO]) assert.ok(e.cozum.includes(k), "cozum: " + k);
   }
-  assert.deepEqual(M.motorSirasi("otomatik", envDen({}), edge, "voxcpm:tok_anlatici"), ["edge"], "kurulu degil: sessizce Edge");
+  assert.deepEqual(M.motorSirasi("otomatik", envDen({}), edge, "voxcpm:tok_anlatici"), ["edge"].concat(SISTEM), "kurulu degil: sessizce Edge");
   const env = kuruluEnv(sahteKok());
-  assert.deepEqual(M.motorSirasi("otomatik", env, edge, "voxcpm:tok_anlatici"), ["voxcpm", "edge"]);
-  assert.deepEqual(M.motorSirasi("otomatik", env, edge, "tr-TR-AhmetNeural"), ["edge"], "Edge sesiyle VoxCPM otomatik siraya girmez");
+  assert.deepEqual(M.motorSirasi("otomatik", env, edge, "voxcpm:tok_anlatici"), ["voxcpm", "edge"].concat(SISTEM));
+  assert.deepEqual(M.motorSirasi("otomatik", env, edge, "tr-TR-AhmetNeural"), ["edge"].concat(SISTEM), "Edge sesiyle VoxCPM otomatik siraya girmez");
   assert.deepEqual(M.motorSirasi("voxcpm", env, {}), ["voxcpm"]);
   assert.throws(() => M.motorSirasi("edge", env, edge, "voxcpm:tok_anlatici"), e => e.cikis === 2 && /VoxCPM sesi/.test(e.message));
   assert.throws(() => M.motorSirasi("elevenlabs", env, {}), e => e.cikis === 2 && /voxcpm/.test(e.cozum));

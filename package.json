@@ -1,6 +1,6 @@
 {
   "name": "otopilot",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Video icerik otomasyon paneli (localhost) — YouTube, Shorts, Reels, TikTok",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
     "test:indirici": "node --test \"video-indirici/test/**/*.test.js\"",
     "test:aiinfapp": "node --test \"ai-infapp/test/**/*.test.js\"",
     "egitim": "node lib/egitim.js",
+    "kaynak-dene": "node kaynak-dene.js",
     "guncelle": "node lib/guncelle.js"
   },
   "dependencies": {

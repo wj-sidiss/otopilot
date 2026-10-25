@@ -44,7 +44,7 @@ test("gorsel-bul: senaryo yok -> exit 2; bozuk konu.json -> exit 2 ve satir/sutu
   assert.equal(r.kod, 2); assert.match(r.err, /konu\.json bozuk \(satır 2/);
 
   const ayar = path.join(yardim.KOKTEST, "ayar-kapali.json");
-  fs.writeFileSync(ayar, JSON.stringify({ surum: 1, kaynaklar: { nasa: false, wikimedia: false, openverse: false, pexels: false, pixabay: false, met: false, aic: false, cleveland: false } }));
+  fs.writeFileSync(ayar, JSON.stringify({ surum: 1, kaynaklar: { nasa: false, wikimedia: false, openverse: false, pexels: false, pixabay: false, met: false, aic: false, cleveland: false, smithsonian: false, unsplash: false, rijks: false, europeana: false } }));
   yardim.isKur("cli-kapali", { senaryo: yardim.senaryoUret(2, 30), konu: { format: "long" } });
   r = calistir("gorsel-bul.js", ["cli-kapali"], { OTOMASYON_AYAR_DOSYASI: ayar });
   assert.equal(r.kod, 2); assert.match(r.err, /Hiçbir görsel kaynağı açık değil/);

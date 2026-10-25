@@ -130,7 +130,7 @@ testF("ardisik 3 paragraf dusunce o motor birakilir (servis kapali) ve hepsi lis
     assert.equal(e.cikis, 4);
     assert.equal(e.message, "Paragraf 1, 2, 3 seslendirilemedi");
     assert.match(e.cozum, /Servis yanıt vermiyor/);
-    assert.match(e.cozum, /AZURE_SPEECH_KEY/, "yedek motor onerisi");
+    assert.match(e.cozum, /AZURE_SPEECH_KEY|Yedek motor hazır/, "yedek motor onerisi");
     return true;
   });
   assert.equal(sahte.durum.istekler.length, 15, "3 paragraf x 5 deneme; kalan paragraflar denenmedi");

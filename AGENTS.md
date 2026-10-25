@@ -48,7 +48,7 @@ Aşağıdakilerin hepsi anahtarsız ve ücretsizdir (hepsi gerçek bir işte den
 |---|---|---|
 | Senaryo | **sen (ajan) yazarsın** | Claude/vidIQ anahtarı gerekmez |
 | Görsel (video) | Wikimedia Commons, Openverse, NASA; sanat/tarih sahnelerinde ayrıca The Met, Art Institute of Chicago, Cleveland, Rijksmuseum (CC0 / kamu malı) | lisans süzülür, atıf `ATIF.txt`'e yazılır |
-| Ses | Edge sesli okuma (`seslendir.js`) | resmî API değil, ticari hakkı belirsiz; yerel alternatif Piper (internetsiz, `.env.ornek`) |
+| Ses | Edge sesli okuma (`seslendir.js`); Edge çalışmazsa işletim sisteminin sesi (`--motor sistem`, kurulum yok) | Edge resmî API değil, ticari hakkı belirsiz ve zaman zaman kapanır (Ekim 2026'da `Unexpected server response: 200`); `otomatik` sırada sistem sesi en sonda otomatik devreye girer. Daha iyi yerel ses: VoxCPM2 / Piper |
 | Doğal Türkçe ses (isteğe bağlı) | yerel VoxCPM2: `sesler/voxcpm2/` içindeki 14 hazır yapay ses | ekran kartı ister (NVIDIA ≥4 GB); kurulum aşağıda "Yerel VoxCPM2 sesi" |
 | Kurgu | ffmpeg (yerel) | |
 | AI influencer görseli | Pollinations (Ai Infapp varsayılanı) | küçük, filigranlı, ara sıra yavaş/`402`; tam ücretsiz ve sınırsız seçenek: kendi bilgisayarında AUTOMATIC1111/Forge ya da ComfyUI (GPU ister) |
@@ -97,6 +97,7 @@ node yeni-is.js <is> --baslik "Başlık" --dil en --format short
 - Öncelik: `--sahne N --ara` > konu.json `sahneKelimeleri` > `ARAMALAR.txt` > otomatik. Satır sayısı tutmazsa ya da satır Türkçe görünürse uyarı verilir.
 
 ```bash
+node kaynak-dene.js          # görsel kaynaklarının hangisi çalışıyor? (canlı yoklama; sorun olursa önce bunu çalıştır)
 node gorsel-bul.js <is>       # ücretsiz kaynaklardan (Wikimedia, Openverse, NASA…) görsel bulur, lisans süzer
 node seslendir.js <is>        # ücretsiz Edge sesi, paragraf paragraf (+ zamanlama)
 node video-yap.js <is>        # kurgu + altyazı + kapak + yayın paketi
@@ -136,6 +137,7 @@ Ayar alanlarının tam listesi: `KONU-JSON.md` (geçiş, müzik, altyazı biçim
 
 Seslendirmede `403` alırsan: `npm install msedge-tts@latest --ignore-scripts --no-save` çalıştır (Microsoft'un ücretsiz sesi
 zaman zaman kural değiştirir), `seslendir.js`'i yeniden başlat; tamamlanan paragraflar tekrar üretilmez.
+Edge `Unexpected server response: 200` ile düşerse bu paket güncellemesiyle düzelmez (Microsoft el sıkışmayı reddediyordur): `node seslendir.js <is> --motor sistem` ile işletim sistemi sesini kullan, tamamlanan paragraflar korunur; `otomatik` motor bunu zaten kendiliğinden yapar.
 
 **Bitince kullanıcıya şunları ver** (dosya yollarıyla):
 - `uretim/<is>/Videos/<is>.mp4`, `<is>.srt`, `<is>-kapak.jpg`

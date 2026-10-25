@@ -139,8 +139,9 @@ testF("uzun paragraf >1500 karakterde parcalanir, mp3'ler birlestirilir, kelime 
 test("motorSirasi: otomatik = hazir motorlar; acik motor hazir degilse yapilandirma hatasi (exit 2)", () => {
   const sahte = S.sahteEdge();
   const env = o => ({ AZURE_SPEECH_KEY: "k", AZURE_SPEECH_REGION: "westeurope" })[o];
-  assert.deepEqual(M.motorSirasi("otomatik", env, { msedge: sahte }), ["edge", "azure"]);
-  assert.deepEqual(M.motorSirasi("otomatik", () => "", { msedge: sahte }), ["edge"]);
+  const SISTEM = M.motorHazirMi("sistem").ok ? ["sistem"] : [];        // isletim sistemi sesi: makineye gore hazir, hep EN SONDA
+  assert.deepEqual(M.motorSirasi("otomatik", env, { msedge: sahte }), ["edge", "azure"].concat(SISTEM));
+  assert.deepEqual(M.motorSirasi("otomatik", () => "", { msedge: sahte }), ["edge"].concat(SISTEM));
   assert.deepEqual(M.motorSirasi("piper", o => ({ PIPER_YOL: "x", PIPER_MODEL: "y" })[o], {}), ["piper"]);
   try { M.motorSirasi("azure", () => "", { msedge: sahte }); assert.fail("hata bekleniyordu"); }
   catch (e) { assert.equal(e.cikis, 2); assert.match(e.message, /azure/); assert.match(e.message, /AZURE_SPEECH_KEY/); }

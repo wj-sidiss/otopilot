@@ -16,7 +16,7 @@ test("met: yalniz isPublicDomain + gorselli eser; nesne basina ayri istek, en co
   assert.equal(g.cagrilar.length, 9);
   assert.equal(r.length, 7);
   assert.equal(r[0].lisansKodu, "cc0"); assert.match(r[0].atif, /Metropolitan/);
-  assert.match(g.cagrilar[0], /isPublicDomain=true/);
+  assert.match(g.cagrilar[0], /v1\.1\/search\?.*isPublicDomain=true/);
 });
 
 test("aic: IIIF adresi uretir, kamu mali olmayan/gorselsiz elenir", async () => {
@@ -86,4 +86,22 @@ test("europeana: anahtarsiz bos; yalniz acik lisans (NC/ND/InC elenir)", async (
   const r = await kaynak.europeanaAra("x", {}, { getir: g, anahtar: "K" });
   assert.deepEqual(r.map(x => x.baslik), ["a", "d"]); assert.equal(r[1].atifGerekli, true);
   assert.match(g.cagrilar[0], /reusability=open/);
+});
+
+test("muzeSorgu: dolgu kelimeleri atilir, en cok 3 kelime kalir", () => {
+  const { muzeSorgu } = require("../lib/gorsel-kaynak.js");
+  assert.equal(muzeSorgu("Rembrandt Night Watch painting"), "Rembrandt Night Watch");
+  assert.equal(muzeSorgu("Night Watch painting detail restoration"), "Night Watch");
+  assert.equal(muzeSorgu("painting"), "painting");
+});
+
+test("kayit butunlugu: her istemci ADLAR'da, ARALIK'ta, ayar izin listesinde; yonetici hepsini sorgular", () => {
+  const ortak = require("../lib/ortak.js");
+  for (const ad of Object.keys(kaynak.ISTEMCILER)) {
+    assert.ok(kaynak.ADLAR[ad], ad + " ADLAR'da yok");
+    assert.ok(ortak.AYAR_VARSAYILAN.kaynaklar[ad] === true, ad + " ayar varsayilaninda yok");
+  }
+  const y = new kaynak.KaynakYonetici({ getir: sahte(() => ({})), anahtarlar: {}, etkin: {} });
+  for (const ad of ["met", "aic", "cleveland", "rijks"]) assert.ok(y.acikMi(ad), ad);
+  for (const ad of ["smithsonian", "unsplash", "europeana"]) assert.ok(!y.acikMi(ad), ad + " anahtarsiz kapali olmali");
 });
