@@ -2,6 +2,12 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.7.0] — 2026-10-25 — Stok video klipleri
+
+### Eklenenler
+- **`node video-bul.js <iş>`:** sahnelere Pexels ve Pixabay'dan alakalı STOK VİDEO klibi ekler (ücretsiz `PEXELS_KEY` / `PIXABAY_KEY`). `gorsel-bul.js`'ten sonra, `video-yap.js`'ten önce çalışır. Klip `Visuals/<sahne>/00-stok-*.mp4` olarak yazılır, sahnenin başına konur, döngülenir ve kadraja kırpılır. Atıf `Visuals/video-atif.json`'a yazılır ve `YAYIN-PAKETI.md`'ye girer.
+- Kurgu artık `Visuals/` içindeki mp4 dosyalarını da sahne görseli olarak kabul eder (zoom efekti uygulanmaz; kapak yine durgun görselden yapılır).
+
 ## [1.6.0] — 2026-10-25 — vidIQ ile AI klip aracı
 
 ### Eklenenler

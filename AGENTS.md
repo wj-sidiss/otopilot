@@ -125,7 +125,7 @@ Zayıf sahneyi düzelt, sonra `video-yap.js` çalıştır:
 node gorsel-bul.js <is> --sahne 3 --ara "far side of the moon"
 ```
 
-Görüntü okuyabiliyorsan `Visuals/NNN-*/01.jpg` dosyalarına bak. Tüm videoyu yeniden kurmak için `video-yap.js <is> --yeniden`.
+İstersen sahnelere stok video klibi ekle (`PEXELS_KEY` ya da `PIXABAY_KEY` varsa): `node video-bul.js <is>`, sonra `node video-yap.js <is>`; anahtar yoksa açık bir mesajla durur. Görüntü okuyabiliyorsan `Visuals/NNN-*/01.jpg` dosyalarına bak. Tüm videoyu yeniden kurmak için `video-yap.js <is> --yeniden`.
 
 **Hata olursa** (mesaj Türkçe ve çözümü söyler): çıkış `3` (ağ/servis) → 30 sn bekleyip aynı komutu en çok 2 kez yeniden çalış, ilerleme korunur;
 `4` (yetersiz sonuç) → mesajdaki çözümü uygula (görsel azsa `--sahne N --ara`; paragraf düştüyse `seslendir.js`'i yeniden çalıştır);
