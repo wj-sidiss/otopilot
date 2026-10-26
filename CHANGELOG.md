@@ -2,6 +2,13 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.9.3] — 2026-10-26 — README ve küçük iyileştirmeler
+
+### Değişenler
+- **README** 1.3.0'dan beri güncellenmemişti: başa İngilizce hızlı başlangıç, yeni görsel/ses kaynakları, anahtar tablosu (Unsplash, Smithsonian, Europeana, FAL_KEY), Edge çökünce sistem sesi yedeği, yeni araçlar (kaynak-dene, video-bul, vidiq-klip, film, dudak-*), 15 dilli arayüz notu.
+- Panelde ses motoru seçimine **VoxCPM2** ve **işletim sistemi sesi** eklendi (sunucu zaten kabul ediyordu).
+- `vidiq-klip.js` en-boy oranını verilmediğinde işin `konu.json` biçiminden alır (uzun video 16:9, diğerleri 9:16).
+
 ## [1.9.2] — 2026-10-26 — Bulut dudak senkronu
 
 ### Eklenenler

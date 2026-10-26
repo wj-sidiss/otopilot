@@ -45,7 +45,9 @@ async function calistir(args, enj) {
   const model = b.model || K.VARSAYILAN.model;
   const cozunurluk = b.cozunurluk || (model === K.VARSAYILAN.model ? K.VARSAYILAN.cozunurluk : "720p");
   const sure = Number(b.sure || K.VARSAYILAN.sure);
-  const oran = b.oran || K.VARSAYILAN.oran;
+  // oran verilmediyse isin konu.json'indaki biciminden: 16:9 uzun video, digerleri (short/reels/tiktok) 9:16
+  const konu = ortak.jsonOku(path.join(ortak.isDizin(is), "konu.json"), {}) || {};
+  const oran = b.oran || (konu.aspect === "16:9" ? "16:9" : K.VARSAYILAN.oran);
   const butce = Number(b.butce || 0);
   let liste;
   if (b.istem) liste = K.klipListesi(b.istem, sure);

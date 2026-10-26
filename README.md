@@ -1,5 +1,18 @@
 # Otopilot — konudan bitmiş videoya
 
+## English (quick start)
+
+**Otopilot** turns a topic into a finished video: script → free stock images / museum art (CC0) / stock video → voice-over → edit → MP4 + subtitles + thumbnail + a YouTube publishing pack. It also builds short **series with characters, dialogue and AI clips** (`film.js`) and an AI-influencer studio (Ai Infapp). Everything runs **locally** (panel on `localhost` only); no account needed for the free path. The interface speaks **15 languages** (language box at the bottom right); command-line messages, this README's detailed sections and the training PDFs are Turkish, and your AI agent can translate them for you.
+
+```bash
+node -v                      # Node 22+ required
+npm ci --ignore-scripts      # install
+node ff-yol.js               # checks ffmpeg (install: winget install Gyan.FFmpeg | brew install ffmpeg | apt install ffmpeg)
+node panel.js                # panel at http://localhost:4173   (or hand the repo to Claude Code / Codex: see AGENTS.md)
+```
+
+Free path (no keys): Wikimedia, Openverse, NASA and museum images · Edge voice (unofficial, may break) with an automatic fallback to your OS voice (`--motor sistem`) · ffmpeg. Optional keys: Pexels/Pixabay/Unsplash/Smithsonian/Europeana (more images, stock video), Azure/Piper/VoxCPM2 (voices), vidIQ (paid AI clips via `vidiq-klip.js`, dry-run by default), fal.ai (lip-sync in `film.js kur --dudak`). `node kaynak-dene.js` live-tests every image source. Details below (Turkish).
+
 > **Claude Code ya da Codex ile kullanacaksan:** depoyu klasör olarak aç, ajanı başlat, isteğini yaz ("şu konuda 40 saniyelik Shorts yap", "bir fitness influencer yarat ve 3 foto üret"). [`AGENTS.md`](AGENTS.md) (Claude Code için `CLAUDE.md` üzerinden) kendiliğinden okunur; ajan kurulumu, komutları ve akışı oradan bilir, sana tekrar sormaz.
 
 > **Bu bir hizmet değil / This is not a service.** Otopilot, kendi bilgisayarında çalıştırdığın açık kaynaklı bir araçtır; burada video yapılmaz ve sipariş alınmaz (issue'lar yalnızca hata bildirimi ve özellik isteği içindir). Kendi videonu üretmek için depoyu Claude Code ya da Codex'e ver. / Otopilot is an open-source tool you run on your own computer. Videos are not made or ordered here (issues are for bug reports and feature requests only). To make your own video, give the repo to Claude Code or Codex.
@@ -13,8 +26,8 @@ konu + başlık (+ isteğe bağlı: kaynak metni, kişisel katkın)
    ↓
 senaryo yazımı      → Claude (Anthropic) ya da vidIQ   ·  ya da kendin yaz
    ↓  ⏸ onay durağı: senaryoyu oku, düzenle, ONAYLA (varsayılan açık)
-görsel bulma        → Pexels · Pixabay · Wikimedia · Openverse · NASA   (isteğe bağlı AI görsel)
-seslendirme         → Edge sesli okuma (ücretsiz, resmî değil) · Azure Speech · Piper (yerel) · VoxCPM2 (yerel, 14 hazır doğal ses)
+görsel bulma        → Wikimedia · Openverse · NASA · müzeler (Met, Art Institute of Chicago, Cleveland, Rijksmuseum: CC0) · Pexels · Pixabay · Unsplash · Smithsonian · Europeana   (+ stok video, isteğe bağlı AI görsel)
+seslendirme         → Edge sesli okuma (ücretsiz, resmî değil) · Azure Speech · Piper (yerel) · VoxCPM2 (yerel, 14 hazır doğal ses) · işletim sistemi sesi (son çare)
 video kurulumu      → ffmpeg
    ↓
 bitmiş MP4 + SRT + kapak (JPG) + YAYIN-PAKETI.md (başlık, açıklama, bölümler, atıflar)
@@ -26,7 +39,7 @@ bitmiş MP4 + SRT + kapak (JPG) + YAYIN-PAKETI.md (başlık, açıklama, bölüm
 
 - **Herhangi bir konu.** Senaryo şablonu türe göre seçilir: belgesel, reklam, haber/spor, eğitim, hikâye, tanıtım. Kaynak/araştırma metnini ve kendi bakışını (kişisel katkı) verirsen senaryo onlara dayanır.
 - **Dört biçim:** YouTube uzun video (16:9) · YouTube Shorts (9:16) · Instagram Reels (9:16) · TikTok (9:16). Panelin teknik üst sınırları: Shorts 180 sn, Reels 1200 sn, TikTok 600 sn. Shorts sınırı Ekim 2024'te 45 sn'den 180 sn'ye çıktı; **platform kurallarını yayın öncesi kendi hesabından doğrula** (Reels/TikTok değerleri de bu şekilde teyit edilmeli). Reels ve TikTok'ta abone-ol kapanışı çıkarılır.
-- **Çok dilli.** İngilizce, Türkçe, İspanyolca, Almanca, Fransızca… Dil, ses, konuşma hızı ve altyazı dili panelden seçilir; altyazı dili farklıysa çeviri adımı kendiliğinden eklenir. Kelime hızı: İngilizce 151, Türkçe 113 (ölçüldü), diğer diller 140 (tahmin; ses sonrası gerçek süre esas alınır).
+- **Çok dilli.** İngilizce, Türkçe, İspanyolca, Almanca, Fransızca… Dil, ses, konuşma hızı ve altyazı dili panelden seçilir; altyazı dili farklıysa çeviri adımı kendiliğinden eklenir. Kelime hızı: İngilizce 151, Türkçe 113 (ölçüldü), diğer diller 140 (tahmin; ses sonrası gerçek süre esas alınır). **Arayüz 15 dilde** (sağ alttaki dil kutusu; tarayıcı diline göre açılır). Komut satırı mesajları, bu belge ve eğitim PDF'leri Türkçe kalır.
 - **Hızlı açılış.** Yeni uzun videoda geri sayım/intro/başlık kartı **kapalı** gelir (kanca 0. saniyede duyulur; kanal adı alt köşede 2 sn kalır). Eski sinematik açılış (5+10+3 sn) panelden seçilebilir — ilk kelime ~18. saniyede gelir ve izleyici kaybı riski uyarısı gösterilir.
 - **Gömülü altyazı** (cümle ya da kelime kelime) + ayrı SRT. Kapatılabilir.
 - **29 geçiş tipi, 5 hareket efekti, 6 renk tonu**, müzik ruh hali/kendi müzik dosyan/konuşmada kısma (ducking). Hiçbir şey belirtmezsen geçiş/efekt/renk iş adından türetilen bir rotasyonla çeşitlenir (hepsi aynı görünen videolar YouTube'un "tekrarlayan içerik" riskini artırır).
@@ -72,12 +85,17 @@ Panelin **Kaynaklar** sekmesinden girilir (kaydedince otomatik test edilir, sili
 | Anahtar | Ne için | Zorunlu mu |
 |---|---|---|
 | **`ANTHROPIC_API_KEY`** (Claude) | senaryo yazımı (daha iyi kalite); `ANTHROPIC_MODEL` ile model seçilir | Senaryo için **ikisinden en az biri** — ya da senaryoyu kendin yaz |
-| **`VIDIQ_KEY`** | senaryo yazımı (yedek motor), başlık puanlama, trend/viral analiz, performans | |
-| `PEXELS_KEY`, `PIXABAY_KEY` | görsel kalitesini ve isabetini artırır (ücretsiz) | hayır |
+| **`VIDIQ_KEY`** | senaryo yazımı (yedek motor), başlık puanlama, trend/viral analiz, performans; `vidiq-klip.js` ile AI video klibi (**kredi harcar**: kuru çalışma, `--butce` ve `--onay` korumalı) | |
+| `PEXELS_KEY`, `PIXABAY_KEY` | görsel kalitesini ve isabetini artırır; ayrıca `video-bul.js` ile **stok video** (ücretsiz) | hayır |
+| `UNSPLASH_KEY`, `SMITHSONIAN_KEY`, `EUROPEANA_KEY` | ek görsel kaynakları (ücretsiz kayıt); Smithsonian ve Europeana yalnız sanat/tarih sahnelerinde, yalnız CC0/açık lisanslı eserler | hayır |
+| `FAL_KEY` | `film.js kur --dudak`: bulutta dudak senkronu (fal.ai LatentSync, **ücretli**) | hayır |
+| `MUSETALK_KOK`, `DUDAK_KOMUT` | yerel dudak senkronu (MuseTalk) ya da kendi komut şablonun | hayır |
 | `CF_ACCOUNT_ID`+`CF_API_TOKEN`, `TOGETHER_KEY`, `HF_TOKEN` | AI görsel üretimi (hiçbiri yoksa Pollinations) | hayır |
 | `AZURE_SPEECH_KEY`+`AZURE_SPEECH_REGION` | resmî Azure Speech sesi (Edge sesi başarısız olursa yedek) | hayır |
 | `PIPER_YOL`+`PIPER_MODEL` | yerel, internetsiz ses (Piper) | hayır |
 | `VOXCPM_KOK` (isteğe bağlı `VOXCPM_PYTHON`) | yerel VoxCPM2 sesi: `sesler/voxcpm2/` içindeki 14 hazır yapay ses (7 Türkçe + İngilizce, Almanca, İspanyolca, Fransızca, Japonca, Rusça, Çince anlatıcı). NVIDIA ekran kartı (≥4 GB) ister; kurulum ve lisans: [`sesler/voxcpm2/README.md`](sesler/voxcpm2/README.md) | hayır |
+
+**Edge sesi kapanırsa (Ekim 2026'da bir kez oldu):** `otomatik` motor sırası edge → azure → piper → **sistem** (işletim sisteminin sesi: Windows'ta Türkçe için "Microsoft Tolga" gibi kurulu sesler kullanılır; dile uygun ses yoksa yanlış dille OKUNMAZ, açık hata verir; Linux'ta `espeak-ng` gerekir). Daha iyi yerel ses için VoxCPM2.
 
 **Edge sesli okuma hakkında:** varsayılan ses motoru Microsoft Edge tarayıcısının sesli okuma servisidir. Anahtar istemez ve ücretsizdir ama **resmî, sözleşmeli bir API değildir**: servis değişirse çalışmayabilir ve ticari kullanım hakkı belirsizdir. Gelir getiren kanal için resmî Azure Speech'i tanımla; `otomatik` motor modunda Edge hata verirse iş yedek motorla **baştan** seslendirilir.
 
@@ -170,6 +188,11 @@ node yayin-paketi.js   <is-adi>      # açıklama, bölümler, atıflar (video-y
 | `geri-sayim.js` | film lideri geri sayımı |
 | `toplu-uret.cjs`, `toplu-uret-uzun.cjs` | manifestten toplu Shorts / uzun video (aşağıda) |
 | `ff-yol.js` | ffmpeg/ffprobe yolunu bulur (`node ff-yol.js`) |
+| `kaynak-dene.js` (`npm run kaynak-dene`) | her görsel kaynağını CANLI dener, görseli gerçekten indirip doğrular (servis API'si değişirse önce bunu çalıştır) |
+| `video-bul.js` | sahnelere Pexels/Pixabay **stok video** klibi ekler (`--sahne N --ara`, `--azami`, `--yeniden`); atıf `YAYIN-PAKETI.md`'ye girer |
+| `vidiq-klip.js` | vidIQ ile AI video klibi; **kredi harcar**, varsayılan kuru çalışma, `--butce` zorunlu, `--onay` ile üretir, aynı istem tekrar üretilmez |
+| `film.js` | karakterli/diyaloglu kısa dizi: `yeni`, `klipler`, `ses`, `kur [--dudak] [--yer-tutucu]` (AGENTS.md "1b") |
+| `dudak-fal.js`, `dudak-musetalk.js` | `film.js --dudak` sağlayıcıları (bulut fal.ai / yerel MuseTalk) |
 | `video-indirici/` | **ayrı** mini panel (aşağıda); panel onu kendiliğinden başlatmaz. **Kanonik kopya bu klasördür**; bu depo dışında duran eski bir `video-indirici` klasörü varsa onu kullanma |
 | `ai-infapp/` | **ayrı** mini panel (aşağıda): AI influencer karakteri, fotoroman, Etsy baskı tasarımı, reklam görseli. Panelden **Ai Infapp** düğmesiyle ya da `ai-infapp\BASLAT.bat` ile açılır; panel onu kendiliğinden başlatmaz. **Kanonik kopya bu klasördür**; bu depo dışında duran eski bir Ai Infapp klasörü eski bir nüshadır, kullanma |
 

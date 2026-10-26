@@ -184,7 +184,7 @@
   P.RENKLER = [["sinematik", "Sinematik — koyu, soğuk"], ["sicak", "Sıcak — turuncu"], ["soguk", "Soğuk — mavi, gece"], ["canli", "Canlı — doygun, parlak"], ["siyahbeyaz", "Siyah-beyaz"], ["yok", "Dokunma — orijinal"]];
   P.MUZIK_RUHLARI = [["sakin", "Sakin"], ["gerilim", "Gerilim"], ["umut", "Umut"], ["enerjik", "Enerjik"], ["otomatik", "Otomatik"]];
   P.TURLER = [["belgesel", "Belgesel"], ["reklam", "Reklam"], ["haber-spor", "Haber / spor"], ["egitim", "Eğitim"], ["hikaye", "Hikâye"], ["tanitim", "Tanıtım"]];
-  P.SES_MOTORLARI = [["otomatik", "Otomatik (önce Edge, olmazsa sıradaki)"], ["edge", "Edge sesli okuma (resmî değil)"], ["azure", "Azure Speech (resmî, anahtar ister)"], ["piper", "Piper (yerel, çevrimdışı)"]];
+  P.SES_MOTORLARI = [["otomatik", "Otomatik (önce Edge, olmazsa sıradaki)"], ["edge", "Edge sesli okuma (resmî değil)"], ["azure", "Azure Speech (resmî, anahtar ister)"], ["piper", "Piper (yerel, çevrimdışı)"], ["voxcpm", "VoxCPM2 (yerel ekran kartı, doğal ses)"], ["sistem", "İşletim sistemi sesi (kurulum yok, orta kalite)"]];
   P.FORMATLAR = {
     long:   { etiket: "YouTube uzun video", kisa: "UZUN", oran: "16:9", varsSn: 900, not: "Yatay 16:9. Öneri 15 dk." },
     short:  { etiket: "YouTube Shorts", kisa: "SHORTS", oran: "9:16", varsSn: 40, teknikMax: 180, not: "Dikey 9:16. Üst sınır 3 dakika (180 sn); güncel kuralı YouTube Yardım'dan teyit et." },
