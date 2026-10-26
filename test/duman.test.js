@@ -35,11 +35,12 @@ function yuru(dizin, cikti, kok) {
   return cikti;
 }
 const goreli = y => path.relative(KOK, y).replace(/\\/g, "/");
-const TUM = yuru(KOK, []);
+// gercek anahtar dosyalari ASLA okunmaz: .env ve .env.<ad> (yalniz .env.ornek serbest). Kullanicinin kendi .env'i varsa tarama DISINDA tutulur
+// (eskiden listeye girip testi dusuruyordu: yalniz temiz klonlarda yesildi)
+const gizliDosyaMi = y => /^\.env(\..+)?$/.test(path.basename(y)) && path.basename(y) !== ".env.ornek";
+const TUM = yuru(KOK, []).filter(y => !gizliDosyaMi(y));
 const adUzanti = y => { const ad = path.basename(y); return ad.startsWith(".") && ad.indexOf(".", 1) < 0 ? ad : path.extname(ad).toLowerCase(); };
 const KODLAR = TUM.filter(y => KOD_UZ.has(path.extname(y).toLowerCase()));
-// gercek anahtar dosyalari ASLA okunmaz: .env ve .env.<ad> (yalniz .env.ornek serbest)
-const gizliDosyaMi = y => /^\.env(\..+)?$/.test(path.basename(y)) && path.basename(y) !== ".env.ornek";
 const METINLER = TUM.filter(y => !gizliDosyaMi(y) && (METIN_UZ.has(adUzanti(y)) || METIN_AD.test(path.basename(y)) || path.basename(y) === ".env.ornek") && path.basename(y) !== "package-lock.json");
 
 async function sinirli(isler, n, calistir) {

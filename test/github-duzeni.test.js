@@ -115,5 +115,5 @@ test("package.json: 'npm run guncelle' lib/guncelle.js'i calistirir; yeni bagiml
   const p = JSON.parse(oku("package.json"));
   assert.equal(p.scripts.guncelle, "node lib/guncelle.js");
   assert.ok(fs.existsSync(path.join(KOK, "lib", "guncelle.js")));
-  assert.deepEqual(Object.keys(p.dependencies).sort(), ["@anthropic-ai/sdk", "msedge-tts"]);
+  assert.deepEqual(Object.keys(p.dependencies).sort(), ["@anthropic-ai/sdk", "msedge-tts", "ws"]);   // ws: Edge sesi onarimi dogrudan kullanir (msedge-tts ile zaten gelir)
 });
