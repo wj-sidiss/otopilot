@@ -4,7 +4,8 @@
 //   node film.js ses <dizi> <bolum>                            diyalog satirlarini karakter sesleriyle seslendirir (ucretsiz motorlar)
 //   node film.js kur <dizi> <bolum> [--dudak] [--yer-tutucu]   sahne klipleri + ses -> bolum-NNN.mp4 (+ .srt)
 // Klip uretimi: node vidiq-klip.js <dizi>-bNNN --butce <kredi> [--onay]   (kuru calisma varsayilan; ucretli, onaysiz harcamaz)
-// Dudak senkronu DIS aractir: hazir MuseTalk baglayicisi dudak-musetalk.js (bkz .env.ornek). Genel: .env DUDAK_KOMUT = sablon, orn.
+// Dudak senkronu (--dudak): FAL_KEY varsa bulut (dudak-fal.js, fal.ai LatentSync, UCRETLI), MUSETALK_KOK varsa yerel MuseTalk (dudak-musetalk.js);
+// ya da .env DUDAK_KOMUT = sablon, orn.
 //   python C:\musetalk\inference.py --video {video} --audio {ses} --cikti {cikti}
 // {video} {ses} {cikti} yerine sahne dosyalari konur; komut kullanici tarafindan kurulur (bu depo indirmez/calistirmaz baska kod).
 // Dosya duzeni: uretim/<dizi>/bibliya.json, uretim/<dizi>/bolum-001.json, uretim/<dizi>/bolum-001/{ses,kurgu}/ ,
@@ -133,8 +134,11 @@ async function ses(dizi, n) {
 
 // ---------------------------------------------------------------- kur (kurgu)
 function dudakKomutu(video, ses, cikti) {
-  const sablon = ortak.envOku("DUDAK_KOMUT");
-  if (!sablon) throw hata("DUDAK_KOMUT tanımlı değil.", ".env'e dudak senkronu komutunu yaz, ör. DUDAK_KOMUT=python C:\\musetalk\\inference.py --video {video} --audio {ses} --cikti {cikti}  (MuseTalk/LatentSync'i sen kurarsın).");
+  // DUDAK_KOMUT yoksa: FAL_KEY varsa bulut (fal.ai LatentSync), MUSETALK_KOK varsa yerel MuseTalk
+  const sablon = ortak.envOku("DUDAK_KOMUT")
+    || (ortak.envOku("FAL_KEY") ? "node dudak-fal.js --video {video} --ses {ses} --cikti {cikti}" : "")
+    || (ortak.envOku("MUSETALK_KOK") ? "node dudak-musetalk.js --video {video} --ses {ses} --cikti {cikti}" : "");
+  if (!sablon) throw hata("Dudak senkronu için sağlayıcı ayarlı değil.", "Birini seç: (1) bulut: .env'e FAL_KEY=... (fal.ai, ücretli, GPU gerekmez); (2) yerel: MUSETALK_KOK=... (MuseTalk kurulu; RTX 50 kartta uyumlu torch gerekir, 'node dudak-musetalk.js --kontrol'); ya da DUDAK_KOMUT şablonu yaz.");
   const parcalar = sablon.match(/"[^"]*"|\S+/g).map(p => p.replace(/^"|"$/g, "").replace("{video}", video).replace("{ses}", ses).replace("{cikti}", cikti));
   const r = spawnSync(parcalar[0], parcalar.slice(1), { encoding: "utf8", windowsHide: true, timeout: 20 * 60 * 1000 });
   if (r.status !== 0 || !fs.existsSync(cikti)) throw hata("Dudak senkronu komutu başarısız: " + String(r.stderr || r.error || "").trim().slice(-300));

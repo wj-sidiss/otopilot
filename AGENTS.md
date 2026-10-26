@@ -158,7 +158,7 @@ node film.js klipler <dizi> 1                 # Voice/KLIPLER.txt; sonra: node v
 node film.js kur <dizi> 1                     # klipler + ses + altyazı -> uretim/<dizi>/bolum-001.mp4
 ```
 
-Karakter yüzü her klipte hafifçe kayar (AI video sınırı): `gorunum` alanını her istemde tekrar eder, aynı karakterin referans görselini Ai Infapp'ten alıp sağlayıcıya ilk kare olarak verebilirsin. Dudak senkronu için MuseTalk bağlayıcısı hazır (`dudak-musetalk.js`, `.env.ornek` bölümü "FILM"): kullanıcı MuseTalk'ı kurup `MUSETALK_KOK` ve `DUDAK_KOMUT` yazarsa `node film.js kur <dizi> 1 --dudak` çalışır; önce `node dudak-musetalk.js --kontrol` (RTX 50 kartlarda torch >= 2.7 cu128 ayrı ortam gerekir). Klip yokken `--yer-tutucu` yalnız deneme içindir. 100 bölüme baştan girme: önce 3 bölümlük pilotla maliyet ve kaliteyi ölç.
+Karakter yüzü her klipte hafifçe kayar (AI video sınırı): `gorunum` alanını her istemde tekrar eder, aynı karakterin referans görselini Ai Infapp'ten alıp sağlayıcıya ilk kare olarak verebilirsin. Dudak senkronu için ÖNERİLEN yol bulut: `.env`'e `FAL_KEY` (fal.ai, ücretli) yazılınca `node film.js kur <dizi> 1 --dudak` fal.ai LatentSync'i kullanır (gerçek para harcar: kullanıcıya söyle). Yerel alternatif MuseTalk bağlayıcısı hazır (`dudak-musetalk.js`, `.env.ornek` bölümü "FILM"): kullanıcı MuseTalk'ı kurup `MUSETALK_KOK` ve `DUDAK_KOMUT` yazarsa `node film.js kur <dizi> 1 --dudak` çalışır; önce `node dudak-musetalk.js --kontrol` (RTX 50 kartlarda torch >= 2.7 cu128 ayrı ortam gerekir). Klip yokken `--yer-tutucu` yalnız deneme içindir. 100 bölüme baştan girme: önce 3 bölümlük pilotla maliyet ve kaliteyi ölç.
 
 ## 2. AI influencer (Ai Infapp) — HTTP API ile
 

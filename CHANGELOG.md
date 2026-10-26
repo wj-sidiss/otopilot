@@ -2,6 +2,11 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.9.2] — 2026-10-26 — Bulut dudak senkronu
+
+### Eklenenler
+- **`dudak-fal.js`:** `film.js kur --dudak` için bulut sağlayıcı: fal.ai LatentSync (ByteDance), kullanıcının kendi `FAL_KEY` anahtarıyla. Yerel GPU, Python ya da MuseTalk kurulumu gerekmez (RTX 50 serisi dahil her makinede çalışır). Ücretli ve her sahne için ayrı istek olduğundan çıktı varsa yeniden istenmez. Sonuç yalnız fal alan adlarından, https ile ve gerçek mp4 doğrulamasıyla indirilir. `film.js`, `DUDAK_KOMUT` boşsa `FAL_KEY` → bulut, `MUSETALK_KOK` → yerel sırasıyla seçer. Henüz gerçek anahtarla denenmedi (testler sahte fal ile).
+
 ## [1.9.1] — 2026-10-26 — Dudak senkronu bağlantısı
 
 ### Eklenenler
