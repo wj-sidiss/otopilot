@@ -2,6 +2,19 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.9.0] — 2026-10-26 — Film/dizi hattı, Edge sesi onarımı, 44 hata düzeltmesi
+
+### Eklenenler
+- **`node film.js` (film / kısa dizi):** `yeni` (bibliya.json: karakterler, ses, görünüm + örnek bölüm), `klipler` (vidiq-klip için `KLIPLER.txt`; karakter görünümü her istemde tekrarlanır), `ses` (her diyalog satırı karakterinin sesiyle), `kur` (sahne klipleri + ses → dikey 1080×1920 bölüm MP4 + gömülü altyazı). Klip yoksa `--yer-tutucu` ile düz renkle denenebilir. Dudak senkronu dış araçla: `.env` `DUDAK_KOMUT` (MuseTalk/LatentSync'i kullanıcı kurar; depo indirmez).
+- `ws` bağımlılığı açıkça bildirildi (Edge sesi onarımı doğrudan kullanıyor; zaten `msedge-tts` ile geliyordu).
+
+### Düzeltilenler (denetimde doğrulanan hatalar)
+- **Edge sesi** yeniden çalışıyor (el sıkışmada dört başlık gerekiyordu). Windows sistem sesi artık OneCore Türkçe sesi (Tolga) kullanır; dile uygun ses yoksa yanlış dille OKUMAZ, açık hata verir. macOS'ta dile uygun ses seçilir.
+- **Görsel kaynakları:** AIC görselleri 403 veriyordu (indirme başlığı), Cleveland adayları "çözünürlük düşük" diye eleniyordu (print görseli), Unsplash 1080 px indiriyordu ve atfı listeye girmiyordu, Europeana API anahtarı kaynak adresiyle ATIF/YouTube açıklamasına sızıyordu, Smithsonian/Europeana görselleri aynı anahtara düşüp iş başına 1'e iniyordu, Met 404 kimliğinde kaynağı kapatıyordu, sanat sahnesi tespiti çok genişti. `kaynak-dene` artık görseli gerçekten indirip doğrular.
+- **Stok video:** atıf kalıcı yazılır, alakasız klip seçimi sıkılaştı, panelde görünür ve silinebilir, ATIF.txt'ye girer, sahneler arası tekrar yok.
+- **vidIQ klip:** bütçe her klip öncesi denetlenir, başarısız iş kilidi kalkar, ödenmiş yarım iş alınabilir, bozuk `klipler.json`'da durur, çözünürlük/oran değişimi yeni istek sayılır.
+- Arayüz dili: `value`'suz `<option>` metni çevrilince Ai Infapp karakter kaydı bozuluyordu.
+
 ## [1.8.0] — 2026-10-25 — 15 dilde arayüz
 
 ### Eklenenler

@@ -147,6 +147,19 @@ Edge `Unexpected server response: 200` ile düşerse bu paket güncellemesiyle d
 
 Süre: 40 sn'lik kısa videoda toplam birkaç dakika (görsel ~1-2 dk, ses ~1 dk, kurgu ~30 sn).
 
+## 1b. Film / kısa dizi (karakterli, diyaloglu, AI klipli)
+
+Anlatımlı video yerine karakterlerin konuştuğu dikey kısa dizi için `film.js` (ayrıntı dosyanın başındaki yorumda):
+
+```bash
+node film.js yeni <dizi> --ad "Dizi Adı"     # bibliya.json (karakter, ses, görünüm) + bolum-001.json örneği; ikisini kullanıcının fikrine göre YAZ
+node film.js ses <dizi> 1                     # diyalog satırları karakter seslerinden (ücretsiz motorlar)
+node film.js klipler <dizi> 1                 # Voice/KLIPLER.txt; sonra: node vidiq-klip.js <dizi>-b001 --butce <kredi>  (kuru çalışma; KREDİ HARCAR, onay al)
+node film.js kur <dizi> 1                     # klipler + ses + altyazı -> uretim/<dizi>/bolum-001.mp4
+```
+
+Karakter yüzü her klipte hafifçe kayar (AI video sınırı): `gorunum` alanını her istemde tekrar eder, aynı karakterin referans görselini Ai Infapp'ten alıp sağlayıcıya ilk kare olarak verebilirsin. Dudak senkronu depoda yok; kullanıcı MuseTalk/LatentSync gibi bir aracı kendisi kurarsa `.env` `DUDAK_KOMUT` ile `node film.js kur <dizi> 1 --dudak` bağlanır. Klip yokken `--yer-tutucu` yalnız deneme içindir. 100 bölüme baştan girme: önce 3 bölümlük pilotla maliyet ve kaliteyi ölç.
+
 ## 2. AI influencer (Ai Infapp) — HTTP API ile
 
 **Sunucu:** önce `GET http://127.0.0.1:4200/api/durum` dene; yanıt veriyorsa zaten çalışıyordur, yenisini başlatma.

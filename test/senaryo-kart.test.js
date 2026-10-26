@@ -31,7 +31,8 @@ test("formul-kart: ozel karakterli metin, uzun formul, sahne klasorune yazim; .p
   ] });
   // zemin: baska bir sahne klasorundeki gorsel + _eski klasoru atlanir
   fs.mkdirSync(path.join(d, "Visuals", "002-zemin"), { recursive: true });
-  execFileSync(FF, ["-y", "-f", "lavfi", "-i", "color=c=blue:s=640x360", "-frames:v", "1", path.join(d, "Visuals", "002-zemin", "01.jpg")], { stdio: "ignore" });
+  // -threads 1: mjpeg kodlayicisi varsayilan "auto"da cekirdek basina kopya acar, bellek darken ENOMEM (test/render-fikstur.js ff)
+  execFileSync(FF, ["-y", "-f", "lavfi", "-i", "color=c=blue:s=640x360", "-frames:v", "1", "-threads", "1", path.join(d, "Visuals", "002-zemin", "01.jpg")], { stdio: "ignore" });
   fs.mkdirSync(path.join(d, "Visuals", "_eski-20260101-000000"), { recursive: true });
   fs.writeFileSync(path.join(d, "Visuals", "_eski-20260101-000000", "01.jpg"), "bozuk");
 

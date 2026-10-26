@@ -105,7 +105,7 @@ function sentetikVideo(yol, sn, sesli) {
   if (sesli) args.push("-f", "lavfi", "-i", "sine=frequency=220:duration=" + sn);
   args.push("-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p");
   if (sesli) args.push("-c:a", "aac", "-ar", "44100");
-  args.push(yol);
+  args.push("-threads", "2", yol);       // fikstur: cekirdek sayisi kadar kodlayici is parcacigi gereksiz, bellek darken ENOMEM verir
   execFileSync(FF.ffmpeg, args, { stdio: "ignore" });
 }
 const PAR = ["Welcome to this short demo about narrated videos.", "The second paragraph says something different here.", "And finally the closing words of the demo."];
@@ -187,6 +187,27 @@ testF("paragraf seslendirilemezse cikis 4, cikti dosyasi OLUSMAZ (eskiden sessiz
   });
   assert.ok(!fs.existsSync(cikti));
   assert.ok(!fs.existsSync(path.join(dizin, "hata-cikti.part.mp4")));
+});
+
+testF("otomatik: Edge TEK paragraf dusurdu, sirada sistem sesi var -> sisteme GECILMEZ (cikis 4, cozumde --motor sistem)", async () => {
+  const video = path.join(dizin, "sistem.mp4");
+  sentetikVideo(video, 8, true);
+  const senaryo = path.join(dizin, "sistem.txt");
+  fs.writeFileSync(senaryo, PAR.join("\n\n"));
+  const cikti = path.join(dizin, "sistem-cikti.mp4");
+  let sistemCagri = 0;
+  const sistemCalistir = async () => { sistemCagri++; return { kod: 1, stderr: "cagrilmamaliydi" }; };
+  const sahte = S.sahteEdge((no, metin) => (/second paragraph/.test(metin) ? "hata" : "tam"));
+  assert.deepEqual(M.motorSirasi("otomatik", env0, { msedge: sahte, sistemCalistir }), ["edge", "sistem"]);
+  await assert.rejects(VS.ana([video, senaryo, cikti, "--ses", "en-US-ChristopherNeural"],
+    { env: env0, enjekte: { msedge: sahte, sistemCalistir }, ayar, log: sessiz, uyari: () => {} }), e => {
+    assert.equal(e.cikis, 4);
+    assert.match(e.cozum, /İşletim sistemi sesine \(robotik, kalite düşer\) kendiliğinden geçilmedi/);
+    assert.match(e.cozum, /--motor sistem/);
+    return true;
+  });
+  assert.equal(sistemCagri, 0);
+  assert.ok(!fs.existsSync(cikti));
 });
 
 testF("girdi hatalari: eksik arguman, olmayan dosya, kaynakla ayni cikti, gecersiz hiz/orijinal/punto -> exit 2", async () => {

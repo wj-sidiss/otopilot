@@ -61,6 +61,8 @@
 
   function atlanir(e) {
     for (var x = e; x && x.nodeType === 1; x = x.parentNode) {
+      // value'su olmayan <option>: metni ayni zamanda DEGER (select.value); cevrilirse kayit/istek bozulur
+      if (x.nodeName === "OPTION" && !(x.hasAttribute && x.hasAttribute("value"))) return true;
       if (x.id === "otopilot-dil-kutusu" || ATLA[x.nodeName] || x.isContentEditable || (x.hasAttribute && x.hasAttribute("data-dil-yok"))) return true;
     }
     return false;

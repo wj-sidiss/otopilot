@@ -7,10 +7,13 @@ const os = require("os");
 const path = require("path");
 const crypto = require("crypto");
 const { spawnSync } = require("child_process");
+const artik = require("./artik-yardim");
 
 const KOK = path.resolve(__dirname, "..");
 // uretim/_test-gorsel-<pid>: sozlesme geregi test is klasoru; is adlari alt klasorlerdir
 const KOKTEST = path.join(KOK, "uretim", "_test-gorsel-" + process.pid);
+// onceki kosularin sahipsiz artiklari (surec disaridan oldurulmus, temizle calismamis): bkz. artik-yardim.js
+artik.eskiArtiklariTemizle(path.join(KOK, "uretim"));
 fs.mkdirSync(KOKTEST, { recursive: true });
 const ENVDOSYA = path.join(KOKTEST, "_bos.env");
 fs.writeFileSync(ENVDOSYA, "");
@@ -21,7 +24,7 @@ delete process.env.PEXELS_KEY; delete process.env.PIXABAY_KEY;
 fs.mkdirSync(process.env.OTOMASYON_URETIM, { recursive: true });
 
 function temizle() {
-  try { fs.rmSync(KOKTEST, { recursive: true, force: true }); } catch (e) {}
+  artik.sil(KOKTEST);      // antivirus kilidine karsi yeniden denemeli; kalirsa sonraki kosu siler
   // uretim/ bos kaldiysa (biz actiysak) dokunma; baska is varsa zaten silinmez
 }
 

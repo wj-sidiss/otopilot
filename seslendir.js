@@ -11,9 +11,11 @@
 // Ses, hiz, dil ve okunus konu.json'dan okunur; komut satiri onu ezer ("ses": "tr-TR-AhmetNeural",
 // "sesHizi": "+7%", "dil": "tr", "okunus": {"GPU": "G P U"}, "sesMotoru": "otomatik").
 // Motorlar: edge (varsayilan, ucretsiz, RESMI DEGIL), azure (resmi, anahtar ister), piper (yerel),
-// voxcpm (yerel ekran karti, VOXCPM_KOK ister; ses "voxcpm:<ad>", ad verilmezse dile gore varsayilan).
+// voxcpm (yerel ekran karti, VOXCPM_KOK ister; ses "voxcpm:<ad>", ad verilmezse dile gore varsayilan),
+// sistem (isletim sisteminin sesi: robotik, kurulum yok; o dilde ses yoksa calismaz, baska dilde OKUMAZ).
 // "otomatik": Edge dener; paragraf dusurursa TUM is siradaki motorla bastan yapilir. Ses "voxcpm:<ad>" ise
-// VoxCPM (kuruluysa) en bastadir; kurulu degilse Edge'e (dilin varsayilan sesi) dusulur.
+// VoxCPM (kuruluysa) en bastadir; kurulu degilse Edge'e (dilin varsayilan sesi) dusulur. Sistem sesine yalniz
+// onceki motor tumden coktugunde gecilir; kismi ilerleme varsa is durur (cikis 4), biten paragraflar korunur.
 //
 // Girdi : uretim/<is>/Voice/SESLENDIRME-TAM-METIN.txt
 // Cikti : Voice/parts/NNN.mp3, Voice/kelimeler.json, Voice/zamanlama.json   (ayrinti: lib/ses-uret.js)

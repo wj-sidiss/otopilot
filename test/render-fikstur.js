@@ -8,10 +8,13 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { execFileSync, spawn } = require("child_process");
+const artik = require("./artik-yardim");
 
 const KOK = path.resolve(__dirname, "..");
 
 function ortamKur() {
+  // onceki kosularin sahipsiz artiklari (surec disaridan oldurulmus, test.after calismamis): bkz. artik-yardim.js
+  artik.eskiArtiklariTemizle(path.join(KOK, "uretim"));
   const kok = path.join(KOK, "uretim", "_test-render-" + process.pid + "-" + Math.random().toString(36).slice(2, 8));
   fs.mkdirSync(kok, { recursive: true });
   process.env.OTOMASYON_URETIM = kok;
@@ -26,7 +29,26 @@ function ffmpegVarMi() {
 }
 const FF = () => require("../ff-yol").ffmpeg;
 const FP = () => require("../ff-yol").ffprobe;
-const ff = args => execFileSync(FF(), ["-y", "-hide_banner", "-loglevel", "error", ...args], { stdio: "pipe", windowsHide: true, timeout: 120000 });
+// Fikstur ffmpeg'i (tek kare gorsel, kisa ses/video): kodlayiciya -threads 1, son arguman = cikti. Varsayilan "auto" mjpeg/png
+// kodlayicisinda cekirdek sayisi kadar (16) kopya acar: 1280x720 JPEG'de en yuksek commit 130 MB'a karsi 36 MB (ffmpeg 8.1 -benchmark
+// maxrss). Bellek darken bu kopyalar "ff_frame_thread_encoder_init failed" + cikis 4294967284 (-12 ENOMEM) ile dusup isKur'u
+// ('hazirlik' testini) kiriyordu. test/gorsel-yardim.js ve lib/senaryo-kart.js ayni dersi zaten uyguluyor. Bellek hatasinda bir kez,
+// kisa beklemeyle yeniden denenir: ayni anda kosan baska test dosyasinin render'i gecici basinc yaratabilir.
+const ffArgv = args => ["-y", "-hide_banner", "-loglevel", "error", ...args.slice(0, -1), "-threads", "1", args[args.length - 1]];
+// Windows'ta -12 cikis kodu 4294967284 (uint32), POSIX'te 244; surec hic baslatilamazsa ENOMEM ya da (Windows) spawn UNKNOWN
+const ffBellekHatasiMi = e => !!e && (e.code === "ENOMEM" || e.status === 4294967284 || e.status === 244 ||
+  (process.platform === "win32" && e.code === "UNKNOWN" && /^spawn/i.test(String(e.syscall || ""))) ||
+  /Cannot allocate memory|ff_frame_thread_encoder_init failed|out of memory|\bENOMEM\b/i.test(String(e.stderr || "") + " " + String(e.message || "")));
+const uyu = ms => { try { Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms); } catch (e) { /* bekleme olmadi */ } };
+// secenek yalniz birim testi icindir: { ffmpeg (yol), calistir (execFileSync yerine), uyu (bekleme yerine) }
+function ff(args, secenek) {
+  const o = Object.assign({ calistir: execFileSync, uyu }, secenek || {});
+  const yol = o.ffmpeg || FF(), argv = ffArgv(args);
+  for (let deneme = 1; ; deneme++) {
+    try { return o.calistir(yol, argv, { stdio: "pipe", windowsHide: true, timeout: 120000 }); }
+    catch (e) { if (deneme >= 2 || !ffBellekHatasiMi(e)) throw e; o.uyu(1500); }
+  }
+}
 const sureOlc = f => Number(execFileSync(FP(), ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f], { windowsHide: true }).toString().trim());
 
 const CUMLELER = [
@@ -113,20 +135,46 @@ function isKur(kok, secenek) {
   return { dizin, ad: o.ad, paragraflar, toplam, bosluk, zParca };
 }
 
+// Calisan alt surecler: temizle() dosya sonunda hala calisani kapatir (acik ffmpeg dosyayi kilitler, klasor silinemez, artik kalir).
+// Windows'ta libuv cocuklari bir is nesnesine koyar: betik olunce actigi ffmpeg'ler de kapanir, ayrica agac oldurmeye gerek yok.
+const cocuklar = new Set();
+function cocukOldur(c) {
+  if (!c || c.exitCode !== null || c.signalCode !== null) return;
+  try { c.kill("SIGKILL"); } catch (e) { /* bitmis */ }
+}
+
 // video-yap.js vb. betigi alt surecte calistir: { kod, stdout, stderr }
+// secenek: { env, zamanAsimiMs, cikti, signal }. signal: testin t.signal'i. node:test bir testi zaman asimiyla dusurdugunde betigi
+// OLDURMEZ: render (kendi 600 sn sinirina dek) arka planda surer, dosyadaki sonraki render'larla AYNI ANDA bellek tuketir.
+// Varsayilan VIDEO_KODEK=cpu (CI ile ayni yol; windows-latest GPU'suz): yerelde NVENC her ffmpeg'de CUDA baglami acar (test olceginde
+// klip basina ~270 MB commit, libx264 ~60 MB; her betigin GPU yoklamasi ~290 MB). GPU yolu icin TEST_GPU=1 ya da kabukta VIDEO_KODEK.
 function betikCalistir(betik, args, secenek) {
   const o = secenek || {};
   return new Promise(coz => {
+    const varsayilan = { RENDER_OLCEK: process.env.RENDER_OLCEK || "0.25" };
+    if (process.env.TEST_GPU !== "1" && !process.env.VIDEO_KODEK) varsayilan.VIDEO_KODEK = "cpu";
     const c = spawn(process.execPath, [path.join(KOK, betik), ...args], { cwd: KOK, windowsHide: true,
-      env: Object.assign({}, process.env, { RENDER_OLCEK: process.env.RENDER_OLCEK || "0.25" }, o.env || {}) });
+      env: Object.assign({}, process.env, varsayilan, o.env || {}) });
+    cocuklar.add(c);
     let out = "", err = "";
     c.stdout.on("data", d => { out += d; if (o.cikti) o.cikti(c, d.toString()); });
     c.stderr.on("data", d => { err += d; });
-    const t = setTimeout(() => { try { c.kill("SIGKILL"); } catch (e) { /* bitmis */ } }, o.zamanAsimiMs || 600000);
-    c.on("close", kod => { clearTimeout(t); coz({ kod, stdout: out, stderr: err }); });
+    const oldur = () => cocukOldur(c);
+    const t = setTimeout(oldur, o.zamanAsimiMs || 600000);
+    if (o.signal) { if (o.signal.aborted) oldur(); else o.signal.addEventListener("abort", oldur, { once: true }); }
+    c.on("close", kod => {
+      clearTimeout(t); cocuklar.delete(c);
+      if (o.signal) o.signal.removeEventListener("abort", oldur);
+      coz({ kod, stdout: out, stderr: err });
+    });
   });
 }
 
-function temizle(kok) { try { fs.rmSync(kok, { recursive: true, force: true }); } catch (e) { /* kilitli olabilir */ } }
+// Dosya sonu: once hala calisan alt surecler kapatilir, sonra klasor silinir (antivirus kilidine karsi yeniden denemeli; kalirsa
+// sonraki kosunun ortamKur'u siler).
+function temizle(kok) {
+  for (const c of cocuklar) cocukOldur(c);
+  artik.sil(kok);
+}
 
-module.exports = { ortamKur, ffmpegVarMi, isKur, betikCalistir, temizle, ff, sureOlc, KOK, FF, FP };
+module.exports = { ortamKur, ffmpegVarMi, isKur, betikCalistir, temizle, ff, ffArgv, sureOlc, KOK, FF, FP };

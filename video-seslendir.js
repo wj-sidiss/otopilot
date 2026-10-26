@@ -13,7 +13,8 @@
 //   --orijinal 0.12             orijinal sesin seviyesi (0 = tamamen kapat)
 //   --altyazi 0                 altyaziyi gomme
 //   --punto 22                  altyazi boyutu
-//   --motor otomatik|edge|azure|piper|voxcpm   ses motoru (varsayilan otomatik: Edge, olmazsa yedek)
+//   --motor otomatik|edge|azure|piper|voxcpm|sistem   ses motoru (varsayilan otomatik: Edge, olmazsa yedek;
+//                               sistem = isletim sistemi sesi, robotik, yalniz Edge tumden duserse kendiliginden secilir)
 //   --srt                       altyazi SRT'sini de <cikti>.srt olarak kaydet
 //
 // SENARYO DOSYASI: duz metin, paragraflar bos satirla ayrilir.
@@ -132,7 +133,7 @@ async function ana(argv, secenek) {
       let sonHata = null;
       for (const adi of (motorAdi ? [motorAdi] : sira)) {
         let motor;
-        try { motor = M.motorOlustur(adi, { ses: SES, hiz, dil, env, enjekte: ek.enjekte }); }
+        try { motor = M.motorOlustur(adi, { ses: SES, hiz, dil, env, enjekte: ek.enjekte, log, uyar: uyari }); }
         catch (e) { sonHata = new ortak.OrtakHata("motor_hata", e.message, { cikis: 2, cozum: "'" + adi + "' ayarlarını kontrol et." }); continue; }
         const parcalar = [], dusen = [];
         let ardisik = 0;
@@ -159,6 +160,13 @@ async function ana(argv, secenek) {
         }
         try { motor.kapat(); } catch (e) { /* yoksay */ }
         if (!dusen.length) { motorAdi = adi; return parcalar; }
+        // Kalite dusuren son care (sistem sesi, robotik) KISMI basari varken secilmez: tek tuk paragraf gecici dustu diye
+        // tum anlatim robotik sesle okunmaz (ses-uret.js ile ayni kural). Yalniz motor tumden coktuyse sisteme gecilir.
+        const denenen = motorAdi ? [motorAdi] : sira;
+        if (denenen[denenen.indexOf(adi) + 1] === "sistem" && parcalar.length)
+          throw new ortak.OrtakHata("paragraf_dustu", "Paragraf " + dusen.join(", ") + " seslendirilemedi", { cikis: 4,
+            cozum: "Bağlantını kontrol edip tekrar dene. İşletim sistemi sesine (robotik, kalite düşer) kendiliğinden geçilmedi; " +
+              "servis düzelmezse tümünü o sesle yapmak için: --motor sistem" });
         sonHata = new ortak.OrtakHata("paragraf_dustu", "Paragraf " + dusen.join(", ") + " seslendirilemedi", {
           cikis: 4, cozum: "Bağlantını kontrol edip tekrar dene (paragrafı kısaltmak da yardımcı olabilir)." });
         if (adi !== sira[sira.length - 1] && !motorAdi) log("'" + adi + "' motoru başarısız; TÜM iş sıradaki motorla baştan yapılıyor.");

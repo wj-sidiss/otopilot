@@ -283,10 +283,11 @@ test("README: yalniz process.env'den okunan portlar (PANEL_PORT, AIINFAPP_PORT) 
 // ---------------------------------------------------------------- 4) bagimlilik cozumu
 const YAPI = JSON.parse(fs.readFileSync(path.join(KOK, "package.json"), "utf8"));
 
-test("package.json: surum/engines/test betigi var; bagimliliklar YALNIZ sdk + msedge-tts (yeni paket eklenmemis); sahte yesil icin 'test' tum test dosyalarini kapsar", () => {
+test("package.json: surum/engines/test betigi var; bagimliliklar YALNIZ sdk + msedge-tts + ws (baska yeni paket eklenmemis); sahte yesil icin 'test' tum test dosyalarini kapsar", () => {
   assert.match(YAPI.version, /^\d+\.\d+\.\d+$/);
   assert.ok(YAPI.engines && /\d/.test(YAPI.engines.node), "engines.node yok");
-  assert.deepEqual(Object.keys(YAPI.dependencies || {}).sort(), ["@anthropic-ai/sdk", "msedge-tts"]);
+  // ws: msedge-tts'in zaten getirdigi paket; Edge sesi onarimi (lib/ses-motor-edge.js) onu DOGRUDAN kullandigi icin acikca bildirilir
+  assert.deepEqual(Object.keys(YAPI.dependencies || {}).sort(), ["@anthropic-ai/sdk", "msedge-tts", "ws"]);
   assert.match(YAPI.scripts.test, /node --test/);
   assert.match(YAPI.scripts.test, /test\/\*\*\/\*\.test\.js/, "test betigi test/**/*.test.js desenini icermeli");
   const testler = TUM.filter(y => /\.test\.js$/.test(y) && goreli(y).startsWith("test/")).map(goreli);

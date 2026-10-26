@@ -371,7 +371,9 @@ GET["/api/performans"] = async () => yayin.performansOzeti();
 POST["/api/ses-testi"] = async c => {
   const ayar = ortak.ayarOku();
   const motor = c.b.motor || "otomatik";
-  if (!["otomatik", "edge", "azure", "piper", "voxcpm"].includes(motor)) throw new HttpHata(400, "motor", "Motor otomatik, edge, azure, piper ya da voxcpm olmalı.");
+  // gecerli motorlar tek yerden (konu.json ve CLI ile ayni liste; 'sistem' dahil)
+  if (typeof motor !== "string" || !ortak.SES_MOTORLARI.includes(motor))
+    throw new HttpHata(400, "motor", "Motor şunlardan biri olmalı: " + ortak.SES_MOTORLARI.join(", ") + ".");
   const dil = c.b.dil || ayar.dil || "en";
   if (typeof dil !== "string" || !/^[a-z]{2}$/.test(dil)) throw new HttpHata(400, "dil", "Dil iki küçük harf olmalı.");
   const ses = c.b.ses || (dil === ayar.dil ? ayar.ses : ortak.varsayilanSes(dil));

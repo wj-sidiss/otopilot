@@ -146,7 +146,27 @@ test("motorSirasi: otomatik = hazir motorlar; acik motor hazir degilse yapilandi
   try { M.motorSirasi("azure", () => "", { msedge: sahte }); assert.fail("hata bekleniyordu"); }
   catch (e) { assert.equal(e.cikis, 2); assert.match(e.message, /azure/); assert.match(e.message, /AZURE_SPEECH_KEY/); }
   try { M.motorSirasi("elevenlabs", () => "", {}); assert.fail("hata bekleniyordu"); }
-  catch (e) { assert.equal(e.cikis, 2); assert.match(e.message, /Bilinmeyen/); }
+  catch (e) {
+    assert.equal(e.cikis, 2); assert.match(e.message, /Bilinmeyen/);
+    for (const m of ["otomatik"].concat(M.MOTORLAR)) assert.ok(e.cozum.includes(m), "cozum tum motorlari saymali (" + m + "): " + e.cozum);
+  }
+});
+
+test("Edge hazir mi: kendi istemcimiz yalniz WebSocket ister (paket/ag yoklamasi yok); enjekte edilen sinif da yeter", () => {
+  assert.equal(M.motorHazirMi("edge", () => "", {}).ok, true, "Node 22+ yerlesik WebSocket ya da ws");
+  assert.equal(M.motorHazirMi("edge", () => "", { edgeWs: class {} }).ok, true);
+  assert.deepEqual(M.motorSirasi("edge", () => "", {}), ["edge"]);
+});
+
+test("motorOlustur('edge'): enjeksiyonsuz uretim yolu kendi istemcimiz (msedge-tts kullanilmaz), enjekte sinifla baglanir", async () => {
+  const acilan = [];
+  class SahteWS { constructor(url, o) { acilan.push({ url, basliklar: o && o.headers }); setImmediate(() => this.onerror && this.onerror({})); } close() {} }
+  const motor = M.motorOlustur("edge", { ses: "tr-TR-AhmetNeural", hiz: "+0%", dil: "tr",
+    enjekte: { edgeWs: SahteWS, edgeUclar: [{ ad: "yerel", url: "ws://127.0.0.1:9/x", anahtar: "TrustedClientToken" }], edgeGetir: async () => ({ headers: { get: () => null } }) } });
+  await assert.rejects(motor.sentez("merhaba", {}), /Edge sesi alınamadı/);
+  assert.equal(acilan.length, 1);
+  assert.match(acilan[0].url, /^ws:\/\/127\.0\.0\.1:9\/x\?TrustedClientToken=/);
+  assert.equal(acilan[0].basliklar["Accept-Language"], edge.BASLIKLAR["Accept-Language"]);
 });
 
 // ---------------------------------------------------------------------------

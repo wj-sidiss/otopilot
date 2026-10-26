@@ -356,6 +356,133 @@ testF("disk dolu (ENOSPC) paragraf hatasi sayilmaz: ilk hatada durur, tekrar den
   assert.equal(ortak.hataCevir(Object.assign(new Error("x"), { code: "ENOSPC" })).kod, "disk_dolu");
 });
 
+// ---------------------------------------------------------------------------
+// Sistem sesi (son care) ile Edge arasindaki kurallar
+// ---------------------------------------------------------------------------
+// sahte isletim sistemi sesi (Windows argv'si): okunan kelime sayisina gore WAV yazar, secilen sesi stdout'a bildirir
+function sahteSistem(karar) {
+  const durum = { cagri: 0 };
+  const calistir = async o => {
+    durum.cagri++;
+    const k = karar ? karar(durum.cagri) : "tam";
+    if (k === "sesyok") return { kod: 3, stdout: "", stderr: "SES_YOK en-US" };
+    const kelime = fs.readFileSync(o.argv[o.argv.indexOf("-Metin") + 1], "utf8").split(/\s+/).filter(Boolean).length;
+    require("child_process").execFileSync(require("../ff-yol.js").ffmpeg, ["-y", "-hide_banner", "-loglevel", "error", "-f", "lavfi",
+      "-i", "sine=frequency=300:duration=" + Math.max(0.6, kelime * 0.4), "-ar", "16000", "-ac", "1", o.argv[o.argv.indexOf("-Cikti") + 1]]);
+    return { kod: 0, stdout: "SES Microsoft Zira|en-US\r\n", stderr: "" };
+  };
+  return { calistir, durum };
+}
+const otomatikSistemle = (dizin, edgeSahte, sistemSahte, ek) => U.seslendir(Object.assign({
+  dizin, ses: "en-US-ChristopherNeural", hiz: "+7%", dil: "en", motorSecimi: "otomatik", okunus: {}, env: env0,
+  enjekte: { msedge: edgeSahte, sistemCalistir: sistemSahte.calistir, sistemPlatform: "win32" }, ayar: S.hizliAyar(), ...sessiz,
+}, ek || {}));
+
+testF("otomatik: Edge TEK paragraf dusurdu -> sistem sesine GECILMEZ; cikis 4, biten Edge parcalari korunur, ikinci kosu yalniz eksigi uretir", async () => {
+  const dizin = yeniIs(PAR);
+  const sis = sahteSistem();
+  assert.deepEqual(M.motorSirasi("otomatik", env0, { msedge: S.sahteEdge(), sistemCalistir: sis.calistir }), ["edge", "sistem"]);
+  const edge1 = S.sahteEdge((no, metin) => (/third/i.test(metin) ? "hata" : "tam"));
+  await assert.rejects(otomatikSistemle(dizin, edge1, sis), e => {
+    assert.equal(e.cikis, 4);
+    assert.equal(e.kod, "paragraf_dustu");
+    assert.match(e.message, /Paragraf 3 seslendirilemedi/);
+    assert.match(e.cozum, /tamamlanan paragraflar yeniden üretilmez/);
+    assert.match(e.cozum, /işletim sistemi sesine \(robotik, kalite düşer\) geçilmedi/);
+    assert.match(e.cozum, /--motor sistem/);
+    return true;
+  });
+  assert.equal(sis.durum.cagri, 0, "sistem sesi hic cagrilmamali");
+  const tmp = fs.readdirSync(path.join(dizin, "Voice", "parts.tmp")).filter(f => /\.mp3$/.test(f)).sort();
+  assert.deepEqual(tmp, ["000.mp3", "001.mp3", "003.mp3", "004.mp3"], "biten Edge parcalari silinmez");
+  assert.ok(!fs.existsSync(path.join(dizin, "Voice", "zamanlama.json")));
+  // Edge duzeldi: yalniz paragraf 3 uretilir, is Edge'le biter
+  const edge2 = S.sahteEdge();
+  const r = await otomatikSistemle(dizin, edge2, sis);
+  assert.equal(r.motor, "edge");
+  assert.equal(edge2.durum.istekler.length, 1, "yalniz dusen paragraf");
+  assert.equal(sis.durum.cagri, 0);
+});
+
+testF("otomatik: Edge TUMDEN coktu -> sistem sesi; zamanlama.json gercek sesi yazar (sistem-<kultur>), sonra Edge gelince ses guncel SAYILMAZ", async () => {
+  const dizin = yeniIs(PAR);
+  NEFES.length = 0;
+  const sis = sahteSistem();
+  const loglar = [];
+  const r = await otomatikSistemle(dizin, S.sahteEdge(() => "hata"), sis, { log: m => loglar.push(m) });
+  assert.equal(r.motor, "sistem");
+  assert.equal(r.ses, "sistem-en-US", "istenen Edge adi (Christopher) yazilmaz");
+  assert.equal(sis.durum.cagri, 5);
+  const z = oku(dizin, "zamanlama.json");
+  assert.equal(z.motor, "sistem"); assert.equal(z.ses, "sistem-en-US");
+  assert.equal(oku(dizin, "kelimeler.json").ses, "sistem-en-US");
+  assert.ok(NEFES.some(m => /'edge' motoru başarısız.*'sistem' motoruyla baştan.*robotik, kalite düşer/.test(m)), NEFES.join(" | "));
+  assert.ok(r.uyarilar.some(m => /robotik/.test(m)), "uyari sonuc listesinde");
+  assert.ok(loglar.some(m => /Sistem sesi: Microsoft Zira \(en-US\)/.test(m)), "gercekte secilen ses bildirilir");
+  // ikinci kosu: Edge calisiyor -> eski robotik ses guncel sayilmaz, Edge'le yeniden uretilir
+  loglar.length = 0;
+  const edge = S.sahteEdge();
+  const r2 = await otomatikSistemle(dizin, edge, sis, { log: m => loglar.push(m) });
+  assert.equal(r2.atlandi, false);
+  assert.equal(r2.motor, "edge");
+  assert.equal(r2.ses, "en-US-ChristopherNeural");
+  assert.equal(edge.durum.istekler.length, 5, "eski sistem parcalari Edge'de yeniden kullanilmaz");
+  assert.ok(loglar.some(m => /işletim sistemi sesiyle \(son çare\) üretilmiş; 'edge' motoru hazır/.test(m)), loglar.join(" | "));
+  // ucuncu kosu: artik guncel
+  const r3 = await otomatikSistemle(dizin, S.sahteEdge(), sis);
+  assert.equal(r3.atlandi, true);
+});
+
+testF("acik --motor sistem ile uretilen ses acik secimde guncel kalir; guncelMi sistem kurali yalniz otomatikte", async () => {
+  const dizin = yeniIs(PAR.slice(0, 2));
+  const sis = sahteSistem();
+  const g = { motorSecimi: "sistem" };
+  const r = await otomatikSistemle(dizin, S.sahteEdge(), sis, g);
+  assert.equal(r.motor, "sistem");
+  assert.equal((await otomatikSistemle(dizin, S.sahteEdge(), sis, g)).atlandi, true);
+  assert.equal(U.sesAdiMotor("sistem", "tr-TR-AhmetNeural", env0, "tr"), "sistem-tr-TR");
+  assert.equal(U.sesAdiMotor("sistem", "x", env0, "xx"), "sistem-en-US");
+});
+
+testF("Edge tumden dustu, yedek sistem sesinde o dil yok: motor_hata (cikis 2), mesaj asil dusen motoru da soyler, yanlis dilde ses yok", async () => {
+  const dizin = yeniIs(PAR);
+  const sis = sahteSistem(() => "sesyok");
+  await assert.rejects(otomatikSistemle(dizin, S.sahteEdge(() => "hata"), sis), e => {
+    assert.equal(e.kod, "motor_hata");
+    assert.equal(e.cikis, 2);
+    assert.match(e.message, /'edge' motoru başarısız oldu; yedek 'sistem' de kullanılamadı: Sistemde en-US sesi yok/);
+    assert.match(e.cozum, /Ayarlar > Zaman ve dil > Konuşma/);
+    return true;
+  });
+  assert.equal(sis.durum.cagri, 1, "kalici: ilk paragrafta durur");
+  assert.ok(!fs.existsSync(path.join(dizin, "Voice", "zamanlama.json")));
+});
+
+testF("acik --motor edge dusunce ipucu: sistem 'otomatik yap' onerisine katilmaz, ayrica kalite notuyla; Turkcede Piper onerilmez", async () => {
+  const dizin = yeniIs(["Birinci paragraf burada.", "İkinci paragraf burada."]);
+  const piperEnv = a => ({ PIPER_YOL: "piper", PIPER_MODEL: "C:\\m\\tr_TR-dfki-medium.onnx" })[a] || "";
+  await assert.rejects(U.seslendir({ dizin, ses: "tr-TR-AhmetNeural", hiz: "+0%", dil: "tr", motorSecimi: "edge", okunus: {}, env: piperEnv,
+    enjekte: { msedge: S.sahteEdge(() => "hata"), sistemCalistir: sahteSistem().calistir }, ayar: S.hizliAyar(), ...sessiz }), e => {
+    assert.equal(e.cikis, 4);
+    assert.doesNotMatch(e.cozum, /Yedek motor hazır \([^)]*sistem/, "sistem 'otomatik yap' listesine girmez");
+    assert.doesNotMatch(e.cozum, /piper|PIPER/i, "Turkce icin Piper onerilmez: " + e.cozum);
+    assert.match(e.cozum, /AZURE_SPEECH_KEY/);
+    assert.match(e.cozum, /Son çare: --motor sistem \(işletim sistemi sesi \(robotik, kalite düşer\)\)/);
+    return true;
+  });
+});
+
+testF("Turkce Piper modeli kullanilirsa lisans uyarisi (tr_TR-dfki CC BY-NC-SA, ticari degil)", async () => {
+  const dizin = yeniIs(["Birinci paragraf burada yeterince uzun.", "İkinci paragraf da yeterince uzun."]);
+  NEFES.length = 0;
+  const piper = S.sahtePiperCalistir();
+  const env = a => ({ PIPER_YOL: "piper", PIPER_MODEL: "C:\\m\\tr_TR-dfki-medium.onnx" })[a] || "";
+  const r = await U.seslendir({ dizin, ses: "tr-TR-AhmetNeural", hiz: "+0%", dil: "tr", motorSecimi: "piper", okunus: {}, env,
+    enjekte: { calistir: piper.calistir }, ayar: S.hizliAyar(), ...sessiz });
+  assert.equal(r.motor, "piper");
+  assert.ok(r.uyarilar.some(m => /CC BY-NC-SA 4\.0.*ticari kullanım yok/.test(m)), r.uyarilar.join(" | "));
+});
+
 testF("test sonrasi kalinti yok: parts.eski / .part / gecici dosya", () => {
   const bul = d => fs.readdirSync(d, { withFileTypes: true }).flatMap(g => {
     const p = path.join(d, g.name);

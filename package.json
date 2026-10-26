@@ -1,6 +1,6 @@
 {
   "name": "otopilot",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Video icerik otomasyon paneli (localhost) — YouTube, Shorts, Reels, TikTok",
   "private": true,
   "scripts": {
@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
-    "msedge-tts": "^2.1.0"
+    "msedge-tts": "^2.1.0",
+    "ws": "8.22.0"
   },
   "engines": {
     "node": ">=22"
