@@ -4,7 +4,7 @@
 //   node film.js ses <dizi> <bolum>                            diyalog satirlarini karakter sesleriyle seslendirir (ucretsiz motorlar)
 //   node film.js kur <dizi> <bolum> [--dudak] [--yer-tutucu]   sahne klipleri + ses -> bolum-NNN.mp4 (+ .srt)
 // Klip uretimi: node vidiq-klip.js <dizi>-bNNN --butce <kredi> [--onay]   (kuru calisma varsayilan; ucretli, onaysiz harcamaz)
-// Dudak senkronu DIS aractir (MuseTalk, LatentSync...): .env DUDAK_KOMUT = sablon, orn.
+// Dudak senkronu DIS aractir: hazir MuseTalk baglayicisi dudak-musetalk.js (bkz .env.ornek). Genel: .env DUDAK_KOMUT = sablon, orn.
 //   python C:\musetalk\inference.py --video {video} --audio {ses} --cikti {cikti}
 // {video} {ses} {cikti} yerine sahne dosyalari konur; komut kullanici tarafindan kurulur (bu depo indirmez/calistirmaz baska kod).
 // Dosya duzeni: uretim/<dizi>/bibliya.json, uretim/<dizi>/bolum-001.json, uretim/<dizi>/bolum-001/{ses,kurgu}/ ,

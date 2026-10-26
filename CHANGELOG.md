@@ -2,6 +2,11 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.9.1] — 2026-10-26 — Dudak senkronu bağlantısı
+
+### Eklenenler
+- **`dudak-musetalk.js`:** `film.js kur --dudak` için MuseTalk (MIT, ticari kullanım serbest) sarmalayıcısı. `.env`: `MUSETALK_KOK`, isteğe bağlı `MUSETALK_PYTHON`, `DUDAK_KOMUT=node dudak-musetalk.js --video {video} --ses {ses} --cikti {cikti}`. MuseTalk komut satırında video/ses almadığı için geçici yaml yazar, `scripts.inference`'i çağırır, sonucu kopyalar. `node dudak-musetalk.js --kontrol` kurulumu ve **GPU/torch uyumunu** denetler: RTX 50 (sm_120) kartta MuseTalk'in sabit torch 2.0.1/cu118'i çalışmaz, bunu baştan açık hatayla söyler. MuseTalk'i depo indirmez/kurmaz.
+
 ## [1.9.0] — 2026-10-26 — Film/dizi hattı, Edge sesi onarımı, 44 hata düzeltmesi
 
 ### Eklenenler
