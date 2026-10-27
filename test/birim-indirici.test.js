@@ -54,7 +54,7 @@ test("klasorDogrula: indirme klasoru yalniz izinli koklerin altinda; '..', UNC, 
     "C:\\Windows", "C:\\Windows\\System32", "/etc", "/", "\\\\sunucu\\paylasim\\x", "\\\\?\\C:\\Windows", "\\\\.\\PhysicalDrive0", "//sunucu/x",
     "goreli/yol", ".", "..", "", "   ", "\0", "a".repeat(301), 5, null, undefined, {}, [], true];
   for (const k of kotu) assert.equal(m.klasorDogrula(k).ok, false, String(JSON.stringify(k)).slice(0, 60));
-  const r = m.klasorDogrula("C:\\Windows");
+  const r = m.klasorDogrula(process.platform === "win32" ? "C:\\Windows" : "/etc");   // diger platformda C:\ goreli yoldur
   assert.match(r.neden, /izinli|yalnızca|Güvenlik/i);
 });
 

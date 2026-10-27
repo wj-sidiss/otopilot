@@ -711,7 +711,7 @@ testF("CLI: --motor voxcpm sahte VoxCPM ile cikis 0 (komut, cwd, dil dogru); kur
   assert.equal(s.motor, "voxcpm");
   assert.equal(s.ses, "voxcpm:belgesel_hanim");
   const c = JSON.parse(fs.readFileSync(kayit, "utf8").trim().split("\n")[0]);
-  assert.equal(path.resolve(c.cwd), path.resolve(kok));
+  assert.equal(fs.realpathSync(c.cwd), fs.realpathSync(kok));   // macOS: /var -> /private/var
   assert.equal(c.argv[c.argv.indexOf("--ses") + 1], path.join(V.SESLER, "belgesel_hanim"));
   assert.equal(c.argv[c.argv.indexOf("--dil") + 1], "tr");
   assert.equal(c.metin, "Komut satırından Voks si pi em ile iki cümle.\nİkincisi bu.\n", "rakam yaziya + okunus sozlugu");
