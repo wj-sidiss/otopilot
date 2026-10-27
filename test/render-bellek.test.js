@@ -24,12 +24,15 @@ const KL = require("../lib/render-klip");
 const GB = 1073741824;
 const asilFreemem = os.freemem;
 const asilUyari = ortak.uyari;
+const asilPlatform = Object.getOwnPropertyDescriptor(process, "platform");
 
 // Her test temiz durumla baslar: bos bellek sabit (varsayilan 8 GB), ortam degiskeni yok, kodlayici CPU, uyarilar toplanir.
+// macOS'ta bosBellekGB gercek vm_stat'i da okur; sahte os.freemem tek olcum olsun diye platform linux gosterilir.
 function ortam(o) {
   const ayar = Object.assign({ bosGB: 8, env: undefined, gpu: null }, o || {});
   const uyarilar = [];
   os.freemem = () => ayar.bosGB * GB;
+  if (asilPlatform.value === "darwin") Object.defineProperty(process, "platform", { value: "linux", configurable: true });
   if (ayar.env === undefined) delete process.env.RENDER_DUSUK_BELLEK; else process.env.RENDER_DUSUK_BELLEK = ayar.env;
   ortak.uyari = m => uyarilar.push(String(m));
   F.kodlayiciSabitle(ayar.gpu);
@@ -38,6 +41,7 @@ function ortam(o) {
 }
 test.afterEach(() => {
   os.freemem = asilFreemem;
+  Object.defineProperty(process, "platform", asilPlatform);
   ortak.uyari = asilUyari;
   delete process.env.RENDER_DUSUK_BELLEK;
   F.bellekSifirla();
