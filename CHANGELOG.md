@@ -2,6 +2,11 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.9.4] — 2026-10-28 — AI klipleri sahneye yerleştirme
+
+### Eklenenler
+- **`klip-yerlestir.js`:** `vidiq-klip.js` ile inen AI klipleri `Voice/KLIPLER.txt` sırasıyla (satır i → sahne i) `Visuals/<sahne>/00-ai-*.mp4` olarak koyar; `video-yap.js` onları sahnenin başına yerleştirir. Ücretsiz, ağ kullanmaz, tekrar çalıştırılabilir (`--yeniden` ile eski AI klibin yerine yenisini koyar); sahne/satır sayısı uyuşmazsa uyarır.
+
 ## [1.9.3] — 2026-10-26 — README ve küçük iyileştirmeler
 
 ### Değişenler

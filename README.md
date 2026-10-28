@@ -191,6 +191,7 @@ node yayin-paketi.js   <is-adi>      # açıklama, bölümler, atıflar (video-y
 | `kaynak-dene.js` (`npm run kaynak-dene`) | her görsel kaynağını CANLI dener, görseli gerçekten indirip doğrular (servis API'si değişirse önce bunu çalıştır) |
 | `video-bul.js` | sahnelere Pexels/Pixabay **stok video** klibi ekler (`--sahne N --ara`, `--azami`, `--yeniden`); atıf `YAYIN-PAKETI.md`'ye girer |
 | `vidiq-klip.js` | vidIQ ile AI video klibi; **kredi harcar**, varsayılan kuru çalışma, `--butce` zorunlu, `--onay` ile üretir, aynı istem tekrar üretilmez |
+| `klip-yerlestir.js` | vidiq-klip ile inen AI klipleri `KLIPLER.txt` sırasıyla sahne klasörlerine koyar (ücretsiz, tekrar çalıştırılabilir); sonra `video-yap.js --yeniden` |
 | `film.js` | karakterli/diyaloglu kısa dizi: `yeni`, `klipler`, `ses`, `kur [--dudak] [--yer-tutucu]` (AGENTS.md "1b") |
 | `dudak-fal.js`, `dudak-musetalk.js` | `film.js --dudak` sağlayıcıları (bulut fal.ai / yerel MuseTalk) |
 | `video-indirici/` | **ayrı** mini panel (aşağıda); panel onu kendiliğinden başlatmaz. **Kanonik kopya bu klasördür**; bu depo dışında duran eski bir `video-indirici` klasörü varsa onu kullanma |
