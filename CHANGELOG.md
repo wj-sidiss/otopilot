@@ -8,6 +8,8 @@ Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [Se
 - **`studyo.js` (AI Stüdyo):** kendi fotoğraflarından ve videolarından kısa animasyon/kısa film. 7 hazır stil (çizgi film, anime, 3D animasyon, kil animasyon, suluboya, çizgi roman, gerçekçi). Fotoğraf `referans` (sahne stilde yeniden çizilir, yüz korunur) ya da `ilk-kare` (fotoğraf olduğu gibi canlanır) olarak gider; kendi videon (https/YouTube) hareketi korunarak stile çevrilir; yerel videodan kare alınır. Fotoğraflar 1536 px JPEG'e küçültülür (HEIC/BMP dahil). `kur` klipleri seçilen oranda birleştirir, isteğe bağlı müzik ekler.
 - `lib/vidiq-klip.js`: ilk kare / referans fotoğraf / video girdisi, `wan-3` modeli; model desteklemiyorsa istek gönderilmeden reddedilir. Aynı istem farklı fotoğrafla ayrı çekim sayılır.
 
+- **Serbest stil ve metin modu:** `--stil serbest` ek stil eklemez; `node studyo.js sahne <ad> "istem"` fotoğrafsız, yalnız yazılan istemden video üretir. Yani yalnız çizgi film değil, istenen her AI video.
+
 ### Notlar
 - Ücretlidir (vidIQ kredisi): varsayılan kuru çalışma, `--butce` ve `--onay` korumaları `vidiq-klip.js` ile aynı. Testler sahte vidIQ ile; gerçek krediyle henüz denenmedi.
 

@@ -113,3 +113,17 @@ test("kur: klipler oran boyutunda birlesir, klipsiz sahne atlanir", { skip }, ()
   assert.equal(r.sahne, 3);
   assert.throws(() => S.kur("donustur-yok", {}), /studyo\.json yok/);
 });
+
+test("serbest stil + metin modu: fotografsiz, ek stil metni olmadan istem aynen gider", { skip }, async () => {
+  S.yeni("serbest1", { stil: "serbest" });
+  assert.throws(() => S.sahneEkle("serbest1", "  "), /İstem boş/);
+  S.sahneEkle("serbest1", "an astronaut walking on mars at sunset, cinematic", 5);
+  const a = S.ayarOku("serbest1");
+  assert.equal(a.sahneler[0].mod, "metin");
+  assert.equal(S.istemKur(a, a.sahneler[0]), "an astronaut walking on mars at sunset, cinematic.");
+  const v = sahteVidiq();
+  const MP4 = Buffer.concat([Buffer.from([0, 0, 0, 0x18]), Buffer.from("ftypisom"), Buffer.alloc(20, 1)]);
+  const r = await S.uret("serbest1", { butce: "200", onay: true }, Object.assign({ vidiq: v, indir: async () => MP4 }, sessiz));
+  assert.equal(r.durum, "bitti");
+  assert.ok(!v.d.basladi[0].startFrameB64 && !v.d.basladi[0].ingredients && !v.d.basladi[0].videoUrls);
+});

@@ -1,13 +1,16 @@
-// AI STUDYO: kendi fotograflarindan ve kendi videolarindan kisa animasyon / cizgi film / kisa film (vidIQ ile; KREDI HARCAR, varsayilan KURU CALISMA).
+// AI STUDYO: ne istersen -- yazdigin istemden video, fotografindan video, kendi videonu donusturme; istersen cizgi film/anime/3D/kil stili (vidIQ ile; KREDI HARCAR, varsayilan KURU CALISMA).
+//   Stil "serbest" = ek stil yok, istem aynen gider. Fotograf gerekmez: node studyo.js sahne <ad> "istem" ile yalniz metinden sahne eklenir.
 //   node studyo.js stiller                                  hazir stiller (cizgi-film, anime, 3d-animasyon, kil, suluboya, cizgi-roman, gercekci)
 //   node studyo.js yeni <ad> [--stil cizgi-film] [--oran 9:16|16:9] [--model minimax-h3] [--sure 6]
 //   (fotograflari ve videolari uretim/<ad>/girdi/ icine koy; dosya adi sirasi = film sirasi)
+//   node studyo.js sahne <ad> "istem" [--sure 6]            fotografsiz sahne: yalniz yazdigin istemden video
 //   node studyo.js tara <ad>                                girdi/'deki yeni dosyalari sahne olarak studyo.json'a ekler
 //   node studyo.js uret <ad> --butce 400 [--onay] [--yeni-cekim]   maliyeti yazar; --onay ile klipleri uretir (vidiq-klip korumalari)
 //   node studyo.js kur <ad> [--muzik yol.mp3]               klipleri sirayla birlestirir -> uretim/<ad>/Videos/<ad>.mp4
 // Sahne modlari (studyo.json "sahneler"[].mod):
 //   referans  foto karakter/stil referansi olur, sahne secilen stilde YENIDEN cizilir (cizgi film/anime icin varsayilan)
 //   ilk-kare  foto videonun ilk karesi olur, oldugu gibi canlanir (gercekci icin varsayilan)
+//   metin     fotograf yok: "hareket" alanindaki istem (Ingilizce) videoya cevrilir
 //   video     "url": kendi videonun https/YouTube adresi -> vidIQ'ya ucretsiz yuklenir, hareketi korunarak stile cevrilir (minimax-h3/gemini-omni-flash)
 // girdi/'deki yerel video dosyasindan "an" saniyesindeki kare alinir ve referans olarak kullanilir (vidIQ yerel videoyu okuyamaz).
 // "hareket": Ingilizce, sahnede ne olacagi; "sure": sn. "karakter": tum referans sahnelerine eklenen ortak yuz fotograflari (girdi/ icinde).
@@ -22,6 +25,7 @@ const ortak = require("./lib/ortak.js");
 const K = require("./lib/vidiq-klip.js");
 
 const STILLER = {
+  serbest: { ad: "Serbest (ne istersen)", metin: "", mod: "ilk-kare" },
   "cizgi-film": { ad: "Çizgi film", metin: "2D hand-drawn cartoon animation style, bold clean outlines, flat vibrant colors, expressive faces", mod: "referans" },
   anime: { ad: "Anime", metin: "Japanese anime style animation, cel shading, detailed painted background, dynamic lighting", mod: "referans" },
   "3d-animasyon": { ad: "3D animasyon", metin: "3D animated feature film style, stylized characters, soft global illumination, rich colors", mod: "referans" },
@@ -30,7 +34,7 @@ const STILLER = {
   "cizgi-roman": { ad: "Çizgi roman", metin: "comic book style animation, ink lines, halftone shading, bold colors", mod: "referans" },
   gercekci: { ad: "Gerçekçi", metin: "photorealistic, natural motion, cinematic lighting, shallow depth of field", mod: "ilk-kare" },
 };
-const MODLAR = ["referans", "ilk-kare", "video"];
+const MODLAR = ["referans", "ilk-kare", "video", "metin"];
 const FOTO = /\.(jpe?g|png|webp|bmp|heic)$/i, VIDEO = /\.(mp4|mov|m4v|webm|mkv)$/i;
 const VARSAYILAN_HAREKET = "gentle natural movement, the subject slowly turns and smiles, subtle camera push-in";
 const BOYUT = { "9:16": [1080, 1920], "16:9": [1920, 1080] };
@@ -54,7 +58,7 @@ function ayarOku(ad) {
   if (!Array.isArray(a.sahneler)) a.sahneler = [];
   a.sahneler.forEach((s, i) => {
     if (!MODLAR.includes(s.mod)) throw hata("Sahne " + (i + 1) + ": geçersiz mod '" + s.mod + "'.", "Geçerli: " + MODLAR.join(", "));
-    if (s.mod === "video" ? !s.url : !s.kaynak) throw hata("Sahne " + (i + 1) + ": " + (s.mod === "video" ? "'url'" : "'kaynak'") + " yok.");
+    if (s.mod === "metin" ? !String(s.hareket || "").trim() : s.mod === "video" ? !s.url : !s.kaynak) throw hata("Sahne " + (i + 1) + ": " + (s.mod === "metin" ? "'hareket' (istem)" : s.mod === "video" ? "'url'" : "'kaynak'") + " yok.");
   });
   return a;
 }
@@ -81,6 +85,15 @@ function yeni(ad, b) {
     sure: Number(b.sure || 6), karakter: [], sahneler: [] };
   ayarYaz(ad, a);
   return { dizin: d, girdi: path.join(d, "girdi") };
+}
+
+// fotografsiz sahne: yalniz yazdigin istemden video (ne istersen)
+function sahneEkle(ad, istem, sure) {
+  const a = ayarOku(ad);
+  if (!String(istem || "").trim()) throw hata("İstem boş.", "Örnek: node studyo.js sahne " + ad + " \"a astronaut walking on mars at sunset, cinematic\"");
+  a.sahneler.push({ mod: "metin", hareket: String(istem).trim().slice(0, 3500), sure: Number(sure || a.sure) });
+  ayarYaz(ad, a);
+  return a.sahneler.length;
 }
 
 // girdi/'de olup sahnelerde olmayan dosyalari ekler (ad sirasiyla)
@@ -116,10 +129,10 @@ const dosyaOzeti = y => crypto.createHash("sha1").update(fs.readFileSync(y)).dig
 
 function istemKur(a, s) {
   const st = STILLER[a.stil];
-  const ek = s.mod === "referans" ? "Keep the same people, faces and outfits as in the reference photos."
+  const ek = s.mod === "metin" ? "" : s.mod === "referans" ? "Keep the same people, faces and outfits as in the reference photos."
     : s.mod === "video" ? "Restyle the whole video in this style, keep the original motion, timing and composition."
       : "Animate this exact image, keep the composition and the people's faces.";
-  return String(s.hareket || VARSAYILAN_HAREKET).trim().replace(/\.$/, "") + ". " + st.metin + ". " + ek;
+  return [String(s.hareket || VARSAYILAN_HAREKET).trim().replace(/\.$/, "") + ".", st.metin && st.metin + ".", ek].filter(Boolean).join(" ");
 }
 
 // studyo.json -> vidiq-klip listesi. videolar: url -> vidIQ videoUrl (yalniz gercek koşuda yuklenir)
@@ -127,7 +140,9 @@ function liste(ad, a, videolar) {
   const karakter = (a.karakter || []).map(f => hazirla(ad, f));
   return a.sahneler.map((s, i) => {
     const k = { istem: istemKur(a, s), sure: Number(s.sure || a.sure) };
-    if (s.mod === "video") {
+    if (s.mod === "metin") {
+      k.girdiOzet = ozet("metin");
+    } else if (s.mod === "video") {
       k.videoUrl = (videolar && videolar[i]) || "https://vidiq.yuklenecek/" + i;
       k.girdiOzet = ozet("video", s.url);
     } else {
@@ -241,10 +256,13 @@ async function ana(args) {
   const { b, konum } = ayristir(args);
   const [komut, ad] = konum;
   if (komut === "stiller") { for (const [k, v] of Object.entries(STILLER)) console.log("  " + k.padEnd(14) + v.ad + " (" + v.mod + ")"); return; }
-  if (!ad || !["yeni", "tara", "uret", "kur"].includes(komut)) throw hata("Kullanım: node studyo.js yeni|tara|uret|kur <ad> (ayrıntı: dosyanın başı) · node studyo.js stiller");
+  if (!ad || !["yeni", "tara", "sahne", "uret", "kur"].includes(komut)) throw hata("Kullanım: node studyo.js yeni|tara|uret|kur <ad> (ayrıntı: dosyanın başı) · node studyo.js stiller");
   if (komut === "yeni") {
     const r = yeni(ad, b);
     console.log("✓ Stüdyo işi açıldı. Fotoğrafları ve videoları şuraya koy (dosya adı sırası = film sırası):\n  " + r.girdi + "\nSonra: node studyo.js tara " + ad);
+  } else if (komut === "sahne") {
+    const n = sahneEkle(ad, konum.slice(2).join(" "), b.sure);
+    console.log("✓ Sahne " + n + " eklendi (metinden video). Sonra: node studyo.js uret " + ad + " --butce <kredi>");
   } else if (komut === "tara") {
     const r = tara(ad);
     console.log("✓ " + r.eklenen.length + " yeni sahne eklendi (toplam " + r.toplam + "). Hareketleri uretim/" + ad + "/studyo.json içinde yaz, sonra: node studyo.js uret " + ad + " --butce <kredi>");
@@ -261,4 +279,4 @@ async function ana(args) {
 if (require.main === module) {
   ana(process.argv.slice(2)).catch(e => { console.error("✗ " + e.message + (e.cozum ? "\n  ↳ " + e.cozum : "")); process.exit(e.cikis || 1); });
 }
-module.exports = { STILLER, MODLAR, yeni, tara, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };
+module.exports = { STILLER, MODLAR, yeni, tara, sahneEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };

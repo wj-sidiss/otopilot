@@ -160,9 +160,9 @@ node film.js kur <dizi> 1                     # klipler + ses + altyazı -> uret
 
 Karakter yüzü her klipte hafifçe kayar (AI video sınırı): `gorunum` alanını her istemde tekrar eder, aynı karakterin referans görselini Ai Infapp'ten alıp sağlayıcıya ilk kare olarak verebilirsin. Dudak senkronu için ÖNERİLEN yol bulut: `.env`'e `FAL_KEY` (fal.ai, ücretli) yazılınca `node film.js kur <dizi> 1 --dudak` fal.ai LatentSync'i kullanır (gerçek para harcar: kullanıcıya söyle). Yerel alternatif MuseTalk bağlayıcısı hazır (`dudak-musetalk.js`, `.env.ornek` bölümü "FILM"): kullanıcı MuseTalk'ı kurup `MUSETALK_KOK` ve `DUDAK_KOMUT` yazarsa `node film.js kur <dizi> 1 --dudak` çalışır; önce `node dudak-musetalk.js --kontrol` (RTX 50 kartlarda torch >= 2.7 cu128 ayrı ortam gerekir). Klip yokken `--yer-tutucu` yalnız deneme içindir. 100 bölüme baştan girme: önce 3 bölümlük pilotla maliyet ve kaliteyi ölç.
 
-## 1c. AI Stüdyo — fotoğraftan animasyon, çizgi film, kısa film (vidIQ kredisiyle)
+## 1c. AI Stüdyo — ne isterse: metinden video, fotoğraftan video, çizgi film/anime/3D/kil, kendi videosunu dönüştürme (vidIQ kredisiyle)
 
-Kullanıcı kendi fotoğraflarından ya da kendi videosundan çizgi film, anime, 3D animasyon, kil animasyon veya gerçekçi kısa film isterse `studyo.js`:
+Kullanıcı bir AI video istediğinde (yazdığı istemden, kendi fotoğraflarından ya da kendi videosundan; çizgi film, anime, 3D, kil animasyon, gerçekçi ya da stilsiz `serbest`) `studyo.js`. Fotoğraf gerekmez: `node studyo.js sahne <ad> "istem"` yalnız metinden sahne ekler (istemi İngilizce yaz):
 
 ```bash
 node studyo.js stiller                                   # cizgi-film, anime, 3d-animasyon, kil, suluboya, cizgi-roman, gercekci
@@ -173,7 +173,7 @@ node studyo.js uret <ad> --butce 400 --onay               # kullanıcı maliyeti
 node studyo.js kur <ad> [--muzik muzik.mp3]               # klipleri birleştirir -> uretim/<ad>/Videos/<ad>.mp4
 ```
 
-- Sahne modu (`studyo.json` → `sahneler[].mod`): `referans` fotoğrafı karakter referansı yapar ve sahneyi seçilen stilde yeniden çizer (stilli işlerde varsayılan); `ilk-kare` fotoğrafı olduğu gibi canlandırır (`gercekci` varsayılanı); `video` + `"url"` kullanıcının kendi videosunu (herkese açık https MP4 ya da YouTube linki) hareketini koruyarak stile çevirir (vidIQ'ya yükleme ücretsiz; yalnız `minimax-h3` / `gemini-omni-flash`). `girdi/` içindeki yerel videodan `"an"` saniyesindeki kare alınır.
+- Sahne modu (`studyo.json` → `sahneler[].mod`): `referans` fotoğrafı karakter referansı yapar ve sahneyi seçilen stilde yeniden çizer (stilli işlerde varsayılan); `ilk-kare` fotoğrafı olduğu gibi canlandırır (`gercekci` ve `serbest` varsayılanı); `metin` fotoğrafsız, istemden video; `video` + `"url"` kullanıcının kendi videosunu (herkese açık https MP4 ya da YouTube linki) hareketini koruyarak stile çevirir (vidIQ'ya yükleme ücretsiz; yalnız `minimax-h3` / `gemini-omni-flash`). `girdi/` içindeki yerel videodan `"an"` saniyesindeki kare alınır.
 - `"karakter": ["yuz.jpg"]` tüm referans sahnelerine aynı yüzü ekler (tutarlılık). `"model"`, `"cozunurluk"`, `"sure"` dosyada değiştirilebilir; varsayılan en ucuzu `minimax-h3` 768p (~20 kredi/sn, 6 sn sahne ≈ 120 kredi).
 - Aynı fotoğraf+istem ikinci kez ücretli üretilmez; fotoğraf ya da mod değişirse yeni çekimdir. İlk kullanımda tek sahneyle başla.
 - **İzin:** yalnız kullanıcının kendi fotoğrafı/videosu ya da yazılı izin verilen kişi. Ünlü, başkasının fotoğrafı, telifli film/dizi sahnesi YOK (kullanıcının kendi çekimi olmalı). Yayında yapay zekâ ürünü olduğunu belirtmesini öner.
