@@ -9,6 +9,7 @@
   var MODELLER = { "minimax-h3": ["768p", "2k"], "seedance-2-fast": ["720p"], "seedance-2": ["720p", "1080p"], "gemini-omni-flash": ["720p"], "wan-3": ["720p", "1080p"] };
   var MODEL_ETIKET = [["minimax-h3", "MiniMax H3 (en ucuz, ~20 kredi/sn)"], ["seedance-2-fast", "Seedance 2 Fast (~40 kredi/sn)"], ["seedance-2", "Seedance 2 (~60-88 kredi/sn)"], ["gemini-omni-flash", "Gemini Omni Flash (ses dahil)"], ["wan-3", "Wan 3 (2-30 sn)"]];
   var MODLAR = [["metin", "Yazıdan video"], ["ilk-kare", "Fotoğraf olduğu gibi canlansın"], ["referans", "Fotoğraf karakter/stil referansı"], ["video", "Kendi videom (link)"]];
+  var DILLER = [["en", "English"], ["tr", "Türkçe"], ["es", "Español"], ["de", "Deutsch"], ["fr", "Français"], ["it", "Italiano"], ["pt", "Português"], ["ru", "Русский"], ["ar", "العربية"], ["ja", "日本語"]];
   var ORANLAR = [["9:16", "Dikey 9:16 (Shorts, Reels, TikTok)"], ["16:9", "Yatay 16:9 (YouTube)"]];
 
   function enc(s) { return encodeURIComponent(s); }
@@ -68,10 +69,11 @@
     var stiller = Object.keys(d.stiller).map(function (k) { return [k, d.stiller[k]]; });
     var stilSec = P.secim(stiller, a.stil), oranSec = P.secim(ORANLAR, a.oran);
     var sureG = P.girdi({ type: "number", min: "2", max: "15", deger: a.sure, style: "width:5rem" });
-    ui.ayar = { stil: stilSec, oran: oranSec, model: modelSec, coz: cozSec, sure: sureG };
+    var dilSec = P.secim(DILLER, a.dil || "en");
+    ui.ayar = { stil: stilSec, oran: oranSec, model: modelSec, coz: cozSec, sure: sureG, dil: dilSec };
     Object.keys(ui.ayar).forEach(function (k) { ui.ayar[k].addEventListener("change", function () { kirli = true; }); });
     return P.bolum("Ayarlar", "Stil, ekran, model. Aynı fotoğraf ve istem ikinci kez ücretli üretilmez.",
-      P.h("div", { class: "studyo-ayar" }, P.alan("Stil", stilSec), P.alan("Ekran", oranSec), P.alan("Model", modelSec), P.alan("Çözünürlük", cozSec), P.alan("Sahne süresi (sn)", sureG)));
+      P.h("div", { class: "studyo-ayar" }, P.alan("Stil", stilSec), P.alan("Ekran", oranSec), P.alan("Model", modelSec), P.alan("Çözünürlük", cozSec), P.alan("Sahne süresi (sn)", sureG), P.alan("Anlatım dili", dilSec)));
   }
 
   function sahneKarti(s, i) {
@@ -85,6 +87,9 @@
     istem.addEventListener("input", function () { s.hareket = istem.value; kirli = true; });
     var sure = P.girdi({ type: "number", min: "2", max: "15", deger: s.sure, style: "width:4.5rem", "aria-label": "Süre (sn)" });
     sure.addEventListener("input", function () { s.sure = Number(sure.value) || d.ayar.sure; kirli = true; });
+    var anlatim = P.metinAlani({ maxlength: "600", placeholder: "Anlatım (isteğe bağlı): bu sahnede okunacak metin. Ücretsiz sesle seslendirilir, altyazı olarak yakılır.", "aria-label": "Sahne " + (i + 1) + " anlatımı" });
+    anlatim.rows = 2; anlatim.value = s.anlatim || "";
+    anlatim.addEventListener("input", function () { s.anlatim = anlatim.value; kirli = true; });
     var ek = [];
     if (s.mod === "video") {
       var url = P.girdi({ type: "url", placeholder: "https:// MP4 ya da YouTube linki (yalnız kendi videon)", deger: s.url || "", style: "width:100%" });
@@ -99,7 +104,7 @@
       P.dugme("", { tur: "hafif", kucuk: true, ikon: "ok-sag", sinif: "asagi", aria: "Aşağı taşı", disabled: i === sahneler.length - 1, onclick: function () { tasi(i, 1); } }),
       P.dugme("", { tur: "tehlike", kucuk: true, ikon: "sil", aria: "Sahneyi sil", onclick: function () { sahneler.splice(i, 1); kirli = true; sahneleriCiz(); } }));
     return P.h("div", { class: "studyo-kart" }, gorsel,
-      P.h("div", null, P.h("div", { class: "sahne-ust" }, P.h("h4", null, "Sahne " + (i + 1)), mod, P.alan("sn", sure), araclar), ek, istem, P.h("div", { class: "satir" }, durum)));
+      P.h("div", null, P.h("div", { class: "sahne-ust" }, P.h("h4", null, "Sahne " + (i + 1)), mod, P.alan("sn", sure), araclar), ek, istem, anlatim, P.h("div", { class: "satir" }, durum)));
   }
   function tasi(i, yon) {
     var j = i + yon; if (j < 0 || j >= sahneler.length) return;
@@ -140,7 +145,8 @@
     if (!d) return;
     var o = ui.ayar;
     var govde = { ad: ad, stil: o.stil.value, oran: o.oran.value, model: o.model.value, cozunurluk: o.coz.value, sure: Number(o.sure.value) || 6,
-      sahneler: sahneler.map(function (s) { return { mod: s.mod, kaynak: s.kaynak, url: s.url, hareket: s.hareket, sure: s.sure, an: s.an }; }) };
+      dil: o.dil.value,
+      sahneler: sahneler.map(function (s) { return { mod: s.mod, kaynak: s.kaynak, url: s.url, hareket: s.hareket, sure: s.sure, an: s.an, anlatim: s.anlatim }; }) };
     try {
       await P.api("/api/studyo/kaydet", govde);
       await detayYukle();

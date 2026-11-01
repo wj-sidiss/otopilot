@@ -170,10 +170,11 @@ node studyo.js yeni <ad> --stil cizgi-film --oran 9:16    # uretim/<ad>/girdi/ a
 node studyo.js tara <ad>                                  # girdi/'deki dosyalar sahne olur; uretim/<ad>/studyo.json'da her sahnenin "hareket"ini (İngilizce) SEN yaz
 node studyo.js uret <ad> --butce 400                      # KURU ÇALIŞMA: maliyeti yazar, kredi harcamaz
 node studyo.js uret <ad> --butce 400 --onay               # kullanıcı maliyeti onaylayınca: klipleri üretir (vidIQ kredisi)
-node studyo.js kur <ad> [--muzik muzik.mp3]               # klipleri birleştirir -> uretim/<ad>/Videos/<ad>.mp4
+node studyo.js kur <ad> [--muzik muzik.mp3] [--altyazisiz]  # klipleri birleştirir -> uretim/<ad>/Videos/<ad>.mp4 (anlatım varsa seslendirir + altyazı yakar, ÜCRETSİZ)
 ```
 
 - Sahne modu (`studyo.json` → `sahneler[].mod`): `referans` fotoğrafı karakter referansı yapar ve sahneyi seçilen stilde yeniden çizer (stilli işlerde varsayılan); `ilk-kare` fotoğrafı olduğu gibi canlandırır (`gercekci` ve `serbest` varsayılanı); `metin` fotoğrafsız, istemden video; `video` + `"url"` kullanıcının kendi videosunu (herkese açık https MP4 ya da YouTube linki) hareketini koruyarak stile çevirir (vidIQ'ya yükleme ücretsiz; yalnız `minimax-h3` / `gemini-omni-flash`). `girdi/` içindeki yerel videodan `"an"` saniyesindeki kare alınır.
+- Anlatım: sahnede `"anlatim": "metin"` (≤600 karakter) varsa `kur` onu ücretsiz seslendirir (Edge, olmazsa sistem sesi), altyazı olarak yakar, sahne anlatımdan kısaysa klibi döngüler; dil `studyo.json` → `"dil": "tr"` (varsayılan `en`), isteğe bağlı `"ses"`. `--muzik` anlatımın altına kısık karışır. Yayında "yapay zekâ sesi/içeriği" belirtmesini öner.
 - `"karakter": ["yuz.jpg"]` tüm referans sahnelerine aynı yüzü ekler (tutarlılık). `"model"`, `"cozunurluk"`, `"sure"` dosyada değiştirilebilir; varsayılan en ucuzu `minimax-h3` 768p (~20 kredi/sn, 6 sn sahne ≈ 120 kredi).
 - Aynı fotoğraf+istem ikinci kez ücretli üretilmez; fotoğraf ya da mod değişirse yeni çekimdir. İlk kullanımda tek sahneyle başla.
 - **İzin:** yalnız kullanıcının kendi fotoğrafı/videosu ya da yazılı izin verilen kişi. Ünlü, başkasının fotoğrafı, telifli film/dizi sahnesi YOK (kullanıcının kendi çekimi olmalı). Yayında yapay zekâ ürünü olduğunu belirtmesini öner.

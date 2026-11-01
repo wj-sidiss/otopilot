@@ -2,6 +2,15 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.11.0] — 2026-11-01 — Stüdyo'da anlatım, altyazı ve müzik
+
+### Eklenenler
+- **Anlatım (ücretsiz):** Stüdyo sahnesine `anlatim` metni (≤600 karakter) yazılırsa film kurulurken Edge sesiyle (olmazsa işletim sistemi sesiyle) seslendirilir. Sahne anlatımdan kısaysa klip döngülenir, anlatım bitmeden kesilmez. Aynı metin+dil+ses ikinci kez seslendirilmez. Anlatım dili ayarı (`dil`, 10 dil panelde).
+- **Altyazı:** anlatım metni ekrana yakılır ve `Videos/<ad>.srt` olarak yazılır (`--altyazisiz` ile kapatılır).
+- **Müzik anlatımın altında:** `--muzik` anlatım varken müziği kısık seviyeyle (%18) karıştırır; anlatım yoksa eskisi gibi tam sesle çalar.
+- Panelde sahne başına "Anlatım" kutusu ve "Anlatım dili" seçimi. Yüklenen fotoğraf adlarındaki Türkçe karakterler okunur kalır (`Büyük Foto.png` → `Buyuk-Foto.jpg`).
+- `studyo.js kur` artık asenkron; anlatım olmayan filmler eskisi gibi sessiz kurulur.
+
 ## [1.10.1] — 2026-11-01 — Panelde AI Stüdyo
 
 ### Eklenenler

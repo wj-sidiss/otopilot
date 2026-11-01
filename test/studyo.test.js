@@ -102,16 +102,16 @@ test("girdiDenetle: wan-3 referans almaz, karma girdi reddedilir", () => {
   assert.doesNotThrow(() => K.girdiDenetle("minimax-h3", { istem: "x" }));
 });
 
-test("kur: klipler oran boyutunda birlesir, klipsiz sahne atlanir", { skip }, () => {
+test("kur: klipler oran boyutunda birlesir, klipsiz sahne atlanir", { skip }, async () => {
   const clips = path.join(kok, "aile", "Clips");
   const kayit = K.kayitOku(clips);
   for (const g of kayit.klipler.filter(x => x.dosya)) klip(path.join(clips, g.dosya), 1);
-  const r = S.kur("aile", {});
+  const r = await S.kur("aile", {}, sessiz);
   assert.ok(fs.existsSync(r.cikti));
   const boyut = execFileSync(ff().ffprobe, ["-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=p=0", r.cikti], { encoding: "utf8" }).trim();
   assert.equal(boyut, "1080,1920");
   assert.equal(r.sahne, 3);
-  assert.throws(() => S.kur("donustur-yok", {}), /studyo\.json yok/);
+  await assert.rejects(S.kur("donustur-yok", {}, sessiz), /studyo\.json yok/);
 });
 
 test("serbest stil + metin modu: fotografsiz, ek stil metni olmadan istem aynen gider", { skip }, async () => {
@@ -126,4 +126,32 @@ test("serbest stil + metin modu: fotografsiz, ek stil metni olmadan istem aynen 
   const r = await S.uret("serbest1", { butce: "200", onay: true }, Object.assign({ vidiq: v, indir: async () => MP4 }, sessiz));
   assert.equal(r.durum, "bitti");
   assert.ok(!v.d.basladi[0].startFrameB64 && !v.d.basladi[0].ingredients && !v.d.basladi[0].videoUrls);
+});
+
+test("anlatim: ucretsiz ses uretilir, sahne anlatimdan kisaysa uzar, altyazi + muzik karisir; ayni metin ikinci kez seslendirilmez", { skip }, async () => {
+  const yol = path.join(kok, "aile", "studyo.json");
+  const a = JSON.parse(fs.readFileSync(yol, "utf8"));
+  a.dil = "tr";
+  a.sahneler[0].anlatim = "Bir varmış bir yokmuş, küçük bir kedi uzak bir plajda güneşin doğuşunu izlemiş.";
+  fs.writeFileSync(yol, JSON.stringify(a));
+  let cagri = 0;
+  const sahteSes = async g => {
+    cagri++;
+    assert.equal(g.dil, "tr"); assert.match(g.metin, /küçük bir kedi/);
+    execFileSync(ff().ffmpeg, ["-y", "-loglevel", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=2.5", "-c:a", "aac", "-f", "adts", g.cikti], { windowsHide: true });
+  };
+  const muzik = path.join(kok, "muzik.m4a");
+  execFileSync(ff().ffmpeg, ["-y", "-loglevel", "error", "-f", "lavfi", "-i", "sine=frequency=220:duration=2", "-c:a", "aac", muzik], { windowsHide: true });
+  const r = await S.kur("aile", { muzik }, Object.assign({ ses: sahteSes }, sessiz));
+  assert.equal(r.anlatim, 1); assert.equal(cagri, 1);
+  assert.ok(r.sure >= 2.9 + 1 + 1 - 0.2);                            // 1. sahne anlatima (2.5 + 0.4) kadar uzar, diger ikisi 1 sn
+  assert.ok(fs.existsSync(path.join(kok, "aile", "Videos", "aile.srt")));
+  assert.match(fs.readFileSync(path.join(kok, "aile", "Videos", "aile.srt"), "utf8"), /küçük/);
+  const akislar = execFileSync(ff().ffprobe, ["-v", "error", "-show_entries", "stream=codec_type", "-of", "csv=p=0", r.cikti], { encoding: "utf8" });
+  assert.match(akislar, /audio/); assert.match(akislar, /video/);
+  await S.kur("aile", {}, Object.assign({ ses: sahteSes }, sessiz));
+  assert.equal(cagri, 1);                                             // onbellek: ayni metin ikinci kez seslendirilmedi
+  a.sahneler[0].anlatim = "x".repeat(601);
+  fs.writeFileSync(yol, JSON.stringify(a));
+  await assert.rejects(S.kur("aile", {}, sessiz), /600 karakter/);
 });

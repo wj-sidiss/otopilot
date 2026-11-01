@@ -46,9 +46,11 @@ test("foto yukleme: gercek imza zorunlu, guvenli ad, tekrar yuklenince ad cakism
   assert.equal(r.json.dosya, "Kedi-Foto.jpg");                                     // yol kirpildi, bosluk temizlendi
   r = await kotu({ dosya: "Kedi Foto.jpg", veri: JPEG });
   assert.equal(r.json.dosya, "Kedi-Foto-2.jpg");
+  r = await kotu({ dosya: "Büyük Çocuk ığış.jpg", veri: JPEG });                    // Turkce karakterler okunur kalir
+  assert.equal(r.json.dosya, "Buyuk-Cocuk-igis.jpg");
   assert.ok(fs.existsSync(path.join(ortam.uretim, "film1", "girdi", "Kedi-Foto.jpg")));
   const d = (await c.get("/api/studyo/detay?ad=film1")).json;
-  assert.equal(d.sahneler.length, 2);
+  assert.equal(d.sahneler.length, 3);
   assert.equal(d.sahneler[0].mod, "ilk-kare");                                     // serbest stil: foto oldugu gibi canlanir
 });
 
@@ -57,10 +59,10 @@ test("kaydet: sahneler, ayar ve maliyet; gecersiz kayit eski dosyayi bozmaz", as
   assert.equal(r.durum, 200, r.metin);
   assert.equal((await c.post("/api/studyo/sahne", { ad: "film1", istem: "  " })).durum, 400);
   const d = (await c.get("/api/studyo/detay?ad=film1")).json;
-  assert.equal(d.sahneler.length, 3);
+  assert.equal(d.sahneler.length, 4);
   const bekle = d.ayar.sure;
   assert.equal(d.krediSn, 20);                                                      // minimax-h3 768p
-  assert.equal(d.kredi, (bekle + bekle + 5) * 20);
+  assert.equal(d.kredi, (bekle * 3 + 5) * 20);
   const oncekiDosya = fs.readFileSync(path.join(ortam.uretim, "film1", "studyo.json"), "utf8");
   r = await c.post("/api/studyo/kaydet", { ad: "film1", model: "wan-3", cozunurluk: "768p" });   // wan-3 768p yok
   assert.equal(r.durum, 400);
@@ -115,4 +117,16 @@ test("medya: foto cerezle gelir, cerezsiz 403, yol kacisi ve uzanti reddedilir",
   assert.equal((await c.get("/studyo/film1/girdi/not.txt", { cerezli: true })).durum, 400);
   assert.equal((await c.get("/studyo/film1/gizli/Kedi-Foto.jpg", { cerezli: true })).durum, 400);
   assert.equal((await c.get("/studyo/yok-boyle/girdi/a.jpg", { cerezli: true })).durum, 404);
+});
+
+test("anlatim ve dil kaydedilir; 600 karakteri asan anlatim kesilir, gecersiz dil reddedilir", async () => {
+  let r = await c.post("/api/studyo/kaydet", { ad: "film1", model: "minimax-h3", cozunurluk: "768p", dil: "tr",
+    sahneler: [{ mod: "metin", hareket: "a cat on a beach", sure: 4, anlatim: "Bir kedi plajda.".padEnd(700, "x") }] });
+  assert.equal(r.durum, 200, r.metin);
+  const d = (await c.get("/api/studyo/detay?ad=film1")).json;
+  assert.equal(d.ayar.dil, "tr");
+  assert.equal(d.sahneler[0].anlatim.length, 600);
+  r = await c.post("/api/studyo/kaydet", { ad: "film1", dil: "turkce" });
+  assert.equal(r.durum, 400);
+  assert.equal((await c.get("/api/studyo/detay?ad=film1")).json.ayar.dil, "tr");           // gecersiz kayit eskiyi bozmadi
 });

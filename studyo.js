@@ -6,7 +6,9 @@
 //   node studyo.js sahne <ad> "istem" [--sure 6]            fotografsiz sahne: yalniz yazdigin istemden video
 //   node studyo.js tara <ad>                                girdi/'deki yeni dosyalari sahne olarak studyo.json'a ekler
 //   node studyo.js uret <ad> --butce 400 [--onay] [--yeni-cekim]   maliyeti yazar; --onay ile klipleri uretir (vidiq-klip korumalari)
-//   node studyo.js kur <ad> [--muzik yol.mp3]               klipleri sirayla birlestirir -> uretim/<ad>/Videos/<ad>.mp4
+//   node studyo.js kur <ad> [--muzik yol.mp3] [--altyazisiz]  klipleri sirayla birlestirir -> uretim/<ad>/Videos/<ad>.mp4
+//   Anlatim: sahnede "anlatim": "metin" (<=600 kr) varsa UCRETSIZ seslendirilir (Edge, olmazsa sistem sesi; dil: studyo.json "dil", ses: "ses"),
+//   sahne anlatimdan kisaysa klip dongulenir, altyazi yakilir, --muzik anlatimin altina karisir. Anlatimsiz film eskisi gibi sessizdir.
 // Sahne modlari (studyo.json "sahneler"[].mod):
 //   referans  foto karakter/stil referansi olur, sahne secilen stilde YENIDEN cizilir (cizgi film/anime icin varsayilan)
 //   ilk-kare  foto videonun ilk karesi olur, oldugu gibi canlanir (gercekci icin varsayilan)
@@ -56,8 +58,11 @@ function ayarOku(ad) {
   if (!STILLER[a.stil]) throw hata("Bilinmeyen stil: " + a.stil, "Geçerli: " + Object.keys(STILLER).join(", "));
   if (!BOYUT[a.oran]) throw hata("Geçersiz oran: " + a.oran, "9:16 ya da 16:9");
   if (!Array.isArray(a.sahneler)) a.sahneler = [];
+  a.dil = a.dil || "en";
+  if (!/^[a-z]{2}$/.test(a.dil)) throw hata("Geçersiz anlatım dili: " + a.dil, "İki harfli kod: tr, en, es, de, fr…");
   a.sahneler.forEach((s, i) => {
     if (!MODLAR.includes(s.mod)) throw hata("Sahne " + (i + 1) + ": geçersiz mod '" + s.mod + "'.", "Geçerli: " + MODLAR.join(", "));
+    if (s.anlatim !== undefined && (typeof s.anlatim !== "string" || s.anlatim.length > 600)) throw hata("Sahne " + (i + 1) + ": 'anlatim' en çok 600 karakterlik metin olmalı.");
     if (s.mod === "metin" ? !String(s.hareket || "").trim() : s.mod === "video" ? !s.url : !s.kaynak) throw hata("Sahne " + (i + 1) + ": " + (s.mod === "metin" ? "'hareket' (istem)" : s.mod === "video" ? "'url'" : "'kaynak'") + " yok.");
   });
   return a;
@@ -215,35 +220,93 @@ function klipEsle(ad, a) {
   });
 }
 
-function kur(ad, b) {
+// sahne anlatimlarini ucretsiz motorlarla seslendirir (Edge -> sistem sesi). Ayni metin+dil+ses ikinci kez uretilmez.
+async function anlatimSesleri(ad, a, log, uretici) {
+  const klasor = path.join(dizinOf(ad), "Voice");
+  fs.mkdirSync(klasor, { recursive: true });
+  const out = [];
+  for (const [i, s] of a.sahneler.entries()) {
+    const metin = String(s.anlatim || "").trim();
+    if (!metin) { out.push(null); continue; }
+    const dosya = path.join(klasor, String(i + 1).padStart(3, "0") + "-" + ozet(metin, a.dil, a.ses || "") + ".mp3");
+    if (!fs.existsSync(dosya)) {
+      log("  sahne " + (i + 1) + " seslendiriliyor…");
+      await (uretici || require("./lib/ses-uret.js").ornekUret)({ metin, dil: a.dil, ses: a.ses || undefined, cikti: dosya, log: () => {} });
+    }
+    out.push({ dosya, sure: sureOlc(dosya), metin });
+  }
+  return out;
+}
+const srtZaman = sn => { const ms = Math.round(sn * 1000), p = (n, k) => String(n).padStart(k, "0"); return p(Math.floor(ms / 3600000), 2) + ":" + p(Math.floor(ms / 60000) % 60, 2) + ":" + p(Math.floor(ms / 1000) % 60, 2) + "," + p(ms % 1000, 3); };
+function satirla(metin, en) {
+  const satirlar = []; let su = "";
+  for (const k of String(metin).split(/\s+/)) { if (su && (su + " " + k).length > en) { satirlar.push(su); su = k; } else su = su ? su + " " + k : k; }
+  if (su) satirlar.push(su);
+  return satirlar.join("\n");
+}
+
+// klipleri sirayla birlestirir; anlatim varsa sahne anlatimdan kisaysa uzatilir (klip dongulenir), altyazi yakilir, muzik anlatimin altina karisir
+async function kur(ad, b, enj) {
+  const e = enj || {};
+  const log = e.log || (m => console.log(m));
   const a = ayarOku(ad);
   const es = klipEsle(ad, a);
   const eksik = es.filter(x => !x.yol).map(x => x.sahne);
   const var_ = es.filter(x => x.yol);
   if (!var_.length) throw hata("Hiç klip yok.", "Önce: node studyo.js uret " + ad + " --butce <kredi> --onay");
+  const sesler = await anlatimSesleri(ad, a, log, e.ses);
+  const sesVar = var_.some(x => sesler[x.sahne - 1]);
   const [w, h] = BOYUT[a.oran];
   const d = dizinOf(ad), kurgu = path.join(d, "kurgu");
   fs.mkdirSync(kurgu, { recursive: true });
   fs.mkdirSync(path.join(d, "Videos"), { recursive: true });
+  const filtre = "fps=30,scale=" + w + ":" + h + ":force_original_aspect_ratio=increase,crop=" + w + ":" + h + ",format=yuv420p,setsar=1";
+  let t = 0; const altyazi = [];
   const parcalar = var_.map((x, i) => {
     const p = path.join(kurgu, String(i + 1).padStart(3, "0") + ".mp4");
-    ffmpeg(["-i", x.yol, "-vf", "fps=30,scale=" + w + ":" + h + ":force_original_aspect_ratio=increase,crop=" + w + ":" + h + ",format=yuv420p,setsar=1",
-      "-an", "-c:v", "libx264", "-crf", "20", "-preset", "veryfast", "-threads", "2", p], "sahne " + x.sahne);
+    const ses = sesler[x.sahne - 1];
+    const klipSn = sureOlc(x.yol);
+    const sure = ses ? Math.max(klipSn, ses.sure + 0.4) : klipSn;
+    const girdi = ["-stream_loop", "-1", "-i", x.yol];
+    if (sesVar) girdi.push(...(ses ? ["-i", ses.dosya] : ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]));
+    ffmpeg([...girdi, "-t", sure.toFixed(3), "-vf", filtre,
+      ...(sesVar ? ["-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "160k", "-ar", "44100", "-ac", "2", "-af", "apad"] : ["-an"]),
+      "-c:v", "libx264", "-crf", "20", "-preset", "veryfast", "-threads", "2", p], "sahne " + x.sahne);
+    if (ses) altyazi.push({ b: t + 0.1, e: t + Math.min(sure, ses.sure + 0.3), m: satirla(ses.metin, a.oran === "9:16" ? 28 : 52) });
+    t += sure;
     return p;
   });
   const listeDosya = path.join(kurgu, "liste.txt");
   fs.writeFileSync(listeDosya, parcalar.map(p => "file '" + p.replace(/\\/g, "/").replace(/'/g, "'\\''") + "'").join("\n") + "\n");
+  const ham = path.join(kurgu, "ham.mp4");
+  ffmpeg(["-f", "concat", "-safe", "0", "-i", listeDosya, "-c", "copy", ham], "birleştir");
+  const uyarilar = [];
+  let simdi = ham;
+  if (altyazi.length && b.altyazisiz !== true) {
+    const srt = path.join(d, "Videos", ad + ".srt");
+    fs.writeFileSync(srt, altyazi.map((x, k) => (k + 1) + "\n" + srtZaman(x.b) + " --> " + srtZaman(x.e) + "\n" + x.m + "\n").join("\n"));
+    const yakili = path.join(kurgu, "altyazili.mp4");
+    const srtF = srt.replace(/\\/g, "/").replace(/:/g, "\\:");
+    try {
+      ffmpeg(["-i", ham, "-vf", "subtitles='" + srtF + "':force_style='Alignment=2,FontSize=" + (a.oran === "9:16" ? 14 : 20) + ",Outline=2,MarginV=" + (a.oran === "9:16" ? 90 : 40) + "'", "-c:v", "libx264", "-crf", "20", "-preset", "veryfast", "-c:a", "copy", yakili], "altyazı");
+      simdi = yakili;
+    } catch (x) { uyarilar.push("Altyazı videoya gömülemedi (" + x.message.slice(0, 100) + "); .srt ayrı dosya olarak yazıldı."); }
+  }
   const cikti = path.join(d, "Videos", ad + ".mp4");
   if (b.muzik) {
     const m = path.resolve(String(b.muzik));
     if (!fs.existsSync(m)) throw hata("Müzik dosyası yok: " + m);
-    const ham = path.join(kurgu, "ham.mp4");
-    ffmpeg(["-f", "concat", "-safe", "0", "-i", listeDosya, "-c", "copy", ham], "birleştir");
-    const sure = var_.length ? parcalar.reduce((t, p) => t + sureOlc(p), 0) : 0;
-    ffmpeg(["-i", ham, "-stream_loop", "-1", "-i", m, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k",
-      "-af", "afade=t=in:d=0.5,afade=t=out:st=" + Math.max(0, sure - 1.5).toFixed(2) + ":d=1.5", "-t", sure.toFixed(3), cikti], "müzik");
-  } else ffmpeg(["-f", "concat", "-safe", "0", "-i", listeDosya, "-c", "copy", cikti], "birleştir");
-  return { cikti, sahne: var_.length, eksik };
+    const son = Math.max(0, t - 1.5).toFixed(2);
+    if (sesVar) {
+      ffmpeg(["-i", simdi, "-stream_loop", "-1", "-i", m, "-filter_complex",
+        "[1:a]volume=0.18,afade=t=in:d=0.5,afade=t=out:st=" + son + ":d=1.5[m];[0:a][m]amix=inputs=2:duration=first:dropout_transition=0[a]",
+        "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-t", t.toFixed(3), cikti], "müzik");
+    } else {
+      ffmpeg(["-i", simdi, "-stream_loop", "-1", "-i", m, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k",
+        "-af", "afade=t=in:d=0.5,afade=t=out:st=" + son + ":d=1.5", "-t", t.toFixed(3), cikti], "müzik");
+    }
+  } else fs.copyFileSync(simdi, cikti);
+  return { cikti, sahne: var_.length, eksik, sure: t, uyarilar, anlatim: altyazi.length };
 }
 function sureOlc(dosya) {
   const r = spawnSync(ff().ffprobe, ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", dosya], { encoding: "utf8", windowsHide: true });
@@ -280,8 +343,8 @@ async function ana(args) {
     if (r.durum === "butce_doldu") process.exitCode = ortak.CIKIS.MALIYET;
     else if (r.durum === "kismi") process.exitCode = ortak.CIKIS.SERVIS;
   } else {
-    const r = kur(ad, b);
-    console.log("✓ " + r.cikti + " (" + r.sahne + " sahne)" + (r.eksik.length ? "\n! klibi olmayan sahneler atlandı: " + r.eksik.join(", ") : ""));
+    const r = await kur(ad, b);
+    console.log("✓ " + r.cikti + " (" + r.sahne + " sahne)" + (r.eksik.length ? "\n! klibi olmayan sahneler atlandı: " + r.eksik.join(", ") : "") + (r.anlatim ? "\n  anlatım: " + r.anlatim + " sahne seslendirildi, altyazı yakıldı" : "") + r.uyarilar.map(u => "\n! " + u).join(""));
   }
 }
 
