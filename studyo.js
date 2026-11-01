@@ -96,6 +96,15 @@ function sahneEkle(ad, istem, sure) {
   return a.sahneler.length;
 }
 
+// tek fotografi sahne olarak ekler (panel yuklemesi); girdi/'deki silinmis sahneler geri gelmesin diye tara() cagrilmaz
+function fotoEkle(ad, dosya) {
+  const a = ayarOku(ad);
+  girdiYolu(ad, dosya);
+  a.sahneler.push({ kaynak: dosya, mod: STILLER[a.stil].mod, hareket: VARSAYILAN_HAREKET, sure: a.sure });
+  ayarYaz(ad, a);
+  return a.sahneler.length;
+}
+
 // girdi/'de olup sahnelerde olmayan dosyalari ekler (ad sirasiyla)
 function tara(ad) {
   const a = ayarOku(ad);
@@ -279,4 +288,4 @@ async function ana(args) {
 if (require.main === module) {
   ana(process.argv.slice(2)).catch(e => { console.error("✗ " + e.message + (e.cozum ? "\n  ↳ " + e.cozum : "")); process.exit(e.cikis || 1); });
 }
-module.exports = { STILLER, MODLAR, yeni, tara, sahneEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };
+module.exports = { STILLER, MODLAR, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };

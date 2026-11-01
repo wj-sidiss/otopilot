@@ -247,7 +247,7 @@ vidIQ'yu depodaki betikler de kullanır (`VIDIQ_KEY`, senaryo/başlık/trend/per
 ## 3. Diğer
 
 - **Video indirici** (`video-indirici/`, `node video-indirici/server.js`, 4190): yalnızca kullanıcının kendi ya da izinli içeriği için.
-- **Panel** (`node panel.js`, 4173): tarayıcıdan kullanmak isteyen kullanıcı içindir; sen komut satırını kullan.
+- **Panel** (`node panel.js`, 4173): tarayıcıdan kullanmak isteyen kullanıcı içindir (AI Stüdyo sekmesi dahil); sen komut satırını kullan.
 - **Kendi yüzün/sesinle video (yerel araçlar):** `araclar/klon-video/` — ses klonlama (VoxCPM2), FaceFusion başlatıcı, arka plan/logo yerleştirme,
   renk eşleme, senaryo kontrolü, dudak ölçümü. Betikler tek başına çalışır; ayrıntı ve tuzaklar `araclar/klon-video/README.md`.
   Yalnız kullanıcının kendi yüzü/sesi ya da yazılı izin; yayında "sentetik içerik" kutusu.

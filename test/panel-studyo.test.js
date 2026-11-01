@@ -1,0 +1,118 @@
+// Panel / AI Studyo uclari (gercek panel sureci): is acma, foto yukleme guvenligi, kaydetme + geri alma, maliyet, kuru calisma, medya.
+// Gercek vidIQ'ya ve krediye DOKUNMAZ (VIDIQ_KEY yok; kuru calisma anahtarsiz calisir).
+"use strict";
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const fs = require("fs");
+const path = require("path");
+const Y = require("./panel-yardim");
+
+let ortam, panel, c;
+test.before(async () => { ortam = Y.geciciOrtam("studyo"); panel = await Y.panelBaslat(ortam); c = panel.istemci; });
+test.after(async () => { if (panel) await panel.kapat(); if (ortam) ortam.temizle(); });
+
+// kucuk gecerli JPEG basligi (yalniz imza kontrolu) + govde
+const JPEG = Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(64, 1)]).toString("base64");
+
+async function bekleBitsin(ad) {
+  for (let i = 0; i < 100; i++) {
+    const r = (await c.get("/api/studyo/detay?ad=" + ad)).json;
+    if (!r.is || !r.is.calisiyor) return r;
+    await new Promise(k => setTimeout(k, 150));
+  }
+  throw new Error("is bitmedi");
+}
+
+test("yeni is: gecersiz ad ve stil reddedilir; liste stilleri dondurur", async () => {
+  assert.equal((await c.post("/api/studyo/yeni", { ad: "../kotu" })).durum, 400);
+  assert.equal((await c.post("/api/studyo/yeni", { ad: "Buyuk" })).durum, 400);
+  assert.equal((await c.post("/api/studyo/yeni", { ad: "film1", stil: "yok" })).durum, 400);
+  const r = await c.post("/api/studyo/yeni", { ad: "film1", stil: "serbest", oran: "9:16" });
+  assert.equal(r.durum, 200, r.metin);
+  assert.equal((await c.post("/api/studyo/yeni", { ad: "film1" })).durum, 400);     // zaten var
+  const l = (await c.get("/api/studyo/liste")).json;
+  assert.deepEqual(l.isler.map(x => x.ad), ["film1"]);
+  assert.ok(l.stiller["cizgi-film"] && l.stiller.serbest);
+});
+
+test("foto yukleme: gercek imza zorunlu, guvenli ad, tekrar yuklenince ad cakismaz; ucuncu taraf yol/uzanti reddedilir", async () => {
+  const kotu = (govde) => c.post("/api/studyo/yukle", Object.assign({ ad: "film1" }, govde));
+  assert.equal((await kotu({ dosya: "a.exe", veri: JPEG })).durum, 400);
+  assert.equal((await kotu({ dosya: "a.jpg", veri: Buffer.from("MZ not an image").toString("base64") })).durum, 400);   // imza yok
+  assert.equal((await kotu({ dosya: "a.jpg", veri: "" })).durum, 400);
+  assert.equal((await c.post("/api/studyo/yukle", { ad: "yok-boyle", dosya: "a.jpg", veri: JPEG })).durum, 404);
+  let r = await kotu({ dosya: "../../etc/Kedi Foto.jpg", veri: JPEG });
+  assert.equal(r.durum, 200, r.metin);
+  assert.equal(r.json.dosya, "Kedi-Foto.jpg");                                     // yol kirpildi, bosluk temizlendi
+  r = await kotu({ dosya: "Kedi Foto.jpg", veri: JPEG });
+  assert.equal(r.json.dosya, "Kedi-Foto-2.jpg");
+  assert.ok(fs.existsSync(path.join(ortam.uretim, "film1", "girdi", "Kedi-Foto.jpg")));
+  const d = (await c.get("/api/studyo/detay?ad=film1")).json;
+  assert.equal(d.sahneler.length, 2);
+  assert.equal(d.sahneler[0].mod, "ilk-kare");                                     // serbest stil: foto oldugu gibi canlanir
+});
+
+test("kaydet: sahneler, ayar ve maliyet; gecersiz kayit eski dosyayi bozmaz", async () => {
+  let r = await c.post("/api/studyo/sahne", { ad: "film1", istem: "an astronaut on mars at sunset", sure: 5 });
+  assert.equal(r.durum, 200, r.metin);
+  assert.equal((await c.post("/api/studyo/sahne", { ad: "film1", istem: "  " })).durum, 400);
+  const d = (await c.get("/api/studyo/detay?ad=film1")).json;
+  assert.equal(d.sahneler.length, 3);
+  const bekle = d.ayar.sure;
+  assert.equal(d.krediSn, 20);                                                      // minimax-h3 768p
+  assert.equal(d.kredi, (bekle + bekle + 5) * 20);
+  const oncekiDosya = fs.readFileSync(path.join(ortam.uretim, "film1", "studyo.json"), "utf8");
+  r = await c.post("/api/studyo/kaydet", { ad: "film1", model: "wan-3", cozunurluk: "768p" });   // wan-3 768p yok
+  assert.equal(r.durum, 400);
+  assert.equal(fs.readFileSync(path.join(ortam.uretim, "film1", "studyo.json"), "utf8"), oncekiDosya);
+  const videolu = [{ mod: "metin", hareket: "a cat", sure: 4 }, { mod: "video", url: "https://example.com/v.mp4", sure: 6 }];
+  r = await c.post("/api/studyo/kaydet", { ad: "film1", model: "seedance-2-fast", cozunurluk: "720p", sahneler: videolu });   // bu model videoyu donusturmez
+  assert.equal(r.durum, 400); assert.match(r.json.hata, /dönüştürmez/);
+  assert.equal(fs.readFileSync(path.join(ortam.uretim, "film1", "studyo.json"), "utf8"), oncekiDosya);
+  r = await c.post("/api/studyo/kaydet", { ad: "film1", model: "minimax-h3", cozunurluk: "2k", sahneler: videolu });
+  assert.equal(r.durum, 200, r.metin);
+  const d2 = (await c.get("/api/studyo/detay?ad=film1")).json;
+  assert.equal(d2.kredi, (4 + 6) * 26);
+  assert.equal(d2.uretilecek, 2);
+  assert.equal((await c.post("/api/studyo/kaydet", { ad: "film1", sahneler: [{ mod: "metin", hareket: "" }] })).durum, 400);     // bos istem
+  assert.equal((await c.post("/api/studyo/kaydet", { ad: "film1", sahneler: [{ mod: "uydurma", hareket: "x" }] })).durum, 400);
+});
+
+test("kuru calisma: onaysiz uret hicbir sey baslatmaz, maliyeti yazar; butcesiz istek reddedilir", async () => {
+  assert.equal((await c.post("/api/studyo/uret", { ad: "film1" })).durum, 400);               // butce yok
+  const r = await c.post("/api/studyo/uret", { ad: "film1", butce: 500 });                    // onay yok => kuru
+  assert.equal(r.durum, 200, r.metin);
+  assert.equal(r.json.tur, "kuru");
+  const son = await bekleBitsin("film1");
+  assert.equal(son.is.kod, 0);
+  const metin = son.is.satirlar.join("\n");
+  assert.match(metin, /KURU ÇALIŞMA: kredi harcanmadı/);
+  assert.match(metin, /tahmini en çok 260 kredi/);
+  assert.ok(!fs.existsSync(path.join(ortam.uretim, "film1", "Clips", "klipler.json")));        // hicbir is kaydedilmedi
+});
+
+test("onayli uret VIDIQ_KEY yoksa acik hatayla biter (kredi harcanmaz)", async () => {
+  const r = await c.post("/api/studyo/uret", { ad: "film1", butce: 500, onay: true });
+  assert.equal(r.durum, 200);
+  const son = await bekleBitsin("film1");
+  assert.notEqual(son.is.kod, 0);
+  assert.match(son.is.satirlar.join("\n"), /VIDIQ_KEY tanımlı değil/);
+});
+
+test("kur: klip yokken acik hata", async () => {
+  await c.post("/api/studyo/kur", { ad: "film1" });
+  const son = await bekleBitsin("film1");
+  assert.notEqual(son.is.kod, 0);
+  assert.match(son.is.satirlar.join("\n"), /Hiç klip yok/);
+});
+
+test("medya: foto cerezle gelir, cerezsiz 403, yol kacisi ve uzanti reddedilir", async () => {
+  let r = await c.get("/studyo/film1/girdi/Kedi-Foto.jpg", { cerezli: true });
+  assert.equal(r.durum, 200);
+  assert.equal(r.baslik["content-type"], "image/jpeg");
+  assert.equal((await c.get("/studyo/film1/girdi/Kedi-Foto.jpg", { cerezli: false, jetonsuz: true })).durum, 403);
+  assert.equal((await c.get("/studyo/film1/girdi/..%2F..%2Fstudyo.json", { cerezli: true })).durum, 400);
+  assert.equal((await c.get("/studyo/film1/girdi/not.txt", { cerezli: true })).durum, 400);
+  assert.equal((await c.get("/studyo/film1/gizli/Kedi-Foto.jpg", { cerezli: true })).durum, 400);
+  assert.equal((await c.get("/studyo/yok-boyle/girdi/a.jpg", { cerezli: true })).durum, 404);
+});

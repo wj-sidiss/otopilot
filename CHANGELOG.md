@@ -2,6 +2,12 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.10.1] — 2026-11-01 — Panelde AI Stüdyo
+
+### Eklenenler
+- **Panel → "AI Stüdyo" sekmesi:** komut yazmadan iş aç, fotoğraf yükle (tarayıcıda 1536 px'e küçülür), yazıdan/fotoğraftan/kendi videondan sahne ekle, sırala, stil-ekran-model seç. Maliyet önce gösterilir; **"Üret" düğmesi, harcama onay kutusu işaretlenmeden kapalı kalır**, "Maliyeti hesapla" kredi harcamaz. Klipler sahne sahne önizlenir, film tek MP4 olarak panelde oynar ve indirilir. İşi alt süreç yürütür; kapatmadan izlenir, durdurulabilir.
+- Kaydederken modelin desteklemediği girdi (örn. Seedance ile video dönüştürme) daha kaydedilirken reddedilir; geçersiz kayıt eski dosyayı bozmaz.
+
 ## [1.10.0] — 2026-11-01 — AI Stüdyo
 
 ### Eklenenler
