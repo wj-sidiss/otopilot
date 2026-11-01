@@ -23,7 +23,7 @@ node ff-yol.js               # checks ffmpeg (install: winget install Gyan.FFmpe
 node panel.js                # panel at http://localhost:4173   (or hand the repo to Claude Code / Codex: see AGENTS.md)
 ```
 
-Free path (no keys): Wikimedia, Openverse, NASA and museum images · Edge voice (unofficial, may break) with an automatic fallback to your OS voice (`--motor sistem`) · ffmpeg. Optional keys: Pexels/Pixabay/Unsplash/Smithsonian/Europeana (more images, stock video), Azure/Piper/VoxCPM2 (voices), vidIQ (paid AI clips via `vidiq-klip.js`, dry-run by default), fal.ai (lip-sync in `film.js kur --dudak`). `node kaynak-dene.js` live-tests every image source. Details below (Turkish).
+Free path (no keys): Wikimedia, Openverse, NASA and museum images · Edge voice (unofficial, may break) with an automatic fallback to your OS voice (`--motor sistem`) · ffmpeg. Optional keys: Pexels/Pixabay/Unsplash/Smithsonian/Europeana (more images, stock video), Azure/Piper/VoxCPM2 (voices), vidIQ (paid AI clips via `vidiq-klip.js`, and the **AI Studio** `studyo.js`: turn your own photos/videos into cartoon, anime, 3D or claymation shorts; dry-run by default), fal.ai (lip-sync in `film.js kur --dudak`). `node kaynak-dene.js` live-tests every image source. Details below (Turkish).
 
 > **Claude Code ya da Codex ile kullanacaksan:** depoyu klasör olarak aç, ajanı başlat, isteğini yaz ("şu konuda 40 saniyelik Shorts yap", "bir fitness influencer yarat ve 3 foto üret"). [`AGENTS.md`](AGENTS.md) (Claude Code için `CLAUDE.md` üzerinden) kendiliğinden okunur; ajan kurulumu, komutları ve akışı oradan bilir, sana tekrar sormaz.
 
@@ -203,6 +203,7 @@ node yayin-paketi.js   <is-adi>      # açıklama, bölümler, atıflar (video-y
 | `kaynak-dene.js` (`npm run kaynak-dene`) | her görsel kaynağını CANLI dener, görseli gerçekten indirip doğrular (servis API'si değişirse önce bunu çalıştır) |
 | `video-bul.js` | sahnelere Pexels/Pixabay **stok video** klibi ekler (`--sahne N --ara`, `--azami`, `--yeniden`); atıf `YAYIN-PAKETI.md`'ye girer |
 | `vidiq-klip.js` | vidIQ ile AI video klibi; **kredi harcar**, varsayılan kuru çalışma, `--butce` zorunlu, `--onay` ile üretir, aynı istem tekrar üretilmez |
+| `studyo.js` | **AI Stüdyo:** kendi fotoğrafından/videondan çizgi film, anime, 3D, kil animasyon ya da gerçekçi kısa film (vidIQ kredisiyle; kuru çalışma varsayılan, `--butce` + `--onay`) |
 | `klip-yerlestir.js` | vidiq-klip ile inen AI klipleri `KLIPLER.txt` sırasıyla sahne klasörlerine koyar (ücretsiz, tekrar çalıştırılabilir); sonra `video-yap.js --yeniden` |
 | `film.js` | karakterli/diyaloglu kısa dizi: `yeni`, `klipler`, `ses`, `kur [--dudak] [--yer-tutucu]` (AGENTS.md "1b") |
 | `dudak-fal.js`, `dudak-musetalk.js` | `film.js --dudak` sağlayıcıları (bulut fal.ai / yerel MuseTalk) |
