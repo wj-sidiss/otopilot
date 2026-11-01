@@ -26,3 +26,5 @@ Hepsi tek başına çalışan Python betikleridir (panel bunları çağırmaz). 
 - **VoxCPM ses klonlama:** model dosyası (4,6 GB) Windows'ta topluca belleğe alınınca "sayfa dosyası çok küçük" hatası verir;
   `ses-klonla.py` ağırlıkları tek tek okuyarak bunu aşar.
 - **Not (ölçüm):** `dudak-olc.py` gürültülüdür (±0,1 sn); kesin karar için izle.
+
+> **Sorumluluk / Liability:** "olduğu gibi" sunulur; yüz/ses izni ve içerikten **kullanıcı sorumludur**, depo sahipleri ve katkıcılar sorumluluk kabul etmez. Provided as is; you are responsible for consent and content.

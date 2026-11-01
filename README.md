@@ -292,6 +292,10 @@ npm run test:aiinfapp   # yalnız ai-infapp testleri
 
 ffmpeg kurulu değilse ffmpeg gerektiren testler atlanır (yt-dlp yoksa gerçek-yt-dlp testi de atlanır). Değişiklik geçmişi: [CHANGELOG.md](CHANGELOG.md).
 
+## Sorumluluk reddi / Disclaimer
+
+Otopilot **"olduğu gibi"** sunulur (MIT lisansı, garanti yoktur). Ürettiğin içerikten; kullandığın yüz, ses, görsel ve müziğin izninden; telif hakkı, YouTube/TikTok/Instagram kuralları ve yasalardan **sen sorumlusun**. Depo sahipleri ve katkıcılar hiçbir sorumluluk kabul etmez. `araclar/klon-video/` yalnızca **kendi yüzün/sesin ya da yazılı izin verilen kişi** içindir; başkasını izinsiz taklit etmek yasaktır ve hukuki sorumluluk doğurabilir. Yayında "değiştirilmiş/sentetik içerik" kutusunu işaretle. / Provided "as is" under the MIT license, without warranty. You alone are responsible for the content you create and for having the rights and consent for any face, voice, image or music you use; the maintainers and contributors accept no liability. The tools in `araclar/klon-video/` are for your own face/voice or people who gave you written permission only.
+
 ## Lisans
 
 MIT, bkz. [LICENSE](LICENSE). İstediğin gibi kullan. Üçüncü taraf kaynak: `ai-infapp/` içindeki 1.264 hazır sahne kaydı, MIT lisanslı [ai-image-prompts-skill](https://github.com/YouMind-OpenLab/ai-image-prompts-skill) (YouMind-OpenLab) projesinden türetilmiştir; lisans metni ve değişiklik notu `ai-infapp/THIRD_PARTY_LICENSES.md` içindedir.

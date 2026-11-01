@@ -199,7 +199,7 @@ Dürüstlük notları (kullanıcıya da söyle):
   sağlayıcı anahtarını bağlar (`GET /api/saglayicilar` seçenekleri gösterir, `POST /api/saglayici` bağlar). Anahtarı kullanıcıdan
   iste, ama sohbette tekrar yazma ve dosyaya kaydetme; kullanıcı isterse tarayıcıdaki **Ayarlar** ekranından kendisi girer.
 - Yüz tutarlılığı sağlayıcıya bağlıdır; ayrıntı `ai-infapp/README.md` ("Dürüst olalım").
-- Gerçek kişi, ünlü ya da marka taklidi yapma; karakter tamamen kurgusaldır. Paylaşımda yapay zekâ ürünü olduğunu belirtmesini öner.
+- Gerçek kişi, ünlü ya da marka taklidi yapma; Ai Infapp karakteri tamamen kurgusaldır. Tek istisna `araclar/klon-video/`: kullanıcının **kendi** yüzü/sesi ya da **yazılı izin verilen** kişi (izin kullanıcıda olmalı; yoksa yardım etme). Paylaşımda yapay zekâ ürünü olduğunu belirtmesini öner.
 
 Diğer stüdyolar (Etsy baskı tasarımı, fotoroman, reklam görseli): aynı sunucuda çalışır. Etsy ve fotoroman `ai-infapp/README.md`
 içindeki "Etsy" ve "Fotoroman" bölümlerinde anlatılır; reklam/grafik tasarım için `ai-infapp/src/studios/reklam/index.js`'e bak.
@@ -235,6 +235,8 @@ vidIQ'yu depodaki betikler de kullanır (`VIDIQ_KEY`, senaryo/başlık/trend/per
   Yalnız kullanıcının kendi yüzü/sesi ya da yazılı izin; yayında "sentetik içerik" kutusu.
 
 ## 4. Kurallar
+
+- **Sorumluluk:** Bu depo ve araçları "olduğu gibi" sunulur (MIT, garanti yok). Üretilen içerikten, kullanılan yüz/ses/görselin izninden, telif ve platform kurallarından **kullanıcı sorumludur**; depo sahipleri ve katkıcılar sorumluluk kabul etmez. Kullanıcıyı bu konuda bir kez, kısaca bilgilendir.
 
 - Ücretli adım (Claude/vidIQ ile senaryo, ücretli görsel sağlayıcı) başlatmadan önce tahmini maliyeti söyle; varsayılan akış ücretsizdir.
 - `.env`, `ai-infapp/data/`, `uretim/` repoda değildir (`.gitignore`). Anahtarları sohbete, koda ya da commit'e yazma.
