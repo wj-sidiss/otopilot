@@ -1,5 +1,17 @@
 # Otopilot — konudan bitmiş videoya
 
+[![CI](https://github.com/wj-sidiss/otopilot/actions/workflows/ci.yml/badge.svg)](https://github.com/wj-sidiss/otopilot/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+![Node 22+](https://img.shields.io/badge/node-22%2B-brightgreen)
+![15 languages](https://img.shields.io/badge/UI-15%20languages-blue)
+![No API key needed](https://img.shields.io/badge/API%20key-not%20required-lightgrey)
+
+<p align="center"><img src="docs/demo.gif" alt="Otopilot demo: one topic in, a finished vertical Short out" width="216"></p>
+<p align="center"><sub>One sentence in → this Short out (script, museum art, voice-over, subtitles). Images: Rijksmuseum / The Met (CC0) and Wikimedia Commons, credits in <a href="docs/demo-credits.txt">docs/demo-credits.txt</a>.</sub></p>
+
+> **No account, no tracking, no key required: it runs on your own computer.** Hand the repo to Claude Code or Codex and ask for a video. / **Hesap yok, izleme yok, anahtar şart değil: kendi bilgisayarında çalışır.** Depoyu Claude Code ya da Codex'e ver, video iste. · MIT
+> ⭐ Useful? A star helps others find it, and **Watch → Releases** tells you about new versions.
+
 ## English (quick start)
 
 **Otopilot** turns a topic into a finished video: script → free stock images / museum art (CC0) / stock video → voice-over → edit → MP4 + subtitles + thumbnail + a YouTube publishing pack. It also builds short **series with characters, dialogue and AI clips** (`film.js`) and an AI-influencer studio (Ai Infapp). Everything runs **locally** (panel on `localhost` only); no account needed for the free path. The interface speaks **15 languages** (language box at the bottom right); command-line messages, this README's detailed sections and the training PDFs are Turkish, and your AI agent can translate them for you.
