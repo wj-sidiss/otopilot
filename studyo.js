@@ -3,10 +3,13 @@
 //   node studyo.js stiller                                  hazir stiller (cizgi-film, anime, 3d-animasyon, kil, suluboya, cizgi-roman, gercekci)
 //   node studyo.js yeni <ad> [--stil cizgi-film] [--oran 9:16|16:9] [--model minimax-h3] [--sure 6]
 //   (fotograflari ve videolari uretim/<ad>/girdi/ icine koy; dosya adi sirasi = film sirasi)
+//   node studyo.js sablonlar | sablon <ad> romantik|aksiyon|gerilim [--foto a.jpg,b.jpg]   hazir cekim listesi (yonetmen modu); fotograf verilirse referans olur
+//   Yonetmen modu: sahnede "plan", "kameraHareketi", "lens", "isik" (kodlar studyo.js YONETMEN) -> Ingilizce sinema dili istemin sonuna eklenir
 //   node studyo.js sahne <ad> "istem" [--sure 6]            fotografsiz sahne: yalniz yazdigin istemden video
 //   node studyo.js tara <ad>                                girdi/'deki yeni dosyalari sahne olarak studyo.json'a ekler
 //   node studyo.js uret <ad> --butce 400 [--onay] [--yeni-cekim]   maliyeti yazar; --onay ile klipleri uretir (vidiq-klip korumalari)
 //   node studyo.js kur <ad> [--muzik yol.mp3] [--altyazisiz]  klipleri sirayla birlestirir -> uretim/<ad>/Videos/<ad>.mp4
+//   Kamera gorunumu: yeni <ad> --kamera sinema|film|temiz (varsayilan sinema; kur --kamerasiz ile bir kereligine kapatilir)
 //   Anlatim: sahnede "anlatim": "metin" (<=600 kr) varsa UCRETSIZ seslendirilir (Edge, olmazsa sistem sesi; dil: studyo.json "dil", ses: "ses"),
 //   sahne anlatimdan kisaysa klip dongulenir, altyazi yakilir, --muzik anlatimin altina karisir. Anlatimsiz film eskisi gibi sessizdir.
 // Sahne modlari (studyo.json "sahneler"[].mod):
@@ -37,6 +40,58 @@ const STILLER = {
   gercekci: { ad: "Gerçekçi", metin: "photorealistic, natural motion, cinematic lighting, shallow depth of field", mod: "ilk-kare" },
 };
 const MODLAR = ["referans", "ilk-kare", "video", "metin"];
+// YONETMEN MODU: sahne basina plan / kamera hareketi / lens / isik (Ingilizce sinema dili istem sonuna eklenir) + hazir cekim sablonlari.
+const YONETMEN = {
+  plan: {
+    genis: ["Geniş plan", "wide establishing shot"], orta: ["Orta plan", "medium shot"], yakin: ["Yakın plan", "close-up shot"],
+    "cok-yakin": ["Çok yakın (detay)", "extreme close-up shot"], omuz: ["Omuz üstü", "over-the-shoulder shot"], ikili: ["İkili plan", "two-shot framing both characters"],
+    "alt-aci": ["Alttan çekim", "low angle shot"], "ust-aci": ["Üstten çekim", "high angle shot"], pov: ["Göz hizası (POV)", "point-of-view shot"], siluet: ["Siluet", "silhouette shot against the light"],
+  },
+  hareket: {
+    sabit: ["Sabit kamera", "static locked-off camera"], yaklas: ["Yavaş yaklaşma", "slow push-in"], uzaklas: ["Yavaş uzaklaşma", "slow pull-out"], pan: ["Yatay pan", "smooth pan"],
+    tilt: ["Yukarı tilt", "gentle tilt up"], takip: ["Takip çekimi", "tracking shot following the subject"], dolly: ["Dolly", "smooth dolly move"], vinc: ["Vinç yükselişi", "crane shot rising"],
+    elde: ["Elde kamera", "handheld camera with subtle shake"], orbit: ["Etrafında dönüş", "slow orbit around the subject"],
+  },
+  lens: {
+    "24": ["24mm geniş açı", "24mm wide-angle lens"], "35": ["35mm", "35mm lens"], "50": ["50mm doğal", "50mm lens, natural perspective"],
+    "85": ["85mm portre (bokeh)", "85mm portrait lens, shallow depth of field, creamy bokeh"], anamorfik: ["Anamorfik", "anamorphic lens, horizontal flares, cinematic widescreen look"],
+  },
+  isik: {
+    altin: ["Altın saat", "golden hour warm backlight"], mavi: ["Mavi saat", "blue hour soft twilight"], neon: ["Gece neon", "night scene with neon lights"],
+    bulutlu: ["Bulutlu yumuşak", "soft overcast daylight"], mum: ["Mum ışığı", "warm candlelight"], arkadan: ["Arkadan güneş", "sun flare backlight"],
+  },
+};
+const YONETMEN_ALANLAR = { plan: "plan", kameraHareketi: "hareket", lens: "lens", isik: "isik" };
+const SABLONLAR = {
+  romantik: { ad: "Romantik (6 çekim)", sahneler: [
+    { hareket: "a couple walking hand in hand along the seashore, seen from far away", plan: "genis", kameraHareketi: "yaklas", isik: "altin" },
+    { hareket: "the couple laughing together while walking, a warm natural moment", plan: "ikili", kameraHareketi: "takip", lens: "35", isik: "altin" },
+    { hareket: "close-up of one partner's eyes looking at the other, a soft smile", plan: "yakin", kameraHareketi: "sabit", lens: "85", isik: "altin" },
+    { hareket: "two hands slowly intertwining", plan: "cok-yakin", kameraHareketi: "yaklas", lens: "85" },
+    { hareket: "the partners look at each other, foreheads almost touching", plan: "omuz", kameraHareketi: "yaklas", lens: "50", isik: "arkadan" },
+    { hareket: "the couple embracing as the sun sets", plan: "siluet", kameraHareketi: "uzaklas", isik: "arkadan" },
+  ] },
+  aksiyon: { ad: "Aksiyon (5 çekim)", sahneler: [
+    { hareket: "a car speeds through a narrow city street at night", plan: "genis", kameraHareketi: "takip", isik: "neon" },
+    { hareket: "the driver grips the steering wheel, eyes focused", plan: "cok-yakin", kameraHareketi: "elde", lens: "50" },
+    { hareket: "a runner leaps across a rooftop gap", plan: "alt-aci", kameraHareketi: "takip", lens: "24" },
+    { hareket: "an explosion lights up the street behind the hero walking away", plan: "orta", kameraHareketi: "sabit", isik: "neon" },
+    { hareket: "the hero looks up at the skyline", plan: "ust-aci", kameraHareketi: "vinc", lens: "24" },
+  ] },
+  gerilim: { ad: "Gerilim (5 çekim)", sahneler: [
+    { hareket: "an empty corridor with a flickering light", plan: "genis", kameraHareketi: "yaklas", isik: "mavi" },
+    { hareket: "a hand slowly reaches for a door handle", plan: "cok-yakin", kameraHareketi: "sabit", lens: "85" },
+    { hareket: "the character turns around, sensing someone behind", plan: "omuz", kameraHareketi: "elde", lens: "35", isik: "mavi" },
+    { hareket: "a shadow moves across the wall", plan: "orta", kameraHareketi: "pan", isik: "mum" },
+    { hareket: "the character's frightened eyes in the dark", plan: "yakin", kameraHareketi: "yaklas", lens: "85", isik: "mum" },
+  ] },
+};
+// Kamera gorunumu: AI klipin "plastik" hissini kirar (gercek kamera gibi tane, vinyet, hafif renk kaymasi/sicaklik). Yalniz ffmpeg; ucretsiz.
+const KAMERALAR = {
+  temiz: { ad: "Temiz (dokunma)", vf: "" },
+  sinema: { ad: "Sinema", vf: "eq=contrast=1.06:saturation=0.9:gamma=0.98,colorbalance=rs=0.04:bs=-0.03:rh=0.05:bh=-0.04,rgbashift=rh=-1:bh=1,unsharp=3:3:0.4,noise=alls=9:allf=t+u,vignette=PI/5,format=yuv420p" },
+  film: { ad: "Film (grenli, solgun)", vf: "eq=contrast=1.04:saturation=0.82:brightness=0.01,colorbalance=rs=0.06:gs=0.01:bs=-0.05:rm=0.03:bm=-0.03,noise=alls=18:allf=t+u,unsharp=3:3:0.3,vignette=PI/4,format=yuv420p" },
+};
 const FOTO = /\.(jpe?g|png|webp|bmp|heic)$/i, VIDEO = /\.(mp4|mov|m4v|webm|mkv)$/i;
 const VARSAYILAN_HAREKET = "gentle natural movement, the subject slowly turns and smiles, subtle camera push-in";
 const BOYUT = { "9:16": [1080, 1920], "16:9": [1920, 1080] };
@@ -59,9 +114,13 @@ function ayarOku(ad) {
   if (!BOYUT[a.oran]) throw hata("Geçersiz oran: " + a.oran, "9:16 ya da 16:9");
   if (!Array.isArray(a.sahneler)) a.sahneler = [];
   a.dil = a.dil || "en";
+  a.kamera = a.kamera || "temiz";
+  if (!KAMERALAR[a.kamera]) throw hata("Bilinmeyen kamera görünümü: " + a.kamera, "Geçerli: " + Object.keys(KAMERALAR).join(", "));
   if (!/^[a-z]{2}$/.test(a.dil)) throw hata("Geçersiz anlatım dili: " + a.dil, "İki harfli kod: tr, en, es, de, fr…");
   a.sahneler.forEach((s, i) => {
     if (!MODLAR.includes(s.mod)) throw hata("Sahne " + (i + 1) + ": geçersiz mod '" + s.mod + "'.", "Geçerli: " + MODLAR.join(", "));
+    for (const [alan, grup] of Object.entries(YONETMEN_ALANLAR))
+      if (s[alan] && !YONETMEN[grup][s[alan]]) throw hata("Sahne " + (i + 1) + ": bilinmeyen " + alan + " '" + s[alan] + "'.", "Geçerli: " + Object.keys(YONETMEN[grup]).join(", "));
     if (s.anlatim !== undefined && (typeof s.anlatim !== "string" || s.anlatim.length > 600)) throw hata("Sahne " + (i + 1) + ": 'anlatim' en çok 600 karakterlik metin olmalı.");
     if (s.mod === "metin" ? !String(s.hareket || "").trim() : s.mod === "video" ? !s.url : !s.kaynak) throw hata("Sahne " + (i + 1) + ": " + (s.mod === "metin" ? "'hareket' (istem)" : s.mod === "video" ? "'url'" : "'kaynak'") + " yok.");
   });
@@ -86,7 +145,7 @@ function yeni(ad, b) {
   const d = dizinOf(ad);
   if (fs.existsSync(path.join(d, "studyo.json"))) throw hata("Bu stüdyo işi zaten var: " + ad, "Başka ad seç ya da 'tara' ile devam et.");
   fs.mkdirSync(path.join(d, "girdi"), { recursive: true });
-  const a = { surum: 1, stil, oran, model: b.model || K.VARSAYILAN.model, cozunurluk: b.cozunurluk || (b.model && b.model !== K.VARSAYILAN.model ? "720p" : K.VARSAYILAN.cozunurluk),
+  const a = { surum: 1, stil, oran, kamera: b.kamera || "sinema", model: b.model || K.VARSAYILAN.model, cozunurluk: b.cozunurluk || (b.model && b.model !== K.VARSAYILAN.model ? "720p" : K.VARSAYILAN.cozunurluk),
     sure: Number(b.sure || 6), karakter: [], sahneler: [] };
   ayarYaz(ad, a);
   return { dizin: d, girdi: path.join(d, "girdi") };
@@ -108,6 +167,22 @@ function fotoEkle(ad, dosya) {
   a.sahneler.push({ kaynak: dosya, mod: STILLER[a.stil].mod, hareket: VARSAYILAN_HAREKET, sure: a.sure });
   ayarYaz(ad, a);
   return a.sahneler.length;
+}
+
+// hazir cekim sablonunu ekler; fotograf verilirse sahneler sirayla o fotograflari referans alir (yuz/stil tutarliligi), yoksa yazidan video
+function sablonEkle(ad, sablon, fotolar) {
+  const t = SABLONLAR[sablon];
+  if (!t) throw hata("Bilinmeyen şablon: " + sablon, "Geçerli: " + Object.keys(SABLONLAR).join(", "));
+  const a = ayarOku(ad);
+  const f = (fotolar || []).filter(Boolean);
+  f.forEach(x => girdiYolu(ad, x));
+  t.sahneler.forEach((s, i) => {
+    const o = Object.assign({ mod: f.length ? "referans" : "metin", sure: a.sure }, s);
+    if (f.length) o.kaynak = f[i % f.length];
+    a.sahneler.push(o);
+  });
+  ayarYaz(ad, a);
+  return t.sahneler.length;
 }
 
 // girdi/'de olup sahnelerde olmayan dosyalari ekler (ad sirasiyla)
@@ -146,7 +221,8 @@ function istemKur(a, s) {
   const ek = s.mod === "metin" ? "" : s.mod === "referans" ? "Keep the same people, faces and outfits as in the reference photos."
     : s.mod === "video" ? "Restyle the whole video in this style, keep the original motion, timing and composition."
       : "Animate this exact image, keep the composition and the people's faces.";
-  return [String(s.hareket || VARSAYILAN_HAREKET).trim().replace(/\.$/, "") + ".", st.metin && st.metin + ".", ek].filter(Boolean).join(" ");
+  const yon = Object.entries(YONETMEN_ALANLAR).map(([alan, grup]) => s[alan] && YONETMEN[grup][s[alan]] ? YONETMEN[grup][s[alan]][1] : "").filter(Boolean);
+  return [String(s.hareket || VARSAYILAN_HAREKET).trim().replace(/\.$/, "") + ".", yon.length && "Cinematic direction: " + yon.join(", ") + ".", st.metin && st.metin + ".", ek].filter(Boolean).join(" ");
 }
 
 // studyo.json -> vidiq-klip listesi. videolar: url -> vidIQ videoUrl (yalniz gercek koşuda yuklenir)
@@ -282,13 +358,19 @@ async function kur(ad, b, enj) {
   ffmpeg(["-f", "concat", "-safe", "0", "-i", listeDosya, "-c", "copy", ham], "birleştir");
   const uyarilar = [];
   let simdi = ham;
+  if (KAMERALAR[a.kamera].vf && b.kamerasiz !== true) {
+    const kameraliYol = path.join(kurgu, "kamera.mp4");
+    try { ffmpeg(["-i", ham, "-vf", KAMERALAR[a.kamera].vf, "-c:v", "libx264", "-crf", "18", "-preset", "veryfast", "-c:a", "copy", kameraliYol], "kamera"); simdi = kameraliYol; }
+    catch (x) { uyarilar.push("Kamera görünümü uygulanamadı (" + x.message.slice(0, 100) + "); film olduğu gibi kuruldu."); }
+  }
+  const kameraBitti = simdi;
   if (altyazi.length && b.altyazisiz !== true) {
     const srt = path.join(d, "Videos", ad + ".srt");
     fs.writeFileSync(srt, altyazi.map((x, k) => (k + 1) + "\n" + srtZaman(x.b) + " --> " + srtZaman(x.e) + "\n" + x.m + "\n").join("\n"));
     const yakili = path.join(kurgu, "altyazili.mp4");
     const srtF = srt.replace(/\\/g, "/").replace(/:/g, "\\:");
     try {
-      ffmpeg(["-i", ham, "-vf", "subtitles='" + srtF + "':force_style='Alignment=2,FontSize=" + (a.oran === "9:16" ? 14 : 20) + ",Outline=2,MarginV=" + (a.oran === "9:16" ? 90 : 40) + "'", "-c:v", "libx264", "-crf", "20", "-preset", "veryfast", "-c:a", "copy", yakili], "altyazı");
+      ffmpeg(["-i", kameraBitti, "-vf", "subtitles='" + srtF + "':force_style='Alignment=2,FontSize=" + (a.oran === "9:16" ? 14 : 20) + ",Outline=2,MarginV=" + (a.oran === "9:16" ? 90 : 40) + "'", "-c:v", "libx264", "-crf", "20", "-preset", "veryfast", "-c:a", "copy", yakili], "altyazı");
       simdi = yakili;
     } catch (x) { uyarilar.push("Altyazı videoya gömülemedi (" + x.message.slice(0, 100) + "); .srt ayrı dosya olarak yazıldı."); }
   }
@@ -315,7 +397,7 @@ function sureOlc(dosya) {
 }
 
 function ayristir(args) {
-  const DEGERLI = new Set(["stil", "oran", "model", "cozunurluk", "sure", "butce", "muzik"]);
+  const DEGERLI = new Set(["stil", "oran", "model", "cozunurluk", "sure", "butce", "muzik", "kamera", "foto"]);
   const b = {}, konum = [];
   for (let i = 0; i < args.length; i++) {
     const x = args[i];
@@ -327,14 +409,18 @@ function ayristir(args) {
 async function ana(args) {
   const { b, konum } = ayristir(args);
   const [komut, ad] = konum;
+  if (komut === "sablonlar") { for (const [k, v] of Object.entries(SABLONLAR)) console.log("  " + k.padEnd(10) + v.ad); return; }
   if (komut === "stiller") { for (const [k, v] of Object.entries(STILLER)) console.log("  " + k.padEnd(14) + v.ad + " (" + v.mod + ")"); return; }
-  if (!ad || !["yeni", "tara", "sahne", "uret", "kur"].includes(komut)) throw hata("Kullanım: node studyo.js yeni|tara|uret|kur <ad> (ayrıntı: dosyanın başı) · node studyo.js stiller");
+  if (!ad || !["yeni", "tara", "sahne", "sablon", "uret", "kur"].includes(komut)) throw hata("Kullanım: node studyo.js yeni|tara|uret|kur <ad> (ayrıntı: dosyanın başı) · node studyo.js stiller");
   if (komut === "yeni") {
     const r = yeni(ad, b);
     console.log("✓ Stüdyo işi açıldı. Fotoğrafları ve videoları şuraya koy (dosya adı sırası = film sırası):\n  " + r.girdi + "\nSonra: node studyo.js tara " + ad);
   } else if (komut === "sahne") {
     const n = sahneEkle(ad, konum.slice(2).join(" "), b.sure);
     console.log("✓ Sahne " + n + " eklendi (metinden video). Sonra: node studyo.js uret " + ad + " --butce <kredi>");
+  } else if (komut === "sablon") {
+    const n = sablonEkle(ad, konum[2], b.foto ? String(b.foto).split(",").map(x => x.trim()) : []);
+    console.log("✓ " + n + " çekim eklendi (" + konum[2] + "). Hareketleri/planları studyo.json'da ya da panelde düzenle, sonra: node studyo.js uret " + ad + " --butce <kredi>");
   } else if (komut === "tara") {
     const r = tara(ad);
     console.log("✓ " + r.eklenen.length + " yeni sahne eklendi (toplam " + r.toplam + "). Hareketleri uretim/" + ad + "/studyo.json içinde yaz, sonra: node studyo.js uret " + ad + " --butce <kredi>");
@@ -351,4 +437,4 @@ async function ana(args) {
 if (require.main === module) {
   ana(process.argv.slice(2)).catch(e => { console.error("✗ " + e.message + (e.cozum ? "\n  ↳ " + e.cozum : "")); process.exit(e.cikis || 1); });
 }
-module.exports = { STILLER, MODLAR, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };
+module.exports = { STILLER, MODLAR, KAMERALAR, YONETMEN, SABLONLAR, sablonEkle, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };

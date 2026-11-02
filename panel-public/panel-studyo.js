@@ -70,10 +70,11 @@
     var stilSec = P.secim(stiller, a.stil), oranSec = P.secim(ORANLAR, a.oran);
     var sureG = P.girdi({ type: "number", min: "2", max: "15", deger: a.sure, style: "width:5rem" });
     var dilSec = P.secim(DILLER, a.dil || "en");
-    ui.ayar = { stil: stilSec, oran: oranSec, model: modelSec, coz: cozSec, sure: sureG, dil: dilSec };
+    var kameraSec = P.secim(Object.keys(d.kameralar).map(function (k) { return [k, d.kameralar[k]]; }), a.kamera || "temiz");
+    ui.ayar = { stil: stilSec, oran: oranSec, model: modelSec, coz: cozSec, sure: sureG, dil: dilSec, kamera: kameraSec };
     Object.keys(ui.ayar).forEach(function (k) { ui.ayar[k].addEventListener("change", function () { kirli = true; }); });
     return P.bolum("Ayarlar", "Stil, ekran, model. Aynı fotoğraf ve istem ikinci kez ücretli üretilmez.",
-      P.h("div", { class: "studyo-ayar" }, P.alan("Stil", stilSec), P.alan("Ekran", oranSec), P.alan("Model", modelSec), P.alan("Çözünürlük", cozSec), P.alan("Sahne süresi (sn)", sureG), P.alan("Anlatım dili", dilSec)));
+      P.h("div", { class: "studyo-ayar" }, P.alan("Stil", stilSec), P.alan("Ekran", oranSec), P.alan("Model", modelSec), P.alan("Çözünürlük", cozSec), P.alan("Sahne süresi (sn)", sureG), P.alan("Anlatım dili", dilSec), P.alan("Kamera görünümü", kameraSec, { ipucu: "Tane, vinyet, renk: AI klibin plastik hissini kırar." })));
   }
 
   function sahneKarti(s, i) {
@@ -90,6 +91,13 @@
     var anlatim = P.metinAlani({ maxlength: "600", placeholder: "Anlatım (isteğe bağlı): bu sahnede okunacak metin. Ücretsiz sesle seslendirilir, altyazı olarak yakılır.", "aria-label": "Sahne " + (i + 1) + " anlatımı" });
     anlatim.rows = 2; anlatim.value = s.anlatim || "";
     anlatim.addEventListener("input", function () { s.anlatim = anlatim.value; kirli = true; });
+    var yon = d.yonetmen, yonKutu = P.h("div", { class: "studyo-ayar" });
+    [["plan", "plan", "Plan"], ["kameraHareketi", "hareket", "Kamera"], ["lens", "lens", "Lens"], ["isik", "isik", "Işık"]].forEach(function (g) {
+      var liste = [["", "—"]].concat(Object.keys(yon[g[1]]).map(function (k) { return [k, yon[g[1]][k]]; }));
+      var sec = P.secim(liste, s[g[0]] || "", { "aria-label": g[2] + " (sahne " + (i + 1) + ")" });
+      sec.addEventListener("change", function () { if (sec.value) s[g[0]] = sec.value; else delete s[g[0]]; kirli = true; });
+      yonKutu.appendChild(P.alan(g[2], sec));
+    });
     var ek = [];
     if (s.mod === "video") {
       var url = P.girdi({ type: "url", placeholder: "https:// MP4 ya da YouTube linki (yalnız kendi videon)", deger: s.url || "", style: "width:100%" });
@@ -104,7 +112,7 @@
       P.dugme("", { tur: "hafif", kucuk: true, ikon: "ok-sag", sinif: "asagi", aria: "Aşağı taşı", disabled: i === sahneler.length - 1, onclick: function () { tasi(i, 1); } }),
       P.dugme("", { tur: "tehlike", kucuk: true, ikon: "sil", aria: "Sahneyi sil", onclick: function () { sahneler.splice(i, 1); kirli = true; sahneleriCiz(); } }));
     return P.h("div", { class: "studyo-kart" }, gorsel,
-      P.h("div", null, P.h("div", { class: "sahne-ust" }, P.h("h4", null, "Sahne " + (i + 1)), mod, P.alan("sn", sure), araclar), ek, istem, anlatim, P.h("div", { class: "satir" }, durum)));
+      P.h("div", null, P.h("div", { class: "sahne-ust" }, P.h("h4", null, "Sahne " + (i + 1)), mod, P.alan("sn", sure), araclar), ek, istem, P.h("details", null, P.h("summary", null, "Yönetmen modu: plan, kamera, lens, ışık"), yonKutu), anlatim, P.h("div", { class: "satir" }, durum)));
   }
   function tasi(i, yon) {
     var j = i + yon; if (j < 0 || j >= sahneler.length) return;
@@ -145,8 +153,8 @@
     if (!d) return;
     var o = ui.ayar;
     var govde = { ad: ad, stil: o.stil.value, oran: o.oran.value, model: o.model.value, cozunurluk: o.coz.value, sure: Number(o.sure.value) || 6,
-      dil: o.dil.value,
-      sahneler: sahneler.map(function (s) { return { mod: s.mod, kaynak: s.kaynak, url: s.url, hareket: s.hareket, sure: s.sure, an: s.an, anlatim: s.anlatim }; }) };
+      dil: o.dil.value, kamera: o.kamera.value,
+      sahneler: sahneler.map(function (s) { return { mod: s.mod, kaynak: s.kaynak, url: s.url, hareket: s.hareket, sure: s.sure, an: s.an, anlatim: s.anlatim, plan: s.plan, kameraHareketi: s.kameraHareketi, lens: s.lens, isik: s.isik }; }) };
     try {
       await P.api("/api/studyo/kaydet", govde);
       await detayYukle();
@@ -225,12 +233,24 @@
       P.dugme("Değişiklikleri kaydet", { ikon: "tamam", onclick: function () { kaydet(false); } }));
     sahneleriCiz();
   }
+  var sablonSec = null;
+  async function sablonEkle() {
+    if (!sablonSec.value) return P.durumYaz(ui.durum, "uyari", "Önce bir çekim şablonu seç.");
+    try {
+      await kaydet(true);
+      var fotolar = sahneler.filter(function (s) { return s.kaynak; }).map(function (s) { return s.kaynak; });
+      await P.api("/api/studyo/sablon", { ad: ad, sablon: sablonSec.value, fotolar: fotolar.slice(0, 9) });
+      await detayYukle(); ciz();
+    } catch (e) { P.durumYaz(ui.durum, "hata", e); }
+  }
   function ekleDugmeleri() {
     ui.foto = P.h("input", { type: "file", accept: "image/jpeg,image/png,image/webp", multiple: true, hidden: true });
     ui.foto.addEventListener("change", function () { var l = Array.prototype.slice.call(ui.foto.files); ui.foto.value = ""; fotoYukle(l); });
     return [
       P.dugme("Fotoğraf ekle", { ikon: "gorsel", onclick: function () { ui.foto.click(); } }),
       P.dugme("Yazıdan sahne ekle", { ikon: "metin", onclick: function () { sahneler.push({ mod: "metin", hareket: "", sure: d.ayar.sure, kredi: 0 }); kirli = true; sahneleriCiz(); } }),
+      sablonSec = P.secim([["", "Çekim şablonu…"]].concat(Object.keys(d.sablonlar).map(function (k) { return [k, d.sablonlar[k]]; })), "", { "aria-label": "Çekim şablonu" }),
+      P.dugme("Şablonu ekle", { ikon: "arti", onclick: sablonEkle }),
       P.dugme("Video linki ekle", { ikon: "film", onclick: function () { sahneler.push({ mod: "video", url: "", hareket: "recreate this exact scene with the same composition, characters and action", sure: d.ayar.sure, kredi: 0 }); kirli = true; sahneleriCiz(); } }),
       ui.foto];
   }

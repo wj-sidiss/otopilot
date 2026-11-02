@@ -95,6 +95,29 @@ test("video modu: url vidIQ'ya ucretsiz yuklenir, videoUrls gider; desteklemeyen
   await assert.rejects(S.uret("donustur", { butce: "500" }, Object.assign({ vidiq: v }, sessiz)), /video dönüştürmez/);
 });
 
+test("yonetmen modu: plan/kamera/lens/isik istemin sonuna sinema diliyle eklenir; sablon sahneleri ekler; gecersiz kod reddedilir", { skip }, () => {
+  S.yeni("yon1", { stil: "serbest" });
+  const n = S.sablonEkle("yon1", "romantik", []);
+  assert.equal(n, 6);
+  const a = S.ayarOku("yon1");
+  assert.equal(a.sahneler.length, 6); assert.ok(a.sahneler.every(s => s.mod === "metin"));
+  const i3 = S.istemKur(a, a.sahneler[2]);
+  assert.match(i3, /Cinematic direction: close-up shot, static locked-off camera, 85mm portrait lens, shallow depth of field, creamy bokeh, golden hour warm backlight\./);
+  assert.throws(() => S.sablonEkle("yon1", "komedi", []), /Bilinmeyen şablon/);
+  const yol = path.join(kok, "yon1", "studyo.json");
+  a.sahneler[0].plan = "yok"; fs.writeFileSync(yol, JSON.stringify(a));
+  assert.throws(() => S.ayarOku("yon1"), /bilinmeyen plan/);
+  // fotograf verilirse sahneler sirayla referans olur
+  S.yeni("yon2", { stil: "cizgi-film" });
+  const r = path.join(kok, "yon2", "girdi");
+  foto(path.join(r, "a.jpg"), "red"); foto(path.join(r, "b.jpg"), "blue");
+  S.sablonEkle("yon2", "aksiyon", ["a.jpg", "b.jpg"]);
+  const b = S.ayarOku("yon2");
+  assert.deepEqual(b.sahneler.map(s => s.kaynak), ["a.jpg", "b.jpg", "a.jpg", "b.jpg", "a.jpg"]);
+  assert.ok(b.sahneler.every(s => s.mod === "referans"));
+  assert.throws(() => S.sablonEkle("yon2", "gerilim", ["yok.jpg"]), /Girdi dosyası yok/);
+});
+
 test("girdiDenetle: wan-3 referans almaz, karma girdi reddedilir", () => {
   assert.throws(() => K.girdiDenetle("wan-3", { istem: "x", referans: ["a.jpg"] }), /en çok 0 referans/);
   assert.throws(() => K.girdiDenetle("minimax-h3", { istem: "x", ilkKare: "a.jpg", referans: ["b.jpg"] }), /birlikte/);
@@ -150,7 +173,19 @@ test("anlatim: ucretsiz ses uretilir, sahne anlatimdan kisaysa uzar, altyazi + m
   const akislar = execFileSync(ff().ffprobe, ["-v", "error", "-show_entries", "stream=codec_type", "-of", "csv=p=0", r.cikti], { encoding: "utf8" });
   assert.match(akislar, /audio/); assert.match(akislar, /video/);
   await S.kur("aile", {}, Object.assign({ ses: sahteSes }, sessiz));
-  assert.equal(cagri, 1);                                             // onbellek: ayni metin ikinci kez seslendirilmedi
+  assert.equal(cagri, 1);
+  // kamera gorunumu: boyut ve ses akisi korunur, gecersiz deger reddedilir
+  for (const kam of ["sinema", "film"]) {
+    a.kamera = kam; a.sahneler[0].anlatim = "Bir varmış bir yokmuş, küçük bir kedi uzak bir plajda güneşin doğuşunu izlemiş.";
+    fs.writeFileSync(yol, JSON.stringify(a));
+    const k = await S.kur("aile", {}, Object.assign({ ses: sahteSes }, sessiz));
+    assert.equal(k.uyarilar.length, 0, k.uyarilar.join(" | "));
+    const boyut = execFileSync(ff().ffprobe, ["-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=p=0", k.cikti], { encoding: "utf8" }).trim();
+    assert.equal(boyut, "1080,1920");
+  }
+  a.kamera = "yok"; fs.writeFileSync(yol, JSON.stringify(a));
+  await assert.rejects(S.kur("aile", {}, sessiz), /Bilinmeyen kamera/);
+  a.kamera = "temiz";                                             // onbellek: ayni metin ikinci kez seslendirilmedi
   a.sahneler[0].anlatim = "x".repeat(601);
   fs.writeFileSync(yol, JSON.stringify(a));
   await assert.rejects(S.kur("aile", {}, sessiz), /600 karakter/);

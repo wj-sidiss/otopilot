@@ -130,3 +130,18 @@ test("anlatim ve dil kaydedilir; 600 karakteri asan anlatim kesilir, gecersiz di
   assert.equal(r.durum, 400);
   assert.equal((await c.get("/api/studyo/detay?ad=film1")).json.ayar.dil, "tr");           // gecersiz kayit eskiyi bozmadi
 });
+
+test("yonetmen modu: detay etiketleri verir, sablon sahne ekler, plan/lens/isik kaydedilir, gecersiz kod reddedilir", async () => {
+  const d0 = (await c.get("/api/studyo/detay?ad=film1")).json;
+  assert.equal(d0.yonetmen.plan.genis, "Geniş plan");
+  assert.ok(d0.sablonlar.romantik && d0.kameralar.sinema);
+  let r = await c.post("/api/studyo/kaydet", { ad: "film1", sahneler: [{ mod: "metin", hareket: "a kiss", sure: 4, plan: "yakin", kameraHareketi: "yaklas", lens: "85", isik: "mum" }] });
+  assert.equal(r.durum, 200, r.metin);
+  const d = (await c.get("/api/studyo/detay?ad=film1")).json;
+  assert.deepEqual([d.sahneler[0].plan, d.sahneler[0].lens, d.sahneler[0].isik], ["yakin", "85", "mum"]);
+  assert.equal((await c.post("/api/studyo/kaydet", { ad: "film1", sahneler: [{ mod: "metin", hareket: "x", plan: "uydurma" }] })).durum, 400);
+  r = await c.post("/api/studyo/sablon", { ad: "film1", sablon: "romantik" });
+  assert.equal(r.durum, 200, r.metin); assert.equal(r.json.eklenen, 6);
+  assert.equal((await c.get("/api/studyo/detay?ad=film1")).json.sahneler.length, 7);
+  assert.equal((await c.post("/api/studyo/sablon", { ad: "film1", sablon: "komedi" })).durum, 400);
+});

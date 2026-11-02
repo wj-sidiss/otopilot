@@ -2,6 +2,12 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.12.0] — 2026-11-02 — Yönetmen modu ve kamera görünümü
+
+### Eklenenler
+- **Yönetmen modu:** her sahneye plan (geniş, yakın, omuz üstü, siluet…), kamera hareketi (yaklaşma, takip, dolly, vinç, elde…), lens (24–85mm, anamorfik) ve ışık (altın saat, mavi saat, neon, mum ışığı…) seçilir; sinema dilinde İngilizce olarak isteme eklenir. Hazır **çekim şablonları**: romantik (6 çekim), aksiyon, gerilim; fotoğraf verilirse sahneler sırayla onları referans alır. CLI: `studyo.js sablonlar`, `studyo.js sablon <ad> romantik --foto a.jpg,b.jpg`; panelde sahne kartında "Yönetmen modu" ve "Şablonu ekle".
+- **Kamera görünümü** (ücretsiz, yalnız ffmpeg): `sinema` (tane, vinyet, hafif renk kayması ve sıcaklık) ve `film` (daha grenli, solgun) AI klibin "plastik" hissini kırar. Yeni işlerde varsayılan `sinema`; `kur --kamerasiz` ile kapatılır. Altyazı kamera efektinden sonra yakılır, yazı bozulmaz.
+
 ## [1.11.0] — 2026-11-01 — Stüdyo'da anlatım, altyazı ve müzik
 
 ### Eklenenler
