@@ -2,6 +2,13 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.13.0] — 2026-11-02 — Yüz değiştirme (çift fotoğrafı)
+
+### Eklenenler
+- **Yüz değiştirme (yerel FaceFusion, ücretsiz):** poz fotoğrafındaki yüzler çiftin kendi fotoğraflarıyla değişir, sonuç `ilk-kare` sahnesi olur ve vidIQ ile canlandırılır (gerçek fotoğraf tabanlı olduğu için AI klibin yapay hissini azaltır). Çift için her kişi ayrı geçişte, soldan sağa değişir (FaceFusion birden çok kaynağı ortaladığı için). Ekran kartı (cuda) başarısız olursa işlemciye düşer. CLI: `studyo.js yuz <ad> --sablon yuz/poz.jpg --kisi yuz/sol.jpg,yuz/sag.jpg --riza`; panelde "Yüz değiştirme" bölümü.
+- **Rıza onayı zorunlu:** `--riza` (panelde onay kutusu) olmadan çalışmaz; onay `studyo.json`'a tarihiyle yazılır. Yalnız kendi ya da yazılı izin verilen yüzler. FaceFusion'ın lisansı OpenRAIL-AS'tir (kullanım kısıtları içerir); depo FaceFusion'ı içermez ve indirmez, kullanıcı kendi makinesine kurup `.env`'e `FACEFUSION_KOK=<klasör>` yazar (kendi `.venv`'iyle).
+- Poz fotoğrafları internetten toplanmaz: telifsiz ya da kendi çekimin olmalı (panel yükleme alanı bunu hatırlatır).
+
 ## [1.12.0] — 2026-11-02 — Yönetmen modu ve kamera görünümü
 
 ### Eklenenler

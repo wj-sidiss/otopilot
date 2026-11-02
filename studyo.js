@@ -3,6 +3,7 @@
 //   node studyo.js stiller                                  hazir stiller (cizgi-film, anime, 3d-animasyon, kil, suluboya, cizgi-roman, gercekci)
 //   node studyo.js yeni <ad> [--stil cizgi-film] [--oran 9:16|16:9] [--model minimax-h3] [--sure 6]
 //   (fotograflari ve videolari uretim/<ad>/girdi/ icine koy; dosya adi sirasi = film sirasi)
+//   node studyo.js yuz <ad> --sablon yuz/poz.jpg --kisi yuz/sol.jpg,yuz/sag.jpg --riza   yerel FaceFusion ile poz fotografindaki yuzleri degistirir (ucretsiz; .env FACEFUSION_KOK; kisiler soldan saga)
 //   node studyo.js sablonlar | sablon <ad> romantik|aksiyon|gerilim [--foto a.jpg,b.jpg]   hazir cekim listesi (yonetmen modu); fotograf verilirse referans olur
 //   Yonetmen modu: sahnede "plan", "kameraHareketi", "lens", "isik" (kodlar studyo.js YONETMEN) -> Ingilizce sinema dili istemin sonuna eklenir
 //   node studyo.js sahne <ad> "istem" [--sure 6]            fotografsiz sahne: yalniz yazdigin istemden video
@@ -183,6 +184,26 @@ function sablonEkle(ad, sablon, fotolar) {
   });
   ayarYaz(ad, a);
   return t.sahneler.length;
+}
+
+// YUZ DEGISTIRME (yerel FaceFusion, ucretsiz): poz fotografindaki yuzler ciftin kendi fotograflariyla degisir, sonuc ilk-kare sahnesi olur.
+// Rıza onayi ZORUNLU (--riza): yuzler kullanicinin kendisine ya da yazili izin verdigi kisilere ait olmali.
+function yuzDegistir(ad, b, enj) {
+  const e = enj || {};
+  const log = e.log || (m => console.log(m));
+  const a = ayarOku(ad);
+  if (b.riza !== true) throw hata("Rıza onayı gerekli.", "Fotoğraflardaki kişiler sen ya da yazılı izin veren kişiler olmalı; onaylıyorsan --riza ekle.");
+  const adlar = String(b.kisi || "").split(",").map(x => x.trim()).filter(Boolean);
+  if (!b.sablon || !adlar.length) throw hata("Poz fotoğrafı ve kişi fotoğrafları gerekli.", "node studyo.js yuz <ad> --sablon yuz/poz.jpg --kisi yuz/sol.jpg,yuz/sag.jpg --riza (kişiler soldan sağa)");
+  const sablon = girdiYolu(ad, b.sablon), kisiler = adlar.map(k => girdiYolu(ad, k));
+  for (const y of [sablon, ...kisiler]) if (!/\.(jpe?g|png|webp)$/i.test(y)) throw hata("Yalnız JPG/PNG/WebP: " + path.basename(y));
+  const cikti = path.join(dizinOf(ad), "girdi", "yuz-" + ozet(dosyaOzeti(sablon), ...kisiler.map(dosyaOzeti)) + ".jpg");
+  if (!fs.existsSync(cikti)) (e.degistir || require("./lib/yuz-degistir.js").degistir)({ sablon, kisiler, cikti }, { log });
+  const dosya = path.basename(cikti);
+  if (!a.sahneler.some(s => s.kaynak === dosya)) a.sahneler.push({ kaynak: dosya, mod: "ilk-kare", hareket: "the couple gently look at each other, subtle natural movement, soft breeze", sure: a.sure });
+  a.riza = { onay: true, tarih: new Date().toISOString() };
+  ayarYaz(ad, a);
+  return { dosya };
 }
 
 // girdi/'de olup sahnelerde olmayan dosyalari ekler (ad sirasiyla)
@@ -397,7 +418,7 @@ function sureOlc(dosya) {
 }
 
 function ayristir(args) {
-  const DEGERLI = new Set(["stil", "oran", "model", "cozunurluk", "sure", "butce", "muzik", "kamera", "foto"]);
+  const DEGERLI = new Set(["stil", "oran", "model", "cozunurluk", "sure", "butce", "muzik", "kamera", "foto", "sablon", "kisi"]);
   const b = {}, konum = [];
   for (let i = 0; i < args.length; i++) {
     const x = args[i];
@@ -411,13 +432,16 @@ async function ana(args) {
   const [komut, ad] = konum;
   if (komut === "sablonlar") { for (const [k, v] of Object.entries(SABLONLAR)) console.log("  " + k.padEnd(10) + v.ad); return; }
   if (komut === "stiller") { for (const [k, v] of Object.entries(STILLER)) console.log("  " + k.padEnd(14) + v.ad + " (" + v.mod + ")"); return; }
-  if (!ad || !["yeni", "tara", "sahne", "sablon", "uret", "kur"].includes(komut)) throw hata("Kullanım: node studyo.js yeni|tara|uret|kur <ad> (ayrıntı: dosyanın başı) · node studyo.js stiller");
+  if (!ad || !["yeni", "tara", "sahne", "sablon", "yuz", "uret", "kur"].includes(komut)) throw hata("Kullanım: node studyo.js yeni|tara|uret|kur <ad> (ayrıntı: dosyanın başı) · node studyo.js stiller");
   if (komut === "yeni") {
     const r = yeni(ad, b);
     console.log("✓ Stüdyo işi açıldı. Fotoğrafları ve videoları şuraya koy (dosya adı sırası = film sırası):\n  " + r.girdi + "\nSonra: node studyo.js tara " + ad);
   } else if (komut === "sahne") {
     const n = sahneEkle(ad, konum.slice(2).join(" "), b.sure);
     console.log("✓ Sahne " + n + " eklendi (metinden video). Sonra: node studyo.js uret " + ad + " --butce <kredi>");
+  } else if (komut === "yuz") {
+    const r = yuzDegistir(ad, b);
+    console.log("✓ Yüzler değiştirildi: girdi/" + r.dosya + " yeni sahne olarak eklendi (ilk kare). Sıradaki: node studyo.js uret " + ad + " --butce <kredi>");
   } else if (komut === "sablon") {
     const n = sablonEkle(ad, konum[2], b.foto ? String(b.foto).split(",").map(x => x.trim()) : []);
     console.log("✓ " + n + " çekim eklendi (" + konum[2] + "). Hareketleri/planları studyo.json'da ya da panelde düzenle, sonra: node studyo.js uret " + ad + " --butce <kredi>");
@@ -437,4 +461,4 @@ async function ana(args) {
 if (require.main === module) {
   ana(process.argv.slice(2)).catch(e => { console.error("✗ " + e.message + (e.cozum ? "\n  ↳ " + e.cozum : "")); process.exit(e.cikis || 1); });
 }
-module.exports = { STILLER, MODLAR, KAMERALAR, YONETMEN, SABLONLAR, sablonEkle, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };
+module.exports = { yuzDegistir, STILLER, MODLAR, KAMERALAR, YONETMEN, SABLONLAR, sablonEkle, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };

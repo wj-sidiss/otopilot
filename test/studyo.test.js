@@ -190,3 +190,24 @@ test("anlatim: ucretsiz ses uretilir, sahne anlatimdan kisaysa uzar, altyazi + m
   fs.writeFileSync(yol, JSON.stringify(a));
   await assert.rejects(S.kur("aile", {}, sessiz), /600 karakter/);
 });
+
+test("yuz degistirme: riza onayi zorunlu, girdi/ disina cikilamaz, sonuc ilk-kare sahnesi olur, ayni girdi tekrar islenmez", { skip }, () => {
+  S.yeni("yuzis", { stil: "serbest" });
+  const yz = path.join(kok, "yuzis", "girdi", "yuz");
+  fs.mkdirSync(yz, { recursive: true });
+  foto(path.join(yz, "poz.jpg"), "gray"); foto(path.join(yz, "sol.jpg"), "red"); foto(path.join(yz, "sag.jpg"), "blue");
+  let cagri = 0;
+  const sahte = o => { cagri++; assert.equal(o.kisiler.length, 2); fs.copyFileSync(o.sablon, o.cikti); };
+  const b = { sablon: "yuz/poz.jpg", kisi: "yuz/sol.jpg,yuz/sag.jpg" };
+  assert.throws(() => S.yuzDegistir("yuzis", b, { degistir: sahte, log: () => {} }), /Rıza onayı gerekli/);
+  assert.equal(cagri, 0);
+  assert.throws(() => S.yuzDegistir("yuzis", { riza: true, sablon: "../../studyo.json", kisi: "yuz/sol.jpg" }, { degistir: sahte }), /dışında/);
+  assert.throws(() => S.yuzDegistir("yuzis", { riza: true, sablon: "yuz/yok.jpg", kisi: "yuz/sol.jpg" }, { degistir: sahte }), /Girdi dosyası yok/);
+  const r = S.yuzDegistir("yuzis", Object.assign({ riza: true }, b), { degistir: sahte, log: () => {} });
+  assert.match(r.dosya, /^yuz-[0-9a-f]{12}\.jpg$/);
+  const a = S.ayarOku("yuzis");
+  assert.equal(a.sahneler.length, 1); assert.equal(a.sahneler[0].mod, "ilk-kare"); assert.equal(a.sahneler[0].kaynak, r.dosya);
+  assert.equal(a.riza.onay, true);
+  S.yuzDegistir("yuzis", Object.assign({ riza: true }, b), { degistir: sahte, log: () => {} });
+  assert.equal(cagri, 1); assert.equal(S.ayarOku("yuzis").sahneler.length, 1);          // ayni girdi: yeniden islenmez, sahne tekrarlanmaz
+});

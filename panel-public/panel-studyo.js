@@ -184,7 +184,7 @@
     P.degistir(ui.uretimYer,
       ozet, onayKutu,
       P.h("div", { class: "satir" }, uret, kuru, kur, dur),
-      calisiyor ? P.h("p", { class: "soluk" }, is.tur === "kur" ? "Film kuruluyor…" : is.tur === "kuru" ? "Maliyet hesaplanıyor (kredi harcanmıyor)…" : "Klipler üretiliyor, birkaç dakika sürebilir…") : (is && is.kod !== null && is.kod !== 0 ? P.mesajKutusu("hata", "Son işlem hata ile bitti (kod " + is.kod + "). Ayrıntı aşağıda.") : null),
+      calisiyor ? P.h("p", { class: "soluk" }, is.tur === "yuz" ? "Yüzler değiştiriliyor… (ekran kartıyla birkaç saniye, işlemciyle birkaç dakika)" : is.tur === "kur" ? "Film kuruluyor…" : is.tur === "kuru" ? "Maliyet hesaplanıyor (kredi harcanmıyor)…" : "Klipler üretiliyor, birkaç dakika sürebilir…") : (is && is.kod !== null && is.kod !== 0 ? P.mesajKutusu("hata", "Son işlem hata ile bitti (kod " + is.kod + "). Ayrıntı aşağıda.") : null),
       log, video, indir);
   }
 
@@ -215,11 +215,51 @@
       try {
         var oncekiTur = d.is && d.is.tur;
         var yeni = await detayYukle(true);
-        if (!yeni.is || !yeni.is.calisiyor) { if (oncekiTur === "kur") d.videoT = Date.now(); sahneleriCiz(); }
+        if (!yeni.is || !yeni.is.calisiyor) {
+          if (oncekiTur === "kur") d.videoT = Date.now();
+          if (oncekiTur === "yuz" && yeni.is && yeni.is.kod === 0) { yuz = { sablon: "", kisiler: [] }; await detayYukle(); ciz(); } else sahneleriCiz();
+        }
         else uretimCiz();
         izle();
       } catch (e) { /* ag kopmasi: bir sonraki turda yeniden dener */ izle(); }
     }, 2000);
+  }
+
+  // ---------------------------------------------------------------- yuz degistirme (yerel FaceFusion, ucretsiz)
+  var yuz = { sablon: "", kisiler: [] }, yuzYer = null;
+  async function yuzYukle(liste, rol) {
+    try {
+      for (var i = 0; i < liste.length; i++) {
+        var k = await kucult(liste[i]);
+        var r = await P.api("/api/studyo/yukle", { ad: ad, dosya: k.dosya, veri: k.veri, rol: rol }, { zamanAsimi: 60000 });
+        var dosya = r.dosya.replace(/^.*\//, "");
+        if (rol === "sablon") yuz.sablon = dosya; else if (yuz.kisiler.indexOf(dosya) < 0) yuz.kisiler.push(dosya);
+      }
+      yuzCiz();
+    } catch (e) { P.durumYaz(ui.durum, "hata", e instanceof P.ApiHata ? e : e.message); }
+  }
+  function yuzCiz() {
+    var sabInp = P.h("input", { type: "file", accept: "image/jpeg,image/png,image/webp", hidden: true });
+    var kisiInp = P.h("input", { type: "file", accept: "image/jpeg,image/png,image/webp", multiple: true, hidden: true });
+    sabInp.addEventListener("change", function () { var l = Array.prototype.slice.call(sabInp.files); sabInp.value = ""; yuzYukle(l.slice(0, 1), "sablon"); });
+    kisiInp.addEventListener("change", function () { var l = Array.prototype.slice.call(kisiInp.files); kisiInp.value = ""; yuzYukle(l, "kisi"); });
+    var riza = P.onayKutusu("Bu fotoğraflardaki kişiler benim ya da yazılı izin veren kişiler. Yüzlerin yapay zekâyla değiştirildiğini yayında belirteceğim.", false);
+    var hazir = d.yuz && d.yuz.hazir;
+    var calis = P.dugme("Yüzleri değiştir (ücretsiz, yerel)", { tur: "birincil", ikon: "yenile", disabled: true, onclick: async function () {
+      try {
+        await P.api("/api/studyo/yuz", { ad: ad, sablon: yuz.sablon, kisiler: yuz.kisiler, riza: riza.girdi.checked });
+        await detayYukle(true); uretimCiz(); izle();
+      } catch (e) { P.durumYaz(ui.durum, "hata", e); }
+    } });
+    function durumGuncelle() { calis.disabled = !(hazir && riza.girdi.checked && yuz.sablon && yuz.kisiler.length); }
+    riza.girdi.addEventListener("change", durumGuncelle); durumGuncelle();
+    P.degistir(yuzYer,
+      hazir ? null : P.mesajKutusu("uyari", P.h("span", null, (d.yuz && d.yuz.neden) || "FaceFusion kurulu değil.", d.yuz && d.yuz.cozum ? " " + d.yuz.cozum : "")),
+      P.h("div", { class: "satir" },
+        P.dugme("Poz fotoğrafı seç", { ikon: "gorsel", tur: "hafif", onclick: function () { sabInp.click(); } }), P.h("span", { class: "soluk" }, yuz.sablon || "henüz seçilmedi"),
+        P.dugme("Kişi fotoğrafları (soldan sağa)", { ikon: "kisi", tur: "hafif", onclick: function () { kisiInp.click(); } }), P.h("span", { class: "soluk" }, yuz.kisiler.length ? yuz.kisiler.join(", ") : "henüz seçilmedi"),
+        P.dugme("Temizle", { tur: "hafif", kucuk: true, onclick: function () { yuz.sablon = ""; yuz.kisiler = []; yuzCiz(); } })),
+      riza, P.h("div", { class: "satir" }, calis), sabInp, kisiInp);
   }
 
   function ciz() {
@@ -229,9 +269,10 @@
       P.bolum("Sahneler", "Sırası film sırasıdır. Fotoğraf, yazı ya da kendi videonla sahne ekle.",
         ui.sahneYer = P.h("div"),
         P.h("div", { class: "satir" }, ekleDugmeleri()), ui.foto),
+      P.bolum("Yüz değiştirme (çift fotoğrafı)", "Poz fotoğrafındaki yüzler senin/çiftin fotoğraflarıyla değişir, sonuç bir sahne olur. Yalnız kendi ya da izinli yüzler. Poz fotoğrafı telifsiz ya da kendi çekimin olmalı.", yuzYer = P.h("div")),
       P.bolum("Üretim", "Önce maliyeti gör, onaylarsan üretilir. Klipler hazır olunca film tek MP4 olarak birleşir.", ui.uretimYer = P.h("div")),
       P.dugme("Değişiklikleri kaydet", { ikon: "tamam", onclick: function () { kaydet(false); } }));
-    sahneleriCiz();
+    sahneleriCiz(); yuzCiz();
   }
   var sablonSec = null;
   async function sablonEkle() {

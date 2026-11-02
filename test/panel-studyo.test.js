@@ -145,3 +145,22 @@ test("yonetmen modu: detay etiketleri verir, sablon sahne ekler, plan/lens/isik 
   assert.equal((await c.get("/api/studyo/detay?ad=film1")).json.sahneler.length, 7);
   assert.equal((await c.post("/api/studyo/sablon", { ad: "film1", sablon: "komedi" })).durum, 400);
 });
+
+test("yuz degistirme: kisi/poz yuklemesi sahne olmaz (girdi/yuz), riza yoksa 400, FaceFusion yoksa acik hata", async () => {
+  await c.post("/api/studyo/yeni", { ad: "film2", stil: "serbest" });
+  let r = await c.post("/api/studyo/yukle", { ad: "film2", dosya: "Poz.jpg", veri: JPEG, rol: "sablon" });
+  assert.equal(r.durum, 200, r.metin);
+  r = await c.post("/api/studyo/yukle", { ad: "film2", dosya: "Sol.jpg", veri: JPEG, rol: "kisi" });
+  assert.equal(r.durum, 200, r.metin);
+  assert.ok(fs.existsSync(path.join(ortam.uretim, "film2", "girdi", "yuz", "Poz.jpg")));
+  assert.equal((await c.get("/api/studyo/detay?ad=film2")).json.sahneler.length, 0);       // sahne eklenmedi
+  assert.equal((await c.post("/api/studyo/yuz", { ad: "film2", sablon: "Poz.jpg", kisiler: ["Sol.jpg"] })).durum, 400);   // riza yok
+  assert.equal((await c.post("/api/studyo/yuz", { ad: "film2", sablon: "Poz.jpg", kisiler: [], riza: true })).durum, 400);
+  const d = (await c.get("/api/studyo/detay?ad=film2")).json;
+  assert.equal(d.yuz.hazir, false);                                                             // test ortaminda FACEFUSION_KOK yok
+  r = await c.post("/api/studyo/yuz", { ad: "film2", sablon: "Poz.jpg", kisiler: ["Sol.jpg"], riza: true });
+  assert.equal(r.durum, 200, r.metin);
+  const son = await bekleBitsin("film2");
+  assert.notEqual(son.is.kod, 0);
+  assert.match(son.is.satirlar.join("\n"), /FACEFUSION_KOK tanımlı değil/);
+});
