@@ -2,6 +2,14 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.15.0] — 2026-11-03 — 3B sahneler (three.js, ücretsiz)
+
+### Eklenenler
+- **3B sahne modu (ücretsiz, bu bilgisayarda):** Stüdyo'ya vidIQ kredisi harcamayan sahne türü. Üç şablon: **ürün platformu** (döner, cilalı ürün ya da kendi GLB modelin), **dünya ve uçuş yayları** (şehirler arası yaylar), **konuşan 3B karakter** (5 ön ayar: yaratıcı, öğretmen, şef, koç, analist; göz kırpma, nefes, jest). Karakterin ağzı, sahnenin Anlatım metninin sesinden otomatik hareket eder (`lib/ses-agzi.js`: ses → kare başına açıklık). CLI: `studyo.js 3b <ad> urun|dunya|karakter --baslik ".." --on-ayar ogretmen --anlatim ".."`; panelde "3B sahne ekle".
+- **Çizici (`lib/sahne3d.js`):** kendi Chrome/Edge'ini başsız açar, her kareyi zamana kurup (kare = f(t), her çizim aynı sonucu verir) DevTools Protocol (`ws`) ile alır ve ffmpeg'e akıtır; yeni bağımlılık yok. three.js ilk 3B sahnede `uretim/_3d/three` altına npm ile iner (MIT, ~30 MB, `--ignore-scripts`), depoya girmez. Hızlı çizim için kısa kenar 720 px'e indirilir, filme 1080p'ye ölçeklenir; aynı girdi yeniden çizilmez.
+- Şablon yapısı ve ses→ağız fikri: [motionforge](https://github.com/aykutucesai/motionforge) (MIT); şablonlar ve kod bu depoda yeniden yazıldı.
+- Gerçek çizim testi `OTOPILOT_3D_TEST=1` ile çalışır (varsayılan testler Chrome'a/ağa dokunmaz).
+
 ## [1.14.0] — 2026-11-03 — "Yapay zekâ gibi" kalıp denetimi, ses seviyesi, kontrol sayfası
 
 ### Eklenenler

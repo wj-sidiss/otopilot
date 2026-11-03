@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><title>3B sunucu karakter</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; font-family: "Segoe UI", Inter, Arial, sans-serif; }
+  canvas { position: absolute; inset: 0; z-index: 1; }
+  #baslik { position: absolute; left: 6%; right: 6%; bottom: 6%; text-align: center; color: #fff; font-weight: 800; font-size: 6vmin; letter-spacing: -0.02em; text-shadow: 0 2px 24px rgba(0,0,0,.6); opacity: 0; z-index: 2; }
+  #alt { position: absolute; left: 6%; right: 6%; bottom: 2.2%; text-align: center; color: #cbd2de; font-size: 2.8vmin; opacity: 0; z-index: 2; }
+</style>
+<script type="importmap">{ "imports": { "three": "/three/build/three.module.min.js", "three/addons/": "/three/examples/jsm/" } }</script>
+<script id="params" type="application/json">/*PARAMETRE*/</script>
+</head><body>
+<div id="baslik"></div><div id="alt"></div>
+<script type="module">
+  import { THREE, P, sahneKur, ortam, baslat, ease, seg, rng, renk, yazi, gorun, clamp01 } from "/ortak.js";
+  const { renderer, sahne, kamera, dikey } = sahneKur();
+  document.body.style.background = "radial-gradient(circle at 50% 40%, " + P.renk + "55, " + P.renk2 + " 70%, #000 140%)";
+  ortam(renderer, sahne, 0.55);
+
+  // on ayarlar: yaratici, ogretmen, sef, koc, analist
+  const ON = {
+    yaratici: { gomlek: 0xff5d73, sac: 0x2b2118, aks: "kulaklik" }, ogretmen: { gomlek: 0x3b82f6, sac: 0x6b4f3a, aks: "gozluk" },
+    sef: { gomlek: 0xf2f2f2, sac: 0x3a2a1c, aks: "sef" }, koc: { gomlek: 0x22c55e, sac: 0x1c1c1c, aks: "saclik" }, analist: { gomlek: 0x1f2937, sac: 0x8b5e34, aks: "kravat" },
+  };
+  const ay = ON[P.onAyar] || ON.yaratici;
+  const ten = renk(P.ten || "#f1c27d");
+  const mat = (renkHex, p = {}) => new THREE.MeshStandardMaterial(Object.assign({ color: renkHex, roughness: 0.6, metalness: 0.05 }, p));
+  const golge = new THREE.Mesh(new THREE.CircleGeometry(1.3, 48), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.28 }));
+  golge.rotation.x = -Math.PI / 2; golge.position.y = -0.98; sahne.add(golge);
+
+  const kisi = new THREE.Group(); sahne.add(kisi);
+  const govde = new THREE.Mesh(new THREE.CapsuleGeometry(0.58, 0.95, 10, 28), mat(ay.gomlek)); govde.position.y = -0.1; govde.castShadow = true; kisi.add(govde);
+  const bas = new THREE.Group(); bas.position.y = 1.18; kisi.add(bas);
+  bas.add(new THREE.Mesh(new THREE.SphereGeometry(0.56, 40, 32), mat(ten, { roughness: 0.5 })));
+  const sac = new THREE.Mesh(new THREE.SphereGeometry(0.585, 40, 24, 0, Math.PI * 2, 0, Math.PI / 2.05), mat(ay.sac, { roughness: 0.8 })); sac.position.y = 0.03; sac.rotation.x = -0.12; bas.add(sac);
+  const gozler = [-1, 1].map(s => { const g = new THREE.Group(); g.position.set(0.2 * s, 0.1, 0.47);
+    const beyaz = new THREE.Mesh(new THREE.SphereGeometry(0.095, 20, 16), mat(0xffffff, { roughness: 0.3 })); g.add(beyaz);
+    const gozbebegi = new THREE.Mesh(new THREE.SphereGeometry(0.05, 16, 12), mat(0x14161c, { roughness: 0.2 })); gozbebegi.position.z = 0.065; g.add(gozbebegi);
+    const kas = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.035, 0.04), mat(ay.sac)); kas.position.set(0, 0.17, 0.02); kas.rotation.z = -0.12 * s; g.add(kas);
+    bas.add(g); return { g, kas }; });
+  const burun = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 12), mat(ten.clone().multiplyScalar(0.92))); burun.position.set(0, -0.02, 0.56); bas.add(burun);
+  const agiz = new THREE.Mesh(new THREE.SphereGeometry(0.1, 24, 16), mat(0x7a1f2b, { roughness: 0.4 })); agiz.position.set(0, -0.23, 0.5); bas.add(agiz);
+  [-1, 1].forEach(s => { const y = new THREE.Mesh(new THREE.SphereGeometry(0.07, 14, 10), mat(0xff8aa0, { transparent: true, opacity: 0.35 })); y.position.set(0.34 * s, -0.12, 0.42); y.scale.set(1, 0.6, 0.4); bas.add(y); });
+
+  // kollar: omuzdan sarkan kapsuller (sol kol selam verir)
+  const kol = s => { const g = new THREE.Group(); g.position.set(0.7 * s, 0.55, 0); const k = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 0.62, 6, 16), mat(ay.gomlek)); k.position.y = -0.38; k.castShadow = true; g.add(k);
+    const el = new THREE.Mesh(new THREE.SphereGeometry(0.14, 16, 12), mat(ten)); el.position.y = -0.82; g.add(el); kisi.add(g); return g; };
+  const solKol = kol(-1), sagKol = kol(1);
+
+  // aksesuar
+  if (ay.aks === "gozluk") { [-1, 1].forEach(s => { const c = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.015, 10, 32), mat(0x111111)); c.position.set(0.2 * s, 0.1, 0.55); bas.add(c); }); const kopru = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.014, 0.014), mat(0x111111)); kopru.position.set(0, 0.1, 0.55); bas.add(kopru); }
+  if (ay.aks === "sef") { const sapka = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.3, 0.42, 28), mat(0xffffff)); sapka.position.y = 0.66; bas.add(sapka); const ust = new THREE.Mesh(new THREE.SphereGeometry(0.38, 24, 16), mat(0xffffff)); ust.position.y = 0.9; ust.scale.y = 0.7; bas.add(ust); }
+  if (ay.aks === "kulaklik") { const yay = new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.035, 12, 40, Math.PI), mat(0x222831)); yay.rotation.z = 0; yay.position.y = 0.05; bas.add(yay); [-1, 1].forEach(s => { const k = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.1, 20), mat(0x222831)); k.rotation.z = Math.PI / 2; k.position.set(0.6 * s, 0.03, 0); bas.add(k); }); }
+  if (ay.aks === "saclik") { const b = new THREE.Mesh(new THREE.BoxGeometry(1.14, 0.1, 0.12), mat(0xfacc15)); b.position.set(0, 0.34, 0.45); b.rotation.x = -0.18; bas.add(b); }
+  if (ay.aks === "kravat") { const k = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.5, 4), mat(0xdc2626)); k.position.set(0, 0.35, 0.58); k.rotation.x = Math.PI; kisi.add(k); const d = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.1, 0.06), mat(0xdc2626)); d.position.set(0, 0.62, 0.58); kisi.add(d); }
+
+  const isik = new THREE.DirectionalLight(0xffffff, 2.6); isik.position.set(2.5, 4, 5); isik.castShadow = true; sahne.add(isik);
+  const rim = new THREE.DirectionalLight(renk(P.renk), 2.2); rim.position.set(-4, 2, -3); sahne.add(rim);
+  sahne.add(new THREE.HemisphereLight(0xffffff, 0x445566, 0.6));
+  yazi("baslik", P.baslik); yazi("alt", P.altBaslik);
+
+  // goz kirpma: tohumlu, zamana bagli (her kare ayni sonucu verir)
+  const r = rng(7); const kirp = []; for (let ts = 1.6; ts < 400; ts += r.aralik(2.2, 4.2)) kirp.push(ts);
+  const kirpma = t => { for (const ts of kirp) { if (t >= ts && t < ts + 0.15) return 1 - 0.92 * Math.sin(Math.PI * (t - ts) / 0.15); if (ts > t) break; } return 1; };
+  const agizDegeri = t => { const a = P.agiz; if (!a || !a.length) return 0; const i = Math.min(a.length - 1, Math.max(0, Math.round(t * P.fps))); return clamp01(a[i] || 0); };
+  const enerji = t => { let s = 0, n = 0; for (let k = -6; k <= 0; k++) { s += agizDegeri(t + k / P.fps); n++; } return s / n; };
+
+  baslat(renderer, sahne, kamera, t => {
+    const gir = ease.out(seg(t, 0, 0.9)), nefes = Math.sin(t * 2.1) * 0.012, v = agizDegeri(t), e = enerji(t);
+    kisi.position.y = (1 - gir) * -0.6; kisi.scale.set(1 + nefes * 0.5, 1 + nefes, 1 + nefes * 0.5);
+    bas.rotation.z = Math.sin(t * 1.3) * 0.04; bas.rotation.y = Math.sin(t * 0.9) * 0.12 + Math.sin(t * 3.1) * 0.03 * e * 4; bas.rotation.x = -0.03 + e * 0.12 * Math.sin(t * 5.3);
+    agiz.scale.set(1.15 - 0.25 * v, 0.18 + 1.05 * v, 0.5 + 0.4 * v);
+    const k = kirpma(t); gozler.forEach(o => { o.g.scale.y = k; o.kas.position.y = 0.17 + (1 - k) * -0.04 + e * 0.05; });
+    // selam (ilk 1.8 sn) sonra dinlenme + konusurken jest
+    const selam = seg(t, 0.3, 0.7) * (1 - seg(t, 1.9, 2.4));
+    solKol.rotation.z = lerp2(-0.22, -2.7 + Math.sin(t * 10) * 0.28, selam) - e * 0.5 * Math.sin(t * 2.6);
+    sagKol.rotation.z = 0.22 + e * 0.9 * (0.5 + 0.5 * Math.sin(t * 3.3 + 1)) * (1 - selam);
+    const d = dikey ? 7.2 : 5.6; kamera.position.set(Math.sin(t * 0.25) * 0.4, dikey ? 1.1 : 0.9, d); kamera.lookAt(0, dikey ? 0.55 : 0.5, 0);
+    gorun(document.getElementById("baslik"), ease.out(seg(t, 0.5, 1.4))); gorun(document.getElementById("alt"), ease.out(seg(t, 0.9, 1.8)));
+  });
+  function lerp2(a, b, k) { return a + (b - a) * k; }
+</script>
+</body></html>

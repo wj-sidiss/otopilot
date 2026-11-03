@@ -3,6 +3,8 @@
 //   node studyo.js stiller                                  hazir stiller (cizgi-film, anime, 3d-animasyon, kil, suluboya, cizgi-roman, gercekci)
 //   node studyo.js yeni <ad> [--stil cizgi-film] [--oran 9:16|16:9] [--model minimax-h3] [--sure 6]
 //   (fotograflari ve videolari uretim/<ad>/girdi/ icine koy; dosya adi sirasi = film sirasi)
+//   node studyo.js 3b <ad> urun|dunya|karakter [--baslik ".."] [--alt ".."] [--renk "#c8f53a"] [--on-ayar ogretmen] [--sure 5] [--anlatim ".."]   3B sahne (UCRETSIZ, yerel three.js; karakterin agzi anlatim sesinden)
+//   node studyo.js 3b-sablonlar | 3b-kur (three.js'i bir kez indirir)
 //   node studyo.js yuz <ad> --sablon yuz/poz.jpg --kisi yuz/sol.jpg,yuz/sag.jpg --riza   yerel FaceFusion ile poz fotografindaki yuzleri degistirir (ucretsiz; .env FACEFUSION_KOK; kisiler soldan saga)
 //   node studyo.js sablonlar | sablon <ad> romantik|aksiyon|gerilim [--foto a.jpg,b.jpg]   hazir cekim listesi (yonetmen modu); fotograf verilirse referans olur
 //   Yonetmen modu: sahnede "plan", "kameraHareketi", "lens", "isik" (kodlar studyo.js YONETMEN) -> Ingilizce sinema dili istemin sonuna eklenir
@@ -40,7 +42,10 @@ const STILLER = {
   "cizgi-roman": { ad: "Çizgi roman", metin: "comic book style animation, ink lines, halftone shading, bold colors", mod: "referans" },
   gercekci: { ad: "Gerçekçi", metin: "photorealistic, natural motion, cinematic lighting, shallow depth of field", mod: "ilk-kare" },
 };
-const MODLAR = ["referans", "ilk-kare", "video", "metin"];
+const MODLAR = ["referans", "ilk-kare", "video", "metin", "3b"];
+// 3B SAHNE (ucretsiz, yerel): three.js sablonlari (urun platformu, dunya + ucus yaylari, konusan 3B karakter); vidIQ kredisi harcamaz, kur'da cizilir.
+const S3D = () => require("./lib/sahne3d.js");
+const HEX = /^#[0-9a-fA-F]{6}$/;
 // Ses seviyesi (EBU R128, iki gecis): kisa video platformlari (Shorts/Reels/TikTok/YouTube) icin -14 LUFS, tepe <= -1.5 dBTP.
 // Yontem: motionforge tools/loudness.sh fikri (olc, sonra olculen degerlerle dogrusal kazanc); kod bize ait.
 function sesNormalle(girdi, cikti, hedef) {
@@ -141,6 +146,16 @@ function ayarOku(ad) {
     for (const [alan, grup] of Object.entries(YONETMEN_ALANLAR))
       if (s[alan] && !YONETMEN[grup][s[alan]]) throw hata("Sahne " + (i + 1) + ": bilinmeyen " + alan + " '" + s[alan] + "'.", "Geçerli: " + Object.keys(YONETMEN[grup]).join(", "));
     if (s.anlatim !== undefined && (typeof s.anlatim !== "string" || s.anlatim.length > 600)) throw hata("Sahne " + (i + 1) + ": 'anlatim' en çok 600 karakterlik metin olmalı.");
+    if (s.mod === "3b") {
+      const sb = S3D().SABLONLAR;
+      if (!sb[s.sablon3d]) throw hata("Sahne " + (i + 1) + ": bilinmeyen 3B şablon '" + s.sablon3d + "'.", "Geçerli: " + Object.keys(sb).join(", "));
+      const pr = s.parametre === undefined ? {} : s.parametre;
+      if (!pr || typeof pr !== "object" || Array.isArray(pr) || JSON.stringify(pr).length > 4000) throw hata("Sahne " + (i + 1) + ": 'parametre' küçük bir nesne olmalı.");
+      for (const k of ["renk", "renk2"]) if (pr[k] !== undefined && !HEX.test(pr[k])) throw hata("Sahne " + (i + 1) + ": " + k + " #rrggbb biçiminde olmalı.");
+      if (pr.onAyar !== undefined && !S3D().KARAKTER_AYARLARI.includes(pr.onAyar)) throw hata("Sahne " + (i + 1) + ": onAyar geçerli değil.", "Geçerli: " + S3D().KARAKTER_AYARLARI.join(", "));
+      for (const k of ["baslik", "altBaslik"]) if (pr[k] !== undefined && (typeof pr[k] !== "string" || pr[k].length > 120)) throw hata("Sahne " + (i + 1) + ": " + k + " en çok 120 karakter.");
+      return;
+    }
     if (s.mod === "metin" ? !String(s.hareket || "").trim() : s.mod === "video" ? !s.url : !s.kaynak) throw hata("Sahne " + (i + 1) + ": " + (s.mod === "metin" ? "'hareket' (istem)" : s.mod === "video" ? "'url'" : "'kaynak'") + " yok.");
   });
   return a;
@@ -224,6 +239,26 @@ function yuzDegistir(ad, b, enj) {
   return { dosya };
 }
 
+// 3B sahne ekler (ucretsiz): sablon urun|dunya|karakter; b: {baslik, alt, renk, renk2, "on-ayar", sure, anlatim}
+function sahne3dEkle(ad, sablon, b) {
+  const sb = S3D().SABLONLAR;
+  if (!sb[sablon]) throw hata("Bilinmeyen 3B şablon: " + sablon, "Geçerli: " + Object.keys(sb).join(", "));
+  const a = ayarOku(ad);
+  const parametre = {};
+  if (b.baslik) parametre.baslik = String(b.baslik).slice(0, 120);
+  if (b.alt) parametre.altBaslik = String(b.alt).slice(0, 120);
+  if (b.renk) parametre.renk = String(b.renk);
+  if (b.renk2) parametre.renk2 = String(b.renk2);
+  if (b["on-ayar"]) parametre.onAyar = String(b["on-ayar"]);
+  const s = { mod: "3b", sablon3d: sablon, parametre, sure: Number(b.sure || a.sure) };
+  if (b.anlatim) s.anlatim = String(b.anlatim).slice(0, 600);
+  a.sahneler.push(s);
+  const yol = ayarYolu(ad), eski = fs.readFileSync(yol, "utf8");
+  ayarYaz(ad, a);
+  try { ayarOku(ad); } catch (x) { fs.writeFileSync(yol, eski); throw x; }       // gecersiz parametre dosyayi bozmaz
+  return a.sahneler.length;
+}
+
 // girdi/'de olup sahnelerde olmayan dosyalari ekler (ad sirasiyla)
 function tara(ad) {
   const a = ayarOku(ad);
@@ -268,6 +303,7 @@ function istemKur(a, s) {
 function liste(ad, a, videolar) {
   const karakter = (a.karakter || []).map(f => hazirla(ad, f));
   return a.sahneler.map((s, i) => {
+    if (s.mod === "3b") return { istem: "3b:" + s.sablon3d, sure: Number(s.sure || a.sure), yerel: true, girdiOzet: ozet("3b", s.sablon3d, JSON.stringify(s.parametre || {})) };
     const k = { istem: istemKur(a, s), sure: Number(s.sure || a.sure) };
     if (s.mod === "metin") {
       k.girdiOzet = ozet("metin");
@@ -313,7 +349,7 @@ async function uret(ad, b, enj) {
   const ag = e.indir ? null : require("./lib/gorsel-ag.js");
   const vk = require("./vidiq-klip.js");
   const r = await K.uret({
-    liste: liste(ad, a, videolar), model: a.model, cozunurluk: a.cozunurluk, oran: a.oran, dizin: path.join(dizinOf(ad), "Clips"),
+    liste: liste(ad, a, videolar).filter(k => !k.yerel), model: a.model, cozunurluk: a.cozunurluk, oran: a.oran, dizin: path.join(dizinOf(ad), "Clips"),
     butce: Number(b.butce || 0), onay, yeniCekim: b["yeni-cekim"] === true, log, vidiq,
     indir: e.indir || vk.indirici(ag.istemciYap({ limitBekleSn: 5 })),
   });
@@ -330,6 +366,7 @@ function klipEsle(ad, a) {
   const kayit = K.kayitOku(clips).klipler || [];
   const l = liste(ad, a, {});
   return l.map((k, i) => {
+    if (k.yerel) return { sahne: i + 1, yol: null, yerel: true };
     const e = kayit.filter(g => g.dosya && g.istem === k.istem && Number(g.sure) === k.sure && (g.girdiOzet || "") === k.girdiOzet && fs.existsSync(path.join(clips, g.dosya))).pop();
     return { sahne: i + 1, yol: e ? path.join(clips, e.dosya) : null };
   });
@@ -366,8 +403,8 @@ async function kur(ad, b, enj) {
   const log = e.log || (m => console.log(m));
   const a = ayarOku(ad);
   const es = klipEsle(ad, a);
-  const eksik = es.filter(x => !x.yol).map(x => x.sahne);
-  const var_ = es.filter(x => x.yol);
+  const eksik = es.filter(x => !x.yol && !x.yerel).map(x => x.sahne);
+  const var_ = es.filter(x => x.yol || x.yerel);
   if (!var_.length) throw hata("Hiç klip yok.", "Önce: node studyo.js uret " + ad + " --butce <kredi> --onay");
   const kalipUyarilari = [];
   a.sahneler.forEach((s, i) => {
@@ -378,6 +415,22 @@ async function kur(ad, b, enj) {
   const sesler = await anlatimSesleri(ad, a, log, e.ses);
   const sesVar = var_.some(x => sesler[x.sahne - 1]);
   const [w, h] = BOYUT[a.oran];
+  // 3B sahneleri bu bilgisayarda cizilir (ucretsiz); karakter sahnesinde agiz, o sahnenin anlatim sesinden gelir
+  let yerel3b = 0;
+  for (const x of var_.filter(v => v.yerel)) {
+    const s = a.sahneler[x.sahne - 1], ses = sesler[x.sahne - 1];
+    const sure3 = Math.max(Number(s.sure || a.sure), ses ? ses.sure + 0.4 : 0);
+    const parametre = Object.assign({}, s.parametre || {});
+    if (s.sablon3d === "karakter" && ses) parametre.agiz = require("./lib/ses-agzi.js").agizEgrisi(ses.dosya, 30);
+    const kimlik3 = ozet("3b", s.sablon3d, JSON.stringify(Object.assign({}, parametre, { agiz: parametre.agiz ? ozet(parametre.agiz.join(",")) : "" })), sure3.toFixed(2), w, h);
+    const yol3 = path.join(dizinOf(ad), "Clips3d", String(x.sahne).padStart(3, "0") + "-" + s.sablon3d + "-" + kimlik3 + ".mp4");
+    if (!fs.existsSync(yol3)) {
+      log("  3B sahne " + x.sahne + " (" + s.sablon3d + ") çiziliyor…");
+      const k = Math.min(1, 720 / Math.min(w, h));
+      await (e.ciz3d || S3D().ciz)({ sablon: s.sablon3d, parametre, sure: sure3, genislik: Math.round(w * k), yukseklik: Math.round(h * k), fps: 30, cikti: yol3, log });
+    }
+    x.yol = yol3; yerel3b++;
+  }
   const d = dizinOf(ad), kurgu = path.join(d, "kurgu");
   fs.mkdirSync(kurgu, { recursive: true });
   fs.mkdirSync(path.join(d, "Videos"), { recursive: true });
@@ -443,7 +496,7 @@ async function kur(ad, b, enj) {
   let kontrol = "";
   try { kontrol = path.join(d, "Videos", ad + "-kontrol.jpg"); kontrolSayfasi(cikti, kontrol, t); }
   catch (x) { kontrol = ""; uyarilar.push("Kontrol sayfası yapılamadı (" + x.message.slice(0, 100) + ")."); }
-  return { cikti, sahne: var_.length, eksik, sure: t, uyarilar: kalipUyarilari.concat(uyarilar), anlatim: altyazi.length, sesNormal, kontrol };
+  return { cikti, sahne: var_.length, eksik, sure: t, uyarilar: kalipUyarilari.concat(uyarilar), anlatim: altyazi.length, sesNormal, kontrol, yerel3b };
 }
 function sureOlc(dosya) {
   const r = spawnSync(ff().ffprobe, ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", dosya], { encoding: "utf8", windowsHide: true });
@@ -452,7 +505,7 @@ function sureOlc(dosya) {
 }
 
 function ayristir(args) {
-  const DEGERLI = new Set(["stil", "oran", "model", "cozunurluk", "sure", "butce", "muzik", "kamera", "foto", "sablon", "kisi"]);
+  const DEGERLI = new Set(["stil", "oran", "model", "cozunurluk", "sure", "butce", "muzik", "kamera", "foto", "sablon", "kisi", "baslik", "alt", "renk", "renk2", "on-ayar", "anlatim"]);
   const b = {}, konum = [];
   for (let i = 0; i < args.length; i++) {
     const x = args[i];
@@ -464,15 +517,20 @@ function ayristir(args) {
 async function ana(args) {
   const { b, konum } = ayristir(args);
   const [komut, ad] = konum;
+  if (komut === "3b-kur") { S3D().threeKur(console.log); console.log("✓ three.js hazır (" + S3D().THREE_SURUM + ")."); return; }
+  if (komut === "3b-sablonlar") { for (const [k, v] of Object.entries(S3D().SABLONLAR)) console.log("  " + k.padEnd(10) + v.ad); console.log("  karakter ön ayarları: " + S3D().KARAKTER_AYARLARI.join(", ")); return; }
   if (komut === "sablonlar") { for (const [k, v] of Object.entries(SABLONLAR)) console.log("  " + k.padEnd(10) + v.ad); return; }
   if (komut === "stiller") { for (const [k, v] of Object.entries(STILLER)) console.log("  " + k.padEnd(14) + v.ad + " (" + v.mod + ")"); return; }
-  if (!ad || !["yeni", "tara", "sahne", "sablon", "yuz", "uret", "kur"].includes(komut)) throw hata("Kullanım: node studyo.js yeni|tara|uret|kur <ad> (ayrıntı: dosyanın başı) · node studyo.js stiller");
+  if (!ad || !["yeni", "tara", "sahne", "3b", "sablon", "yuz", "uret", "kur"].includes(komut)) throw hata("Kullanım: node studyo.js yeni|tara|uret|kur <ad> (ayrıntı: dosyanın başı) · node studyo.js stiller");
   if (komut === "yeni") {
     const r = yeni(ad, b);
     console.log("✓ Stüdyo işi açıldı. Fotoğrafları ve videoları şuraya koy (dosya adı sırası = film sırası):\n  " + r.girdi + "\nSonra: node studyo.js tara " + ad);
   } else if (komut === "sahne") {
     const n = sahneEkle(ad, konum.slice(2).join(" "), b.sure);
     console.log("✓ Sahne " + n + " eklendi (metinden video). Sonra: node studyo.js uret " + ad + " --butce <kredi>");
+  } else if (komut === "3b") {
+    const n = sahne3dEkle(ad, konum[2], b);
+    console.log("✓ 3B sahne " + n + " eklendi (" + konum[2] + "; ücretsiz, kur'da bu bilgisayarda çizilir). Sonra: node studyo.js kur " + ad);
   } else if (komut === "yuz") {
     const r = yuzDegistir(ad, b);
     console.log("✓ Yüzler değiştirildi: girdi/" + r.dosya + " yeni sahne olarak eklendi (ilk kare). Sıradaki: node studyo.js uret " + ad + " --butce <kredi>");
@@ -495,4 +553,4 @@ async function ana(args) {
 if (require.main === module) {
   ana(process.argv.slice(2)).catch(e => { console.error("✗ " + e.message + (e.cozum ? "\n  ↳ " + e.cozum : "")); process.exit(e.cikis || 1); });
 }
-module.exports = { yuzDegistir, STILLER, MODLAR, KAMERALAR, YONETMEN, SABLONLAR, sablonEkle, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };
+module.exports = { sahne3dEkle, yuzDegistir, STILLER, MODLAR, KAMERALAR, YONETMEN, SABLONLAR, sablonEkle, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };

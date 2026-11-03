@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><title>3B dünya ve uçuş yayları</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; font-family: "Segoe UI", Inter, Arial, sans-serif; }
+  canvas { position: absolute; inset: 0; z-index: 1; }
+  #baslik { position: absolute; left: 6%; right: 6%; bottom: 12%; text-align: center; color: #fff; font-weight: 800; font-size: 7vmin; letter-spacing: -0.02em; text-shadow: 0 2px 24px rgba(0,0,0,.7); opacity: 0; z-index: 2; }
+  #alt { position: absolute; left: 6%; right: 6%; bottom: 7%; text-align: center; color: #cbd2de; font-size: 3.3vmin; opacity: 0; z-index: 2; }
+</style>
+<script type="importmap">{ "imports": { "three": "/three/build/three.module.min.js", "three/addons/": "/three/examples/jsm/" } }</script>
+<script id="params" type="application/json">/*PARAMETRE*/</script>
+</head><body>
+<div id="baslik"></div><div id="alt"></div>
+<script type="module">
+  import { THREE, P, sahneKur, ortam, baslat, ease, seg, rng, renk, yazi, gorun } from "/ortak.js";
+  import { Line2 } from "three/addons/lines/Line2.js";
+  import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+  import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+  const { renderer, sahne, kamera, dikey } = sahneKur();
+  document.body.style.background = "radial-gradient(circle at 50% 45%, " + P.renk2 + ", #000 140%)";
+  ortam(renderer, sahne, 0.5);
+  const vurgu = renk(P.renk);
+
+  // kure dokusu: tohumlu noktalar + enlem/boylam izgarasi (internet/veri gerekmez)
+  const cv = document.createElement("canvas"); cv.width = 2048; cv.height = 1024; const x = cv.getContext("2d");
+  x.fillStyle = "#0d1426"; x.fillRect(0, 0, 2048, 1024);
+  x.strokeStyle = "rgba(120,160,255,.18)"; x.lineWidth = 2;
+  for (let i = 0; i <= 12; i++) { x.beginPath(); x.moveTo(i * 2048 / 12, 0); x.lineTo(i * 2048 / 12, 1024); x.stroke(); }
+  for (let i = 0; i <= 6; i++) { x.beginPath(); x.moveTo(0, i * 1024 / 6); x.lineTo(2048, i * 1024 / 6); x.stroke(); }
+  const r = rng(11); x.fillStyle = "rgba(150,190,255,.55)";
+  for (let i = 0; i < 5200; i++) { const px = r() * 2048, py = 140 + r() * 740; x.fillRect(px, py, 3, 3); }
+  const doku = new THREE.CanvasTexture(cv); doku.colorSpace = THREE.SRGBColorSpace; doku.anisotropy = 8;
+  const grup = new THREE.Group(); sahne.add(grup);
+  const kure = new THREE.Mesh(new THREE.SphereGeometry(1, 96, 64), new THREE.MeshStandardMaterial({ map: doku, roughness: 0.85, metalness: 0.1 }));
+  grup.add(kure);
+  const atmosfer = new THREE.Mesh(new THREE.SphereGeometry(1.07, 64, 48), new THREE.MeshBasicMaterial({ color: vurgu, transparent: true, opacity: 0.09, side: THREE.BackSide }));
+  sahne.add(atmosfer);
+  const isik = new THREE.DirectionalLight(0xffffff, 2.4); isik.position.set(3, 2, 4); sahne.add(isik);
+
+  const vek = (lat, lon, yaricap = 1) => { const phi = (90 - lat) * Math.PI / 180, th = (lon + 180) * Math.PI / 180; return new THREE.Vector3(-yaricap * Math.sin(phi) * Math.cos(th), yaricap * Math.cos(phi), yaricap * Math.sin(phi) * Math.sin(th)); };
+  const noktalar = (P.noktalar && P.noktalar.length >= 2 ? P.noktalar : [[41, 29], [51.5, -0.1]]).slice(0, 12);
+  const pinler = noktalar.map(([la, lo], i) => { const m = new THREE.Mesh(new THREE.SphereGeometry(0.022, 16, 12), new THREE.MeshBasicMaterial({ color: vurgu })); m.position.copy(vek(la, lo, 1.005)); grup.add(m); return m; });
+  const cozunurluk = new THREE.Vector2(innerWidth, innerHeight);
+  const yaylar = [];
+  for (let i = 0; i < noktalar.length - 1; i++) {
+    const a = vek(noktalar[i][0], noktalar[i][1]), b = vek(noktalar[i + 1][0], noktalar[i + 1][1]);
+    const orta = a.clone().add(b).multiplyScalar(0.5).normalize().multiplyScalar(1 + 0.25 + a.distanceTo(b) * 0.28);
+    const noktalarYay = new THREE.QuadraticBezierCurve3(a.clone().multiplyScalar(1.005), orta, b.clone().multiplyScalar(1.005)).getPoints(80);
+    const g = new LineGeometry(); g.setPositions(noktalarYay.flatMap(p => [p.x, p.y, p.z]));
+    const m = new LineMaterial({ color: vurgu.getHex(), linewidth: dikey ? 4 : 3.2, resolution: cozunurluk, transparent: true });
+    const cizgi = new Line2(g, m); grup.add(cizgi); yaylar.push({ g, cizgi, a: 1.0 + i * 0.9, b: 1.0 + i * 0.9 + 1.3 });
+  }
+  const ilk = vek(noktalar[0][0], noktalar[0][1]); const baslangic = -Math.atan2(ilk.x, ilk.z);
+  yazi("baslik", P.baslik); yazi("alt", P.altBaslik);
+
+  baslat(renderer, sahne, kamera, t => {
+    grup.rotation.y = baslangic + t * 0.1; grup.rotation.x = 0.25 - Math.sin(t * 0.3) * 0.05;
+    for (const y of yaylar) { const k = ease.inOut(seg(t, y.a, y.b)); y.g.instanceCount = Math.max(0, Math.floor(80 * k)); y.cizgi.visible = k > 0.01; }
+    pinler.forEach((p, i) => { const k = ease.out(seg(t, 0.4 + i * 0.9, 0.9 + i * 0.9)); p.scale.setScalar(0.001 + k * (1 + Math.sin(t * 5 + i) * 0.25)); });
+    const gir = ease.out(seg(t, 0, 1.4));
+    const mesafe = (dikey ? 5.4 : 3.9) - gir * 0.5; kamera.position.set(0, 0.2 + (dikey ? 0.4 : 0), mesafe); kamera.lookAt(0, dikey ? -0.45 : 0, 0);
+    grup.position.y = dikey ? -0.3 : 0;
+    gorun(document.getElementById("baslik"), ease.out(seg(t, 0.4, 1.4))); gorun(document.getElementById("alt"), ease.out(seg(t, 0.8, 1.8)));
+  });
+</script>
+</body></html>

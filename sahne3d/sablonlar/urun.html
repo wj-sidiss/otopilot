@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><title>3B ürün platformu</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; font-family: "Segoe UI", Inter, Arial, sans-serif; }
+  canvas { position: absolute; inset: 0; z-index: 1; }
+  #baslik { position: absolute; left: 6%; right: 6%; bottom: 17%; text-align: center; color: #fff; font-weight: 800; font-size: 7vmin; letter-spacing: -0.02em; text-shadow: 0 2px 24px rgba(0,0,0,.6); opacity: 0; z-index: 2; }
+  #alt { position: absolute; left: 6%; right: 6%; bottom: 11%; text-align: center; color: #cbd2de; font-size: 3.3vmin; opacity: 0; z-index: 2; }
+</style>
+<script type="importmap">{ "imports": { "three": "/three/build/three.module.min.js", "three/addons/": "/three/examples/jsm/" } }</script>
+<script id="params" type="application/json">/*PARAMETRE*/</script>
+</head><body>
+<div id="baslik"></div><div id="alt"></div>
+<script type="module">
+  import { THREE, P, sahneKur, ortam, baslat, ease, seg, renk, yazi, gorun } from "/ortak.js";
+  const { renderer, sahne, kamera, dikey } = sahneKur();
+  document.body.style.background = "radial-gradient(circle at 50% 38%, " + P.renk2 + ", #000 135%)";
+  ortam(renderer, sahne, 0.9);
+  const ana = renk(P.renk);
+
+  const platform = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.6, 0.18, 64), new THREE.MeshStandardMaterial({ color: 0x1b1e26, metalness: 0.6, roughness: 0.35 }));
+  platform.position.y = -1.1; platform.receiveShadow = true; sahne.add(platform);
+  const halka = new THREE.Mesh(new THREE.TorusGeometry(1.52, 0.015, 12, 96), new THREE.MeshBasicMaterial({ color: ana }));
+  halka.rotation.x = Math.PI / 2; halka.position.y = -1.0; sahne.add(halka);
+
+  const urun = new THREE.Group(); sahne.add(urun);
+  let hazir = Promise.resolve();
+  if (P.model) {
+    hazir = import("three/addons/loaders/GLTFLoader.js").then(m => new m.GLTFLoader().loadAsync(P.model)).then(g => {
+      const o = g.scene, b = new THREE.Box3().setFromObject(o).getSize(new THREE.Vector3());
+      o.scale.setScalar(2.0 / Math.max(b.x, b.y, b.z));
+      o.position.sub(new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3()));
+      o.traverse(n => { if (n.isMesh) n.castShadow = true; });
+      urun.add(o);
+    });
+  } else {
+    const mat = new THREE.MeshPhysicalMaterial({ color: ana, metalness: 0.9, roughness: 0.18, clearcoat: 1, clearcoatRoughness: 0.08 });
+    const dugum = new THREE.Mesh(new THREE.TorusKnotGeometry(0.62, 0.2, 220, 32, 2, 3), mat); dugum.castShadow = true; urun.add(dugum);
+  }
+  const isik = new THREE.DirectionalLight(0xffffff, 2.2); isik.position.set(3, 5, 4); isik.castShadow = true; sahne.add(isik);
+  const rim = new THREE.DirectionalLight(ana, 2.5); rim.position.set(-4, 2, -3); sahne.add(rim);
+  yazi("baslik", P.baslik); yazi("alt", P.altBaslik);
+
+  baslat(renderer, sahne, kamera, t => {
+    const gir = ease.out(seg(t, 0, 1.2));
+    urun.rotation.y = t * 0.9;
+    urun.position.y = 0.1 + Math.sin(t * 1.4) * 0.05 + (1 - gir) * 1.2;
+    urun.scale.setScalar(0.6 + 0.4 * gir);
+    const r = dikey ? 8.4 : 6.2, aci = 0.35 + Math.sin(t * 0.3) * 0.15;
+    kamera.position.set(Math.sin(aci) * r * 0.35, dikey ? 1.9 : 1.2, r); kamera.lookAt(0, -0.1, 0);
+    gorun(document.getElementById("baslik"), ease.out(seg(t, 0.4, 1.4)));
+    gorun(document.getElementById("alt"), ease.out(seg(t, 0.8, 1.8)));
+  }, hazir);
+</script>
+</body></html>

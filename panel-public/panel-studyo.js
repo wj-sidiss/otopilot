@@ -8,7 +8,7 @@
   var ui = {}, d = null, sahneler = [], ad = "", zaman = null, kirli = false;
   var MODELLER = { "minimax-h3": ["768p", "2k"], "seedance-2-fast": ["720p"], "seedance-2": ["720p", "1080p"], "gemini-omni-flash": ["720p"], "wan-3": ["720p", "1080p"] };
   var MODEL_ETIKET = [["minimax-h3", "MiniMax H3 (en ucuz, ~20 kredi/sn)"], ["seedance-2-fast", "Seedance 2 Fast (~40 kredi/sn)"], ["seedance-2", "Seedance 2 (~60-88 kredi/sn)"], ["gemini-omni-flash", "Gemini Omni Flash (ses dahil)"], ["wan-3", "Wan 3 (2-30 sn)"]];
-  var MODLAR = [["metin", "Yazıdan video"], ["ilk-kare", "Fotoğraf olduğu gibi canlansın"], ["referans", "Fotoğraf karakter/stil referansı"], ["video", "Kendi videom (link)"]];
+  var MODLAR = [["metin", "Yazıdan video"], ["ilk-kare", "Fotoğraf olduğu gibi canlansın"], ["referans", "Fotoğraf karakter/stil referansı"], ["video", "Kendi videom (link)"], ["3b", "3B sahne (ücretsiz, bu bilgisayarda)"]];
   var DILLER = [["en", "English"], ["tr", "Türkçe"], ["es", "Español"], ["de", "Deutsch"], ["fr", "Français"], ["it", "Italiano"], ["pt", "Português"], ["ru", "Русский"], ["ar", "العربية"], ["ja", "日本語"]];
   var ORANLAR = [["9:16", "Dikey 9:16 (Shorts, Reels, TikTok)"], ["16:9", "Yatay 16:9 (YouTube)"]];
 
@@ -81,8 +81,11 @@
     var gorsel = s.kaynak
       ? P.h("img", { class: "studyo-thumb", alt: "Sahne " + (i + 1), loading: "lazy", src: "/studyo/" + enc(ad) + "/girdi/" + enc(s.kaynak) })
       : P.h("div", { class: "studyo-thumb" }, P.ikon(s.mod === "video" ? "film" : "metin"));
-    var mod = P.secim(MODLAR.filter(function (m) { return s.kaynak ? m[0] === "ilk-kare" || m[0] === "referans" : m[0] === "metin" || m[0] === "video"; }), s.mod);
-    mod.addEventListener("change", function () { s.mod = mod.value; kirli = true; });
+    var mod = P.secim(MODLAR.filter(function (m) { return s.kaynak ? m[0] === "ilk-kare" || m[0] === "referans" : m[0] === "metin" || m[0] === "video" || m[0] === "3b"; }), s.mod);
+    mod.addEventListener("change", function () {
+      s.mod = mod.value; kirli = true;
+      if (s.mod === "3b") { s.sablon3d = s.sablon3d || "urun"; s.parametre = s.parametre || {}; sahneleriCiz(); }
+    });
     var istem = P.metinAlani({ maxlength: "3500", placeholder: s.mod === "metin" ? "Ne görmek istiyorsun? (İngilizce yazarsan daha iyi sonuç verir)" : "Sahnede ne olsun? (İngilizce)", "aria-label": "Sahne " + (i + 1) + " istemi" });
     istem.value = s.hareket || "";
     istem.addEventListener("input", function () { s.hareket = istem.value; kirli = true; });
@@ -99,6 +102,22 @@
       yonKutu.appendChild(P.alan(g[2], sec));
     });
     var ek = [];
+    if (s.mod === "3b") {
+      var pr = s.parametre = s.parametre || {}, d3 = d.sahne3d;
+      var sab = P.secim(Object.keys(d3.sablonlar).map(function (k) { return [k, d3.sablonlar[k]]; }), s.sablon3d || "urun", { "aria-label": "3B şablon (sahne " + (i + 1) + ")" });
+      sab.addEventListener("change", function () { s.sablon3d = sab.value; kirli = true; sahneleriCiz(); });
+      var alanYaz = function (anahtar, etiket, yer) { var g = P.girdi({ deger: pr[anahtar] || "", maxlength: "120", placeholder: yer, "aria-label": etiket + " (sahne " + (i + 1) + ")" }); g.addEventListener("input", function () { if (g.value) pr[anahtar] = g.value; else delete pr[anahtar]; kirli = true; }); return P.alan(etiket, g); };
+      var renkG = P.girdi({ type: "color", deger: pr.renk || "#c8f53a", "aria-label": "Vurgu rengi (sahne " + (i + 1) + ")" });
+      renkG.addEventListener("input", function () { pr.renk = renkG.value; kirli = true; });
+      var kutu3 = P.h("div", { class: "studyo-ayar" }, P.alan("Şablon", sab), alanYaz("baslik", "Başlık", "Ekranda görünen büyük yazı"), alanYaz("altBaslik", "Alt başlık", ""), P.alan("Renk", renkG));
+      if ((s.sablon3d || "urun") === "karakter") {
+        var on = P.secim(d3.onAyarlar.map(function (k) { return [k, k]; }), pr.onAyar || "yaratici", { "aria-label": "Karakter ön ayarı (sahne " + (i + 1) + ")" });
+        on.addEventListener("change", function () { pr.onAyar = on.value; kirli = true; });
+        kutu3.appendChild(P.alan("Karakter", on));
+      }
+      ek.push(kutu3);
+      ek.push(P.h("p", { class: "soluk" }, (s.sablon3d === "karakter" ? "Karakterin ağzı, aşağıdaki Anlatım metninin sesiyle oynar. " : "") + "Ücretsiz: film kurulurken bu bilgisayarda çizilir" + (d3.chrome && d3.three ? "." : (!d3.chrome ? ". Chrome ya da Edge bulunamadı!" : "; ilk kullanımda three.js (~30 MB) iner."))));
+    }
     if (s.mod === "video") {
       var url = P.girdi({ type: "url", placeholder: "https:// MP4 ya da YouTube linki (yalnız kendi videon)", deger: s.url || "", style: "width:100%" });
       url.addEventListener("input", function () { s.url = url.value.trim(); kirli = true; });
@@ -106,13 +125,13 @@
     }
     var durum = s.klip
       ? [P.rozet("klip hazır", "ok", "tamam"), P.h("video", { class: "studyo-klip", controls: true, preload: "none", src: "/studyo/" + enc(ad) + "/klip/" + enc(s.klip) })]
-      : [P.rozet("≈ " + s.kredi + " kredi", "soluk")];
+      : [s.mod === "3b" ? P.rozet("ücretsiz · 3B", "ok") : P.rozet("≈ " + s.kredi + " kredi", "soluk")];
     var araclar = P.h("div", { class: "satir" },
       P.dugme("", { tur: "hafif", kucuk: true, ikon: "yukari", aria: "Yukarı taşı", disabled: i === 0, onclick: function () { tasi(i, -1); } }),
       P.dugme("", { tur: "hafif", kucuk: true, ikon: "ok-sag", sinif: "asagi", aria: "Aşağı taşı", disabled: i === sahneler.length - 1, onclick: function () { tasi(i, 1); } }),
       P.dugme("", { tur: "tehlike", kucuk: true, ikon: "sil", aria: "Sahneyi sil", onclick: function () { sahneler.splice(i, 1); kirli = true; sahneleriCiz(); } }));
     return P.h("div", { class: "studyo-kart" }, gorsel,
-      P.h("div", null, P.h("div", { class: "sahne-ust" }, P.h("h4", null, "Sahne " + (i + 1)), mod, P.alan("sn", sure), araclar), ek, istem, P.h("details", null, P.h("summary", null, "Yönetmen modu: plan, kamera, lens, ışık"), yonKutu), anlatim, P.h("div", { class: "satir" }, durum)));
+      P.h("div", null, P.h("div", { class: "sahne-ust" }, P.h("h4", null, "Sahne " + (i + 1)), mod, P.alan("sn", sure), araclar), ek, s.mod === "3b" ? null : istem, s.mod === "3b" ? null : P.h("details", null, P.h("summary", null, "Yönetmen modu: plan, kamera, lens, ışık"), yonKutu), anlatim, P.h("div", { class: "satir" }, durum)));
   }
   function tasi(i, yon) {
     var j = i + yon; if (j < 0 || j >= sahneler.length) return;
@@ -292,6 +311,7 @@
       P.dugme("Yazıdan sahne ekle", { ikon: "metin", onclick: function () { sahneler.push({ mod: "metin", hareket: "", sure: d.ayar.sure, kredi: 0 }); kirli = true; sahneleriCiz(); } }),
       sablonSec = P.secim([["", "Çekim şablonu…"]].concat(Object.keys(d.sablonlar).map(function (k) { return [k, d.sablonlar[k]]; })), "", { "aria-label": "Çekim şablonu" }),
       P.dugme("Şablonu ekle", { ikon: "arti", onclick: sablonEkle }),
+      P.dugme("3B sahne ekle", { ikon: "arti", onclick: function () { sahneler.push({ mod: "3b", sablon3d: "urun", parametre: {}, sure: d.ayar.sure, kredi: 0 }); kirli = true; sahneleriCiz(); } }),
       P.dugme("Video linki ekle", { ikon: "film", onclick: function () { sahneler.push({ mod: "video", url: "", hareket: "recreate this exact scene with the same composition, characters and action", sure: d.ayar.sure, kredi: 0 }); kirli = true; sahneleriCiz(); } }),
       ui.foto];
   }
