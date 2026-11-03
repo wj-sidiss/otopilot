@@ -204,6 +204,7 @@ node yayin-paketi.js   <is-adi>      # açıklama, bölümler, atıflar (video-y
 | `video-bul.js` | sahnelere Pexels/Pixabay **stok video** klibi ekler (`--sahne N --ara`, `--azami`, `--yeniden`); atıf `YAYIN-PAKETI.md`'ye girer |
 | `vidiq-klip.js` | vidIQ ile AI video klibi; **kredi harcar**, varsayılan kuru çalışma, `--butce` zorunlu, `--onay` ile üretir, aynı istem tekrar üretilmez |
 | `studyo.js` | **AI Stüdyo:** ne istersen: yazdığın istemden, fotoğrafından ya da kendi videondan AI video; çizgi film, anime, 3D, kil animasyon, gerçekçi ya da stilsiz (vidIQ kredisiyle; kuru çalışma varsayılan, `--butce` + `--onay`) |
+| `ai-kalip-kontrol.js` | Senaryoda/anlatımda "yapay zekâ gibi" duran kalıpları (10 dil) bulur; ücretsiz, yerel (liste: motionforge, MIT, bkz. `docs/ATIF-motionforge.md`) |
 | `lib/yuz-degistir.js` | Stüdyo'da yerel yüz değiştirme (FaceFusion, kendi kurulumun; `FACEFUSION_KOK`), rıza onaylı, çift için soldan sağa |
 | `klip-yerlestir.js` | vidiq-klip ile inen AI klipleri `KLIPLER.txt` sırasıyla sahne klasörlerine koyar (ücretsiz, tekrar çalıştırılabilir); sonra `video-yap.js --yeniden` |
 | `film.js` | karakterli/diyaloglu kısa dizi: `yeni`, `klipler`, `ses`, `kur [--dudak] [--yer-tutucu]` (AGENTS.md "1b") |

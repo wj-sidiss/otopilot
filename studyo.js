@@ -41,6 +41,24 @@ const STILLER = {
   gercekci: { ad: "Gerçekçi", metin: "photorealistic, natural motion, cinematic lighting, shallow depth of field", mod: "ilk-kare" },
 };
 const MODLAR = ["referans", "ilk-kare", "video", "metin"];
+// Ses seviyesi (EBU R128, iki gecis): kisa video platformlari (Shorts/Reels/TikTok/YouTube) icin -14 LUFS, tepe <= -1.5 dBTP.
+// Yontem: motionforge tools/loudness.sh fikri (olc, sonra olculen degerlerle dogrusal kazanc); kod bize ait.
+function sesNormalle(girdi, cikti, hedef) {
+  const I = hedef || -14, TP = -1.5, LRA = 11;
+  const olc = spawnSync(ff().ffmpeg, ["-hide_banner", "-nostats", "-i", girdi, "-vn", "-af", "loudnorm=I=" + I + ":TP=" + TP + ":LRA=" + LRA + ":print_format=json", "-f", "null", "-"], { encoding: "utf8", windowsHide: true, maxBuffer: 1 << 26 });
+  const m = /\{[^{}]*"input_i"[^{}]*\}/.exec(String(olc.stderr || ""));
+  if (!m) throw hata("Ses seviyesi ölçülemedi.");
+  const o = JSON.parse(m[0]);
+  if (!Number.isFinite(Number(o.input_i))) throw hata("Videoda duyulur ses yok (sessiz).");
+  const f = "loudnorm=I=" + I + ":TP=" + TP + ":LRA=" + LRA + ":measured_I=" + o.input_i + ":measured_TP=" + o.input_tp + ":measured_LRA=" + o.input_lra + ":measured_thresh=" + o.input_thresh + ":offset=" + o.target_offset + ":linear=true";
+  ffmpeg(["-i", girdi, "-c:v", "copy", "-af", f, "-c:a", "aac", "-b:a", "160k", "-ar", "44100", cikti], "ses seviyesi");
+  return { once: Number(o.input_i), hedef: I };
+}
+// Kontrol sayfasi: filmden esit aralikli 12 kare tek JPG (once bak, sonra yayinla; metin tasmasi, bos sahne, kopuk kare).
+function kontrolSayfasi(video, cikti, sure) {
+  const fps = Math.max(0.05, 12 / Math.max(1, sure)).toFixed(4);
+  ffmpeg(["-i", video, "-vf", "fps=" + fps + ",scale=270:-2,tile=4x3:padding=4:margin=4:color=0x111111", "-frames:v", "1", "-q:v", "3", cikti], "kontrol sayfası");
+}
 // YONETMEN MODU: sahne basina plan / kamera hareketi / lens / isik (Ingilizce sinema dili istem sonuna eklenir) + hazir cekim sablonlari.
 const YONETMEN = {
   plan: {
@@ -351,6 +369,12 @@ async function kur(ad, b, enj) {
   const eksik = es.filter(x => !x.yol).map(x => x.sahne);
   const var_ = es.filter(x => x.yol);
   if (!var_.length) throw hata("Hiç klip yok.", "Önce: node studyo.js uret " + ad + " --butce <kredi> --onay");
+  const kalipUyarilari = [];
+  a.sahneler.forEach((s, i) => {
+    if (!s.anlatim) return;
+    for (const k of require("./lib/ai-kalip.js").kalipBul(s.anlatim, a.dil)) kalipUyarilari.push("Sahne " + (i + 1) + " anlatımında yapay zekâ kalıbı: \"" + k.parca + "\" (somut gerçekle değiştir)");
+  });
+  for (const u of kalipUyarilari) log("! " + u);
   const sesler = await anlatimSesleri(ad, a, log, e.ses);
   const sesVar = var_.some(x => sesler[x.sahne - 1]);
   const [w, h] = BOYUT[a.oran];
@@ -409,7 +433,17 @@ async function kur(ad, b, enj) {
         "-af", "afade=t=in:d=0.5,afade=t=out:st=" + son + ":d=1.5", "-t", t.toFixed(3), cikti], "müzik");
     }
   } else fs.copyFileSync(simdi, cikti);
-  return { cikti, sahne: var_.length, eksik, sure: t, uyarilar, anlatim: altyazi.length };
+  let sesNormal = false;
+  if ((sesVar || b.muzik) && b.sesnormalsiz !== true) {
+    const ham2 = path.join(kurgu, "normsiz.mp4");
+    fs.copyFileSync(cikti, ham2);
+    try { sesNormalle(ham2, cikti); sesNormal = true; }
+    catch (x) { fs.copyFileSync(ham2, cikti); uyarilar.push("Ses seviyesi eşitlenmedi (" + x.message.slice(0, 100) + ")."); }
+  }
+  let kontrol = "";
+  try { kontrol = path.join(d, "Videos", ad + "-kontrol.jpg"); kontrolSayfasi(cikti, kontrol, t); }
+  catch (x) { kontrol = ""; uyarilar.push("Kontrol sayfası yapılamadı (" + x.message.slice(0, 100) + ")."); }
+  return { cikti, sahne: var_.length, eksik, sure: t, uyarilar: kalipUyarilari.concat(uyarilar), anlatim: altyazi.length, sesNormal, kontrol };
 }
 function sureOlc(dosya) {
   const r = spawnSync(ff().ffprobe, ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", dosya], { encoding: "utf8", windowsHide: true });

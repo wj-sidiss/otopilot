@@ -2,6 +2,14 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.14.0] — 2026-11-03 — "Yapay zekâ gibi" kalıp denetimi, ses seviyesi, kontrol sayfası
+
+### Eklenenler
+- **Yapay zekâ kalıbı denetimi (ücretsiz, 10 dil):** "oyun değişti", "Here's the thing", "Let's dive in" gibi yapay zekâ metni kokan kalıpları yakalar. `node ai-kalip-kontrol.js <iş | dosya.txt> [--dil tr]` (çıkış 1 = kalıp var, metin değişmez), `--kancalar tr` ile 11 kanca (ilk cümle) kalıbı. Stüdyo `kur` anlatımda kalıp bulursa uyarır, engellemez. Turkce I/İ büyük-küçük harfi sistem diline bağlı değil (tr-TR makinelerde yanlış eşleşmeyi önler).
+- **Ses seviyesi eşitleme:** Stüdyo filmi sesliyse (anlatım ya da müzik) iki geçişli EBU R128 ile -14 LUFS / -1,5 dBTP'ye getirilir (Shorts/Reels/TikTok/YouTube); `--sesnormalsiz` ile kapatılır.
+- **Kontrol sayfası:** `kur` filmden 12 kareyi tek JPG yapar (`Videos/<ad>-kontrol.jpg`): yayından önce bak (taşan yazı, boş sahne, kopuk kare).
+- Kaynak ve atıf: [motionforge](https://github.com/aykutucesai/motionforge) (MIT, Aykut Üçeş); ayrıntı `docs/ATIF-motionforge.md`.
+
 ## [1.13.0] — 2026-11-02 — Yüz değiştirme (çift fotoğrafı)
 
 ### Eklenenler

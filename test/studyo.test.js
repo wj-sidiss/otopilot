@@ -160,13 +160,18 @@ test("anlatim: ucretsiz ses uretilir, sahne anlatimdan kisaysa uzar, altyazi + m
   let cagri = 0;
   const sahteSes = async g => {
     cagri++;
-    assert.equal(g.dil, "tr"); assert.match(g.metin, /küçük bir kedi/);
+    if (cagri === 1) { assert.equal(g.dil, "tr"); assert.match(g.metin, /küçük bir kedi/); }
     execFileSync(ff().ffmpeg, ["-y", "-loglevel", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=2.5", "-c:a", "aac", "-f", "adts", g.cikti], { windowsHide: true });
   };
   const muzik = path.join(kok, "muzik.m4a");
   execFileSync(ff().ffmpeg, ["-y", "-loglevel", "error", "-f", "lavfi", "-i", "sine=frequency=220:duration=2", "-c:a", "aac", muzik], { windowsHide: true });
   const r = await S.kur("aile", { muzik }, Object.assign({ ses: sahteSes }, sessiz));
   assert.equal(r.anlatim, 1); assert.equal(cagri, 1);
+  assert.equal(r.sesNormal, true);                                   // ses seviyesi eşitlendi (-14 LUFS)
+  assert.ok(r.kontrol && fs.existsSync(r.kontrol) && fs.statSync(r.kontrol).size > 1000);   // kontrol sayfası (12 kare)
+  const olc = require("child_process").spawnSync(ff().ffmpeg, ["-hide_banner", "-nostats", "-i", r.cikti, "-vn", "-af", "ebur128=peak=true", "-f", "null", "-"], { encoding: "utf8" }).stderr;
+  const lufs = Number(/I:\s+(-?[\d.]+)\s+LUFS/.exec(olc.slice(olc.lastIndexOf("Summary")))[1]);
+  assert.ok(lufs > -18 && lufs < -10, "LUFS " + lufs);                // hedefe yakın (kısa/sentetik ses için pay bırakıldı)
   assert.ok(r.sure >= 2.9 + 1 + 1 - 0.2);                            // 1. sahne anlatima (2.5 + 0.4) kadar uzar, diger ikisi 1 sn
   assert.ok(fs.existsSync(path.join(kok, "aile", "Videos", "aile.srt")));
   assert.match(fs.readFileSync(path.join(kok, "aile", "Videos", "aile.srt"), "utf8"), /küçük/);
@@ -183,6 +188,14 @@ test("anlatim: ucretsiz ses uretilir, sahne anlatimdan kisaysa uzar, altyazi + m
     const boyut = execFileSync(ff().ffprobe, ["-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=p=0", k.cikti], { encoding: "utf8" }).trim();
     assert.equal(boyut, "1080,1920");
   }
+  // yapay zeka kalibi uyarisi (engellemez): Turkce + Ingilizce
+  a.kamera = "temiz"; a.dil = "tr"; a.sahneler[0].anlatim = "Oyun değişti. Kuralları baştan yazıyor.";
+  fs.writeFileSync(yol, JSON.stringify(a));
+  const kl = await S.kur("aile", { sesnormalsiz: true }, Object.assign({ ses: sahteSes }, sessiz));
+  assert.ok(kl.uyarilar.some(u => /yapay zekâ kalıbı: "oyun değişti"/.test(u)), kl.uyarilar.join(" | "));
+  a.dil = "en"; a.sahneler[0].anlatim = "The camera records 4K at 60 frames per second.";
+  fs.writeFileSync(yol, JSON.stringify(a));
+  assert.equal((await S.kur("aile", { sesnormalsiz: true }, Object.assign({ ses: sahteSes }, sessiz))).uyarilar.length, 0);
   a.kamera = "yok"; fs.writeFileSync(yol, JSON.stringify(a));
   await assert.rejects(S.kur("aile", {}, sessiz), /Bilinmeyen kamera/);
   a.kamera = "temiz";                                             // onbellek: ayni metin ikinci kez seslendirilmedi
