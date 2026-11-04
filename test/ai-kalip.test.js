@@ -52,3 +52,14 @@ test("CLI: dosyada kalip varsa 1, temizse 0, girdi yoksa 2; kancalar listelenir"
     assert.equal(CLI.ana(["--kancalar", "en"]), 0);
   } finally { console.log = log; console.error = hata; }
 });
+
+test("ek kurallar (cinecode): uzun cizgi, ikiden fazla unlem, 'X degil, Y'; sisirilmis kelimeler; sade kelimeler yanlis alarm vermez", () => {
+  assert.ok(K.kalipBul("Bu araç — hızlı ve ucuz.", "tr").some(x => /uzun çizgi/.test(x.kalip)));
+  assert.ok(K.kalipBul("Harika! Süper! Muhteşem!", "tr").some(x => /ünlem/.test(x.kalip)));
+  assert.equal(K.kalipBul("Harika! Süper!", "tr").some(x => /ünlem/.test(x.kalip)), false);
+  assert.ok(K.kalipBul("Bu sadece bir araç değil, bir devrim.", "tr").some(x => /X değil, Y/.test(x.kalip)));
+  assert.ok(K.kalipBul("Bu video adeta büyüleyici.", "tr").length >= 2);
+  assert.ok(K.kalipBul("A breathtaking tapestry of vibrant colors.", "en").length >= 3);
+  assert.equal(K.kalipBul("Bir yolculuk planı: İstanbul'dan Ankara'ya tren 4 saat sürer.", "tr").length, 0);   // sade 'yolculuk' alarm vermez
+  assert.equal(K.kalipBul("The pit crew finished the plan, then went home.", "en").length, 0);
+});

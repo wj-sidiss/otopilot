@@ -75,14 +75,21 @@ const YONETMEN = {
     sabit: ["Sabit kamera", "static locked-off camera"], yaklas: ["Yavaş yaklaşma", "slow push-in"], uzaklas: ["Yavaş uzaklaşma", "slow pull-out"], pan: ["Yatay pan", "smooth pan"],
     tilt: ["Yukarı tilt", "gentle tilt up"], takip: ["Takip çekimi", "tracking shot following the subject"], dolly: ["Dolly", "smooth dolly move"], vinc: ["Vinç yükselişi", "crane shot rising"],
     elde: ["Elde kamera", "handheld camera with subtle shake"], orbit: ["Etrafında dönüş", "slow orbit around the subject"],
+    "dolly-zoom": ["Dolly zoom (vertigo)", "dolly zoom, vertigo effect: the subject keeps its size while the background stretches"], "rack-focus": ["Odak kaydırma", "rack focus from the foreground to the background"],
+    "geri-acilis": ["Detaydan geri açılış", "starts on a close detail and pulls back to reveal the wider scene"], fpv: ["FPV uçuş", "fast FPV drone fly-through with banking turns"],
+    "yavas-cekim": ["Ağır çekim", "slow motion, time stretched"], hizlandirilmis: ["Hızlandırılmış (time-lapse)", "time-lapse, time passing quickly"], "vinc-asagi": ["Vinç alçalışı", "crane shot descending to eye level"],
   },
   lens: {
     "24": ["24mm geniş açı", "24mm wide-angle lens"], "35": ["35mm", "35mm lens"], "50": ["50mm doğal", "50mm lens, natural perspective"],
     "85": ["85mm portre (bokeh)", "85mm portrait lens, shallow depth of field, creamy bokeh"], anamorfik: ["Anamorfik", "anamorphic lens, horizontal flares, cinematic widescreen look"],
+    balikgozu: ["Balık gözü", "fisheye lens, ultra-wide barrel distortion"], "tilt-shift": ["Tilt-shift (minyatür)", "tilt-shift lens, miniature effect with a sharp band"], flare: ["Lens flare", "lens flare from a bright light source"],
   },
   isik: {
     altin: ["Altın saat", "golden hour warm backlight"], mavi: ["Mavi saat", "blue hour soft twilight"], neon: ["Gece neon", "night scene with neon lights"],
     bulutlu: ["Bulutlu yumuşak", "soft overcast daylight"], mum: ["Mum ışığı", "warm candlelight"], arkadan: ["Arkadan güneş", "sun flare backlight"],
+    rembrandt: ["Rembrandt", "Rembrandt lighting, key light high at 45 degrees with a small triangle of light on the shadow cheek"], kelebek: ["Kelebek (güzellik)", "butterfly lighting, high frontal soft key, small shadow under the nose"],
+    yari: ["Yarım yüz ışık", "split lighting, side light illuminating half the face"], "high-key": ["High-key (aydınlık)", "high-key lighting, bright and airy, lifted shadows"], "low-key": ["Low-key (noir)", "low-key lighting, mostly dark with one pool of light, noir mood"],
+    "teal-turuncu": ["Teal ve turuncu", "teal and orange color grade, cool shadows and warm skin tones"], "siyah-beyaz": ["Siyah beyaz", "black and white, high contrast monochrome"], sizinti: ["Işık sızıntısı", "warm light leak drifting in from the frame edge"],
   },
 };
 const YONETMEN_ALANLAR = { plan: "plan", kameraHareketi: "hareket", lens: "lens", isik: "isik" };
@@ -102,6 +109,13 @@ const SABLONLAR = {
     { hareket: "an explosion lights up the street behind the hero walking away", plan: "orta", kameraHareketi: "sabit", isik: "neon" },
     { hareket: "the hero looks up at the skyline", plan: "ust-aci", kameraHareketi: "vinc", lens: "24" },
   ] },
+  tanitim: { ad: "Ürün tanıtımı / reklam (5 çekim)", sahneler: [
+    { hareket: "the product appears in a bold close-up as the very first frame, grabbing attention", plan: "yakin", kameraHareketi: "yaklas", lens: "85", isik: "kelebek" },
+    { hareket: "a person struggles with the problem the product solves, an honest everyday moment", plan: "orta", kameraHareketi: "elde", lens: "35", isik: "bulutlu" },
+    { hareket: "the product enters the scene and the problem disappears", plan: "orta", kameraHareketi: "dolly", lens: "50", isik: "high-key" },
+    { hareket: "a detail of the product, texture and finish in focus", plan: "cok-yakin", kameraHareketi: "rack-focus", lens: "85", isik: "kelebek" },
+    { hareket: "the product on a clean surface, calm final frame with space for text", plan: "genis", kameraHareketi: "sabit", lens: "50", isik: "high-key" },
+  ] },
   gerilim: { ad: "Gerilim (5 çekim)", sahneler: [
     { hareket: "an empty corridor with a flickering light", plan: "genis", kameraHareketi: "yaklas", isik: "mavi" },
     { hareket: "a hand slowly reaches for a door handle", plan: "cok-yakin", kameraHareketi: "sabit", lens: "85" },
@@ -110,6 +124,8 @@ const SABLONLAR = {
     { hareket: "the character's frightened eyes in the dark", plan: "yakin", kameraHareketi: "yaklas", lens: "85", isik: "mum" },
   ] },
 };
+// Anlatim sesi zinciri (cinecode references/sound.md tarifi): alcak kesim, orta boslugu hafif al, 3 kHz sunum, hafif sikistirma.
+const SES_ZINCIRI = "highpass=f=90,equalizer=f=300:t=q:w=1:g=-2,equalizer=f=3200:t=q:w=1:g=2,acompressor=threshold=-22dB:ratio=2.5:attack=8:release=150:makeup=3dB";
 // Kamera gorunumu: AI klipin "plastik" hissini kirar (gercek kamera gibi tane, vinyet, hafif renk kaymasi/sicaklik). Yalniz ffmpeg; ucretsiz.
 const KAMERALAR = {
   temiz: { ad: "Temiz (dokunma)", vf: "" },
@@ -444,7 +460,7 @@ async function kur(ad, b, enj) {
     const girdi = ["-stream_loop", "-1", "-i", x.yol];
     if (sesVar) girdi.push(...(ses ? ["-i", ses.dosya] : ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]));
     ffmpeg([...girdi, "-t", sure.toFixed(3), "-vf", filtre,
-      ...(sesVar ? ["-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "160k", "-ar", "44100", "-ac", "2", "-af", "apad"] : ["-an"]),
+      ...(sesVar ? ["-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "160k", "-ar", "44100", "-ac", "2", "-af", ses ? SES_ZINCIRI + ",apad" : "apad"] : ["-an"]),
       "-c:v", "libx264", "-crf", "20", "-preset", "veryfast", "-threads", "2", p], "sahne " + x.sahne);
     if (ses) altyazi.push({ b: t + 0.1, e: t + Math.min(sure, ses.sure + 0.3), m: satirla(ses.metin, a.oran === "9:16" ? 28 : 52) });
     t += sure;
@@ -479,7 +495,8 @@ async function kur(ad, b, enj) {
     const son = Math.max(0, t - 1.5).toFixed(2);
     if (sesVar) {
       ffmpeg(["-i", simdi, "-stream_loop", "-1", "-i", m, "-filter_complex",
-        "[1:a]volume=0.18,afade=t=in:d=0.5,afade=t=out:st=" + son + ":d=1.5[m];[0:a][m]amix=inputs=2:duration=first:dropout_transition=0[a]",
+        // muzik, anlatim konusurken kendiliginden kisilir (sidechain), aralarda yukselir (cinecode references/sound.md)
+        "[1:a]volume=0.5,afade=t=in:d=0.5,afade=t=out:st=" + son + ":d=1.5[m];[0:a]asplit=2[v][vk];[m][vk]sidechaincompress=threshold=0.03:ratio=8:attack=30:release=600[d];[d][v]amix=inputs=2:normalize=0:duration=first[a]",
         "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-t", t.toFixed(3), cikti], "müzik");
     } else {
       ffmpeg(["-i", simdi, "-stream_loop", "-1", "-i", m, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k",

@@ -2,6 +2,15 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.16.0] — 2026-11-04 — cinecode'dan alınanlar
+
+### Eklenenler
+- **Yazım ve çekim rehberi** (`docs/YAZIM-VE-CEKIM-REHBERI.md`): senaryo/anlatım için kısa kurallar (tek dönüş, sondan başla, %30 kes, soğuk izleyici kontrolü, somutluk testi) ve çekim kuralları (bir ana hareket, hız/yumuşatma kelimeleri, kanca). Ajan kılavuzundan bağlandı.
+- **Yapay zekâ kalıp denetimi genişledi:** İngilizce ve Türkçe listeye cinecode'un klişe tablosu ve "üretilmiş gibi okunan" kelimeler eklendi; yeni kurallar: uzun çizgi (—), ikiden fazla ünlem, "X değil, Y". Çok genel tek kelimeler (ör. "journey", "let's") yanlış alarm verdiği için alınmadı.
+- **Yönetmen sözlüğü:** yeni kamera hareketleri (dolly zoom, rack focus, detaydan geri açılış, FPV, ağır çekim, time-lapse, vinç alçalışı), ışıklar (Rembrandt, kelebek, yarım yüz, high-key, low-key, teal-turuncu, siyah-beyaz, ışık sızıntısı), lensler (balık gözü, tilt-shift, lens flare); yeni çekim şablonu **tanıtım / reklam** (5 çekim).
+- **Ses:** anlatım sesi artık alçak kesim, 3 kHz sunum ve hafif sıkıştırma zincirinden geçer; müzik, anlatım konuşurken kendiliğinden kısılıp aralarda yükselir (sidechain). Eskiden sabit kısık seviyeydi.
+- Atıf: [cinecode](https://github.com/sarpstar/cinecode) (Sarp Yıldız, MIT), ayrıntı `docs/ATIF-cinecode.md`. Python betikleri, Claude Code kancaları ve stil kütüphanesi alınmadı.
+
 ## [1.15.0] — 2026-11-03 — 3B sahneler (three.js, ücretsiz)
 
 ### Eklenenler

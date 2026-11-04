@@ -224,3 +224,15 @@ test("yuz degistirme: riza onayi zorunlu, girdi/ disina cikilamaz, sonuc ilk-kar
   S.yuzDegistir("yuzis", Object.assign({ riza: true }, b), { degistir: sahte, log: () => {} });
   assert.equal(cagri, 1); assert.equal(S.ayarOku("yuzis").sahneler.length, 1);          // ayni girdi: yeniden islenmez, sahne tekrarlanmaz
 });
+
+test("yonetmen sozlugu (cinecode): yeni kamera/lens/isik kodlari istemde sinema diliyle; tanitim sablonu gecerli", { skip }, () => {
+  const a = { stil: "serbest", sure: 4 };
+  const i = S.istemKur(a, { hareket: "a watch on a table", plan: "cok-yakin", kameraHareketi: "dolly-zoom", lens: "balikgozu", isik: "rembrandt" });
+  assert.match(i, /dolly zoom, vertigo effect/); assert.match(i, /fisheye lens/); assert.match(i, /Rembrandt lighting/);
+  for (const [grup, kodlar] of [["hareket", ["rack-focus", "geri-acilis", "fpv", "yavas-cekim", "hizlandirilmis", "vinc-asagi"]], ["lens", ["tilt-shift", "flare"]], ["isik", ["kelebek", "yari", "high-key", "low-key", "teal-turuncu", "siyah-beyaz", "sizinti"]]])
+    for (const k of kodlar) assert.ok(S.YONETMEN[grup][k] && S.YONETMEN[grup][k][1].length > 10, grup + "/" + k);
+  S.yeni("yon3", { stil: "serbest" });
+  assert.equal(S.sablonEkle("yon3", "tanitim", []), 5);
+  assert.equal(S.ayarOku("yon3").sahneler.length, 5);                       // tum kodlar gecerli
+  assert.ok(Object.keys(S.SABLONLAR).includes("tanitim"));
+});
