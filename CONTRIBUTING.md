@@ -7,6 +7,7 @@ Teşekkürler! / Thanks! Küçük, odaklı PR'lar en kolay birleşir. Small, foc
 ```bash
 node -v                    # Node 22+
 npm ci --ignore-scripts
+npm run kapi               # push öncesi hızlı kapı: sürüm=CHANGELOG, sır taraması, sözdizimi, belge (--tam testleri de koşar) / pre-push gate
 npm test                   # tüm testler ağ/ücretli servis kullanmaz / tests never touch the network or paid services
 ```
 
