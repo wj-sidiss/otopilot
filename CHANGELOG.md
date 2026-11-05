@@ -2,6 +2,16 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.17.0] — 2026-11-05 — Stüdyo: geçişler, film türü ve teknik paketleri, yeni kamera görünümleri
+
+### Eklenenler
+- **Geçişler (ücretsiz, ffmpeg xfade):** sahnede `"gecis"` (bu sahneden sonrakine): kesme, çözülme, siyaha kararma, beyaz parlama, kaydırma, whip pan, silme, iris açılış/kapanış, zoom, piksel, radyal, bulanık. Geçiş sahne sonuna son kareyi uzatarak girer; anlatım ve altyazı zamanları kaymaz. Panelde sahne kartında "Geçiş" seçimi.
+- **Film türü paketleri (8 çekim):** `yesilcam` (70'ler melodram), `bilimkurgu`, `fantastik`, `aksiyon-filmi`; her biri kendi görünümünü (kamera), POV çekimlerini ve geçişlerini getirir. Kadro: `node studyo.js sablon <ad> yesilcam --foto erkek.jpg,kadin.jpg[,cift.jpg]`; sahnelere erkek/kadın/ikisi birlikte dağıtılır.
+- **Teknik paketleri:** `simetri` (simetrik tek nokta perspektif), `kesintisiz` (uzun çekim hissi), `gerilim-teknigi` (dolly zoom + POV).
+- **Yeni kamera görünümleri:** VHS, Super 8, yumuşak lens (ışık taşması), 90'lar kamkorder.
+- Not: ffmpeg'in Lensfun filtresi bu makinede derlenmiş olsa da lens profil veritabanı kurulu değil; gerçek lens profilleri (marka/model) henüz eklenmedi.
+- Hiçbir paket film/dizi karesi ya da sahnesi içermez; tarifler kendi cümlelerimizle yazılmıştır.
+
 ## [1.16.0] — 2026-11-04 — cinecode'dan alınanlar
 
 ### Eklenenler
