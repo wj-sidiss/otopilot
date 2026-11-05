@@ -164,3 +164,21 @@ test("yuz degistirme: kisi/poz yuklemesi sahne olmaz (girdi/yuz), riza yoksa 400
   assert.notEqual(son.is.kod, 0);
   assert.match(son.is.satirlar.join("\n"), /FACEFUSION_KOK tanımlı değil/);
 });
+
+test("kadro: tur paketi erkek/kadin/cift fotograflariyla kurulur; eksik rol digerini kullanir", async () => {
+  assert.equal((await c.post("/api/studyo/yeni", { ad: "kadro1", stil: "gercekci" })).durum, 200);
+  const yukle = async (dosya) => (await c.post("/api/studyo/yukle", { ad: "kadro1", dosya, veri: JPEG })).json.dosya;
+  const e = await yukle("erkek.jpg"), k = await yukle("kadin.jpg"), cf = await yukle("cift.jpg");
+  const r = await c.post("/api/studyo/sablon", { ad: "kadro1", sablon: "yesilcam", kadro: { erkek: e, kadin: k, cift: cf } });
+  assert.equal(r.durum, 200, r.metin);
+  let s = (await c.get("/api/studyo/detay?ad=kadro1")).json.sahneler.slice(-8);
+  assert.deepEqual(s.map(x => x.kaynak), [e, e, k, cf, cf, k, cf, cf]);
+  assert.equal(s[0].gecis, "cozul");
+  // yalniz kadin secilince erkek sahneleri de onu kullanir, cift yoksa ikisi sirayla
+  assert.equal((await c.post("/api/studyo/yeni", { ad: "kadro2", stil: "gercekci" })).durum, 200);
+  const k2 = (await c.post("/api/studyo/yukle", { ad: "kadro2", dosya: "tek.jpg", veri: JPEG })).json.dosya;
+  assert.equal((await c.post("/api/studyo/sablon", { ad: "kadro2", sablon: "bilimkurgu", kadro: { kadin: k2 } })).durum, 200);
+  s = (await c.get("/api/studyo/detay?ad=kadro2")).json.sahneler.slice(-8);
+  assert.ok(s.every(x => x.kaynak === k2));
+  assert.equal((await c.post("/api/studyo/sablon", { ad: "kadro2", sablon: "yok-paket", kadro: { kadin: k2 } })).durum, 400);
+});

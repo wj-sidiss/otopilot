@@ -359,13 +359,33 @@
       P.dugme("Değişiklikleri kaydet", { ikon: "tamam", onclick: function () { kaydet(false); } }));
     sahneleriCiz(); yuzCiz();
   }
-  var sablonSec = null;
+  var sablonSec = null, kadro = {};
+  // yuklenen benzersiz fotograflar (sahnelerin kaynaklari)
+  function benzersizFotolar() {
+    var gor = {}, l = [];
+    sahneler.forEach(function (s) { if (s.kaynak && !gor[s.kaynak]) { gor[s.kaynak] = 1; l.push(s.kaynak); } });
+    return l;
+  }
+  // kadro secimi: Erkek / Kadin / Cift fotografi; liste her acilista guncellenir
+  function kadroSecimi(anahtar, etiket, varsayilanSira) {
+    var sec = P.secim([["", "—"]], "", { "aria-label": etiket + " fotoğrafı" });
+    function doldur() {
+      var l = benzersizFotolar(), onceki = sec.value || (kadro[anahtar] !== undefined ? kadro[anahtar] : (l[varsayilanSira] || ""));
+      P.degistir(sec, P.h("option", { value: "" }, "—"));
+      l.forEach(function (f) { sec.appendChild(P.h("option", { value: f }, f)); });
+      sec.value = l.indexOf(onceki) >= 0 ? onceki : "";
+      kadro[anahtar] = sec.value;
+    }
+    sec.addEventListener("focus", doldur); sec.addEventListener("mousedown", doldur);
+    sec.addEventListener("change", function () { kadro[anahtar] = sec.value; });
+    doldur();
+    return P.alan(etiket, sec);
+  }
   async function sablonEkle() {
     if (!sablonSec.value) return P.durumYaz(ui.durum, "uyari", "Önce bir çekim şablonu seç.");
     try {
       await kaydet(true);
-      var fotolar = sahneler.filter(function (s) { return s.kaynak; }).map(function (s) { return s.kaynak; });
-      await P.api("/api/studyo/sablon", { ad: ad, sablon: sablonSec.value, fotolar: fotolar.slice(0, 9) });
+      await P.api("/api/studyo/sablon", { ad: ad, sablon: sablonSec.value, kadro: { erkek: kadro.erkek || "", kadin: kadro.kadin || "", cift: kadro.cift || "" } });
       await detayYukle(); ciz();
     } catch (e) { P.durumYaz(ui.durum, "hata", e); }
   }
@@ -376,6 +396,7 @@
       P.dugme("Fotoğraf ekle", { ikon: "gorsel", onclick: function () { ui.foto.click(); } }),
       P.dugme("Yazıdan sahne ekle", { ikon: "metin", onclick: function () { sahneler.push({ mod: "metin", hareket: "", sure: d.ayar.sure, kredi: 0 }); kirli = true; sahneleriCiz(); } }),
       sablonSec = P.secim([["", "Çekim şablonu…"]].concat(Object.keys(d.sablonlar).map(function (k) { return [k, d.sablonlar[k]]; })), "", { "aria-label": "Çekim şablonu" }),
+      P.h("div", { class: "studyo-ayar", style: "width:100%" }, kadroSecimi("erkek", "Kadro: erkek", 0), kadroSecimi("kadin", "Kadro: kadın", 1), kadroSecimi("cift", "Kadro: çift fotoğrafı (isteğe bağlı)", 2)),
       P.dugme("Şablonu ekle", { ikon: "arti", onclick: sablonEkle }),
       P.dugme("3B sahne ekle", { ikon: "arti", onclick: function () { sahneler.push({ mod: "3b", sablon3d: "urun", parametre: {}, sure: d.ayar.sure, kredi: 0 }); kirli = true; sahneleriCiz(); } }),
       P.dugme("Video linki ekle", { ikon: "film", onclick: function () { sahneler.push({ mod: "video", url: "", hareket: "recreate this exact scene with the same composition, characters and action", sure: d.ayar.sure, kredi: 0 }); kirli = true; sahneleriCiz(); } }),
