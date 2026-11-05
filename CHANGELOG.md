@@ -2,6 +2,12 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.18.0] — 2026-11-05 — Gerçek lens profilleri (Lensfun)
+
+### Eklenenler
+- **Lensfun entegrasyonu (açık kaynak, ücretsiz):** `node studyo.js lens-kur` ~1060 kamera ve ~1580 lens profilini indirir (CC BY-SA 3.0; depoya girmez), `lens-ara` arar, `lens <ad> --kamera .. --lens ..` işe bağlar. `kur`, seçili profili filme gerçek bir lensin karakteri olarak ekler (distorsiyon, vinyet, renk sapması; ffmpeg `lensfun reverse`); `--duzelt` kendi videondaki bozulmayı düzeltir. Atıf: `docs/ATIF-lensfun.md`.
+- Sınır: veritabanında her telefon yok (iPhone XS, Huawei, Nokia, LG, Samsung Galaxy S21 lensi, GoPro, DJI var; yenilerin çoğu, Pixel, Xiaomi yok). Bulunamayan model için uyarı verilir, film yine kurulur.
+
 ## [1.17.0] — 2026-11-05 — Stüdyo: geçişler, film türü ve teknik paketleri, yeni kamera görünümleri
 
 ### Eklenenler
