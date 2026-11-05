@@ -245,9 +245,25 @@ const BOYUT = { "9:16": [1080, 1920], "16:9": [1920, 1080] };
 
 const hata = (m, c, cikis) => Object.assign(new Error(m), { cikis: cikis || 2, cozum: c });
 const ff = () => require("./ff-yol.js");
-function ffmpeg(argv, etiket) {
-  const r = spawnSync(ff().ffmpeg, ["-y", "-hide_banner", "-loglevel", "error", ...argv], { encoding: "utf8", windowsHide: true, maxBuffer: 1 << 26 });
-  if (r.status !== 0) throw hata("ffmpeg başarısız (" + etiket + "): " + String(r.stderr || "").trim().split("\n").slice(-3).join(" | "));
+// Bellek yetersizse (dolu RAM'de libx264 "Cannot allocate memory") bir kez tek is parcacigiyla yeniden dener.
+const BELLEK_HATASI = /Cannot allocate memory|Generic error in an external library|out of memory/i;
+function tekIsParcacigi(argv) {
+  const a = argv.slice();
+  let vardi = false;
+  for (let i = 0; i < a.length - 1; i++) if (a[i] === "-threads") { a[i + 1] = "1"; vardi = true; }
+  if (!vardi) a.splice(a.length - 1, 0, "-threads", "1");          // cikti dosyasindan hemen once
+  return a;
+}
+function ffmpeg(argv, etiket, enj) {
+  const calistir = (enj && enj.spawn) || spawnSync;
+  const kos = a => calistir(ff().ffmpeg, ["-y", "-hide_banner", "-loglevel", "error", ...a], { encoding: "utf8", windowsHide: true, maxBuffer: 1 << 26 });
+  let r = kos(argv);
+  if (r.status !== 0 && BELLEK_HATASI.test(String(r.stderr || ""))) r = kos(tekIsParcacigi(argv));
+  if (r.status !== 0) {
+    const bellek = BELLEK_HATASI.test(String(r.stderr || ""));
+    throw hata("ffmpeg başarısız (" + etiket + "): " + String(r.stderr || "").trim().split("\n").slice(-3).join(" | "),
+      bellek ? "Bellek yetersiz: açık programları (özellikle tarayıcı sekmelerini) kapatıp aynı komutu tekrar çalıştır; biten sahneler korunur." : undefined, bellek ? 5 : 2);
+  }
 }
 const dizinOf = ad => ortak.isDizin(ad);
 
@@ -769,4 +785,4 @@ async function ana(args) {
 if (require.main === module) {
   ana(process.argv.slice(2)).catch(e => { console.error("✗ " + e.message + (e.cozum ? "\n  ↳ " + e.cozum : "")); process.exit(e.cikis || 1); });
 }
-module.exports = { GECISLER, gecisGrafigi, gecisOnizleme, sahne3dEkle, yuzDegistir, STILLER, MODLAR, KAMERALAR, YONETMEN, SABLONLAR, sablonEkle, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };
+module.exports = { GECISLER, gecisGrafigi, gecisOnizleme, ffmpeg, tekIsParcacigi, sahne3dEkle, yuzDegistir, STILLER, MODLAR, KAMERALAR, YONETMEN, SABLONLAR, sablonEkle, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };

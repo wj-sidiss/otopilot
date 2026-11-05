@@ -136,3 +136,20 @@ test("sablonEkle anlatim secenegi: isin diline gore taslak eklenir; secenek yoks
     assert.ok(S.ayarOku("anl1").sahneler.slice(16).every(s => s.anlatim === undefined));
   } finally { fik.temizle(kok); }
 });
+
+test("ffmpeg bellek hatasi: bir kez tek is parcacigiyla yeniden denenir; yine olmazsa cozumlu cikis 5", () => {
+  assert.deepEqual(S.tekIsParcacigi(["-i", "a", "-threads", "2", "b.mp4"]), ["-i", "a", "-threads", "1", "b.mp4"]);
+  assert.deepEqual(S.tekIsParcacigi(["-i", "a", "b.mp4"]), ["-i", "a", "-threads", "1", "b.mp4"]);
+  const cagrilar = [];
+  const sira = [{ status: 1, stderr: "Task finished with error code: -12 (Cannot allocate memory)" }, { status: 0, stderr: "" }];
+  S.ffmpeg(["-i", "a", "b.mp4"], "deneme", { spawn: (_, a) => { cagrilar.push(a); return sira.shift(); } });
+  assert.equal(cagrilar.length, 2);
+  assert.ok(cagrilar[1].includes("-threads"));
+  let n = 0;
+  assert.throws(() => S.ffmpeg(["-i", "a", "b.mp4"], "deneme", { spawn: () => { n++; return { status: 1, stderr: "Cannot allocate memory" }; } }),
+    e => e.cikis === 5 && /Bellek yetersiz/.test(e.cozum));
+  assert.equal(n, 2);
+  let m = 0;
+  assert.throws(() => S.ffmpeg(["-i", "a", "b.mp4"], "deneme", { spawn: () => { m++; return { status: 1, stderr: "Invalid data found" }; } }), e => e.cikis === 2);
+  assert.equal(m, 1, "bellek disi hata yeniden denenmez");
+});
