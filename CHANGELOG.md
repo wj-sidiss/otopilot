@@ -2,6 +2,11 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.19.0] — 2026-11-06 — Panelde lens profili seçimi
+
+### Eklenenler
+- **Panel, AI Stüdyo → "Lens profili" bölümü:** veritabanı yoksa tek tıkla indirilir (≈5 MB, Lensfun, CC BY-SA); sonra kamera/telefon ve lens arama kutuları (canlı arama, 1059 kamera + 1580 lens), odak ve diyafram, "bozulmayı düzelt" ve "kaldır". Seçim işle birlikte kaydedilir, `kur` filme uygular. Yeni uçlar: `GET /api/studyo/lens-ara`, `POST /api/studyo/lens-kur`; `detay` lens durumunu verir.
+
 ## [1.18.0] — 2026-11-05 — Gerçek lens profilleri (Lensfun)
 
 ### Eklenenler
