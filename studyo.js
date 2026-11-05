@@ -46,6 +46,7 @@ const MODLAR = ["referans", "ilk-kare", "video", "metin", "3b"];
 // 3B SAHNE (ucretsiz, yerel): three.js sablonlari (urun platformu, dunya + ucus yaylari, konusan 3B karakter); vidIQ kredisi harcamaz, kur'da cizilir.
 const S3D = () => require("./lib/sahne3d.js");
 const HEX = /^#[0-9a-fA-F]{6}$/;
+const GLB = /^[A-Za-z0-9._-]{1,100}\.glb$/;
 // Ses seviyesi (EBU R128, iki gecis): kisa video platformlari (Shorts/Reels/TikTok/YouTube) icin -14 LUFS, tepe <= -1.5 dBTP.
 // Yontem: motionforge tools/loudness.sh fikri (olc, sonra olculen degerlerle dogrusal kazanc); kod bize ait.
 function sesNormalle(girdi, cikti, hedef) {
@@ -281,6 +282,7 @@ function ayarOku(ad) {
       if (!pr || typeof pr !== "object" || Array.isArray(pr) || JSON.stringify(pr).length > 4000) throw hata("Sahne " + (i + 1) + ": 'parametre' küçük bir nesne olmalı.");
       for (const k of ["renk", "renk2"]) if (pr[k] !== undefined && !HEX.test(pr[k])) throw hata("Sahne " + (i + 1) + ": " + k + " #rrggbb biçiminde olmalı.");
       if (pr.onAyar !== undefined && !S3D().KARAKTER_AYARLARI.includes(pr.onAyar)) throw hata("Sahne " + (i + 1) + ": onAyar geçerli değil.", "Geçerli: " + S3D().KARAKTER_AYARLARI.join(", "));
+      if (pr.glb !== undefined && (typeof pr.glb !== "string" || !GLB.test(pr.glb))) throw hata("Sahne " + (i + 1) + ": glb girdi/ içindeki bir .glb dosya adı olmalı.", "Yalnız harf, rakam, nokta, tire, alt çizgi; örn. urun.glb");
       for (const k of ["baslik", "altBaslik"]) if (pr[k] !== undefined && (typeof pr[k] !== "string" || pr[k].length > 120)) throw hata("Sahne " + (i + 1) + ": " + k + " en çok 120 karakter.");
       return;
     }
@@ -386,6 +388,12 @@ function sahne3dEkle(ad, sablon, b) {
   if (b.renk) parametre.renk = String(b.renk);
   if (b.renk2) parametre.renk2 = String(b.renk2);
   if (b["on-ayar"]) parametre.onAyar = String(b["on-ayar"]);
+  if (b.glb) {
+    const g = path.basename(String(b.glb));
+    if (!GLB.test(g)) throw hata("GLB dosya adı geçersiz: " + g, "Yalnız harf, rakam, nokta, tire, alt çizgi; .glb ile bitmeli.");
+    if (!fs.existsSync(path.join(dizinOf(ad), "girdi", g))) throw hata("GLB bulunamadı: girdi/" + g, "Dosyayı uretim/" + ad + "/girdi/ içine koy (kendi modelin ya da telifsiz bir GLB).");
+    parametre.glb = g;
+  }
   const s = { mod: "3b", sablon3d: sablon, parametre, sure: Number(b.sure || a.sure) };
   if (b.anlatim) s.anlatim = String(b.anlatim).slice(0, 600);
   a.sahneler.push(s);
@@ -558,12 +566,17 @@ async function kur(ad, b, enj) {
     const sure3 = Math.max(Number(s.sure || a.sure), ses ? ses.sure + 0.4 : 0);
     const parametre = Object.assign({}, s.parametre || {});
     if (s.sablon3d === "karakter" && ses) parametre.agiz = require("./lib/ses-agzi.js").agizEgrisi(ses.dosya, 30);
-    const kimlik3 = ozet("3b", s.sablon3d, JSON.stringify(Object.assign({}, parametre, { agiz: parametre.agiz ? ozet(parametre.agiz.join(",")) : "" })), sure3.toFixed(2), w, h);
+    let glbYol = "";
+    if (parametre.glb) {
+      glbYol = path.join(dizinOf(ad), "girdi", parametre.glb);
+      if (!fs.existsSync(glbYol)) throw hata("Sahne " + x.sahne + ": GLB model bulunamadı (girdi/" + parametre.glb + ").", "Dosyayı koy ya da sahneden modeli kaldır; model olmadan varsayılan şekil çizilir.");
+    }
+    const kimlik3 = ozet("3b", s.sablon3d, JSON.stringify(Object.assign({}, parametre, { agiz: parametre.agiz ? ozet(parametre.agiz.join(",")) : "", glbOzet: glbYol ? dosyaOzeti(glbYol) : "" })), sure3.toFixed(2), w, h);
     const yol3 = path.join(dizinOf(ad), "Clips3d", String(x.sahne).padStart(3, "0") + "-" + s.sablon3d + "-" + kimlik3 + ".mp4");
     if (!fs.existsSync(yol3)) {
       log("  3B sahne " + x.sahne + " (" + s.sablon3d + ") çiziliyor…");
       const k = Math.min(1, 720 / Math.min(w, h));
-      await (e.ciz3d || S3D().ciz)({ sablon: s.sablon3d, parametre, sure: sure3, genislik: Math.round(w * k), yukseklik: Math.round(h * k), fps: 30, cikti: yol3, log });
+      await (e.ciz3d || S3D().ciz)({ sablon: s.sablon3d, parametre, sure: sure3, genislik: Math.round(w * k), yukseklik: Math.round(h * k), fps: 30, cikti: yol3, model: glbYol || undefined, log });
     }
     x.yol = yol3; yerel3b++;
   }
@@ -660,7 +673,7 @@ function sureOlc(dosya) {
 }
 
 function ayristir(args) {
-  const DEGERLI = new Set(["stil", "oran", "model", "cozunurluk", "sure", "butce", "muzik", "kamera", "foto", "sablon", "kisi", "baslik", "alt", "renk", "renk2", "on-ayar", "anlatim", "tur", "lens", "odak", "diyafram", "mesafe"]);
+  const DEGERLI = new Set(["stil", "oran", "model", "cozunurluk", "sure", "butce", "muzik", "kamera", "foto", "sablon", "kisi", "baslik", "alt", "renk", "renk2", "on-ayar", "anlatim", "tur", "lens", "odak", "diyafram", "mesafe", "glb"]);
   const b = {}, konum = [];
   for (let i = 0; i < args.length; i++) {
     const x = args[i];

@@ -182,3 +182,20 @@ test("kadro: tur paketi erkek/kadin/cift fotograflariyla kurulur; eksik rol dige
   assert.ok(s.every(x => x.kaynak === k2));
   assert.equal((await c.post("/api/studyo/sablon", { ad: "kadro2", sablon: "yok-paket", kadro: { kadin: k2 } })).durum, 400);
 });
+
+test("3B model (.glb) yukleme: gercek imza zorunlu, sahne olmaz, urun sahnesine baglanip kaydedilir", async () => {
+  assert.equal((await c.post("/api/studyo/yeni", { ad: "glbpanel", stil: "serbest" })).durum, 200);
+  const GLB = Buffer.concat([Buffer.from("glTF"), Buffer.alloc(60, 2)]).toString("base64");
+  const yukle = (govde) => c.post("/api/studyo/yukle", Object.assign({ ad: "glbpanel", rol: "model" }, govde));
+  assert.equal((await yukle({ dosya: "urun.glb", veri: JPEG })).durum, 400);             // imza yok
+  assert.equal((await yukle({ dosya: "urun.exe", veri: GLB })).durum, 400);              // uzanti
+  const r = await yukle({ dosya: "Urun Model.glb", veri: GLB });
+  assert.equal(r.durum, 200, r.metin);
+  assert.equal(r.json.dosya, "Urun-Model.glb");
+  assert.equal((await c.get("/api/studyo/detay?ad=glbpanel")).json.sahneler.length, 0);   // model sahne olmaz
+  assert.equal((await c.post("/api/studyo/sahne3d", { ad: "glbpanel", sablon: "urun", baslik: "Model" })).durum, 200);
+  const k = await c.post("/api/studyo/kaydet", { ad: "glbpanel", sahneler: [{ mod: "3b", sablon3d: "urun", parametre: { baslik: "Model", glb: "Urun-Model.glb" }, sure: 4 }] });
+  assert.equal(k.durum, 200, k.metin);
+  assert.equal((await c.get("/api/studyo/detay?ad=glbpanel")).json.sahneler[0].parametre.glb, "Urun-Model.glb");
+  assert.equal((await c.post("/api/studyo/kaydet", { ad: "glbpanel", sahneler: [{ mod: "3b", sablon3d: "urun", parametre: { glb: "../x.glb" }, sure: 4 }] })).durum, 400);
+});

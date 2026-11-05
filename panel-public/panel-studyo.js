@@ -180,6 +180,24 @@
         on.addEventListener("change", function () { pr.onAyar = on.value; kirli = true; });
         kutu3.appendChild(P.alan("Karakter", on));
       }
+      if ((s.sablon3d || "urun") === "urun") {
+        var glbDosya = P.h("input", { type: "file", accept: ".glb,model/gltf-binary", hidden: true });
+        glbDosya.addEventListener("change", async function () {
+          var f = glbDosya.files[0]; glbDosya.value = ""; if (!f) return;
+          if (f.size > 14 * 1024 * 1024) return P.bildir("GLB en çok 14 MB olabilir.", "hata");
+          try {
+            P.bildir("Model yükleniyor…", "bilgi");
+            var buf = new Uint8Array(await f.arrayBuffer()), ikili = "";
+            for (var q = 0; q < buf.length; q += 0x8000) ikili += String.fromCharCode.apply(null, buf.subarray(q, q + 0x8000));
+            var r = await P.api("/api/studyo/yukle", { ad: ad, rol: "model", dosya: f.name, veri: btoa(ikili) }, { zamanAsimi: 60000 });
+            pr.glb = r.dosya; kirli = true; sahneleriCiz(); P.bildir("Model eklendi: " + r.dosya, "ok");
+          } catch (e) { P.bildir(e.message || "Model yüklenemedi.", "hata"); }
+        });
+        kutu3.appendChild(P.alan("Kendi 3B modelin (.glb)", P.h("div", { class: "satir" },
+          P.dugme(pr.glb ? "Modeli değiştir" : "Model yükle", { tur: "hafif", kucuk: true, onclick: function () { glbDosya.click(); } }),
+          pr.glb ? P.dugme("Kaldır", { tur: "hafif", kucuk: true, onclick: function () { delete pr.glb; kirli = true; sahneleriCiz(); } }) : null,
+          pr.glb ? P.h("span", { class: "soluk" }, pr.glb) : P.h("span", { class: "soluk" }, "Boşsa varsayılan şekil çizilir."), glbDosya)));
+      }
       ek.push(kutu3);
       ek.push(P.h("p", { class: "soluk" }, (s.sablon3d === "karakter" ? "Karakterin ağzı, aşağıdaki Anlatım metninin sesiyle oynar. " : "") + "Ücretsiz: film kurulurken bu bilgisayarda çizilir" + (d3.chrome && d3.three ? "." : (!d3.chrome ? ". Chrome ya da Edge bulunamadı!" : "; ilk kullanımda three.js (~30 MB) iner."))));
     }
