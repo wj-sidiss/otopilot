@@ -196,6 +196,18 @@ test("anlatim: ucretsiz ses uretilir, sahne anlatimdan kisaysa uzar, altyazi + m
   a.dil = "en"; a.sahneler[0].anlatim = "The camera records 4K at 60 frames per second.";
   fs.writeFileSync(yol, JSON.stringify(a));
   assert.equal((await S.kur("aile", { sesnormalsiz: true }, Object.assign({ ses: sahteSes }, sessiz))).uyarilar.length, 0);
+  // gecisler: uyari yok, ses akisi var, toplam sure gecissiz hesapla ayni (anlatim/altyazi zamanlari kaymaz)
+  a.sahneler[0].gecis = "cozul"; a.sahneler[1].gecis = "zoom";
+  fs.writeFileSync(yol, JSON.stringify(a));
+  const gk = await S.kur("aile", { sesnormalsiz: true }, Object.assign({ ses: sahteSes }, sessiz));
+  assert.equal(gk.uyarilar.length, 0, gk.uyarilar.join(" | "));
+  assert.match(execFileSync(ff().ffprobe, ["-v", "error", "-show_entries", "stream=codec_type", "-of", "csv=p=0", gk.cikti], { encoding: "utf8" }), /audio/);
+  const gsure = Number(execFileSync(ff().ffprobe, ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", gk.cikti], { encoding: "utf8" }).trim());
+  assert.ok(Math.abs(gsure - gk.sure) < 0.35, "sure " + gsure + " beklenen " + gk.sure);
+  a.sahneler[0].gecis = "yok-boyle";
+  fs.writeFileSync(yol, JSON.stringify(a));
+  await assert.rejects(S.kur("aile", {}, Object.assign({ ses: sahteSes }, sessiz)), /bilinmeyen geçiş/);
+  delete a.sahneler[0].gecis; delete a.sahneler[1].gecis;
   a.kamera = "yok"; fs.writeFileSync(yol, JSON.stringify(a));
   await assert.rejects(S.kur("aile", {}, sessiz), /Bilinmeyen kamera/);
   a.kamera = "temiz";                                             // onbellek: ayni metin ikinci kez seslendirilmedi

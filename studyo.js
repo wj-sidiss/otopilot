@@ -93,7 +93,109 @@ const YONETMEN = {
   },
 };
 const YONETMEN_ALANLAR = { plan: "plan", kameraHareketi: "hareket", lens: "lens", isik: "isik" };
+
+// GECISLER: sahne sonrasi gecis (ffmpeg xfade; ucretsiz). Kod -> [ad, xfade adi, sure sn]. "kes" = dogrudan kesme.
+const GECISLER = {
+  kes: ["Kesme", "", 0], cozul: ["Çözülme (dissolve)", "fade", 0.6], siyah: ["Siyaha kararma", "fadeblack", 0.8], beyaz: ["Beyaz parlama", "fadewhite", 0.5],
+  kaydir: ["Kaydırma", "slideleft", 0.5], whip: ["Whip pan (hızlı savruluş)", "slideleft", 0.22], silme: ["Silme", "wipeleft", 0.6],
+  daire: ["Daire açılışı (iris)", "circleopen", 0.8], "daire-kapan": ["Daire kapanışı (iris)", "circleclose", 0.8], zoom: ["Zoom geçişi", "zoomin", 0.7],
+  piksel: ["Piksel", "pixelize", 0.7], radyal: ["Radyal silme", "radial", 0.8], bulanik: ["Bulanık geçiş", "hblur", 0.5],
+};
+// Geciskili birlestirme grafigi: her sahne bitisinde kuyruk kadar son kareyi uzatir, sonraki sahne tam sahne baslangicinda gecisle girer;
+// boylece anlatim sesi ve altyazi zamanlari DEGISMEZ. Ses sahne sahne kirpilip birlestirilir. Hic gecis yoksa null (eski concat yolu).
+function gecisGrafigi(sureler, gecisler, sesVar) {
+  const n = sureler.length;
+  const gec = i => {
+    const k = (gecisler || [])[i];
+    if (i >= n - 1 || !k || k === "kes" || !GECISLER[k]) return null;
+    return { ad: GECISLER[k][1], sn: Math.max(0.1, Math.min(GECISLER[k][2], sureler[i] * 0.5, sureler[i + 1] * 0.5)) };
+  };
+  if (n < 2 || !sureler.some((_, i) => gec(i))) return null;
+  const f = [];
+  for (let i = 0; i < n; i++) {
+    const g = gec(i);
+    f.push("[" + i + ":v]" + (g ? "tpad=stop_mode=clone:stop_duration=" + g.sn.toFixed(3) + "," : "") + "setpts=PTS-STARTPTS[v" + i + "]");
+  }
+  let cur = "v0", basla = 0;
+  for (let i = 0; i < n - 1; i++) {
+    basla += sureler[i];
+    const g = gec(i), cikis = i === n - 2 ? "vout" : "x" + i;
+    f.push(g ? "[" + cur + "][v" + (i + 1) + "]xfade=transition=" + g.ad + ":duration=" + g.sn.toFixed(3) + ":offset=" + basla.toFixed(3) + "[" + cikis + "]"
+      : "[" + cur + "][v" + (i + 1) + "]concat=n=2:v=1:a=0[" + cikis + "]");
+    cur = cikis;
+  }
+  if (sesVar) {
+    for (let i = 0; i < n; i++) f.push("[" + i + ":a]atrim=0:" + sureler[i].toFixed(3) + ",asetpts=PTS-STARTPTS[a" + i + "]");
+    f.push(sureler.map((_, i) => "[a" + i + "]").join("") + "concat=n=" + n + ":v=0:a=1[aout]");
+  }
+  return { filtre: f.join(";"), harita: ["-map", "[vout]"].concat(sesVar ? ["-map", "[aout]"] : []) };
+}
 const SABLONLAR = {
+  // TUR PAKETLERI: kisi 0/1 = ilk/ikinci foto (erkek/kadin), 2 = ikisi birlikte (cift fotosu varsa o, yoksa donusumlu). gecis = bu sahneden sonrakine.
+  yesilcam: { ad: "Yeşilçam melodramı (8 çekim)", kamera: "film", stilEki: "1970s Turkish Yesilcam cinema look, melodrama, saturated warm film colors, soft focus, grainy 35mm film", sahneler: [
+    { hareket: "an old Istanbul street by the Bosphorus at dusk, the man walks alone carrying a worn suitcase", plan: "genis", kameraHareketi: "takip", isik: "altin", kisi: 0, gecis: "cozul" },
+    { hareket: "the man's eyes fill with tears as he remembers the past, dramatic zoom on his face", plan: "yakin", kameraHareketi: "yaklas", lens: "85", isik: "altin", kisi: 0, gecis: "cozul" },
+    { hareket: "the woman waits at a ferry pier, the wind in her hair, she turns and sees the man", plan: "orta", kameraHareketi: "yaklas", lens: "50", isik: "altin", kisi: 1, gecis: "zoom" },
+    { hareket: "the two face each other at the pier, time stops, a long silent look", plan: "ikili", kameraHareketi: "sabit", lens: "50", kisi: 2, gecis: "cozul" },
+    { hareket: "they quarrel painfully, the woman turns away in anguish and the man reaches out", plan: "omuz", kameraHareketi: "elde", lens: "35", kisi: 2, gecis: "siyah" },
+    { hareket: "a single tear rolls down the woman's cheek", plan: "cok-yakin", kameraHareketi: "yaklas", lens: "85", isik: "mum", kisi: 1, gecis: "cozul" },
+    { hareket: "rain pours on the empty pier, the man stands alone in the rain, then runs toward the woman and they embrace", plan: "genis", kameraHareketi: "takip", isik: "bulutlu", kisi: 2, gecis: "cozul" },
+    { hareket: "the ferry horn sounds as the couple stand together at sunset, final frame", plan: "siluet", kameraHareketi: "uzaklas", isik: "arkadan", kisi: 2, gecis: "kes" },
+  ] },
+  bilimkurgu: { ad: "Bilim kurgu (8 çekim)", kamera: "sinema", stilEki: "cinematic science fiction film, anamorphic lens look, teal and orange color grade, volumetric light, photorealistic", sahneler: [
+    { hareket: "a vast futuristic megacity at night with flying vehicles between glowing towers", plan: "genis", kameraHareketi: "vinc", isik: "neon", gecis: "kaydir" },
+    { hareket: "the man and the woman in sleek space suits stand on a starship bridge looking at a hologram map", plan: "ikili", kameraHareketi: "orbit", lens: "35", isik: "mavi", kisi: 2, gecis: "cozul" },
+    { hareket: "first-person view from the pilot seat as the ship accelerates into a glowing wormhole", plan: "pov", kameraHareketi: "fpv", lens: "24", isik: "neon", gecis: "beyaz" },
+    { hareket: "the woman's face lit by blue holographic displays, she realizes something is wrong", plan: "yakin", kameraHareketi: "yaklas", lens: "85", isik: "mavi", kisi: 1, gecis: "kes" },
+    { hareket: "an alien planet with two moons, the couple stands on a cliff above a glowing valley", plan: "genis", kameraHareketi: "geri-acilis", isik: "altin", kisi: 2, gecis: "whip" },
+    { hareket: "the man fires an energy weapon at a hovering combat drone, sparks fly", plan: "alt-aci", kameraHareketi: "elde", lens: "24", isik: "neon", kisi: 0, gecis: "kes" },
+    { hareket: "they run through a collapsing corridor as explosions follow behind them", plan: "orta", kameraHareketi: "takip", lens: "24", isik: "mum", kisi: 2, gecis: "siyah" },
+    { hareket: "the two look at a double sunrise over the alien planet, calm after the storm", plan: "siluet", kameraHareketi: "uzaklas", isik: "arkadan", kisi: 2, gecis: "kes" },
+  ] },
+  fantastik: { ad: "Fantastik / destan (8 çekim)", kamera: "sinema", stilEki: "epic high fantasy film, painterly golden light, drifting mist, detailed practical-looking costumes, shot on 35mm", sahneler: [
+    { hareket: "a vast mountain kingdom with a castle above the clouds at dawn", plan: "genis", kameraHareketi: "vinc", isik: "altin", gecis: "cozul" },
+    { hareket: "the man as a knight in worn armor and the woman as a sorceress in a hooded cloak walk through an ancient misty forest", plan: "ikili", kameraHareketi: "takip", lens: "35", isik: "bulutlu", kisi: 2, gecis: "cozul" },
+    { hareket: "the man draws a glowing sword from an old stone, light spills over his face", plan: "yakin", kameraHareketi: "yaklas", lens: "50", isik: "altin", kisi: 0, gecis: "beyaz" },
+    { hareket: "first-person view flying on a dragon's back through storm clouds toward the castle", plan: "pov", kameraHareketi: "fpv", lens: "24", gecis: "kes" },
+    { hareket: "the woman casts a spell, her hands glowing, wind whipping her cloak", plan: "orta", kameraHareketi: "orbit", lens: "35", isik: "neon", kisi: 1, gecis: "whip" },
+    { hareket: "a giant dragon lands in front of the gate, the knight steps forward alone", plan: "alt-aci", kameraHareketi: "sabit", lens: "24", isik: "arkadan", kisi: 0, gecis: "siyah" },
+    { hareket: "sparks and fire as the knight and the sorceress fight side by side against dark soldiers", plan: "orta", kameraHareketi: "elde", lens: "35", isik: "mum", kisi: 2, gecis: "cozul" },
+    { hareket: "the two stand victorious on the castle wall as the sun rises over the kingdom", plan: "siluet", kameraHareketi: "uzaklas", isik: "arkadan", kisi: 2, gecis: "kes" },
+  ] },
+  "aksiyon-filmi": { ad: "Aksiyon filmi (8 çekim)", kamera: "sinema", stilEki: "high-budget action thriller, gritty handheld camera, motion blur, teal and orange grade, photorealistic", sahneler: [
+    { hareket: "a black car speeds through a crowded night market, sparks flying as it scrapes a wall", plan: "genis", kameraHareketi: "takip", lens: "24", isik: "neon", gecis: "kes" },
+    { hareket: "the woman at the wheel, eyes locked on the mirror, gripping the steering wheel", plan: "cok-yakin", kameraHareketi: "elde", lens: "50", isik: "neon", kisi: 1, gecis: "kes" },
+    { hareket: "first-person view running along a rooftop, then jumping across a gap between buildings", plan: "pov", kameraHareketi: "elde", lens: "24", gecis: "whip" },
+    { hareket: "the man hangs from a ledge with one hand, the street far below, then pulls himself up", plan: "ust-aci", kameraHareketi: "vinc-asagi", lens: "24", kisi: 0, gecis: "kes" },
+    { hareket: "a close fight in a narrow corridor, the man blocks a punch and throws one back", plan: "orta", kameraHareketi: "elde", lens: "35", isik: "mum", kisi: 0, gecis: "beyaz" },
+    { hareket: "slow motion: the couple walks away as a car explodes behind them without looking back", plan: "orta", kameraHareketi: "yavas-cekim", lens: "50", isik: "neon", kisi: 2, gecis: "siyah" },
+    { hareket: "a tense standoff, the man and the woman back to back surrounded by armed men", plan: "ikili", kameraHareketi: "orbit", lens: "35", isik: "mavi", kisi: 2, gecis: "kes" },
+    { hareket: "they step out of the smoke at dawn, battered but alive, and look at each other", plan: "ikili", kameraHareketi: "yaklas", lens: "85", isik: "altin", kisi: 2, gecis: "kes" },
+  ] },
+  // TEKNIK PAKETLERI: ayri bir film turu degil, bir cekim dilini ogretir (kendi cumlelerimizle; belirli bir filmden sahne/kare yok)
+  simetri: { ad: "Teknik: simetrik tek nokta perspektif (6 çekim)", stilEki: "perfectly symmetrical centered composition, one-point perspective, pastel color palette, flat frontal staging, deadpan mood", sahneler: [
+    { hareket: "a grand hotel lobby seen straight on, perfectly centered, the character stands in the middle of the frame", plan: "genis", kameraHareketi: "sabit", lens: "24", isik: "high-key", kisi: 0, gecis: "kaydir" },
+    { hareket: "a long hallway with the character walking away from the camera down the exact center", plan: "genis", kameraHareketi: "yaklas", lens: "24", isik: "high-key", kisi: 1, gecis: "kaydir" },
+    { hareket: "two characters sit side by side facing the camera, completely still, staring straight ahead", plan: "ikili", kameraHareketi: "sabit", lens: "35", isik: "high-key", kisi: 2, gecis: "silme" },
+    { hareket: "an overhead view of a perfectly arranged table, the character's hands place one object in the center", plan: "ust-aci", kameraHareketi: "sabit", lens: "35", isik: "high-key", kisi: 0, gecis: "kaydir" },
+    { hareket: "the camera pans sharply to the side to reveal the second character standing in a doorway", plan: "orta", kameraHareketi: "pan", lens: "35", isik: "high-key", kisi: 1, gecis: "whip" },
+    { hareket: "both characters walk toward the camera in step, centered, the background perfectly symmetrical", plan: "ikili", kameraHareketi: "uzaklas", lens: "35", isik: "high-key", kisi: 2, gecis: "kes" },
+  ] },
+  kesintisiz: { ad: "Teknik: kesintisiz uzun çekim hissi (5 çekim)", stilEki: "continuous long take feel, fluid camera, no cuts, naturalistic lighting, immersive", sahneler: [
+    { hareket: "the camera follows the character from behind as they leave a quiet apartment and step into a busy street", plan: "orta", kameraHareketi: "takip", lens: "24", isik: "bulutlu", kisi: 0, gecis: "kes" },
+    { hareket: "the camera drifts past the character and slowly orbits to reveal the second character arriving", plan: "ikili", kameraHareketi: "orbit", lens: "35", isik: "bulutlu", kisi: 2, gecis: "kes" },
+    { hareket: "the camera follows both characters walking and talking through a market, people crossing in front of the lens", plan: "ikili", kameraHareketi: "takip", lens: "35", isik: "altin", kisi: 2, gecis: "kes" },
+    { hareket: "the camera rises on a crane above the crowd while the characters keep walking below", plan: "genis", kameraHareketi: "vinc", lens: "24", isik: "altin", kisi: 2, gecis: "kes" },
+    { hareket: "the camera pushes in slowly until the characters fill the frame, a quiet shared glance", plan: "yakin", kameraHareketi: "yaklas", lens: "50", isik: "altin", kisi: 2, gecis: "kes" },
+  ] },
+  "gerilim-teknigi": { ad: "Teknik: dolly zoom ve POV gerilimi (6 çekim)", stilEki: "suspense thriller cinematography, cold desaturated palette, shallow depth of field, slow deliberate pacing", sahneler: [
+    { hareket: "a character stands at the end of a long hotel corridor, unsure whether to walk forward", plan: "genis", kameraHareketi: "sabit", lens: "35", isik: "mavi", kisi: 0, gecis: "cozul" },
+    { hareket: "dolly zoom on the character's face as they realize they are not alone, the corridor stretches behind them", plan: "yakin", kameraHareketi: "dolly-zoom", lens: "50", isik: "mavi", kisi: 0, gecis: "kes" },
+    { hareket: "first-person view moving slowly toward a half open door, the light from inside spilling out", plan: "pov", kameraHareketi: "yaklas", lens: "24", isik: "mum", gecis: "kes" },
+    { hareket: "extreme close-up of the character's eyes reflecting something unseen", plan: "cok-yakin", kameraHareketi: "sabit", lens: "85", isik: "yari", kisi: 1, gecis: "siyah" },
+    { hareket: "a shadow passes behind the character as they slowly turn, the focus shifting from them to the empty space behind", plan: "omuz", kameraHareketi: "rack-focus", lens: "85", isik: "mum", kisi: 1, gecis: "kes" },
+    { hareket: "the door slams shut, sudden silence, the character alone in the dark corridor", plan: "genis", kameraHareketi: "geri-acilis", lens: "24", isik: "low-key", kisi: 0, gecis: "kes" },
+  ] },
   romantik: { ad: "Romantik (6 çekim)", sahneler: [
     { hareket: "a couple walking hand in hand along the seashore, seen from far away", plan: "genis", kameraHareketi: "yaklas", isik: "altin" },
     { hareket: "the couple laughing together while walking, a warm natural moment", plan: "ikili", kameraHareketi: "takip", lens: "35", isik: "altin" },
@@ -130,6 +232,10 @@ const SES_ZINCIRI = "highpass=f=90,equalizer=f=300:t=q:w=1:g=-2,equalizer=f=3200
 const KAMERALAR = {
   temiz: { ad: "Temiz (dokunma)", vf: "" },
   sinema: { ad: "Sinema", vf: "eq=contrast=1.06:saturation=0.9:gamma=0.98,colorbalance=rs=0.04:bs=-0.03:rh=0.05:bh=-0.04,rgbashift=rh=-1:bh=1,unsharp=3:3:0.4,noise=alls=9:allf=t+u,vignette=PI/5,format=yuv420p" },
+  vhs: { ad: "VHS / eski kamera kaydı", vf: "eq=saturation=1.25:contrast=0.95,chromashift=crh=3:cbh=-3,gblur=sigma=0.8,noise=alls=22:allf=t+u,vignette=PI/6,format=yuv420p" },
+  super8: { ad: "Super 8 (sıcak, titrek tane)", vf: "eq=saturation=0.72:contrast=1.1:brightness=0.02,colorbalance=rs=0.08:bs=-0.08:rm=0.04,gblur=sigma=0.6,noise=alls=28:allf=t+u,vignette=PI/3.5,format=yuv420p" },
+  "yumusak-lens": { ad: "Yumuşak lens (eski cam, ışık taşması)", vf: "split[a][b];[b]gblur=sigma=14,eq=brightness=0.03[g];[a][g]blend=all_mode=screen:all_opacity=0.3,eq=saturation=1.05,vignette=PI/5,format=yuv420p" },
+  kamkorder: { ad: "90'lar kamkorder (parlak, keskin)", vf: "eq=saturation=1.3:contrast=1.1,unsharp=5:5:1.2,noise=alls=10:allf=t,format=yuv420p" },
   film: { ad: "Film (grenli, solgun)", vf: "eq=contrast=1.04:saturation=0.82:brightness=0.01,colorbalance=rs=0.06:gs=0.01:bs=-0.05:rm=0.03:bm=-0.03,noise=alls=18:allf=t+u,unsharp=3:3:0.3,vignette=PI/4,format=yuv420p" },
 };
 const FOTO = /\.(jpe?g|png|webp|bmp|heic)$/i, VIDEO = /\.(mp4|mov|m4v|webm|mkv)$/i;
@@ -161,6 +267,7 @@ function ayarOku(ad) {
     if (!MODLAR.includes(s.mod)) throw hata("Sahne " + (i + 1) + ": geçersiz mod '" + s.mod + "'.", "Geçerli: " + MODLAR.join(", "));
     for (const [alan, grup] of Object.entries(YONETMEN_ALANLAR))
       if (s[alan] && !YONETMEN[grup][s[alan]]) throw hata("Sahne " + (i + 1) + ": bilinmeyen " + alan + " '" + s[alan] + "'.", "Geçerli: " + Object.keys(YONETMEN[grup]).join(", "));
+    if (s.gecis !== undefined && !GECISLER[s.gecis]) throw hata("Sahne " + (i + 1) + ": bilinmeyen geçiş '" + s.gecis + "'.", "Geçerli: " + Object.keys(GECISLER).join(", "));
     if (s.anlatim !== undefined && (typeof s.anlatim !== "string" || s.anlatim.length > 600)) throw hata("Sahne " + (i + 1) + ": 'anlatim' en çok 600 karakterlik metin olmalı.");
     if (s.mod === "3b") {
       const sb = S3D().SABLONLAR;
@@ -220,15 +327,23 @@ function fotoEkle(ad, dosya) {
 }
 
 // hazir cekim sablonunu ekler; fotograf verilirse sahneler sirayla o fotograflari referans alir (yuz/stil tutarliligi), yoksa yazidan video
+// kisi 0 = ilk foto (erkek), 1 = ikinci foto (kadin), 2 = ikisi birlikte: 3. foto (cift fotosu) varsa o, yoksa sirayla ikisi
+function kadroFoto(f, kisi, i) {
+  if (kisi === 2) return f.length >= 3 ? f[2] : f[i % Math.min(2, f.length)];
+  return f[Math.min(kisi, f.length - 1)];
+}
 function sablonEkle(ad, sablon, fotolar) {
   const t = SABLONLAR[sablon];
   if (!t) throw hata("Bilinmeyen şablon: " + sablon, "Geçerli: " + Object.keys(SABLONLAR).join(", "));
   const a = ayarOku(ad);
   const f = (fotolar || []).filter(Boolean);
   f.forEach(x => girdiYolu(ad, x));
+  if (t.kamera) a.kamera = t.kamera;   // tur paketi kendi gorunumunu getirir; sonra panelden/dosyadan degistirilebilir
   t.sahneler.forEach((s, i) => {
     const o = Object.assign({ mod: f.length ? "referans" : "metin", sure: a.sure }, s);
-    if (f.length) o.kaynak = f[i % f.length];
+    delete o.kisi;
+    if (t.stilEki) o.hareket = s.hareket + ", " + t.stilEki;
+    if (f.length) o.kaynak = typeof s.kisi === "number" ? kadroFoto(f, s.kisi, i) : f[i % f.length];
     a.sahneler.push(o);
   });
   ayarYaz(ad, a);
@@ -469,8 +584,17 @@ async function kur(ad, b, enj) {
   const listeDosya = path.join(kurgu, "liste.txt");
   fs.writeFileSync(listeDosya, parcalar.map(p => "file '" + p.replace(/\\/g, "/").replace(/'/g, "'\\''") + "'").join("\n") + "\n");
   const ham = path.join(kurgu, "ham.mp4");
-  ffmpeg(["-f", "concat", "-safe", "0", "-i", listeDosya, "-c", "copy", ham], "birleştir");
   const uyarilar = [];
+  const gecisG = gecisGrafigi(parcalar.map(p => sureOlc(p)), var_.map(x => a.sahneler[x.sahne - 1].gecis), sesVar);
+  let gecisli = false;
+  if (gecisG) {
+    try {
+      ffmpeg([].concat(...parcalar.map(p => ["-i", p])).concat(["-filter_complex", gecisG.filtre], gecisG.harita,
+        ["-c:v", "libx264", "-crf", "20", "-preset", "veryfast", "-threads", "2", "-pix_fmt", "yuv420p"], sesVar ? ["-c:a", "aac", "-b:a", "160k"] : ["-an"], [ham]), "geçişli birleştir");
+      gecisli = true;
+    } catch (x) { uyarilar.push("Geçişler uygulanamadı (" + x.message.slice(0, 100) + "); sahneler düz kesmeyle birleştirildi."); }
+  }
+  if (!gecisli) ffmpeg(["-f", "concat", "-safe", "0", "-i", listeDosya, "-c", "copy", ham], "birleştir");
   let simdi = ham;
   if (KAMERALAR[a.kamera].vf && b.kamerasiz !== true) {
     const kameraliYol = path.join(kurgu, "kamera.mp4");
@@ -570,4 +694,4 @@ async function ana(args) {
 if (require.main === module) {
   ana(process.argv.slice(2)).catch(e => { console.error("✗ " + e.message + (e.cozum ? "\n  ↳ " + e.cozum : "")); process.exit(e.cikis || 1); });
 }
-module.exports = { sahne3dEkle, yuzDegistir, STILLER, MODLAR, KAMERALAR, YONETMEN, SABLONLAR, sablonEkle, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };
+module.exports = { GECISLER, gecisGrafigi, sahne3dEkle, yuzDegistir, STILLER, MODLAR, KAMERALAR, YONETMEN, SABLONLAR, sablonEkle, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };

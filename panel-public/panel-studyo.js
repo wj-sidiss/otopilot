@@ -101,6 +101,9 @@
       sec.addEventListener("change", function () { if (sec.value) s[g[0]] = sec.value; else delete s[g[0]]; kirli = true; });
       yonKutu.appendChild(P.alan(g[2], sec));
     });
+    var gecSec = P.secim(Object.keys(d.gecisler || {}).map(function (k) { return [k, d.gecisler[k]]; }), s.gecis || "kes", { "aria-label": "Geçiş: bu sahneden sonrakine (sahne " + (i + 1) + ")" });
+    gecSec.addEventListener("change", function () { if (gecSec.value && gecSec.value !== "kes") s.gecis = gecSec.value; else delete s.gecis; kirli = true; });
+    yonKutu.appendChild(P.alan("Geçiş", gecSec));
     var ek = [];
     if (s.mod === "3b") {
       var pr = s.parametre = s.parametre || {}, d3 = d.sahne3d;
@@ -173,7 +176,7 @@
     var o = ui.ayar;
     var govde = { ad: ad, stil: o.stil.value, oran: o.oran.value, model: o.model.value, cozunurluk: o.coz.value, sure: Number(o.sure.value) || 6,
       dil: o.dil.value, kamera: o.kamera.value,
-      sahneler: sahneler.map(function (s) { return { mod: s.mod, kaynak: s.kaynak, url: s.url, hareket: s.hareket, sure: s.sure, an: s.an, anlatim: s.anlatim, plan: s.plan, kameraHareketi: s.kameraHareketi, lens: s.lens, isik: s.isik }; }) };
+      sahneler: sahneler.map(function (s) { return { mod: s.mod, kaynak: s.kaynak, url: s.url, hareket: s.hareket, sure: s.sure, an: s.an, anlatim: s.anlatim, plan: s.plan, kameraHareketi: s.kameraHareketi, lens: s.lens, isik: s.isik, gecis: s.gecis }; }) };
     try {
       await P.api("/api/studyo/kaydet", govde);
       await detayYukle();
