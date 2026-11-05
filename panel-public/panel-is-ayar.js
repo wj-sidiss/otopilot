@@ -239,6 +239,7 @@
     k.sesDiger = P.girdi({ placeholder: "örn. en-US-AriaNeural", hidden: true, "aria-label": "Ses adı", "data-alan": "ses" });
     k.hiz = P.secim(P.SES_HIZLARI.map(function (x) { return [x, x === "+0%" ? "Normal (+0%)" : x]; }), "+7%", { id: P.yeniId("s"), "data-alan": "sesHizi" });
     k.motor = P.secim([["", "Kanal ayarındaki (" + (P.ayar && P.ayar.sesMotoru || "otomatik") + ")"]].concat(P.SES_MOTORLARI), "", { id: P.yeniId("s"), "data-alan": "sesMotoru" });
+    k.telaffuz = P.onayKutusu("Türkçe telaffuz paketi (YouTube, ChatGPT, vidIQ gibi adları doğru okur; yalnız seste, altyazı değişmez)", true, { "data-alan": "telaffuzPaketi" });
     k.altyaziDili = P.secim(P.DILLER, "en", { id: P.yeniId("s"), "data-alan": "altyaziDili" });
     k.tur = P.secim([["", "Kanal ayarındaki"]].concat(P.TURLER), "", { id: P.yeniId("s"), "data-alan": "tur" });
     k.ton = P.girdi({ placeholder: "örn. ciddi ve sakin", "data-alan": "ton", maxlength: "200" });
@@ -269,7 +270,7 @@
     var sAltyazi = { ad: "altyaziDili", kontrol: k.altyaziDili,
       doldur: function (r, c) { k.altyaziDili.value = r || etkinDil(c.konu(), c.ozet()); },
       degisim: function (r, c) { var eff = r || etkinDil(c.konu(), c.ozet()); return k.altyaziDili.value === eff ? null : { v: k.altyaziDili.value }; } };
-    var specler = [sDil, sSes, sHiz, sSec("sesMotoru", k.motor), sAltyazi, sSec("tur", k.tur), sMetin("ton", k.ton), sMetin("kisiselKatki", k.katki)];
+    var specler = [sDil, sSes, sHiz, sSec("sesMotoru", k.motor), sKutu("telaffuzPaketi", k.telaffuz), sAltyazi, sSec("tur", k.tur), sMetin("ton", k.ton), sMetin("kisiselKatki", k.katki)];
 
     var kok = P.h("div", { class: "sekme-icerik" });
     var form = formMekanigi({ anahtar: "ses", ctx: ctx, specler: specler, kok: kok, yer: yer,
@@ -277,7 +278,7 @@
       sonrasi: function (govde) {
         var ic = [];
         ctx.kilitTemizle("ses-sonra");            // her kayıtta yeni düğümler çizilir: öncekilerin kilitleri listede birikmesin
-        if (govde.dil !== undefined || govde.ses !== undefined || govde.sesHizi !== undefined || govde.sesMotoru !== undefined) {
+        if (govde.dil !== undefined || govde.ses !== undefined || govde.sesHizi !== undefined || govde.sesMotoru !== undefined || govde.telaffuzPaketi !== undefined) {
           var b = P.dugme("Seslendirmeyi yeniden yap", { kucuk: true, tur: "hafif", ikon: "ses", onclick: function () { ctx.calistir("ses", { yeniden: true }, yer); } });
           ctx.kilitle(b, "mesgul", "ses-sonra"); ic.push(b);
         }
@@ -314,7 +315,7 @@
           P.alan("Altyazı dili", k.altyaziDili, { ipucu: "Anlatım dilinden farklıysa «Altyazıyı çevir» adımı kullanılır (Claude anahtarı gerekir)." })),
         P.h("div", { class: "alan" }, k.sesDiger), P.h("div", { class: "satir" }, testBtn), testYer),
       P.bolum("Ses motoru", "Edge sesli okuma Microsoft'un resmî olmayan ücretsiz uç noktasıdır; kesintiye ya da değişikliğe açıktır. Ticari kanal için Azure Speech (resmî) önerilir; anahtarını Kaynaklar'dan gir.",
-        P.alan("Motor (yalnız bu iş)", k.motor)),
+        P.alan("Motor (yalnız bu iş)", k.motor), k.telaffuz),
       P.bolum("Üslup", "Tür ve ton, senaryonun yapısını ve söyleyiş biçimini belirler. Değişiklik yalnız senaryo yeniden yazılırsa etki eder.",
         P.h("div", { class: "alan-izgara" }, P.alan("Tür", k.tur), P.alan("Ton", k.ton)), P.alan("Kendi katkın", k.katki)),
       yer, form.cubuk);
