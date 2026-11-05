@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Yayin kapisi: push/surum oncesi hizli, agsiz kontroller. `npm run kapi` (hizli) | `npm run kapi -- --tam` (testlerle).
+// Yayin kapisi: push/surum oncesi agsiz kontroller. `npm run kapi` (hizli) | `-- --ilgili` (degisen dosyalara bagli testler) | `-- --tam` (tum testler).
 // Cikis kodu 0 = gecti, 1 = hata var. Uyarilar cikis kodunu etkilemez.
 "use strict";
 const fs = require("fs");
@@ -102,15 +102,52 @@ function belgeDenetimi() {
   else ok(`belgelerde anilan ${gecen.size} npm betigi mevcut`);
 }
 
+
+// 6) ilgili testler: son etiketten (ya da origin/main'den) beri degisen dosyalara bagli test dosyalari.
+// Bir test dosyasi secilir: kendisi degistiyse ya da degisen bir modulu require ediyorsa; panel-public degistiyse panel testleri.
+function ilgiliTestDosyalari() {
+  const taban = git("describe", "--tags", "--abbrev=0") || "origin/main";
+  const degisen = new Set([
+    ...(git("diff", "--name-only", taban) || "").split("\n"),
+    ...(git("ls-files", "--others", "--exclude-standard") || "").split("\n"),
+  ].filter(Boolean).map((f) => f.replace(/\\/g, "/")));
+  const testler = (git("ls-files", "test/*.test.js", "video-indirici/test/*.test.js", "ai-infapp/test/*.test.js") || "").split("\n").filter(Boolean);
+  for (const f of degisen) if (/\.test\.js$/.test(f) && fs.existsSync(path.join(KOK, f)) && !testler.includes(f)) testler.push(f);
+  const moduller = [...degisen].filter((f) => /\.(c?js)$/.test(f) && !/\.test\.js$/.test(f) && !f.startsWith("panel-public/"));
+  const panelDegisti = [...degisen].some((f) => f.startsWith("panel-public/") || f === "panel.js");
+  const secilen = testler.filter((t) => {
+    if (degisen.has(t)) return true;
+    let s = "";
+    try { s = fs.readFileSync(path.join(KOK, t), "utf8"); } catch { return false; }
+    if (panelDegisti && /panel/.test(path.basename(t))) return true;
+    return moduller.some((m) => {
+      const ad = path.basename(m).replace(/\.(c?js)$/, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return new RegExp("require\\([\"'][^\"']*[/\\\\.]" + ad + "(\\.c?js)?[\"']\\)").test(s);
+    });
+  });
+  return { taban, degisen: degisen.size, secilen };
+}
+
+function ilgiliTestler() {
+  const r = ilgiliTestDosyalari();
+  if (!r.secilen.length) return ok("degisikliklere bagli test dosyasi yok (taban " + r.taban + ")");
+  console.log("ilgili testler (" + r.secilen.length + " dosya, taban " + r.taban + ") calisiyor...");
+  const k = spawnSync(process.execPath, ["--test", "--test-concurrency=1", ...r.secilen], { cwd: KOK, stdio: "inherit" });
+  if (k.status !== 0) hata("ilgili testler basarisiz (" + r.secilen.join(", ") + ")");
+  else ok(r.secilen.length + " ilgili test dosyasi gecti");
+}
+
 function main(argv) {
-  const tam = argv.includes("--tam");
+  const tam = argv.includes("--tam"), ilgili = argv.includes("--ilgili");
   surumDenetimi(); sirDenetimi(); sozdizimi(); belgeDenetimi(); gitDurumu();
-  if (tam) {
+  if (argv.includes("--liste")) { const r = ilgiliTestDosyalari(); console.log(r.secilen.join("\n")); return 0; }
+  if (ilgili && !tam) ilgiliTestler();
+  else if (tam) {
     console.log("testler calisiyor (birkac dakika)...");
     const r = spawnSync("npm", ["test"], { cwd: KOK, stdio: "inherit", shell: true });
     if (r.status !== 0) hata("npm test basarisiz");
     else ok("npm test gecti");
-  } else uyari("testler calistirilmadi (tam kontrol: npm run kapi -- --tam)");
+  } else uyari("testler calistirilmadi (ilgili testler: npm run kapi -- --ilgili, hepsi: --tam)");
   tamam.forEach((m) => console.log("  ok   " + m));
   uyarilar.forEach((m) => console.log("  uyari " + m));
   hatalar.forEach((m) => console.log("  HATA " + m));
@@ -119,4 +156,4 @@ function main(argv) {
 }
 
 if (require.main === module) process.exit(main(process.argv.slice(2)));
-module.exports = { main };
+module.exports = { main, ilgiliTestDosyalari };

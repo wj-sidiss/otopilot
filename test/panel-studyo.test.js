@@ -199,3 +199,18 @@ test("3B model (.glb) yukleme: gercek imza zorunlu, sahne olmaz, urun sahnesine 
   assert.equal((await c.get("/api/studyo/detay?ad=glbpanel")).json.sahneler[0].parametre.glb, "Urun-Model.glb");
   assert.equal((await c.post("/api/studyo/kaydet", { ad: "glbpanel", sahneler: [{ mod: "3b", sablon3d: "urun", parametre: { glb: "../x.glb" }, sure: 4 }] })).durum, 400);
 });
+
+test("gecis onizlemesi: ilk istekte uretilir, sonra onbellekten; cerezsiz 403, gecersiz kod 404/400", { skip: !(() => { try { return require("child_process").spawnSync(require("../ff-yol.js").ffmpeg, ["-version"]).status === 0; } catch { return false; } })() }, async () => {
+  const r = await c.get("/studyo/_gecis/cozul.mp4", { cerezli: true });
+  assert.equal(r.durum, 200, r.metin);
+  assert.equal(r.baslik["content-type"], "video/mp4");
+  assert.ok(fs.existsSync(path.join(ortam.uretim, "_gecis", "cozul.mp4")));
+  const t = fs.statSync(path.join(ortam.uretim, "_gecis", "cozul.mp4")).mtimeMs;
+  assert.equal((await c.get("/studyo/_gecis/cozul.mp4", { cerezli: true })).durum, 200);
+  assert.equal(fs.statSync(path.join(ortam.uretim, "_gecis", "cozul.mp4")).mtimeMs, t);   // onbellek: yeniden uretilmedi
+  assert.equal((await c.get("/studyo/_gecis/cozul.mp4", { cerezli: false, jetonsuz: true })).durum, 403);
+  assert.equal((await c.get("/studyo/_gecis/kes.mp4", { cerezli: true })).durum, 404);
+  assert.equal((await c.get("/studyo/_gecis/yok.mp4", { cerezli: true })).durum, 404);
+  assert.equal((await c.get("/studyo/_gecis/..%2Fx.mp4", { cerezli: true })).durum, 400);
+  assert.ok(!fs.readdirSync(path.join(ortam.uretim, "_gecis")).some(f => f.startsWith(".")), "gecici dosya kalmadi");
+});

@@ -165,7 +165,16 @@
     });
     var gecSec = P.secim(Object.keys(d.gecisler || {}).map(function (k) { return [k, d.gecisler[k]]; }), s.gecis || "kes", { "aria-label": "Geçiş: bu sahneden sonrakine (sahne " + (i + 1) + ")" });
     gecSec.addEventListener("change", function () { if (gecSec.value && gecSec.value !== "kes") s.gecis = gecSec.value; else delete s.gecis; kirli = true; });
-    yonKutu.appendChild(P.alan("Geçiş", gecSec));
+    var gecVideo = P.h("video", { class: "studyo-klip", muted: true, loop: true, playsinline: true, hidden: true, "aria-label": "Geçiş önizlemesi" });
+    gecVideo.muted = true;
+    var gecOnizle = P.dugme("Önizle", { tur: "hafif", kucuk: true, onclick: function () {
+      var kod = gecSec.value;
+      if (!kod || kod === "kes") { gecVideo.hidden = true; return P.bildir("Kesme geçişsizdir; önizlemesi yok.", "bilgi"); }
+      gecVideo.src = "/studyo/_gecis/" + encodeURIComponent(kod) + ".mp4"; gecVideo.hidden = false;
+      var o = gecVideo.play(); if (o && o.catch) o.catch(function () {});
+    } });
+    gecSec.addEventListener("change", function () { if (!gecVideo.hidden) gecOnizle.click(); });
+    yonKutu.appendChild(P.alan("Geçiş", P.h("div", null, P.h("div", { class: "satir" }, gecSec, gecOnizle), gecVideo)));
     var ek = [];
     if (s.mod === "3b") {
       var pr = s.parametre = s.parametre || {}, d3 = d.sahne3d;
@@ -377,7 +386,7 @@
       P.dugme("Değişiklikleri kaydet", { ikon: "tamam", onclick: function () { kaydet(false); } }));
     sahneleriCiz(); yuzCiz();
   }
-  var sablonSec = null, kadro = {};
+  var sablonSec = null, kadro = {}, anlatimKutu = null;
   // yuklenen benzersiz fotograflar (sahnelerin kaynaklari)
   function benzersizFotolar() {
     var gor = {}, l = [];
@@ -403,7 +412,7 @@
     if (!sablonSec.value) return P.durumYaz(ui.durum, "uyari", "Önce bir çekim şablonu seç.");
     try {
       await kaydet(true);
-      await P.api("/api/studyo/sablon", { ad: ad, sablon: sablonSec.value, kadro: { erkek: kadro.erkek || "", kadin: kadro.kadin || "", cift: kadro.cift || "" } });
+      await P.api("/api/studyo/sablon", { ad: ad, sablon: sablonSec.value, kadro: { erkek: kadro.erkek || "", kadin: kadro.kadin || "", cift: kadro.cift || "" }, anlatim: !!(anlatimKutu && anlatimKutu.girdi.checked) });
       await detayYukle(); ciz();
     } catch (e) { P.durumYaz(ui.durum, "hata", e); }
   }
@@ -415,6 +424,7 @@
       P.dugme("Yazıdan sahne ekle", { ikon: "metin", onclick: function () { sahneler.push({ mod: "metin", hareket: "", sure: d.ayar.sure, kredi: 0 }); kirli = true; sahneleriCiz(); } }),
       sablonSec = P.secim([["", "Çekim şablonu…"]].concat(Object.keys(d.sablonlar).map(function (k) { return [k, d.sablonlar[k]]; })), "", { "aria-label": "Çekim şablonu" }),
       P.h("div", { class: "studyo-ayar", style: "width:100%" }, kadroSecimi("erkek", "Kadro: erkek", 0), kadroSecimi("kadin", "Kadro: kadın", 1), kadroSecimi("cift", "Kadro: çift fotoğrafı (isteğe bağlı)", 2)),
+      (anlatimKutu = P.onayKutusu("Anlatım taslağı da ekle (film paketlerinde; işin anlatım dilinde, sonra düzenlenebilir, ücretsiz seslendirilir)", false)),
       P.dugme("Şablonu ekle", { ikon: "arti", onclick: sablonEkle }),
       P.dugme("3B sahne ekle", { ikon: "arti", onclick: function () { sahneler.push({ mod: "3b", sablon3d: "urun", parametre: {}, sure: d.ayar.sure, kredi: 0 }); kirli = true; sahneleriCiz(); } }),
       P.dugme("Video linki ekle", { ikon: "film", onclick: function () { sahneler.push({ mod: "video", url: "", hareket: "recreate this exact scene with the same composition, characters and action", sure: d.ayar.sure, kredi: 0 }); kirli = true; sahneleriCiz(); } }),

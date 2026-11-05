@@ -133,7 +133,7 @@ function gecisGrafigi(sureler, gecisler, sesVar) {
 }
 const SABLONLAR = {
   // TUR PAKETLERI: kisi 0/1 = ilk/ikinci foto (erkek/kadin), 2 = ikisi birlikte (cift fotosu varsa o, yoksa donusumlu). gecis = bu sahneden sonrakine.
-  yesilcam: { ad: "Yeşilçam melodramı (8 çekim)", kamera: "film", stilEki: "1970s Turkish Yesilcam cinema look, melodrama, saturated warm film colors, soft focus, grainy 35mm film", sahneler: [
+  yesilcam: { anlatimTaslak: {"tr": ["İstanbul'a döndüğü akşam elinde tek bir bavul vardı.", "Yıllar geçmişti ama o iskeleyi unutamamıştı.", "O ise hâlâ aynı yerde bekliyordu.", "Bir bakış, söylenmemiş her şeyi anlattı.", "Ama yıllar aralarına kolay aşılmayacak bir duvar örmüştü.", "Gözyaşı, sözden önce davrandı.", "Yağmur başladığında ikisi de koşuyordu.", "Vapur düdük çaldı. Bu sefer kimse gitmedi."], "en": ["He came back to Istanbul one evening with a single suitcase.", "Years had passed, but he never forgot that pier.", "She was still waiting in the same place.", "One look said everything they had never said.", "But the years had built a wall between them.", "The tear came before the words.", "When the rain started, they were both running.", "The ferry horn sounded. This time, no one left."]}, ad: "Yeşilçam melodramı (8 çekim)", kamera: "film", stilEki: "1970s Turkish Yesilcam cinema look, melodrama, saturated warm film colors, soft focus, grainy 35mm film", sahneler: [
     { hareket: "an old Istanbul street by the Bosphorus at dusk, the man walks alone carrying a worn suitcase", plan: "genis", kameraHareketi: "takip", isik: "altin", kisi: 0, gecis: "cozul" },
     { hareket: "the man's eyes fill with tears as he remembers the past, dramatic zoom on his face", plan: "yakin", kameraHareketi: "yaklas", lens: "85", isik: "altin", kisi: 0, gecis: "cozul" },
     { hareket: "the woman waits at a ferry pier, the wind in her hair, she turns and sees the man", plan: "orta", kameraHareketi: "yaklas", lens: "50", isik: "altin", kisi: 1, gecis: "zoom" },
@@ -143,7 +143,7 @@ const SABLONLAR = {
     { hareket: "rain pours on the empty pier, the man stands alone in the rain, then runs toward the woman and they embrace", plan: "genis", kameraHareketi: "takip", isik: "bulutlu", kisi: 2, gecis: "cozul" },
     { hareket: "the ferry horn sounds as the couple stand together at sunset, final frame", plan: "siluet", kameraHareketi: "uzaklas", isik: "arkadan", kisi: 2, gecis: "kes" },
   ] },
-  bilimkurgu: { ad: "Bilim kurgu (8 çekim)", kamera: "sinema", stilEki: "cinematic science fiction film, anamorphic lens look, teal and orange color grade, volumetric light, photorealistic", sahneler: [
+  bilimkurgu: { anlatimTaslak: {"tr": ["Yıl 2187. Şehir hiç uyumuyordu.", "Haritada tek bir nokta yanıp sönüyordu: dönüşü olmayan bir rota.", "Solucan deliğine girdikleri an zaman yön değiştirdi.", "Ekrandaki sayılar yanlıştı. Ya da artık doğru olan buydu.", "İki ay, bir vadi ve ikisinden başka kimse.", "Drone onları buldu.", "Koridor arkalarında çöküyordu.", "İki güneş doğdu. Eve dönmek artık bir seçenek değildi."], "en": ["The year is 2187. The city never sleeps.", "One dot blinked on the map: a route with no way back.", "The moment they entered the wormhole, time changed direction.", "The numbers on the screen were wrong. Or maybe this was the new right.", "Two moons, one valley, and no one else.", "The drone found them.", "The corridor collapsed behind them.", "Two suns rose. Going home was no longer an option."]}, ad: "Bilim kurgu (8 çekim)", kamera: "sinema", stilEki: "cinematic science fiction film, anamorphic lens look, teal and orange color grade, volumetric light, photorealistic", sahneler: [
     { hareket: "a vast futuristic megacity at night with flying vehicles between glowing towers", plan: "genis", kameraHareketi: "vinc", isik: "neon", gecis: "kaydir" },
     { hareket: "the man and the woman in sleek space suits stand on a starship bridge looking at a hologram map", plan: "ikili", kameraHareketi: "orbit", lens: "35", isik: "mavi", kisi: 2, gecis: "cozul" },
     { hareket: "first-person view from the pilot seat as the ship accelerates into a glowing wormhole", plan: "pov", kameraHareketi: "fpv", lens: "24", isik: "neon", gecis: "beyaz" },
@@ -153,7 +153,7 @@ const SABLONLAR = {
     { hareket: "they run through a collapsing corridor as explosions follow behind them", plan: "orta", kameraHareketi: "takip", lens: "24", isik: "mum", kisi: 2, gecis: "siyah" },
     { hareket: "the two look at a double sunrise over the alien planet, calm after the storm", plan: "siluet", kameraHareketi: "uzaklas", isik: "arkadan", kisi: 2, gecis: "kes" },
   ] },
-  fantastik: { ad: "Fantastik / destan (8 çekim)", kamera: "sinema", stilEki: "epic high fantasy film, painterly golden light, drifting mist, detailed practical-looking costumes, shot on 35mm", sahneler: [
+  fantastik: { anlatimTaslak: {"tr": ["Bulutların üstünde unutulmuş bir krallık vardı.", "Bir şövalye ve bir büyücü. Aynı yolda, farklı sebeplerle.", "Kılıç yüz yıldır kimseye bu kadar kolay çıkmamıştı.", "Ejderhanın sırtında fırtınayı geçtiler.", "Büyü onun avuçlarında uyandı.", "Kapının önünde ejderha ile şövalye göz göze geldi.", "Karanlık askerler geldiğinde yan yana durdular.", "Güneş doğduğunda krallık hâlâ ayaktaydı."], "en": ["Above the clouds stood a forgotten kingdom.", "A knight and a sorceress. The same road, different reasons.", "In a hundred years, the sword had never come out this easily.", "They crossed the storm on a dragon's back.", "The spell woke in her hands.", "At the gate, the dragon and the knight met eye to eye.", "When the dark soldiers came, they stood side by side.", "When the sun rose, the kingdom was still standing."]}, ad: "Fantastik / destan (8 çekim)", kamera: "sinema", stilEki: "epic high fantasy film, painterly golden light, drifting mist, detailed practical-looking costumes, shot on 35mm", sahneler: [
     { hareket: "a vast mountain kingdom with a castle above the clouds at dawn", plan: "genis", kameraHareketi: "vinc", isik: "altin", gecis: "cozul" },
     { hareket: "the man as a knight in worn armor and the woman as a sorceress in a hooded cloak walk through an ancient misty forest", plan: "ikili", kameraHareketi: "takip", lens: "35", isik: "bulutlu", kisi: 2, gecis: "cozul" },
     { hareket: "the man draws a glowing sword from an old stone, light spills over his face", plan: "yakin", kameraHareketi: "yaklas", lens: "50", isik: "altin", kisi: 0, gecis: "beyaz" },
@@ -163,7 +163,7 @@ const SABLONLAR = {
     { hareket: "sparks and fire as the knight and the sorceress fight side by side against dark soldiers", plan: "orta", kameraHareketi: "elde", lens: "35", isik: "mum", kisi: 2, gecis: "cozul" },
     { hareket: "the two stand victorious on the castle wall as the sun rises over the kingdom", plan: "siluet", kameraHareketi: "uzaklas", isik: "arkadan", kisi: 2, gecis: "kes" },
   ] },
-  "aksiyon-filmi": { ad: "Aksiyon filmi (8 çekim)", kamera: "sinema", stilEki: "high-budget action thriller, gritty handheld camera, motion blur, teal and orange grade, photorealistic", sahneler: [
+  "aksiyon-filmi": { anlatimTaslak: {"tr": ["Gece pazarında yalnızca bir araba bu kadar hızlı gidebilirdi.", "Aynada aynı farlar. Üç sokaktır peşlerindeydiler.", "Bir çatı, bir boşluk, bir karar.", "Aşağısı yirmi kattı. Bırakmak bir seçenek değildi.", "Koridor dardı. Kaçacak yer yoktu.", "Arkalarındaki patlamaya dönüp bakmadılar.", "Sırt sırta. Etrafları sarılmıştı.", "Şafak söktüğünde ikisi de ayaktaydı."], "en": ["Only one car could move that fast through the night market.", "Same headlights in the mirror. Three streets now.", "A rooftop, a gap, a decision.", "Twenty floors down. Letting go was not an option.", "The corridor was narrow. Nowhere to run.", "They did not look back at the explosion.", "Back to back. Surrounded.", "When dawn broke, both of them were still standing."]}, ad: "Aksiyon filmi (8 çekim)", kamera: "sinema", stilEki: "high-budget action thriller, gritty handheld camera, motion blur, teal and orange grade, photorealistic", sahneler: [
     { hareket: "a black car speeds through a crowded night market, sparks flying as it scrapes a wall", plan: "genis", kameraHareketi: "takip", lens: "24", isik: "neon", gecis: "kes" },
     { hareket: "the woman at the wheel, eyes locked on the mirror, gripping the steering wheel", plan: "cok-yakin", kameraHareketi: "elde", lens: "50", isik: "neon", kisi: 1, gecis: "kes" },
     { hareket: "first-person view running along a rooftop, then jumping across a gap between buildings", plan: "pov", kameraHareketi: "elde", lens: "24", gecis: "whip" },
@@ -250,6 +250,30 @@ function ffmpeg(argv, etiket) {
   if (r.status !== 0) throw hata("ffmpeg başarısız (" + etiket + "): " + String(r.stderr || "").trim().split("\n").slice(-3).join(" | "));
 }
 const dizinOf = ad => ortak.isDizin(ad);
+
+// Gecis onizlemesi: iki desen klip arasinda secilen gecisi gosteren kucuk MP4 (bir kez uretilir, uretim/_gecis/ icinde saklanir; ucretsiz)
+function gecisOnizleme(kod) {
+  if (!GECISLER[kod] || kod === "kes") throw hata("Önizlemesi olmayan geçiş: " + kod, "Geçerli: " + Object.keys(GECISLER).filter(k => k !== "kes").join(", "));
+  const d = path.join(ortak.uretimDizini(), "_gecis");
+  fs.mkdirSync(d, { recursive: true });
+  const cikti = path.join(d, kod + ".mp4");
+  if (fs.existsSync(cikti)) return cikti;
+  const gecici = s => path.join(d, "." + process.pid + "-" + crypto.randomBytes(4).toString("hex") + "-" + s);
+  const desen = (ad, kaynak) => {
+    const y = path.join(d, ad);
+    if (fs.existsSync(y)) return y;
+    const t = gecici(ad);
+    ffmpeg(["-f", "lavfi", "-i", kaynak, "-t", "1.4", "-pix_fmt", "yuv420p", "-c:v", "libx264", "-preset", "veryfast", t], "geçiş önizleme");
+    try { fs.renameSync(t, y); } catch (e) { fs.rmSync(t, { force: true }); }
+    return y;
+  };
+  const a = desen("_a.mp4", "testsrc2=s=320x180:r=30"), b = desen("_b.mp4", "smptehdbars=s=320x180:r=30");
+  const g = gecisGrafigi([1.4, 1.4], [kod], false);
+  const t = gecici(kod + ".mp4");
+  ffmpeg(["-i", a, "-i", b, "-filter_complex", g.filtre, ...g.harita, "-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p", "-movflags", "+faststart", t], "geçiş önizleme");
+  try { fs.renameSync(t, cikti); } catch (e) { fs.rmSync(t, { force: true }); }
+  return cikti;
+}
 const ayarYolu = ad => path.join(dizinOf(ad), "studyo.json");
 
 function ayarOku(ad) {
@@ -339,7 +363,7 @@ function kadroFoto(f, kisi, i) {
   if (kisi === 2) return f.length >= 3 ? f[2] : f[i % Math.min(2, f.length)];
   return f[Math.min(kisi, f.length - 1)];
 }
-function sablonEkle(ad, sablon, fotolar) {
+function sablonEkle(ad, sablon, fotolar, secenek) {
   const t = SABLONLAR[sablon];
   if (!t) throw hata("Bilinmeyen şablon: " + sablon, "Geçerli: " + Object.keys(SABLONLAR).join(", "));
   const a = ayarOku(ad);
@@ -351,6 +375,10 @@ function sablonEkle(ad, sablon, fotolar) {
     delete o.kisi;
     if (t.stilEki) o.hareket = s.hareket + ", " + t.stilEki;
     if (f.length) o.kaynak = typeof s.kisi === "number" ? kadroFoto(f, s.kisi, i) : f[i % f.length];
+    if (secenek && secenek.anlatim && t.anlatimTaslak) {
+      const liste = t.anlatimTaslak[a.dil] || t.anlatimTaslak.en;
+      if (liste && liste[i]) o.anlatim = liste[i];
+    }
     a.sahneler.push(o);
   });
   ayarYaz(ad, a);
@@ -723,7 +751,7 @@ async function ana(args) {
     const r = yuzDegistir(ad, b);
     console.log("✓ Yüzler değiştirildi: girdi/" + r.dosya + " yeni sahne olarak eklendi (ilk kare). Sıradaki: node studyo.js uret " + ad + " --butce <kredi>");
   } else if (komut === "sablon") {
-    const n = sablonEkle(ad, konum[2], b.foto ? String(b.foto).split(",").map(x => x.trim()) : []);
+    const n = sablonEkle(ad, konum[2], b.foto ? String(b.foto).split(",").map(x => x.trim()) : [], { anlatim: !!b.anlatimli });
     console.log("✓ " + n + " çekim eklendi (" + konum[2] + "). Hareketleri/planları studyo.json'da ya da panelde düzenle, sonra: node studyo.js uret " + ad + " --butce <kredi>");
   } else if (komut === "tara") {
     const r = tara(ad);
@@ -741,4 +769,4 @@ async function ana(args) {
 if (require.main === module) {
   ana(process.argv.slice(2)).catch(e => { console.error("✗ " + e.message + (e.cozum ? "\n  ↳ " + e.cozum : "")); process.exit(e.cikis || 1); });
 }
-module.exports = { GECISLER, gecisGrafigi, sahne3dEkle, yuzDegistir, STILLER, MODLAR, KAMERALAR, YONETMEN, SABLONLAR, sablonEkle, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };
+module.exports = { GECISLER, gecisGrafigi, gecisOnizleme, sahne3dEkle, yuzDegistir, STILLER, MODLAR, KAMERALAR, YONETMEN, SABLONLAR, sablonEkle, yeni, tara, sahneEkle, fotoEkle, uret, kur, liste, istemKur, klipEsle, ayarOku, ayristir };

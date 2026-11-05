@@ -99,3 +99,40 @@ test("sablonEkle: stilEki, kamera ve kadro dagitimi (erkek, kadin, cift)", () =>
     assert.equal(a.sahneler[0].gecis, "cozul");
   } finally { fik.temizle(kok); }
 });
+
+test("anlatim taslaklari: 4 film paketinde TR/EN 8'er satir, yapay zeka kalibi yok, 600 karakter altinda", () => {
+  const K = require("../lib/ai-kalip.js");
+  for (const k of ["yesilcam", "bilimkurgu", "fantastik", "aksiyon-filmi"]) {
+    const t = S.SABLONLAR[k];
+    for (const dil of ["tr", "en"]) {
+      const l = t.anlatimTaslak[dil];
+      assert.equal(l.length, t.sahneler.length, k + " " + dil);
+      for (const satir of l) {
+        assert.ok(satir.length > 5 && satir.length <= 600, satir);
+        assert.deepEqual(K.kalipBul(satir, dil).map(x => x.kalip), [], k + " " + dil + ": " + satir);
+      }
+    }
+  }
+});
+
+test("sablonEkle anlatim secenegi: isin diline gore taslak eklenir; secenek yoksa eklenmez", () => {
+  const fs2 = require("fs");
+  const fik = require("./render-fikstur");
+  const kok = fik.ortamKur();
+  try {
+    S.yeni("anl1", { stil: "gercekci" });
+    S.sablonEkle("anl1", "yesilcam", [], { anlatim: true });
+    let a = S.ayarOku("anl1");
+    assert.equal(a.sahneler[0].anlatim, S.SABLONLAR.yesilcam.anlatimTaslak.en[0]);       // varsayilan dil en
+    const y = path.join(kok, "anl1", "studyo.json"), j = JSON.parse(fs2.readFileSync(y, "utf8"));
+    j.dil = "tr"; j.sahneler = []; fs2.writeFileSync(y, JSON.stringify(j));
+    S.sablonEkle("anl1", "bilimkurgu", [], { anlatim: true });
+    a = S.ayarOku("anl1");
+    assert.equal(a.sahneler[7].anlatim, S.SABLONLAR.bilimkurgu.anlatimTaslak.tr[7]);
+    S.sablonEkle("anl1", "fantastik", []);
+    a = S.ayarOku("anl1");
+    assert.ok(a.sahneler.slice(8).every(s => s.anlatim === undefined), "secenek yokken anlatim eklenmez");
+    S.sablonEkle("anl1", "romantik", [], { anlatim: true });                                 // taslagi olmayan paket: sessizce atlanir
+    assert.ok(S.ayarOku("anl1").sahneler.slice(16).every(s => s.anlatim === undefined));
+  } finally { fik.temizle(kok); }
+});

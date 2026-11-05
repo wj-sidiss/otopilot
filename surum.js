@@ -50,7 +50,7 @@ function yayinla(yeni) {
   const cl = fs.readFileSync(P("CHANGELOG.md"), "utf8");
   if (cl.includes("TASLAK: buraya yaz")) throw new Error("CHANGELOG hala taslak; once doldur");
   if (git("tag", "-l", `v${yeni}`)) throw new Error(`v${yeni} etiketi zaten var`);
-  const kapi = spawnSync(process.execPath, [P("kapi.js")], { cwd: KOK, stdio: "inherit" });
+  const kapi = spawnSync(process.execPath, [P("kapi.js"), "--ilgili"], { cwd: KOK, stdio: "inherit" });   // degisen dosyalara bagli testler de kosar
   if (kapi.status !== 0) throw new Error("kapi kapali; yayin durdu");
   const kirli = git("status", "--porcelain").split("\n").filter(Boolean).map((l) => l.slice(3));
   const bizim = ["package.json", "package-lock.json", "CHANGELOG.md"];

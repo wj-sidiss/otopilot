@@ -431,6 +431,16 @@ function medya(c, yol) {
     if (new URL(c.req.url, "http://localhost").searchParams.get("indir") === "1") sec.indirAd = is + "-" + ad;
     return H.dosyaAkit(c.req, c.res, p, sec);
   }
+  if (tur === "studyo" && parca[1] === "_gecis") {
+    // /studyo/_gecis/<kod>.mp4 : gecis onizlemesi (ilk istekte ffmpeg ile uretilir, sonra onbellekten)
+    const m = parca.length === 3 && /^([a-z-]{2,20})\.mp4$/.exec(parca[2] || "");
+    if (!m) throw new HttpHata(400, "yol", "Geçersiz adres.");
+    const S = require("./studyo.js");
+    if (!S.GECISLER[m[1]] || m[1] === "kes") throw new HttpHata(404, "gecis", "Böyle bir geçiş yok.");
+    let p;
+    try { p = S.gecisOnizleme(m[1]); } catch (e) { throw new HttpHata(500, "gecis", "Önizleme üretilemedi: " + String(e.message).slice(0, 120)); }
+    return H.dosyaAkit(c.req, c.res, p, { tur: "video/mp4" });
+  }
   if (tur === "studyo") {
     // /studyo/<ad>/girdi/<foto> (yuklenen fotograf) ve /studyo/<ad>/klip/<dosya> (uretilen klip)
     const is = isAl(parca[1], true), alt = parca[2], dosya = parca[3];
