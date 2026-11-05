@@ -2,6 +2,12 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.20.0] — 2026-11-06 — Panelde kadro seçimi
+
+### Eklenenler
+- **Panel, çekim şablonu yanında "Kadro" seçimi:** yüklediğin fotoğraflardan erkek, kadın ve (isteğe bağlı) çift fotoğrafını seçersin; film türü ve teknik paketleri çekimleri buna göre dağıtır (erkek çekimleri erkek fotoğrafı, kadın çekimleri kadın, "ikisi birlikte" çekimleri çift fotoğrafı ya da sırayla ikisi). Tek kişi seçilirse eksik rol onu kullanır. Eskiden şablon, sahnelerdeki fotoğrafları yüklenme sırasıyla alıyordu.
+- Sunucu: `POST /api/studyo/sablon` artık `kadro: { erkek, kadin, cift }` kabul eder (`fotolar` listesi de çalışmaya devam eder).
+
 ## [1.19.0] — 2026-11-06 — Panelde lens profili seçimi
 
 ### Eklenenler
