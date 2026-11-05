@@ -77,6 +77,68 @@
       P.h("div", { class: "studyo-ayar" }, P.alan("Stil", stilSec), P.alan("Ekran", oranSec), P.alan("Model", modelSec), P.alan("Çözünürlük", cozSec), P.alan("Sahne süresi (sn)", sureG), P.alan("Anlatım dili", dilSec), P.alan("Kamera görünümü", kameraSec, { ipucu: "Tane, vinyet, renk: AI klibin plastik hissini kırar." })));
   }
 
+  // ---------------------------------------------------------------- lens profili (Lensfun)
+  var lp = null, lensKutu = null;
+  function lensProfil() { return lp && lp.kamera && lp.lens ? lp : null; }
+  function aramaAlani(tur, etiket) {
+    var giris = P.girdi({ type: "search", placeholder: etiket + " ara (ör. " + (tur === "kamera" ? "iphone, canon 5d" : "50mm, galaxy") + ")", "aria-label": etiket + " ara" });
+    var sec = P.secim([["", "— ara, sonra seç —"]], "", { "aria-label": etiket + " seç" });
+    var bekle = null;
+    function doldur(liste) {
+      P.degistir(sec, P.h("option", { value: "" }, liste.length ? "— " + liste.length + " sonuç —" : "— sonuç yok —"));
+      liste.forEach(function (x) { sec.appendChild(P.h("option", { value: x.model }, x.maker + " | " + x.model)); });
+    }
+    giris.addEventListener("input", function () {
+      clearTimeout(bekle);
+      var q = giris.value.trim();
+      if (q.length < 2) { doldur([]); return; }
+      bekle = setTimeout(async function () {
+        try { var r = await P.api("/api/studyo/lens-ara?tur=" + tur + "&q=" + encodeURIComponent(q)); doldur(r.sonuclar || []); }
+        catch (e) { P.bildir(e.message || "Arama başarısız.", "hata"); }
+      }, 250);
+    });
+    sec.addEventListener("change", function () {
+      if (!sec.value) return;
+      lp = lp || {}; lp[tur] = sec.value; kirli = true; lensYaz();
+    });
+    return { giris: giris, sec: sec };
+  }
+  function lensYaz() {
+    if (!lensKutu) return;
+    var yer = lensKutu.querySelector("[data-lens-ozet]");
+    if (yer) yer.textContent = lensProfil() ? "Seçili: " + lp.kamera + " + " + lp.lens + (lp.yon === "duzelt" ? " (bozulmayı düzelt)" : " (lens karakteri ekle)") : "Seçili lens yok. Film, lens profili olmadan kurulur.";
+  }
+  function lensBolumu() {
+    lp = d.ayar.lensProfili ? JSON.parse(JSON.stringify(d.ayar.lensProfili)) : null;
+    var kutu = P.h("div");
+    lensKutu = kutu;
+    if (!d.lens || !d.lens.hazir) {
+      var indir = P.dugme("Lens profillerini indir (≈5 MB, ücretsiz)", { tur: "hafif", onclick: async function () {
+        indir.disabled = true;
+        try { await P.api("/api/studyo/lens-kur", {}, { zamanAsimi: 180000 }); P.bildir("Lens profilleri indi.", "ok"); await detayYukle(); ciz(); }
+        catch (e) { indir.disabled = false; P.bildir(e.message || "İndirilemedi.", "hata"); }
+      } });
+      kutu.appendChild(P.h("p", { class: "ipucu" }, "Açık kaynak Lensfun veritabanı (CC BY-SA 3.0): yaklaşık 1000 kamera ve 1500 lens profili. Bir kez indirilir, depoya girmez."));
+      kutu.appendChild(P.h("div", { class: "satir" }, indir));
+      return P.bolum("Lens profili", "Filme gerçek bir lensin karakterini (bozulma, köşe kararması) ekler.", kutu);
+    }
+    var kam = aramaAlani("kamera", "Kamera / telefon"), len = aramaAlani("lens", "Lens");
+    var odak = P.girdi({ type: "number", min: "1", max: "2000", step: "any", deger: lp && lp.odak || "", placeholder: "mm", style: "width:5rem", "aria-label": "Odak uzaklığı (mm)" });
+    var diy = P.girdi({ type: "number", min: "0.5", max: "64", step: "any", deger: lp && lp.diyafram || "", placeholder: "f/", style: "width:5rem", "aria-label": "Diyafram" });
+    var duz = P.h("input", { type: "checkbox", "aria-label": "Bozulmayı düzelt" }); duz.checked = !!(lp && lp.yon === "duzelt");
+    function sayi(girdi, anahtar) { girdi.addEventListener("input", function () { if (!lp) lp = {}; if (girdi.value === "") delete lp[anahtar]; else lp[anahtar] = Number(girdi.value); kirli = true; }); }
+    sayi(odak, "odak"); sayi(diy, "diyafram");
+    duz.addEventListener("change", function () { if (!lp) lp = {}; if (duz.checked) lp.yon = "duzelt"; else delete lp.yon; kirli = true; lensYaz(); });
+    var kaldir = P.dugme("Lens profilini kaldır", { tur: "hafif", onclick: function () { lp = null; kirli = true; kam.giris.value = ""; len.giris.value = ""; odak.value = ""; diy.value = ""; duz.checked = false; lensYaz(); } });
+    kutu.appendChild(P.h("p", { class: "ipucu" }, d.lens.kameralar + " kamera, " + d.lens.lensler + " lens profili. Her telefon yok (ör. iPhone XS, Huawei, Nokia, LG, GoPro, DJI var); bulamazsan o model veritabanında yoktur."));
+    kutu.appendChild(P.h("div", { class: "studyo-ayar" }, P.alan("Kamera / telefon", kam.giris), P.alan("Kamera seç", kam.sec), P.alan("Lens", len.giris), P.alan("Lens seç", len.sec),
+      P.alan("Odak (mm)", odak), P.alan("Diyafram (f)", diy), P.alan("Bozulmayı düzelt", duz, { ipucu: "Kendi gerçek videondaki lens bozulmasını giderir. Kapalıyken profil, AI klibe lens karakteri ekler." })));
+    kutu.appendChild(P.h("p", { "data-lens-ozet": "" }));
+    kutu.appendChild(P.h("div", { class: "satir" }, kaldir));
+    lensYaz();
+    return P.bolum("Lens profili", "Filme gerçek bir lensin karakterini (bozulma, köşe kararması, renk sapması) ekler; ücretsiz, kurarken uygulanır.", kutu);
+  }
+
   function sahneKarti(s, i) {
     var gorsel = s.kaynak
       ? P.h("img", { class: "studyo-thumb", alt: "Sahne " + (i + 1), loading: "lazy", src: "/studyo/" + enc(ad) + "/girdi/" + enc(s.kaynak) })
@@ -174,7 +236,7 @@
   async function kaydet(sessiz) {
     if (!d) return;
     var o = ui.ayar;
-    var govde = { ad: ad, stil: o.stil.value, oran: o.oran.value, model: o.model.value, cozunurluk: o.coz.value, sure: Number(o.sure.value) || 6,
+    var govde = { ad: ad, lensProfili: lensProfil(), stil: o.stil.value, oran: o.oran.value, model: o.model.value, cozunurluk: o.coz.value, sure: Number(o.sure.value) || 6,
       dil: o.dil.value, kamera: o.kamera.value,
       sahneler: sahneler.map(function (s) { return { mod: s.mod, kaynak: s.kaynak, url: s.url, hareket: s.hareket, sure: s.sure, an: s.an, anlatim: s.anlatim, plan: s.plan, kameraHareketi: s.kameraHareketi, lens: s.lens, isik: s.isik, gecis: s.gecis }; }) };
     try {
@@ -288,6 +350,7 @@
     P.degistir(ui.govde,
       P.h("div", { class: "satir" }, P.dugme("Tüm işler", { tur: "hafif", ikon: "sol", onclick: function () { P.git("studyo"); } }), P.h("strong", null, ad)),
       ayarBolumu(),
+      lensBolumu(),
       P.bolum("Sahneler", "Sırası film sırasıdır. Fotoğraf, yazı ya da kendi videonla sahne ekle.",
         ui.sahneYer = P.h("div"),
         P.h("div", { class: "satir" }, ekleDugmeleri()), ui.foto),
