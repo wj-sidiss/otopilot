@@ -2,6 +2,16 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.22.0] — 2026-11-06 — Geçiş önizlemesi, anlatım taslakları, ilgili testler kapısı
+
+### Eklenenler
+- **Panelde geçiş önizlemesi:** sahne kartında Geçiş seçiminin yanında "Önizle"; iki desen klip arasında seçilen geçişi gösteren 3 sn'lik video (ilk istekte ffmpeg ile üretilir, `uretim/_gecis/` içinde saklanır; ücretsiz).
+- **Film paketlerine anlatım taslakları:** Yeşilçam, bilim kurgu, fantastik ve aksiyon paketlerinde her çekim için Türkçe ve İngilizce birer satır. Panelde "Anlatım taslağı da ekle" kutusu ya da `node studyo.js sablon <ad> yesilcam --anlatimli`; işin anlatım diline göre eklenir, sonra düzenlenebilir, ücretsiz seslendirilir. Satırların hiçbiri yapay zekâ kalıp denetimine takılmaz (testle korunur).
+- **Yayın kapısı `--ilgili`:** `npm run kapi -- --ilgili` son etiketten beri değişen dosyalara bağlı test dosyalarını bulup koşar; `npm run surum -- --yayinla` artık bunu kendiliğinden yapar. `--liste` seçilen dosyaları yazar.
+
+### Düzeltmeler
+- Stüdyo kurgusu bellek dolu makinede ffmpeg "Cannot allocate memory" ile düşüyordu (yeni yayın kapısı yakaladı). Artık bellek hatasında aynı adım bir kez tek iş parçacığıyla yeniden denenir; yine olmazsa çıkış kodu 5 ve "açık programları kapat" çözümüyle durur, biten sahneler korunur.
+
 ## [1.21.0] — 2026-11-06 — Kendi 3B modelin (GLB)
 
 ### Eklenenler
