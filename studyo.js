@@ -262,6 +262,11 @@ function ayarOku(ad) {
   a.dil = a.dil || "en";
   a.kamera = a.kamera || "temiz";
   if (!KAMERALAR[a.kamera]) throw hata("Bilinmeyen kamera görünümü: " + a.kamera, "Geçerli: " + Object.keys(KAMERALAR).join(", "));
+  if (a.lensProfili !== undefined) {
+    const lp = a.lensProfili;
+    if (!lp || typeof lp !== "object" || typeof lp.kamera !== "string" || typeof lp.lens !== "string" || lp.kamera.length > 120 || lp.lens.length > 120)
+      throw hata("Geçersiz lensProfili.", "{ \"kamera\": \"Apple iPhone XS\", \"lens\": \"...\" } biçiminde olmalı; bul: node studyo.js lens-ara <kelime>");
+  }
   if (!/^[a-z]{2}$/.test(a.dil)) throw hata("Geçersiz anlatım dili: " + a.dil, "İki harfli kod: tr, en, es, de, fr…");
   a.sahneler.forEach((s, i) => {
     if (!MODLAR.includes(s.mod)) throw hata("Sahne " + (i + 1) + ": geçersiz mod '" + s.mod + "'.", "Geçerli: " + MODLAR.join(", "));
@@ -596,6 +601,15 @@ async function kur(ad, b, enj) {
   }
   if (!gecisli) ffmpeg(["-f", "concat", "-safe", "0", "-i", listeDosya, "-c", "copy", ham], "birleştir");
   let simdi = ham;
+  if (a.lensProfili && b.lenssiz !== true) {
+    const lensYol = path.join(kurgu, "lens.mp4");
+    try {
+      const L = require("./lib/lensfun.js"), lp = a.lensProfili;
+      const p = L.profilBul(lp.kamera, lp.lens);
+      ffmpeg(["-i", simdi, "-vf", L.filtre({ kamera: p.kamera, lens: p.lens, odak: lp.odak, diyafram: lp.diyafram, mesafe: lp.mesafe, yon: lp.yon }), "-c:v", "libx264", "-crf", "18", "-preset", "veryfast", "-c:a", "copy", lensYol], "lens");
+      simdi = lensYol;
+    } catch (x) { uyarilar.push("Lens profili uygulanamadı (" + String(x.message).slice(0, 120) + "); film olduğu gibi kuruldu."); }
+  }
   if (KAMERALAR[a.kamera].vf && b.kamerasiz !== true) {
     const kameraliYol = path.join(kurgu, "kamera.mp4");
     try { ffmpeg(["-i", ham, "-vf", KAMERALAR[a.kamera].vf, "-c:v", "libx264", "-crf", "18", "-preset", "veryfast", "-c:a", "copy", kameraliYol], "kamera"); simdi = kameraliYol; }
@@ -646,7 +660,7 @@ function sureOlc(dosya) {
 }
 
 function ayristir(args) {
-  const DEGERLI = new Set(["stil", "oran", "model", "cozunurluk", "sure", "butce", "muzik", "kamera", "foto", "sablon", "kisi", "baslik", "alt", "renk", "renk2", "on-ayar", "anlatim"]);
+  const DEGERLI = new Set(["stil", "oran", "model", "cozunurluk", "sure", "butce", "muzik", "kamera", "foto", "sablon", "kisi", "baslik", "alt", "renk", "renk2", "on-ayar", "anlatim", "tur", "lens", "odak", "diyafram", "mesafe"]);
   const b = {}, konum = [];
   for (let i = 0; i < args.length; i++) {
     const x = args[i];
@@ -660,6 +674,26 @@ async function ana(args) {
   const [komut, ad] = konum;
   if (komut === "3b-kur") { S3D().threeKur(console.log); console.log("✓ three.js hazır (" + S3D().THREE_SURUM + ")."); return; }
   if (komut === "3b-sablonlar") { for (const [k, v] of Object.entries(S3D().SABLONLAR)) console.log("  " + k.padEnd(10) + v.ad); console.log("  karakter ön ayarları: " + S3D().KARAKTER_AYARLARI.join(", ")); return; }
+  if (komut === "lens-kur") { await require("./lib/lensfun.js").indir({}); console.log("✓ Lens profilleri hazır (CC BY-SA 3.0, Lensfun). Ara: node studyo.js lens-ara <kelime> [--tur lens]"); return; }
+  if (komut === "lens-ara") {
+    const L = require("./lib/lensfun.js"), tur = b.tur === "lens" ? "lens" : "kamera";
+    const r = L.ara(konum.slice(1).join(" "), tur, 40);
+    if (!r.length) { console.log("  bulunamadı (veritabanı yoksa önce: node studyo.js lens-kur)"); return; }
+    for (const x of r) console.log("  " + x.maker + " | " + x.model + (x.mount ? "  [" + x.mount + "]" : ""));
+    return;
+  }
+  if (komut === "lens") {
+    if (!konum[1]) throw hata("Kullanım: node studyo.js lens <ad> --kamera \"Apple iPhone XS\" --lens \"iPhone XS back camera\" [--odak 35 --diyafram 2.8 --duzelt | --kaldir]");
+    const a = ayarOku(konum[1]);
+    if (b.kaldir) { delete a.lensProfili; ayarYaz(konum[1], a); console.log("✓ Lens profili kaldırıldı."); return; }
+    const p = require("./lib/lensfun.js").profilBul(b.kamera, b.lens);
+    a.lensProfili = { kamera: p.kamera.model, lens: p.lens.model };
+    for (const k of ["odak", "diyafram", "mesafe"]) if (b[k] !== undefined) a.lensProfili[k] = Number(b[k]);
+    if (b.duzelt) a.lensProfili.yon = "duzelt";
+    ayarYaz(konum[1], a);
+    console.log("✓ Lens profili: " + p.kamera.maker + " " + p.kamera.model + " + " + p.lens.model + (b.duzelt ? " (düzelt)" : " (lens karakteri ekle)") + ". kur'da uygulanır.");
+    return;
+  }
   if (komut === "sablonlar") { for (const [k, v] of Object.entries(SABLONLAR)) console.log("  " + k.padEnd(10) + v.ad); return; }
   if (komut === "stiller") { for (const [k, v] of Object.entries(STILLER)) console.log("  " + k.padEnd(14) + v.ad + " (" + v.mod + ")"); return; }
   if (!ad || !["yeni", "tara", "sahne", "3b", "sablon", "yuz", "uret", "kur"].includes(komut)) throw hata("Kullanım: node studyo.js yeni|tara|uret|kur <ad> (ayrıntı: dosyanın başı) · node studyo.js stiller");
