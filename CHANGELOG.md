@@ -2,6 +2,12 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.21.0] — 2026-11-06 — Kendi 3B modelin (GLB)
+
+### Eklenenler
+- **Ürün sahnesinde kendi GLB modelin:** `node studyo.js 3b <ad> urun --glb urun.glb` (dosya `uretim/<ad>/girdi/` içinde) ya da panelde 3B sahne kartında "Kendi 3B modelin (.glb)" yükleme. Model, kurulurken kendi Chrome'unda three.js ile çizilir (ücretsiz); model dosyası değişince sahne yeniden çizilir, dosya yoksa açık hata verir. Gerçek Chrome çizimi test edildi.
+- Panel yüklemesi: yalnız gerçek GLB (`glTF` imzası), ≤14 MB; yüklenen model sahne olmaz, `girdi/` içine güvenli adla yazılır.
+
 ## [1.20.0] — 2026-11-06 — Panelde kadro seçimi
 
 ### Eklenenler
