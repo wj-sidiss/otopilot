@@ -13,6 +13,11 @@ onizleme/
 *.jpeg
 *.png
 
+# kodla film (cinecode) film klasorleri ve python onbellegi
+Filmler/
+Films/
+__pycache__/
+
 # node
 # NOT: package-lock.json depoya GIRER (herkes ayni surumleri kursun; PANEL.bat "npm ci" kullanir)
 node_modules/

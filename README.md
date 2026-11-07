@@ -210,6 +210,7 @@ node yayin-paketi.js   <is-adi>      # açıklama, bölümler, atıflar (video-y
 | `lib/yuz-degistir.js` | Stüdyo'da yerel yüz değiştirme (FaceFusion, kendi kurulumun; `FACEFUSION_KOK`), rıza onaylı, çift için soldan sağa |
 | Stüdyo film paketleri | Tür paketleri (`yesilcam`, `bilimkurgu`, `fantastik`, `aksiyon-filmi`) ve teknik paketleri (`simetri`, `kesintisiz`, `gerilim-teknigi`): 8 çekimlik hazır kurgu, POV çekimleri, kamera görünümü ve geçişlerle; erkek/kadın/çift fotoğrafın kadroya dağıtılır (panelde "Kadro" seçimi) |
 | Stüdyo geçişleri | 13 ücretsiz geçiş (çözülme, siyaha kararma, whip pan, iris, zoom…); anlatım ve altyazı zamanları kaymaz |
+| `.claude/skills/cinecode/` | **Kodla film** ([cinecode](https://github.com/sarpstar/cinecode), Sarp Yıldız, MIT): kısa film, belgesel, reklam, müzik videosu; her kare koddan çizilir, ses kodda, kredi harcamaz. Claude Code'da "kodla film yap" de. Python 3.9+ ister; güncelleme `npm run cinecode-guncelle` |
 | `lib/lensfun.js` | Stüdyo'da **gerçek lens profilleri** ([Lensfun](https://github.com/lensfun/lensfun), açık kaynak, CC BY-SA): ~1060 kamera/telefon, ~1580 lens; `node studyo.js lens-kur`, panelde "Lens profili". Telefonlarda yalnız bazı modeller (iPhone XS, Huawei, Nokia, LG, GoPro, DJI…) |
 | `klip-yerlestir.js` | vidiq-klip ile inen AI klipleri `KLIPLER.txt` sırasıyla sahne klasörlerine koyar (ücretsiz, tekrar çalıştırılabilir); sonra `video-yap.js --yeniden` |
 | `film.js` | karakterli/diyaloglu kısa dizi: `yeni`, `klipler`, `ses`, `kur [--dudak] [--yer-tutucu]` (AGENTS.md "1b") |

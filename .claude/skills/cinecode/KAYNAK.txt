@@ -1,0 +1,4 @@
+cinecode — https://github.com/sarpstar/cinecode (Sarp Yildiz, MIT; styles/ icindeki bir kismi LemoLab, MIT: styles/LICENSE-lemo-opuscar)
+Surum: 67f9807 2026-11-03
+Esitleme: 2026-11-07T17:03:11.880Z
+Guncelleme: npm run cinecode-guncelle

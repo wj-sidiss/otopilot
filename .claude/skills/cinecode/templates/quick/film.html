@@ -1,0 +1,1698 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>cinecode quick mode: film.html (picture + sound in one file)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; color: #999; font: 12px/1.4 ui-monospace, Menlo, monospace; }
+  canvas { display: block; max-width: 100vw; max-height: 100vh; margin: 0 auto; }
+  #hud { position: fixed; left: 8px; bottom: 6px; opacity: .75; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">click to play with sound · space pause · arrows step</div>
+<script>
+// cinecode QUICK MODE starter. One file holds the whole film: timeline, scenes, on-screen text and the sound.
+//
+// Contract used by tools/capture.mjs:
+//   window.READY            Promise<{frames, fps, width, height, renderer, title, bounds, vo}>, resolves after fonts are
+//                           loaded (bounds = scene starts + the end, for tools/make.py and the per-scene checks)
+//   window.renderFrame(i)   draws frame i; a pure function of (i / FPS, SEED); nothing carried between frames
+//   window.captureFrame(i)  renderFrame(i) + returns a PNG/JPEG data URL of the canvas
+//   window.renderAudio()    Promise<AudioBuffer>: the whole soundtrack, rendered OFFLINE (OfflineAudioContext)
+// URL params: w, h (default 1080x1920 = 9:16), seed, capture=1 (set by capture.mjs: no preview loop),
+//             shutter=<samples> (0 = motion blur off, for drafts), weave=<px>, tone=0 (finishing overrides)
+//
+// Renders: python3 tools/make.py stills | draft | final (KIT/references/quick-mode.md §3-4). It captures, lays the
+// narration on the score (audio/mix.json), masters to -14 LUFS and runs the checks; never chain capture.mjs,
+// master_audio.py and qc.py by hand.
+//
+// Edit only the FILM section below: TITLE, PURPOSE, FINISH, DURATION, PALETTE, TYPE (roles, check), CUES, VO, SCENES, SFX, ROOM,
+// ARRANGEMENT, the scene functions and score(). Helpers stay as they are: EASE, MOTION (at, back, anticipate, spring, stagger, arc), CAM (pan, tilt, dolly, zoom, truck, crane, orbit, dollyZoom,
+// pushTo, fpv, handheld, matchFrom, rackFocus), retime() (speed ramp, slow motion, time-lapse, freeze), plane(),
+// TRANSITION (dissolve, wipe, whip, iris), lazy() (seeded data built once), label() (on-screen names), and the sound voices.
+// Seeded data (star fields, layouts) is built with lazy() and first used inside a draw call: SEED is set further down
+// the file, so a top-level rng() call here would run before it.
+
+// ============================== FILM ==============================
+const TITLE = 'Untitled';
+// Purpose (SKILL.md "First questions"): 'cinematic' or 'ad'.
+const PURPOSE = 'cinematic';
+// Look: one of the eight families (KIT/references/looks.md §1), applied to the whole frame by the look pass: grade (a
+// CSS filter), bloom (highlight glow), texture ('paper' fibre, 'scanlines', 'halftone' dots), vignette, grain (and
+// grainHold: frames per grain pattern; Infinity = static paper fibre), hold (drawings per second: 12 = on twos; sound,
+// captions and the camera keep 24). Draw functions read line (outline width, share of the short side; 0 = none) and
+// steps (toon light bands for shade(); 0 = smooth). palette is the family's starting PALETTE. A recipe from the style
+// library (KIT/styles/<id>.md) starts from its base family here and adds its own grammar in the draw functions.
+// ?look=<id> in the URL swaps the family for a preview (the director card's look line, quick-mode.md §2).
+const LOOKS = {
+  'cinematic-realistic': { grade: 'contrast(1.06) saturate(0.92)', bloom: 0.18, texture: null, vignette: 0.35, grain: 0.05, grainHold: 1, hold: 24, line: 0, steps: 0,
+    palette: { bg: '#0d0f13', ink: '#efe8dc', accent: '#e0a85a', dim: '#2c3340' } },
+  'anime-cel': { grade: 'saturate(1.18) contrast(1.05)', bloom: 0.1, texture: null, vignette: 0, grain: 0, grainHold: 1, hold: 24, line: 0.004, steps: 3,
+    palette: { bg: '#7ec3ef', ink: '#1b1f2e', accent: '#ff5a5f', dim: '#3d5a80' } },
+  'pastel-storybook': { grade: 'saturate(0.85) contrast(0.9) brightness(1.04)', bloom: 0.08, texture: 'paper', vignette: 0.15, grain: 0.025, grainHold: 1, hold: 24, line: 0.002, steps: 4,
+    palette: { bg: '#f6e7d8', ink: '#4a3f55', accent: '#f2a7a0', dim: '#b8c4d6' } },
+  'claymation': { grade: 'saturate(1.05) contrast(1.02)', bloom: 0, texture: null, vignette: 0.3, grain: 0.03, grainHold: 2, hold: 12, line: 0, steps: 0,
+    palette: { bg: '#e9d9c4', ink: '#3b2f2a', accent: '#d9643a', dim: '#8a9a7b' } },
+  'papercut-collage': { grade: 'contrast(1.04)', bloom: 0, texture: 'paper', vignette: 0.1, grain: 0.04, grainHold: Infinity, hold: 12, line: 0.0015, steps: 2,
+    palette: { bg: '#efe6d6', ink: '#1f1d1a', accent: '#d6402f', dim: '#7d8b8f' } },
+  'retro-synthwave-vhs': { grade: 'saturate(1.25) contrast(1.1)', bloom: 0.45, texture: 'scanlines', vignette: 0.4, grain: 0.06, grainHold: 1, hold: 24, line: 0, steps: 0,
+    palette: { bg: '#0c0620', ink: '#f5e9ff', accent: '#ff2e88', dim: '#2de2e6' } },
+  'glossy-commercial': { grade: 'contrast(1.04) saturate(1.04)', bloom: 0.12, texture: null, vignette: 0, grain: 0, grainHold: 1, hold: 24, line: 0, steps: 0,
+    palette: { bg: '#f4f5f7', ink: '#111318', accent: '#2f6bff', dim: '#c9ced8' } },
+  'handmade-ink': { grade: 'grayscale(0.6) sepia(0.15) contrast(1.1)', bloom: 0, texture: 'halftone', vignette: 0.2, grain: 0.04, grainHold: Infinity, hold: 12, line: 0.003, steps: 2,
+    palette: { bg: '#efe7d6', ink: '#16130f', accent: '#b3322a', dim: '#8c8475' } },
+};
+const LOOK_ID = new URLSearchParams(location.search).get('look') || 'cinematic-realistic';
+const LOOK = LOOKS[LOOK_ID] ?? LOOKS['cinematic-realistic'];
+// Finishing: all off unless the user turned it on (the director card, quick-mode.md §2). Each one on its own:
+// shutter: 180° motion blur for scenes marked blur: true, { deg: 180, samples: 8 } (6 for ads); each sample is one
+// more draw, so render time × samples in those scenes; test one scene first. weave: gate weave in px at 1080 (0.6).
+// tone: the kit's print curve, { lift: 0.035, knee: 0.72, contrast: 0.12, split: 0.02 } (lifted blacks, soft highlight
+// roll-off, a light warm/cool split). KIT/references/purpose-cinematic.md §2.
+const FINISH = { shutter: null, weave: 0, tone: null };
+const FPS = 24;
+const DURATION = 8;                         // seconds; the picture and the sound both follow this
+const BPM = 96;                             // music grid; cue times sit on beats and bars: beat(n), bar(n)
+const BEAT0 = 0;                            // film time of beat 0 (a bar line); 0 when the music clip starts on a downbeat
+const beat = (n) => BEAT0 + n * 60 / BPM, bar = (n) => beat(4 * n);
+// Own music (the user's song or track) instead of score(): null, or { file: 'audio/music.wav', gain: 0.8 }. Cut the
+// clip on a bar line and take BPM from tools/beat_grid.py (KIT/references/music-video.md); the file goes through the
+// same bus as everything else, so it ducks under the narration and plays in the browser preview.
+const OWN_MUSIC = null;
+// Recorded instruments for score() (CC0, `python3 tools/samples.py list`; `get cellos-pizz darbuka` copies them into
+// audio/samples/): name them in INSTRUMENTS, then sample(ctx, out, 'cellos-pizz', bar(2), { note: 'E3', vel: 0.7 }) in score().
+const INSTRUMENTS = [];
+// Characters, only when the film has them (KIT/references/characters.md): one design per actor, drawn by character().
+// { <name>: { skin: '#e2a57c', hair: '#2a1d16', hairStyle: 'bob', top: '#c8402f', bottom: '#2c3340', shoes: '#1c1c1c' } }
+// hairStyle: short | bob | long | bun | curly | cap | bald · build: 0.8 slim .. 1.3 broad · check: film.html?modelsheet=<name>
+const CAST = {};
+// Math typeset as TeX, only when the film shows formulas: { pyth: 'a^2 + b^2 = c^2' }; drawn with formula(). MathJax
+// (Apache-2.0, pinned) loads before READY only when this has entries; add its LICENSES.csv row when it does.
+const FORMULAS = {};
+const PALETTE = { ...LOOK.palette };          // the family's palette; replace with the film's own (measured from the board)
+// The film's type, by role (display: titles and big words · text: subtitles, labels, lower thirds, legal · mono: data,
+// code, timestamps). Chosen in the TYPE DIRECTION step (KIT/references/typography.md §10) from the dealt pairings in
+// KIT/references/type-library.json: copy the role objects deal.py printed. Fontsource fonts are pinned on jsDelivr
+// (latin + latin-ext, so Turkish renders the same everywhere; one LICENSES.csv row per family). A brand or Fontshare
+// font stays local: { family: 'Brand Sans', files: { 600: 'fonts/BrandSans-SemiBold.woff2' } } (fonts/ is gitignored,
+// never shared). A role that fails to load, or lacks a glyph of a checked string, stops the render.
+// null roles = the system sans (drafts only). check: strings that must render, sizes (share of the short side) that
+// must pass the phone minimum, maxChars per line. stops: faces for non-weight axes (the weight axis is continuous).
+const TYPE = {
+  lang: 'tr',                                 // casing locale for up()/low(): 'tr' turns i into İ and I into ı
+  roles: { display: null, text: null, mono: null },
+  // e.g. display: { family: 'Fraunces', pkg: 'fraunces', version: '5.3.0', variable: 'full',
+  //        axes: { wght: [100, 900], opsz: [9, 144], SOFT: [0, 100], WONK: [0, 1] }, stops: [{ SOFT: 0 }, { SOFT: 100 }] },
+  //      text: { family: 'Instrument Sans', pkg: 'instrument-sans', version: '5.3.0', weights: [400, 600] },
+  //      mono: { family: 'IBM Plex Mono', pkg: 'ibm-plex-mono', version: '5.3.0', weights: [400], features: '"tnum"' },
+  check: { strings: { display: [TITLE] }, sizes: { text: 0.04 } },
+};
+
+// Cues are shared by picture and sound, so a hit on screen and its sound land on the same frame.
+const CUES = { gather: 0, impact: 3.0, reveal: 5.5, end: DURATION };
+
+// Narration: one row per line, dur measured from its WAV (ffprobe audio/vo/VO1.wav). The score ducks under each line in
+// renderAudio(); the WAVs are laid on top in the mix step. Empty = no narrator. Keep hits in the gaps between lines.
+const VO = [];                              // e.g. { id: 'VO1', at: 0.6, dur: 2.3 }
+// Optional talking-head captions for narrated films and ads (KIT/references/typography.md §8): word-locked, accent words
+// in a contrasting face, punch-in on emphasis. Paste the object tools/captions.py prints; null = no captions.
+const CAPTIONS = null;
+const CAPTION_STYLE = { role: 'display', accentRole: 'display', size: 0.062, caps: false, ink: PALETTE.ink, hi: PALETTE.ink, accent: PALETTE.accent, punch: 0.07 };
+
+// Scenes: [from, to) in seconds. Long films: chapters of 15-30 s are an internal structure (one function per scene,
+// for targeted edits); the viewer sees one film: one arc, one look, motifs that travel, connecting transitions.
+// action = what the subject does in the scene (one action; the camera move alone is not a scene; qc.py action checks it).
+// Each scene opens with its camera line: "name, seconds, speed easing, target" (KIT/references/camera-moves.md).
+// in = the transition INTO the scene: { type: 'cut' | 'smash' | 'match' | 'dissolve' | 'wipe' | 'whip', dur, dir }.
+// amb = the scene's ambience bed: { kind: 'room' | 'air' | 'water' | 'city', gain } (crossfades at the scene edges).
+// blur: true = motion blur from FINISH.shutter in this scene (fast moves: whips, impacts, fast pans, passing objects).
+// Hook rule: scene 1 leads with its action on frame 0 (ease-out = fastest at the start). No fade from black.
+const SCENES = [
+  { chapter: 'C1', from: CUES.gather, to: CUES.impact, draw: fieldGathers, action: 'the dots swirl inward', amb: { kind: 'air', gain: 0.05 } },
+  { chapter: 'C1', from: CUES.impact, to: CUES.reveal, draw: ringSnaps, action: 'the swarm snaps into a ring', in: { type: 'smash' }, amb: { kind: 'room', gain: 0.06 }, blur: true },
+  { chapter: 'C1', from: CUES.reveal, to: CUES.end, draw: titleHolds, action: 'the ring closes around the title', in: { type: 'dissolve', dur: 0.4 }, amb: { kind: 'room', gain: 0.04 } },
+];
+
+// Picture-locked sound effects, one row per picture event, on the same CUES: { at, voice, gain, dur, kind, wet }.
+// voice: hit · whoosh (a low swell peaking at at + dur / 2: put that on a cut that matters) · riser · tick · air (a real
+// rush of air only) · foley (kind: step | tap | cloth); wet = send to the shared ROOM (0-1). Designed sounds are accents for
+// the moments that carry meaning, never one per cut: make.py counts them (references/sound.md §5).
+const SFX = [
+  { at: CUES.impact - 1.6, voice: 'riser', dur: 1.6, gain: 0.25, wet: 0.2 },  // builds into the impact
+  { at: CUES.impact, voice: 'hit', gain: 0.9, wet: 0.35 },                    // the impact (picture flashes here)
+  { at: CUES.impact + 0.04, voice: 'foley', kind: 'tap', gain: 0.35, wet: 0.3 },
+  { at: CUES.reveal - 0.35, voice: 'whoosh', dur: 0.7, gain: 0.3, wet: 0.25 }, // into the title
+];
+
+// One shared reverb space for the whole film (a generated, seeded impulse), so every sound sits in the same room.
+const ROOM = { secs: 2.2, decay: 3.2, tone: 5000 };
+
+// Music arrangement: who plays where. Sections tile the film; a part plays only inside its sections; sustained parts
+// run once across neighbouring sections (spans()), beat parts use half-open beat lists (beats()), so nothing doubles at
+// a section or loop boundary. checkArrangement() validates the table before any render.
+const ARRANGEMENT = [                       // the music's sections; parts: the players this film's card names
+  { section: 'intro', from: 0, to: CUES.impact, parts: [] },
+  { section: 'drive', from: CUES.impact, to: CUES.reveal, parts: [] },
+  { section: 'title', from: CUES.reveal, to: CUES.end, parts: [] },
+];
+
+// EXAMPLE SCENES (fieldGathers, ringSnaps, titleHolds): they only show how the helpers work. Delete them, their SCENES
+// rows, CUES and SFX before the first preview; nothing of them appears in a film (SKILL.md Hard rules: no shortcuts).
+function fieldGathers(g, k, t, S) {
+  // dolly in, 3 s, medium ease-out, toward the centre
+  const cam = CAM.base(); CAM.dolly(cam, EASE.out(k), 1.3, 0.75);
+  for (const z of [0.9, 0.35, 0]) plane(g, S, cam, z, (g) => {        // three depth planes: real parallax
+    const r = rng(11 + z * 10);
+    for (let i = 0; i < 90; i++) {
+      const a = r() * TAU, d = 0.15 + r() * 0.9, sp = 0.2 + r() * 0.8, pull = EASE.in(k);
+      const x = Math.cos(a + t * 0.25 * sp) * d * (1 - 0.7 * pull);
+      const y = Math.sin(a + t * 0.25 * sp) * d * (1 - 0.7 * pull) * 1.6;
+      dot(g, S, x, y, 0.004 + r() * 0.006, i % 17 ? PALETTE.ink : PALETTE.accent, 0.35 + 0.65 * r());
+    }
+  });
+}
+
+function ringSnaps(g, k, t, S) {
+  // handheld, 2.5 s, fast settle, on the ring (shake decays after the impact)
+  const cam = CAM.base(); CAM.dolly(cam, EASE.out(k), 0.75, 0.85); CAM.handheld(cam, t * 6, 4 * (1 - EASE.out(Math.min(1, k * 2))) + 0.3);
+  plane(g, S, cam, 0, (g) => {
+    const r = rng(11), ring = 0.32 + 0.04 * Math.sin(t * 3);
+    for (let i = 0; i < 260; i++) {
+      const a = (i / 260) * TAU + t * 0.6, j = (r() - 0.5) * 0.6 * (1 - EASE.out(Math.min(1, k * 1.5)));
+      dot(g, S, Math.cos(a) * (ring + j), Math.sin(a) * (ring + j), 0.006, i % 17 ? PALETTE.ink : PALETTE.accent, 0.9);
+    }
+  });
+  flash(g, S, Math.max(0, 1 - k * 6) * 0.6);
+}
+
+function titleHolds(g, k, t, S) {
+  // dolly zoom, 3 s, slow ease-in-out, on the title (the title holds its size, the field behind it looms)
+  const cam = CAM.base(); CAM.dollyZoom(cam, EASE.inOut(k), 0.8, 1.8, 0);
+  plane(g, S, cam, 1.2, (g) => {
+    const r = rng(5);
+    for (let i = 0; i < 160; i++) dot(g, S, (r() - 0.5) * 3, (r() - 0.5) * 4, 0.006, PALETTE.dim, 0.8);
+  });
+  plane(g, S, cam, 0, (g) => {
+    const R = lerp(0.36, 0.2, EASE.inOut(Math.min(1, k * 1.4)));
+    // a disc lit from the upper left: shade() bands the light by the look (smooth, or toon steps), inkLine() outlines it
+    for (let i = 0; i < 8; i++) {
+      const l = 0.25 + 0.6 * i / 7, rr = R * 0.9 * (1 - 0.55 * i / 7);
+      g.beginPath(); g.arc(-R * 0.25 * i / 7, -R * 0.25 * i / 7, rr, 0, TAU); g.fillStyle = shade(PALETTE.dim, l); g.fill();
+    }
+    g.beginPath(); g.arc(0, 0, R * 0.9, 0, TAU); inkLine(g, S);
+    circle(g, S, 0, 0, R, PALETTE.accent, 0.006);
+    // the title rises in letter by letter; on a variable display face its weight breathes with the beat
+    const breathing = TYPE.roles.display?.axes?.wght ? breathe(t, BPM, 560, 760) : 700;
+    text(g, S, TITLE, 0, 0, 0.085, PALETTE.ink, 1, null, { weight: breathing, reveal: Math.min(1, k * 1.6), spread: 0.55 });
+  });
+}
+
+// Music, in the same timeline: one continuous track following ARRANGEMENT; chapters follow its sections, it never
+// restarts per chapter. ctx is an OfflineAudioContext; out is the music bus. Ambience (SCENES amb), SFX and the ROOM
+// are added by renderAudio(). Leads: pluck() or lead() (low-passed, soft attack), never a raw saw or square.
+function score(ctx, out) {
+  // Written for this film only when the user chose music in code (STATE.md Music line); a recording or the user's
+  // track goes in OWN_MUSIC instead. Everything comes from the card's music line: genre, tempo, key or mode, the
+  // harmony (or none), the groove and the players (KIT/references/sound.md §8).
+}
+
+// ============================== HELPERS (picture) ==============================
+const q = new URLSearchParams(location.search);
+const W = +q.get('w') || 1080, H = +q.get('h') || 1920, SEED = +q.get('seed') || 7;
+const FRAMES = Math.round(FPS * DURATION), TAU = Math.PI * 2, SR = 48000;
+const canvas = document.getElementById('c');
+canvas.width = W; canvas.height = H;
+const g = canvas.getContext('2d', { alpha: false });
+const S = { W, H, u: Math.min(W, H) };       // u = the short side; sizes below are fractions of it
+
+function rng(salt) {                         // seeded PRNG (mulberry32); call rng(salt) inside draw for a fresh, fixed stream
+  let a = (SEED * 2654435761 + salt * 974711) >>> 0;
+  return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+function hash1(n) { const s = Math.sin(n * 127.1 + SEED * 311.7) * 43758.5453; return s - Math.floor(s); }
+function noise1(x) { const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f); return hash1(i) * (1 - u) + hash1(i + 1) * u; }
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+// Easing names used in camera lines: linear, ease-in, ease-out, ease-in-out, inertia (keeps speed at both ends).
+const EASE = {
+  linear: (k) => k, in: (k) => k * k * k, out: (k) => 1 - (1 - k) ** 3,
+  inOut: (k) => k < 0.5 ? 4 * k ** 3 : 1 - (-2 * k + 2) ** 3 / 2,
+  inertia: (k) => 0.35 * k + 0.65 * k * k * (3 - 2 * k),
+};
+// Motion for things in the frame (KIT/references/motion.md): entrances ease out, exits ease in, nothing living moves linearly.
+const MOTION = {
+  at: (t, start, dur) => clamp((t - start) / dur),                       // 0..1 progress; a follower uses at(t - lag, ...)
+  back: (k, s = 1.7) => 1 + (s + 1) * (k - 1) ** 3 + s * (k - 1) ** 2,    // ease-out with overshoot: s 1 ≈ 4%, 1.7 ≈ 10%, 2.2 ≈ 15%
+  anticipate: (k, amount = 0.15, share = 0.25) => k < share             // wind back by `amount`, then release
+    ? -amount * (1 - Math.cos(Math.PI * k / share)) / 2
+    : -amount + (1 + amount) * (1 - (1 - (k - share) / (1 - share)) ** 3),
+  spring: (tau, zeta = 0.7, f = 2) => {                                  // damped spring tau s after release; zeta 1 firm, 0.7 ≈ 5%, 0.5 ≈ 16%, 0.4 ≈ 25%
+    if (tau <= 0) return 0;
+    const w = 2 * Math.PI * f;
+    if (zeta >= 1) return 1 - Math.exp(-w * tau) * (1 + w * tau);
+    const wd = w * Math.sqrt(1 - zeta * zeta);
+    return 1 - Math.exp(-zeta * w * tau) * (Math.cos(wd * tau) + zeta * w / wd * Math.sin(wd * tau));
+  },
+  stagger: (i, n, spread, order = 'seq') => {                            // start delay of item i of n: seq, reverse, center, random (seeded)
+    if (n < 2) return 0;
+    const u = i / (n - 1);
+    const p = order === 'reverse' ? 1 - u : order === 'center' ? Math.abs(2 * u - 1) : order === 'random' ? hash1(i + 0.5) : u;
+    return p * spread;
+  },
+  arc: (k, ax, ay, bx, by, bend = 0.15) => {                             // point on a bowed path from a to b (living things move on arcs)
+    const dx = bx - ax, dy = by - ay, o = bend * Math.sin(Math.PI * k);
+    return [ax + dx * k - dy * o, ay + dy * k + dx * o];
+  },
+};
+
+// ---- Camera (2.5D). Coordinates: (0,0) is the centre, 1 = the short side; y grows downward.
+// The world is a stack of flat planes; z = depth behind the subject plane (z = 0), negative = in front of it.
+// The camera sits `dist` in front of plane 0; a plane's scale is focal / (dist + z), so moving the camera gives
+// real parallax and changing `focal` does not (a zoom). Every move takes an eased value e in 0..1.
+const CAM = {
+  base: () => ({ x: 0, y: 0, dist: 1, focal: 1, pan: 0, tilt: 0, roll: 0, focusZ: 0, aperture: 0 }),
+  pan: (c, e, a, b) => { c.pan += lerp(a, b, e); },           // turn: screen shift, no parallax (+ = right)
+  tilt: (c, e, a, b) => { c.tilt += lerp(a, b, e); },         // + = up
+  dolly: (c, e, a, b) => { c.dist = lerp(a, b, e); },         // dolly in: b < a
+  zoom: (c, e, a, b) => { c.focal = lerp(a, b, e); },         // zoom in: b > a (no parallax)
+  truck: (c, e, a, b) => { c.x = lerp(a, b, e); },            // tracking / truck: camera moves sideways (+ = right)
+  crane: (c, e, a, b) => { c.y = -lerp(a, b, e); },           // crane / pedestal: + = up
+  orbit: (c, e, a, b, targetZ = 0) => {                       // arc around a target plane, degrees
+    const ang = lerp(a, b, e) * Math.PI / 180, R = c.dist + targetZ;
+    c.x = Math.sin(ang) * R; c.pan -= c.x * c.focal / R;      // turn back toward the target: near and far planes slide
+  },
+  dollyZoom: (c, e, a, b, subjectZ = 0) => {                  // vertigo: dist changes, focal compensates
+    const f0 = c.focal; c.dist = lerp(a, b, e); c.focal = f0 * (c.dist + subjectZ) / (a + subjectZ);
+  },
+  pushTo: (c, e, x, y, a, b) => { c.dist = lerp(a, b, e); c.x = x * e; c.y = y * e; },   // push-in on a detail at (x, y)
+  fpv: (c, e, a, b, bank = 0.15) => { c.dist = lerp(a, b, e); c.roll += bank * Math.sin(Math.PI * e); },   // fly through planes
+  handheld: (c, t, amount = 1, salt = 3) => {                 // seeded, low-passed (0.3-1.1 Hz); never per-frame jitter
+    const n = (f, o) => 2 * noise1(t * f + salt + o) - 1;
+    c.pan += amount * (0.004 * n(1.1, 0) + 0.003 * n(0.3, 40));
+    c.tilt += amount * (0.004 * n(1.0, 20) + 0.003 * n(0.27, 60));
+    c.roll += amount * 0.003 * n(0.8, 80);
+  },
+  matchFrom: (c, e, dx, dy) => { c.x += dx * (1 - e); c.y += dy * (1 - e); },   // match cut: start where A's shape was, settle
+  rackFocus: (c, e, a, b, aperture = 1) => { c.focusZ = lerp(a, b, e); c.aperture = aperture; },
+  // One continuous shot: a fresh camera on the path through `keys` ([{ t, x, y, dist, focal, pan, tilt, roll }], a
+  // missing value keeps the previous key's) at time t. Hermite curves with tangents from the neighbours, so the camera
+  // flows through every key and never stops on one; it eases only out of the first key and into the last.
+  path: (keys, t) => {
+    const K = [];
+    let prev = CAM.base();
+    for (const k of keys) { prev = { ...prev, ...k }; K.push(prev); }
+    const F = Object.keys(K[K.length - 1]).filter((f) => f !== 't' && typeof K[K.length - 1][f] === 'number');
+    const c = CAM.base(), n = K.length;
+    const at = (k) => { for (const f of F) c[f] = k[f]; return c; };
+    if (n === 1 || t <= K[0].t) return at(K[0]);
+    if (t >= K[n - 1].t) return at(K[n - 1]);
+    let i = 0;
+    while (t > K[i + 1].t) i++;
+    const dt = K[i + 1].t - K[i].t, u = (t - K[i].t) / dt, u2 = u * u, u3 = u2 * u;
+    const m = (j, f) => (j <= 0 || j >= n - 1) ? 0 : (K[j + 1][f] - K[j - 1][f]) / (K[j + 1].t - K[j - 1].t);
+    for (const f of F) {
+      c[f] = (2 * u3 - 3 * u2 + 1) * K[i][f] + (u3 - 2 * u2 + u) * dt * m(i, f)
+        + (-2 * u3 + 3 * u2) * K[i + 1][f] + (u3 - u2) * dt * m(i + 1, f);
+    }
+    return c;
+  },
+  // An operator following a moving subject: the camera's x and y trail the subject's position lag seconds behind
+  // (pos(t) returns [x, y] in world units), so it reads as a camera chasing, not a lock. k blends it into the path.
+  follow: (c, pos, t, lag = 0.35, k = 1, offset = [0, 0]) => {
+    const [x, y] = pos(t - lag);
+    c.x = lerp(c.x, x + offset[0], k); c.y = lerp(c.y, y + offset[1], k);
+  },
+};
+
+// Perspective: a camera standing in a 3D world (y up) at (x, y, z), looking at (tx, ty, tz), with a vertical field of
+// view in degrees. For anything seen along or around: a road or track receding, a vehicle at three quarters, an orbit
+// around a product, a flight through a place. Hand-drawn things stay hand-drawn: view.sprite() places a 2D drawing at a
+// 3D point at its true size and depth, view.poly() and view.line() draw ground shapes and objects in perspective, and
+// view.haze() fades what is far into the air (aerial perspective: the far is paler and softer, the near darkest).
+// Keys for a moving view go through CAM.path like any camera: { t, x, y, z, tx, ty, tz, fov }.
+const VIEW = {
+  of(c, S) {
+    const e = [c.x, c.y, c.z ?? 0], f0 = [(c.tx ?? 0) - e[0], (c.ty ?? 0) - e[1], (c.tz ?? 0) - e[2]];
+    const n = (v) => { const l = Math.hypot(...v) || 1; return v.map((x) => x / l); };
+    const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+    const f = n(f0); let r = n(cross(f, [0, 1, 0])), u = cross(r, f);
+    if (c.roll) { const cs = Math.cos(c.roll), sn = Math.sin(c.roll); [r, u] = [r.map((x, i) => x * cs + u[i] * sn), u.map((x, i) => x * cs - r[i] * sn)]; }
+    const k = (S.H / 2) / Math.tan((c.fov ?? 50) * Math.PI / 360), dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+    return {
+      // [screen x, screen y, scale (px per world unit at that depth), depth], or null behind the camera
+      p(x, y, z) {
+        const d = [x - e[0], y - e[1], z - e[2]], zc = dot(d, f);
+        return zc > 0.05 ? [S.W / 2 + dot(d, r) * k / zc, S.H / 2 - dot(d, u) * k / zc, k / zc, zc] : null;
+      },
+      // a 2D drawing (fn draws in its own units, 1 = size world units) standing at (x, y, z)
+      sprite(g, x, y, z, size, fn) {
+        const q = this.p(x, y, z);
+        if (!q) return false;
+        g.save(); g.translate(q[0], q[1]); g.scale(q[2] * size, q[2] * size); fn(g, q[3]); g.restore();
+        return true;
+      },
+      poly(g, pts, fill, stroke, width = 1) {
+        const q = pts.map((p) => this.p(...p));
+        if (q.some((v) => !v)) return false;
+        g.beginPath(); q.forEach(([a, b], i) => (i ? g.lineTo(a, b) : g.moveTo(a, b))); g.closePath();
+        if (fill) { g.fillStyle = fill; g.fill(); }
+        if (stroke) { g.strokeStyle = stroke; g.lineWidth = width; g.stroke(); }
+        return true;
+      },
+      line(g, pts, color, width = 1) {
+        const q = pts.map((p) => this.p(...p)).filter(Boolean);
+        if (q.length < 2) return false;
+        g.beginPath(); q.forEach(([a, b], i) => (i ? g.lineTo(a, b) : g.moveTo(a, b)));
+        g.strokeStyle = color; g.lineWidth = width; g.stroke();
+        return true;
+      },
+      // draw things far to near: items [{ at: [x, y, z], draw(g, view, depth) }]
+      sorted(g, items) {
+        items.map((it) => ({ it, q: this.p(...it.at) })).filter((o) => o.q).sort((a, b) => b.q[3] - a.q[3])
+          .forEach(({ it, q }) => it.draw(g, this, q[3]));
+      },
+      // 0 near .. 1 lost in the air, for a depth: mix a thing's colour toward the air's colour by it
+      haze: (depth, near = 2, far = 40) => clamp((depth - near) / (far - near)),
+    };
+  },
+};
+
+// Speed ramp / slow motion / time-lapse / freeze frame: remap film time. keys = [[t, speed], ...], speed linear
+// between keys (1 = real time, 0.25 = slow motion, 8 = time-lapse, 0 = freeze). Use the result as the scene's t.
+function retime(t, keys) {
+  let acc = 0, pt = 0, ps = keys[0][1];
+  for (const [kt, ks] of keys) {
+    if (kt > pt) {
+      if (t <= kt) { const s = ps + (ks - ps) * (t - pt) / (kt - pt); return acc + (t - pt) * (ps + s) / 2; }
+      acc += (kt - pt) * (ps + ks) / 2;
+    }
+    pt = kt; ps = ks;
+  }
+  return acc + (t - pt) * ps;
+}
+
+// Draw one depth plane through the camera. Planes behind the camera are skipped; out-of-focus planes are drawn
+// into a scratch layer and blurred once (rack focus / focus pull).
+let scratch = null;
+function plane(g, S, c, z, fn) {
+  const depth = c.dist + z;
+  if (depth <= 0.05) return false;
+  const s = c.focal / depth * S.u, sf = c.focal / Math.max(0.05, c.dist + c.focusZ) * S.u;
+  const blur = c.aperture * 12 * Math.abs(s - sf) / sf * (S.u / 1080);
+  const setView = (ctx) => {
+    ctx.setTransform(1, 0, 0, 1, S.W / 2, S.H / 2); ctx.rotate(c.roll);
+    ctx.translate(-c.pan * S.u, c.tilt * S.u); ctx.scale(s, s); ctx.translate(-c.x, -c.y);
+  };
+  if (blur < 0.3) { g.save(); setView(g); fn(g); g.restore(); return true; }
+  scratch ??= Object.assign(document.createElement('canvas'), { width: S.W, height: S.H });
+  const l = scratch.getContext('2d');
+  l.setTransform(1, 0, 0, 1, 0, 0); l.clearRect(0, 0, S.W, S.H); l.save(); setView(l); fn(l); l.restore();
+  g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.filter = `blur(${blur.toFixed(2)}px)`; g.drawImage(scratch, 0, 0); g.restore();
+  return true;
+}
+
+// Transitions between two rendered scenes A (outgoing) and B (incoming); k = 0..1 across the transition window.
+// cut / smash / match need no window (a hard cut on the scene's start; smash = a hard cut between contrasting
+// scenes and sounds; match = a hard cut where B's shape starts where A's was, see CAM.matchFrom).
+const TRANSITION = {
+  dissolve(g, A, B, k) { g.drawImage(A, 0, 0); g.globalAlpha = EASE.inOut(k); g.drawImage(B, 0, 0); g.globalAlpha = 1; },
+  wipe(g, A, B, k, o) {
+    const w = EASE.inOut(k) * W, d = o.dir ?? 1;
+    g.drawImage(A, 0, 0); g.save(); g.beginPath(); d > 0 ? g.rect(0, 0, w, H) : g.rect(W - w, 0, w, H); g.clip();
+    g.drawImage(B, 0, 0); g.restore();
+  },
+  whip(g, A, B, k, o) {                                       // whip pan: A streaks out, B streaks in (dir 1 = pan right)
+    const d = o.dir ?? 1, e = EASE.inOut(k), streak = W * 0.35 * Math.sin(Math.PI * k), N = 8;
+    g.globalAlpha = 1; g.fillStyle = PALETTE.bg; g.fillRect(0, 0, W, H);   // the strip A leaves must not keep the last frame
+    for (let i = 0; i < N; i++) {                             // running average of N offset copies = motion blur
+      const off = e * W + (i / (N - 1) - 0.5) * streak;
+      g.globalAlpha = 1 / (i + 1); g.drawImage(A, -d * off, 0); g.drawImage(B, d * (W - off), 0);
+    }
+    g.globalAlpha = 1;
+  },
+  iris(g, A, B, k, o) {                                       // B opens inside a shape on a point: at = [x, y] shares
+    const [ax, ay] = o.at ?? [0.5, 0.5], cx = ax * W, cy = ay * H;
+    const far = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)), r = far * EASE.inOut(k);
+    g.drawImage(A, 0, 0); g.save(); g.beginPath();
+    if (o.shape) o.shape(g, cx, cy, r); else g.arc(cx, cy, Math.max(0.01, r), 0, TAU);
+    g.clip(); g.drawImage(B, 0, 0); g.restore();
+  },
+};
+// Shape morph: one closed shape becomes another. Both outlines are
+// resampled to n points by length and aligned so the start points match before blending; k from MOTION or EASE.
+const poly = {
+  circle: (cx, cy, r, n = 96) => Array.from({ length: n }, (_, i) => [cx + r * Math.cos(TAU * i / n - Math.PI / 2), cy + r * Math.sin(TAU * i / n - Math.PI / 2)]),
+  rect: (x, y, w, h) => [[x, y], [x + w, y], [x + w, y + h], [x, y + h]],
+  star: (cx, cy, r, points = 5, inner = 0.45) => Array.from({ length: points * 2 }, (_, i) => {
+    const a = Math.PI * i / points - Math.PI / 2, rr = i % 2 ? r * inner : r; return [cx + rr * Math.cos(a), cy + rr * Math.sin(a)]; }),
+};
+function resampleShape(pts, n) {
+  const seg = pts.map((p, i) => Math.hypot(pts[(i + 1) % pts.length][0] - p[0], pts[(i + 1) % pts.length][1] - p[1]));
+  const total = seg.reduce((a, b) => a + b, 0), out = [];
+  for (let j = 0, i = 0, acc = 0; j < n; j++) {
+    const d = total * j / n;
+    while (acc + seg[i] < d && i < pts.length - 1) acc += seg[i++];
+    const u = seg[i] ? (d - acc) / seg[i] : 0, p = pts[i], q = pts[(i + 1) % pts.length];
+    out.push([p[0] + (q[0] - p[0]) * u, p[1] + (q[1] - p[1]) * u]);
+  }
+  return out;
+}
+const morphPairs = new Map();
+function morphShape(A, B, k, n = 96) {
+  const key = `${n}|${A.join(';')}|${B.join(';')}`;           // every point: two shapes never share an alignment
+  if (morphPairs.size > 256) morphPairs.clear();              // shapes that change per frame: the cache stays small
+  if (!morphPairs.has(key)) {                                 // the alignment depends only on A, B, n: frames stay pure
+    const a = resampleShape(A, n), b = resampleShape(B, n);
+    let best = 0, bestD = Infinity;
+    for (let s = 0; s < n; s++) {
+      let d = 0; for (let i = 0; i < n; i += 4) { const q = b[(i + s) % n]; d += (a[i][0] - q[0]) ** 2 + (a[i][1] - q[1]) ** 2; }
+      if (d < bestD) { bestD = d; best = s; }
+    }
+    morphPairs.set(key, [a, b.map((_, i) => b[(i + best) % n])]);
+  }
+  const [a, b] = morphPairs.get(key);
+  return a.map((p, i) => [p[0] + (b[i][0] - p[0]) * k, p[1] + (b[i][1] - p[1]) * k]);
+}
+function fillShape(g, pts, color, alpha = 1) {
+  g.globalAlpha = alpha; g.fillStyle = color; g.beginPath(); pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y)));
+  g.closePath(); g.fill(); g.globalAlpha = 1;
+}
+// Light sweep: a soft band of light crosses a surface (a product, a card, a title) once, k 0 -> 1. clip(g) draws the
+// surface's path; angle in degrees from vertical; width as a share of the surface; strength 0-1.
+function lightSweep(g, x, y, w, h, k, o = {}) {
+  if (k <= 0 || k >= 1) return;
+  const ang = ((o.angle ?? 20) * Math.PI) / 180, band = (o.width ?? 0.25) * w, travel = w + band * 2 + h * Math.tan(ang);
+  const cx = x - band + EASE.inOut(k) * travel;
+  g.save(); g.beginPath(); if (o.clip) o.clip(g); else g.rect(x, y, w, h); g.clip();
+  g.globalCompositeOperation = 'lighter'; g.translate(cx, y + h / 2); g.rotate(ang);
+  const gr = g.createLinearGradient(-band / 2, 0, band / 2, 0), c = o.color ?? '255,248,235', a = o.strength ?? 0.55;
+  gr.addColorStop(0, `rgba(${c},0)`); gr.addColorStop(0.5, `rgba(${c},${a})`); gr.addColorStop(1, `rgba(${c},0)`);
+  g.fillStyle = gr; g.fillRect(-band / 2, -h * 2, band, h * 4); g.restore();
+}
+function dot(g, S, x, y, r, color, alpha = 1) { g.globalAlpha = alpha; g.fillStyle = color; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill(); g.globalAlpha = 1; }
+function circle(g, S, x, y, r, color, width) { g.strokeStyle = color; g.lineWidth = width; g.beginPath(); g.arc(x, y, r, 0, TAU); g.stroke(); }
+// World-space type on a plane (titles): the display role unless o.role says otherwise. tracking: share of the em, or
+// null for tracking by size. o: { role, weight (any value on a variable wght axis, e.g. breathe(t, BPM, 500, 800)),
+// axes ({ SOFT: 60 } -> nearest stop), caps (Turkish-aware up()), reveal (0..1: units rise in through masks), by
+// ('char' | 'word'), spread, order }. KIT/references/typography.md §6-7.
+function text(g, S, str, x, y, size, color, alpha = 1, tracking = null, o = {}) {
+  g.save(); g.scale(0.01, 0.01);              // fonts render badly below 1px, so draw at 100x and scale down
+  g.globalAlpha = alpha; g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  const s = o.caps ? up(str, TYPE.lang) : str;
+  setType(g, TYPE, o.role || 'display', size * 100, { short: 200, weight: o.weight ?? 700, axes: o.axes, caps: o.caps, ...(tracking == null ? {} : { track: tracking }) });
+  const yb = y * 100 + headroom(g).cap / 2;   // x, y = the centre of the cap height
+  if (o.reveal != null) typeReveal(g, s, x * 100, yb, o.reveal, { by: o.by, spread: o.spread, order: o.order, ease: EASE.out });
+  else g.fillText(s, x * 100, yb);
+  g.restore();
+}
+// On-screen name (a place, landmark, product, person): a lower third in screen space, unmoved by the camera, in the
+// film's text role. The box is measured from the font and the string's own ink, so diacritics and ascenders keep their
+// headroom (test with 'İĞÜŞÖÇ ÉÅ Ñ'). x, y = the text's left baseline; align 'left' | 'center'.
+function label(g, S, str, x, y, size, color, bg = null, alpha = 1, align = 'left', role = 'text') {
+  if (alpha <= 0) return;
+  g.save(); g.setTransform(S.u / 100, 0, 0, S.u / 100, S.W / 2, S.H / 2);
+  g.globalAlpha = alpha; setType(g, TYPE, role, size * 100, { short: 100, weight: 600 }); g.textAlign = align; g.textBaseline = 'alphabetic';
+  const m = g.measureText(str), pad = size * 100 * 0.4, X = x * 100, Y = y * 100;
+  const above = Math.max(m.actualBoundingBoxAscent, m.fontBoundingBoxAscent || 0, headroom(g).above);
+  const down = Math.max(m.actualBoundingBoxDescent, m.fontBoundingBoxDescent || 0);
+  const left = align === 'center' ? X - m.width / 2 : X;
+  if (bg) { g.fillStyle = bg; g.fillRect(left - pad, Y - above - pad, m.width + 2 * pad, above + down + 2 * pad); }
+  g.fillStyle = color; g.fillText(str, X, Y); g.restore();
+}
+// Seeded data made once and reused by every frame (a star field, a layout): const stars = lazy(() => { const r = rng(3);
+// return Array.from({ length: 200 }, () => [r(), r()]); }); then call stars() inside a draw function.
+function lazy(make) { let value; return () => (value ??= make()); }
+function flash(g, S, a) { if (a <= 0) return; g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = a; g.fillStyle = '#fff'; g.fillRect(0, 0, S.W, S.H); g.restore(); }
+function grain(g, S, frame, amount = 0.05) {     // seeded per frame, so re-renders are identical
+  if (amount <= 0) return;
+  const r = rng(1000 + frame); g.save(); g.setTransform(1, 0, 0, 1, 0, 0);
+  for (let i = 0; i < 1400; i++) { g.globalAlpha = amount * r(); g.fillStyle = r() < 0.5 ? '#000' : '#fff';
+    g.fillRect(r() * S.W, r() * S.H, 2, 2); }
+  g.restore();
+}
+// Look helpers. shade(hex, light): the colour under a light value (0 shadow, 0.5 the colour itself, 1 lit), banded into
+// LOOK.steps for toon looks. inkLine(g, S): strokes the current path with the look's outline (no-op when line is 0),
+// the same width on screen inside a plane() or outside it.
+function shade(hex, light) {
+  let l = clamp(light);
+  if (LOOK.steps > 1) l = Math.round(l * (LOOK.steps - 1)) / (LOOK.steps - 1);
+  const n = parseInt(hex.slice(1), 16), c = [n >> 16, (n >> 8) & 255, n & 255];
+  const m = l < 0.5 ? c.map((v) => v * (0.45 + 1.1 * l)) : c.map((v) => v + (255 - v) * (l - 0.5) * 0.9);
+  return `rgb(${m.map((v) => Math.round(clamp(v, 0, 255))).join(',')})`;
+}
+function inkLine(g, S, color = PALETTE.ink) {
+  if (!LOOK.line) return;
+  const m = g.getTransform(), scale = Math.hypot(m.a, m.b) || 1;
+  g.save(); g.lineWidth = LOOK.line * S.u / scale; g.strokeStyle = color; g.lineJoin = 'round'; g.lineCap = 'round'; g.stroke(); g.restore();
+}
+const lookTextures = {
+  paper: lazy(() => {                            // warm fibre, made once at half size, laid on with multiply
+    const c = Object.assign(document.createElement('canvas'), { width: Math.ceil(S.W / 2), height: Math.ceil(S.H / 2) });
+    const x = c.getContext('2d'), r = rng(77);
+    x.fillStyle = '#fbf6ec'; x.fillRect(0, 0, c.width, c.height);
+    for (let i = 0; i < c.width * c.height / 40; i++) {
+      x.globalAlpha = 0.05 + 0.1 * r(); x.strokeStyle = r() < 0.5 ? '#c9b99a' : '#fffaf0'; x.lineWidth = 0.5 + r();
+      const px = r() * c.width, py = r() * c.height, a = r() * TAU, len = 2 + 8 * r();
+      x.beginPath(); x.moveTo(px, py); x.lineTo(px + Math.cos(a) * len, py + Math.sin(a) * len); x.stroke();
+    }
+    return { c, op: 'multiply', alpha: 0.55 };
+  }),
+  scanlines: lazy(() => {
+    const step = Math.max(2, Math.round(3 * S.u / 1080));
+    const c = Object.assign(document.createElement('canvas'), { width: 1, height: step });
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, 1, step); x.fillStyle = '#000'; x.fillRect(0, 0, 1, 1);
+    return { pattern: true, c, op: 'multiply', alpha: 0.18 };
+  }),
+  halftone: lazy(() => {
+    const cell = Math.max(4, Math.round(S.u / 180));
+    const c = Object.assign(document.createElement('canvas'), { width: cell, height: cell });
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, cell, cell);
+    x.fillStyle = '#000'; x.beginPath(); x.arc(cell / 2, cell / 2, cell * 0.28, 0, TAU); x.fill();
+    return { pattern: true, c, op: 'multiply', alpha: 0.14 };
+  }),
+};
+function lookTexture(g, S) {
+  const tex = LOOK.texture && lookTextures[LOOK.texture]?.();
+  if (!tex) return;
+  g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = tex.op; g.globalAlpha = tex.alpha;
+  if (tex.pattern) { g.fillStyle = g.createPattern(tex.c, 'repeat'); g.fillRect(0, 0, S.W, S.H); }
+  else g.drawImage(tex.c, 0, 0, S.W, S.H);
+  g.restore();
+}
+function vignette(g, S, k) {
+  if (!k) return;
+  const r = Math.hypot(S.W, S.H) / 2, v = g.createRadialGradient(S.W / 2, S.H / 2, r * 0.45, S.W / 2, S.H / 2, r);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, `rgba(0,0,0,${k})`);
+  g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = v; g.fillRect(0, 0, S.W, S.H); g.restore();
+}
+// ---- TYPE RUNTIME: the same code as KIT/starter/type.mjs (keep them in step) ----
+// Typography runtime: the TYPE block -> FontFace (pinned Fontsource CDN or local fonts/), type set in Canvas 2D by role,
+// type motion (stagger, masks, baseline shifts, axis breathing) and a type check (glyphs, phone size, contrast, line
+// length). Same code in film.html (inline), starter/type.mjs and the type specimen. KIT/references/typography.md.
+//
+// TYPE = { lang: 'tr', roles: { display: ROLE, text: ROLE, mono: ROLE | null } }
+// ROLE (Fontsource, numbers from references/type-library.json):
+//   { family: 'Fraunces', pkg: 'fraunces', version: '5.3.0', weights: [400, 700] }                  static cuts
+//   { family: 'Fraunces', pkg: 'fraunces', version: '5.3.0', variable: 'full',                      variable file
+//     axes: { wght: [100, 900], opsz: [9, 144], SOFT: [0, 100], WONK: [0, 1] },
+//     stops: [{ SOFT: 0 }, { SOFT: 50 }, { SOFT: 100, WONK: 1 }],    faces for non-weight axes (Canvas has no axis API)
+//     features: '"ss01", "tnum"', cap: 0.7 }    OpenType features for every face of this role; cap = cap height / em (library metrics)
+// ROLE (local, brand or Fontshare fonts; fonts/ stays out of git):
+//   { family: 'Brand Sans', files: { 400: 'fonts/brand/BrandSans-Regular.woff2', 700: 'fonts/brand/BrandSans-Bold.woff2' } }
+//   { family: 'Basteleur', files: { var: 'fonts/basteleur/Basteleur-Moonlight.woff2' }, axes: { wght: [200, 700] } }
+// styles: default ['normal']; ['normal', 'italic'] also loads the italic files (Fontsource names them -italic).
+// subsets: default ['latin', 'latin-ext'] (İ Ğ ğ Ş ş live in latin-ext, ı in latin). A font whose library entry has
+// one subset ships one file that already carries Turkish: set subsets: ['latin'] and it loads without a unicode range.
+
+const TYPE_SUBSETS = {
+  latin: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD',
+  'latin-ext': 'U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF',
+};
+const TYPE_FALLBACK = { display: 'ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif',
+  text: 'ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif', mono: 'ui-monospace, Menlo, monospace' };
+const TYPE_TR_TEST = 'İıĞğŞşÇçÖöÜü';
+const STRETCH = [[50, 'ultra-condensed'], [62.5, 'extra-condensed'], [75, 'condensed'], [87.5, 'semi-condensed'], [100, 'normal'],
+  [112.5, 'semi-expanded'], [125, 'expanded'], [150, 'extra-expanded'], [200, 'ultra-expanded']];
+
+const stopKey = (stop) => Object.entries(stop).map(([k, v]) => `${k}${v}`).join(',');
+const typeRole = (T, name) => (T && T.roles && T.roles[name]) || null;
+
+function roleFaces(r) {                       // every FontFace one role needs: subsets × cuts × axis stops
+  const subs = r.subsets || ['latin', 'latin-ext'], ranged = subs.length > 1, out = [];
+  for (const style of r.styles || ['normal']) {
+  const base = { style };
+  if (r.features) base.featureSettings = r.features;
+  const variants = [{ name: r.family, extra: {} }, ...(r.stops || []).map((s) => ({ name: `${r.family}~${stopKey(s)}`,
+    extra: { variationSettings: Object.entries(s).map(([k, v]) => `"${k}" ${v}`).join(', ') } }))];
+  const wr = r.axes?.wght ? `${r.axes.wght[0]} ${r.axes.wght[1]}` : '100 900';
+  const sr = r.axes?.wdth ? `${r.axes.wdth[0]}% ${r.axes.wdth[1]}%` : undefined;
+  for (const v of variants) {
+    if (r.files) {
+      for (const [w, url] of Object.entries(r.files))
+        out.push([v.name, url, { ...base, ...v.extra, weight: w === 'var' ? wr : String(w), ...(w === 'var' && sr ? { stretch: sr } : {}) }]);
+      continue;
+    }
+    for (const sub of subs) {
+      const range = ranged ? { unicodeRange: TYPE_SUBSETS[sub] } : {};
+      if (r.variable) {
+        const url = `https://cdn.jsdelivr.net/npm/@fontsource-variable/${r.pkg}@${r.varVersion || r.version}/files/${r.pkg}-${sub}-${r.variable}-${style}.woff2`;
+        out.push([v.name, url, { ...base, ...range, ...v.extra, weight: wr, ...(sr ? { stretch: sr } : {}) }]);
+      } else for (const w of r.weights || [400]) {
+        const url = `https://cdn.jsdelivr.net/npm/@fontsource/${r.pkg}@${r.version}/files/${r.pkg}-${sub}-${w}-${style}.woff2`;
+        out.push([v.name, url, { ...base, ...range, ...v.extra, weight: String(w) }]);
+      }
+    }
+  }
+  }
+  return out;
+}
+
+// Loads every role; any face that fails stops the render (a silent fallback font would change the film's type).
+// ---- Characters (KIT/references/characters.md): a stylised rig, never a realistic person. CAST in the FILM section
+// names each actor's design; character() draws one at a time t with a view, an emotion and an action.
+// Bean body, rubber-hose limbs with mitt hands, a round head; every part a pure function of t (blinks and boil seeded).
+const EMOTIONS = {   // brow (+ worried, - cross), browY lift, eye openness, pupil size, mouth, head tilt, shoulders, lean, extras
+  neutral: { brow: 0, eye: 1, mouth: 'flat' },
+  happy: { brow: 0.15, eye: 0.95, mouth: 'smile' },
+  laugh: { brow: 0.2, eye: 0, mouth: 'grin', tilt: -0.1, bounce: 1 },
+  sad: { brow: 0.55, eye: 0.7, mouth: 'frown', tilt: 0.12, sh: -0.6, look: [0, 0.35] },
+  cry: { brow: 0.65, eye: 0.45, mouth: 'wobble', tilt: 0.1, sh: -0.8, tears: 1 },
+  angry: { brow: -0.6, eye: 0.85, mouth: 'frown', lean: 0.06, sh: 0.3 },
+  surprised: { brow: 0.25, browY: 0.12, eye: 1.25, pupil: 0.7, mouth: 'o' },
+  scared: { brow: 0.5, browY: 0.08, eye: 1.2, pupil: 0.6, mouth: 'wobble', sh: 0.6, sweat: 1, lean: -0.05 },
+  proud: { brow: -0.05, eye: 0.7, mouth: 'smirk', tilt: -0.12, lean: -0.05 },
+  shy: { brow: 0.3, eye: 0.8, mouth: 'small', tilt: 0.14, blush: 1, look: [0.3, 0.4], sh: 0.2 },
+  thinking: { brow: 0.2, browAsym: 0.25, eye: 0.9, mouth: 'side', tilt: 0.08, look: [0.4, -0.45] },
+  tired: { brow: 0.2, eye: 0.4, mouth: 'flat', sh: -0.5, lean: 0.06, tilt: 0.06 },
+  determined: { brow: -0.35, eye: 0.85, mouth: 'tight', lean: 0.07 },
+  love: { brow: 0.2, eye: 0.85, mouth: 'smile', blush: 1, tilt: -0.08 },
+  disgusted: { brow: -0.25, browAsym: -0.2, eye: 0.65, mouth: 'side', tilt: -0.06, lean: -0.06 },
+  confused: { brow: 0.1, browAsym: 0.35, eye: 1, mouth: 'wobble', tilt: 0.16 },
+};
+// One action's joint angles at progress p (seconds for cycles, 0..1 for jump): limb angles from hanging straight down,
+// + forward; elbows and knees bend; bob lifts the body; sq squashes (1 = none).
+function actionPose(action, p) {
+  const s = Math.sin, P = { la: 0.12, le: 0.15, ra: -0.12, re: 0.15, lh: 0, lk: 0, rh: 0, rk: 0, bob: 0, sq: 1, lean: 0, nod: 0, turn: 0, raise: [0, 0] };
+  const cyc = (len) => TAU * p / len;
+  if (action === 'idle') { const b = s(cyc(3.6)); P.bob = 0.004 * b; P.sq = 1 + 0.01 * b; }
+  else if (action === 'walk' || action === 'run') {
+    const run = action === 'run', ph = cyc(run ? 0.56 : 0.92), A = run ? 0.85 : 0.45;
+    P.lh = A * s(ph); P.rh = -A * s(ph); P.lk = (run ? 1.3 : 0.6) * Math.max(0, s(ph + 1.6)); P.rk = (run ? 1.3 : 0.6) * Math.max(0, s(ph + 1.6 + Math.PI));
+    P.la = -A * 0.9 * s(ph); P.ra = A * 0.9 * s(ph); P.le = P.re = run ? 1.4 : 0.35;
+    P.bob = (run ? 0.035 : 0.016) * Math.abs(s(ph)); P.lean = run ? 0.14 : 0.03;
+  } else if (action === 'wave') { P.raise = [0, 1]; P.ra = -2.5; P.re = 0.6 + 0.4 * s(cyc(0.42)); }
+  else if (action === 'cheer') { const b = Math.abs(s(cyc(0.5))); P.raise = [1, 1]; P.la = -2.8 + 0.15 * b; P.ra = -2.8 + 0.15 * b; P.le = P.re = 0.2; P.bob = 0.03 * b; }
+  else if (action === 'point') { P.raise = [0, 0.5]; P.ra = -1.55; P.re = 0.05; }
+  else if (action === 'nod') { P.nod = 0.16 * s(cyc(0.5)); }
+  else if (action === 'shake') { P.turn = 0.35 * s(cyc(0.45)); }
+  else if (action === 'dance') { const ph = cyc(0.5); P.lean = 0.1 * s(ph); P.la = -1.6 + 1.2 * s(ph); P.ra = -1.6 - 1.2 * s(ph); P.raise = [0.6, 0.6]; P.bob = 0.025 * Math.abs(s(ph)); P.lk = P.rk = 0.25 + 0.2 * s(ph * 2); }
+  else if (action === 'sit') { P.lh = P.rh = 1.5; P.lk = P.rk = 1.5; P.bob = -0.17; P.la = 0.4; P.ra = 0.3; P.le = P.re = 0.9; }
+  else if (action === 'jump') {
+    const k = clamp(p);
+    if (k < 0.2) { const a = k / 0.2; P.sq = 1 - 0.14 * Math.sin(Math.PI * a / 2); P.lk = P.rk = 0.9 * a; P.lh = P.rh = -0.45 * a; P.la = P.ra = 0.6 * a; }
+    else if (k < 0.82) { const a = (k - 0.2) / 0.62; P.bob = 0.34 * Math.sin(Math.PI * a); P.sq = 1 + 0.12 * Math.max(0, 1 - a * 3); P.raise = [1, 1]; P.la = P.ra = -2.6; P.lk = P.rk = 0.5 * a; }
+    else { const a = (k - 0.82) / 0.18; P.sq = 1 - 0.12 * Math.sin(Math.PI * a); P.lk = P.rk = 0.8 * Math.sin(Math.PI * a); }
+  }
+  return P;
+}
+function characterLimb(g, a, b, c, w, color, ow, out) {   // a hose from a through bend b to c, outline first
+  for (const [col, lw] of [[out, w + ow * 2], [color, w]]) {
+    g.strokeStyle = col; g.lineWidth = lw; g.lineCap = 'round'; g.lineJoin = 'round';
+    g.beginPath(); g.moveTo(a[0], a[1]); g.quadraticCurveTo(b[0], b[1], c[0], c[1]); g.stroke();
+  }
+}
+function characterDot(g, x, y, r, fill, ow, out, ry = r) {
+  g.fillStyle = out; g.beginPath(); g.ellipse(x, y, r + ow, ry + ow, 0, 0, TAU); g.fill();
+  g.fillStyle = fill; g.beginPath(); g.ellipse(x, y, r, ry, 0, 0, TAU); g.fill();
+}
+// who: a CAST name; (x, y): the ground point between the feet; h: height in px; pose: { view: front | three | side |
+// back, face: 1 right | -1 left, emotion, action, p (action progress: seconds, or 0..1 for jump), talk 0..1, look [x, y],
+// boil (line boil on twos) }; t: film time (blinks, boil, tears).
+function character(g, S, who, x, y, h, pose = {}, t = 0) {
+  const C = { skin: '#e9b48c', hair: '#2a1d16', hairStyle: 'short', top: '#3d6fb6', bottom: '#2b2f3a', shoes: '#1b1b1f', outline: '#14110f', build: 1, ...(CAST[who] || {}) };
+  const view = pose.view || 'front', f = pose.face || 1, E = { ...EMOTIONS.neutral, ...(EMOTIONS[pose.emotion] || {}) };
+  const A = actionPose(pose.action || 'idle', pose.p ?? t), ow = Math.max(1, h * 0.008), side = view === 'side', front = view === 'front' || view === 'back';
+  const salt = [...String(who)].reduce((s, ch) => s + ch.charCodeAt(0), 0);
+  const boil = pose.boil ? (i) => (hash1(Math.floor(t * 12) * 13 + i + salt) - 0.5) * h * 0.006 : () => 0;
+  const bounce = E.bounce ? Math.abs(Math.sin(TAU * t / 0.35)) * 0.012 : 0;
+  const lift = (A.bob + bounce) * h, sq = A.sq, lean = (A.lean + (E.lean || 0)) * f;
+  g.save(); g.translate(x, y);
+  g.fillStyle = 'rgba(0,0,0,0.18)'; g.beginPath(); g.ellipse(0, 0, h * 0.16 * (1 - Math.min(0.5, A.bob * 1.5)), h * 0.025, 0, 0, TAU); g.fill();
+  g.translate(0, -lift); g.scale(1 / Math.sqrt(sq), sq);
+  const hipY = -0.36 * h, shY = -0.63 * h + (E.sh || 0) * 0.02 * h, bw = 0.135 * h * C.build, lw = 0.06 * h;
+  const hipX = lean * 0.36 * h * 0.3, shX = lean * 0.63 * h * 0.5;
+  const leg = (s, hip, knee) => {         // s: -1 far/left, +1 near/right; returns the three points
+    const o = side ? 0 : s * 0.055 * h, top = [hipX + o + boil(s), hipY];
+    if (side) {
+      const k = [top[0] + f * Math.sin(hip) * 0.18 * h, top[1] + Math.cos(hip) * 0.18 * h];
+      const fa = hip - knee;
+      return [top, k, [k[0] + f * Math.sin(fa) * 0.18 * h, k[1] + Math.cos(fa) * 0.18 * h + boil(s + 3)]];
+    }
+    const short = 1 - 0.35 * Math.abs(Math.sin(hip)) - 0.25 * Math.sin(knee / 2);
+    const k = [top[0] + s * 0.01 * h, top[1] + 0.18 * h * short];
+    return [top, k, [k[0] + s * 0.01 * h, Math.min(0, k[1] + 0.18 * h * short) + boil(s + 3)]];
+  };
+  const arm = (s, ang, el, raise) => {
+    const sh = [shX + (side ? f * 0.02 * h : s * bw * 0.85) + boil(s + 7), shY + 0.03 * h];
+    let a1, a2;
+    if (side) { a1 = ang; a2 = ang - el; return [sh, [sh[0] + f * Math.sin(a1) * 0.15 * h, sh[1] + Math.cos(a1) * 0.15 * h], [sh[0] + f * (Math.sin(a1) * 0.15 + Math.sin(a2) * 0.15) * h, sh[1] + (Math.cos(a1) * 0.15 + Math.cos(a2) * 0.15) * h]]; }
+    const up = raise ? clamp((1 - Math.cos(ang)) / 2) * Math.PI * 0.95 : 0.16 + 0.12 * Math.sin(ang);
+    a1 = s * up; a2 = a1 + s * el * 0.55;
+    const e = [sh[0] + Math.sin(a1) * 0.15 * h, sh[1] + Math.cos(a1) * 0.15 * h];
+    return [sh, e, [e[0] + Math.sin(a2) * 0.15 * h, e[1] + Math.cos(a2) * 0.15 * h]];
+  };
+  const legs = [leg(-1, A.lh, A.lk), leg(1, A.rh, A.rk)];
+  const arms = [arm(-1, A.la, A.le, A.raise[0]), arm(1, A.ra, A.re, A.raise[1])];
+  const drawLeg = (L, far) => { characterLimb(g, L[0], L[1], L[2], lw, far && side ? shade(C.bottom, -0.25) : C.bottom, ow, C.outline);
+    characterDot(g, L[2][0] + (side ? f * 0.02 * h : 0), L[2][1], 0.045 * h, C.shoes, ow, C.outline, 0.025 * h); };
+  const drawArm = (R, far) => { characterLimb(g, R[0], R[1], R[2], lw * 0.82, far && side ? shade(C.top, -0.25) : C.top, ow, C.outline);
+    characterDot(g, R[2][0], R[2][1], 0.032 * h, C.skin, ow, C.outline); };
+  if (side) { drawArm(arms[0], true); drawLeg(legs[0], true); }
+  else { drawLeg(legs[0]); drawLeg(legs[1]); }
+  // torso: a bean from the shoulders to the hips
+  g.fillStyle = C.outline; g.beginPath(); g.ellipse((shX + hipX) / 2, (shY + hipY) / 2 + 0.01 * h, bw + ow, (hipY - shY) / 2 + 0.05 * h + ow, lean * 0.5, 0, TAU); g.fill();
+  g.fillStyle = C.top; g.beginPath(); g.ellipse((shX + hipX) / 2, (shY + hipY) / 2 + 0.01 * h, bw, (hipY - shY) / 2 + 0.05 * h, lean * 0.5, 0, TAU); g.fill();
+  if (side) { drawLeg(legs[1]); drawArm(arms[1]); } else { drawArm(arms[0]); drawArm(arms[1]); }
+  // head
+  const r = 0.135 * h, hx = shX * 1.3 + (pose.view === 'three' ? f * 0.01 * h : 0) + boil(11), hy = shY - r * 0.95;
+  g.save(); g.translate(hx, hy); g.rotate(((E.tilt || 0) + A.nod) * (side ? f : 1) + (view === 'three' ? 0.03 * f : 0));
+  const turn = view === 'three' ? 0.42 * f : side ? 0.95 * f : 0, tt = turn + A.turn;
+  characterHair(g, C, r, view, f, t, true, ow);
+  if (view !== 'back' && !side) { characterDot(g, -r * 0.98, r * 0.1, r * 0.18, C.skin, ow, C.outline); characterDot(g, r * 0.98, r * 0.1, r * 0.18, C.skin, ow, C.outline); }
+  characterDot(g, 0, 0, r, C.skin, ow, C.outline, r * 1.04);
+  if (side) { g.fillStyle = C.skin; g.strokeStyle = C.outline; g.lineWidth = ow; g.beginPath(); g.ellipse(f * r * 0.98, r * 0.12, r * 0.13, r * 0.11, 0, 0, TAU); g.fill(); g.stroke(); }
+  if (view === 'back' && C.hairStyle !== 'bald') { g.fillStyle = C.hair; g.strokeStyle = C.outline; g.lineWidth = ow;   // the back of the head
+    g.beginPath(); g.ellipse(0, C.hairStyle === 'short' || C.hairStyle === 'cap' ? -r * 0.15 : r * 0.05, r * 1.04, C.hairStyle === 'short' || C.hairStyle === 'cap' ? r * 0.9 : r * 1.08, 0, 0, TAU); g.fill(); g.stroke(); }
+  characterHair(g, C, r, view, f, t, false, ow);
+  if (view !== 'back') characterFace(g, C, E, r, tt, side, f, pose, t, salt, ow);   // over the fringe: brows carry half the feeling
+  g.restore(); g.restore();
+}
+function characterFace(g, C, E, r, turn, side, f, pose, t, salt, ow) {
+  const cx = Math.sin(turn) * r * 0.55, look = pose.look || E.look || [0, 0];
+  const blink = (hash1(Math.floor(t / 3.1) + salt) * 3.1 + 0.4), bl = Math.abs(t % 3.1 - blink) < 0.06 ? 0.08 : 1;
+  const open = (E.eye ?? 1) * bl, eyes = side ? [f * 0.45] : [-0.36, 0.36];
+  for (const e of eyes) {
+    const far = !side && Math.sign(e) === -Math.sign(turn) && Math.abs(turn) > 0.1;
+    const ex = cx + e * r * (side ? 1 : 1 - Math.abs(turn) * 0.35), ey = -r * 0.08, sz = far ? 0.82 : 1;
+    if (open < 0.12) {           // closed: a happy arc when laughing, a line when blinking
+      g.strokeStyle = C.outline; g.lineWidth = ow * 1.3; g.lineCap = 'round'; g.beginPath();
+      if (E.mouth === 'grin') g.arc(ex, ey + r * 0.04, r * 0.11 * sz, Math.PI * 1.15, Math.PI * 1.85); else { g.moveTo(ex - r * 0.1 * sz, ey); g.lineTo(ex + r * 0.1 * sz, ey); }
+      g.stroke();
+    } else {
+      characterDot(g, ex, ey, r * 0.12 * sz, '#fbf8f2', ow * 0.7, C.outline, r * 0.16 * sz * Math.min(1.25, open));
+      g.fillStyle = C.outline; g.beginPath(); g.arc(ex + look[0] * r * 0.06 + (side ? f * r * 0.03 : 0), ey + look[1] * r * 0.06, r * 0.07 * sz * (E.pupil || 1), 0, TAU); g.fill();
+    }
+    const by = ey - r * (0.24 + (E.browY || 0)) - (1 - Math.min(1, open)) * r * 0.04, asym = (E.browAsym || 0) * Math.sign(e || 1);
+    const tilt = ((E.brow || 0) + asym) * Math.sign(e || f) * 0.5;
+    g.strokeStyle = C.outline; g.lineWidth = r * 0.065; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(ex - r * 0.13, by - tilt * r * 0.18); g.lineTo(ex + r * 0.13, by + tilt * r * 0.18); g.stroke();
+  }
+  const mx = cx + (side ? f * r * 0.35 : 0), my = r * 0.45, mw = r * (side ? 0.22 : 0.34), talk = clamp(pose.talk || 0);
+  g.strokeStyle = C.outline; g.fillStyle = '#5a1d1d'; g.lineWidth = ow * 1.2; g.lineCap = 'round';
+  const m = E.mouth;
+  g.beginPath();
+  if (talk > 0.05 || m === 'o' || m === 'grin') {
+    const oh = m === 'o' ? r * 0.12 : m === 'grin' ? r * 0.16 : r * 0.04 + talk * r * 0.16, ow2 = m === 'o' ? r * 0.09 : mw * 0.8;
+    if (m === 'grin') { g.moveTo(mx - mw, my - r * 0.04); g.quadraticCurveTo(mx, my + oh * 1.6, mx + mw, my - r * 0.04); g.closePath(); }
+    else g.ellipse(mx, my, ow2, oh, 0, 0, TAU);
+    g.fill(); g.stroke();
+  } else {
+    const curve = { smile: 0.14, small: 0.08, frown: -0.12, flat: 0, tight: 0, side: 0.02, smirk: 0.06, wobble: 0 }[m] ?? 0;
+    const w = m === 'small' || m === 'tight' ? mw * 0.6 : mw;
+    if (m === 'wobble') { g.moveTo(mx - w, my); for (let i = 1; i <= 6; i++) g.lineTo(mx - w + (2 * w * i) / 6, my + (i % 2 ? -1 : 1) * r * 0.03); }
+    else if (m === 'smirk' || m === 'side') { g.moveTo(mx - w * 0.8, my + r * 0.02); g.quadraticCurveTo(mx, my + curve * r, mx + w, my - r * 0.06); }
+    else { g.moveTo(mx - w, my - curve * r * 0.3); g.quadraticCurveTo(mx, my + curve * r, mx + w, my - curve * r * 0.3); }
+    g.stroke();
+  }
+  if (E.blush) { g.fillStyle = 'rgba(232,96,96,0.35)'; for (const s of side ? [f * 0.35] : [-0.48, 0.48]) { g.beginPath(); g.ellipse(cx + s * r, r * 0.22, r * 0.12, r * 0.06, 0, 0, TAU); g.fill(); } }
+  if (E.tears) { g.fillStyle = '#9fd3f5'; for (const e of eyes) { const k = (t * 1.3 + (e > 0 ? 0.5 : 0)) % 1; g.beginPath(); g.ellipse(cx + e * r, r * (0.08 + k * 0.6), r * 0.04, r * 0.06, 0, 0, TAU); g.fill(); } }
+  if (E.sweat) { g.fillStyle = '#9fd3f5'; g.beginPath(); g.ellipse(cx + r * 0.75, -r * 0.35 + (t * 0.4 % 0.3) * r, r * 0.05, r * 0.08, 0, 0, TAU); g.fill(); }
+}
+function characterHair(g, C, r, view, f, t, back, ow) {
+  const st = C.hairStyle, sway = Math.sin(TAU * t / 2.4) * r * 0.03;
+  g.fillStyle = C.hair; g.strokeStyle = C.outline; g.lineWidth = ow;
+  const blob = (cx, cy, rx, ry) => { g.beginPath(); g.ellipse(cx, cy, rx, ry, 0, 0, TAU); g.fill(); g.stroke(); };
+  if (back) {                     // behind the head: long hair, a bun, the back of a bob
+    if (st === 'long') for (const s of view === 'side' ? [-f] : [-1, 1]) blob(s * r * 0.88 + sway, r * 0.55, r * 0.34, r * 0.95);   // locks to the shoulders
+    if (st === 'bob' || view === 'back') blob(0, r * 0.15, r * 1.06, r * 0.95);
+    if (st === 'bun') blob(view === 'side' ? -f * r * 0.85 : 0, -r * 0.95, r * 0.35, r * 0.32);
+    return;
+  }
+  if (st === 'bald' || view === 'back') return;
+  if (st === 'curly') { for (let i = 0; i < 7; i++) { const a = Math.PI * (1.05 + i * 0.15); blob(Math.cos(a) * r * 0.85, Math.sin(a) * r * 0.85, r * 0.26, r * 0.26); } return; }
+  if (st === 'cap') {             // a cap with a brim toward the face
+    g.beginPath(); g.ellipse(0, -r * 0.35, r * 1.02, r * 0.72, 0, Math.PI, TAU); g.closePath(); g.fill(); g.stroke();
+    g.beginPath(); g.ellipse(view === 'side' ? f * r * 0.85 : 0, -r * 0.38, view === 'side' ? r * 0.55 : r * 0.9, r * 0.12, 0, 0, TAU); g.fill(); g.stroke(); return;
+  }
+  const ox = view === 'side' ? -f * r * 0.1 : view === 'three' ? -f * r * 0.06 : 0;   // a dome with a fringe on the brow
+  g.beginPath(); g.ellipse(ox, -r * 0.12, r * 1.07, r * 0.98, 0, Math.PI * 1.04, TAU * 0.98);
+  const fx = view === 'side' ? f : view === 'three' ? f * 0.6 : 0;
+  g.quadraticCurveTo(r * (0.55 + 0.3 * fx), -r * 0.42, r * (0.1 + 0.25 * fx), -r * 0.6);
+  g.quadraticCurveTo(-r * (0.3 - 0.2 * fx), -r * 0.46, -r * 1.04 + ox, -r * 0.3); g.closePath(); g.fill(); g.stroke();
+  if (st === 'bob') { for (const s of view === 'side' ? [-f] : [-1, 1]) { g.beginPath(); g.ellipse(s * r * 0.9 + sway, r * 0.1, r * 0.22, r * 0.62, 0, 0, TAU); g.fill(); g.stroke(); } }
+}
+// The model sheet: every view, emotion and action of one actor on one frame (film.html?modelsheet=<name>), checked
+// before any scene uses the character (KIT/references/characters.md).
+function modelSheet(g, S, who) {
+  g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = PALETTE.bg || '#f3efe6'; g.fillRect(0, 0, W, H);
+  const ink = PALETTE.ink || '#222', lab = (s, x, y) => { g.fillStyle = ink; g.font = `${Math.round(S.u * 0.022)}px sans-serif`; g.textAlign = 'center'; g.fillText(s, x, y); };
+  const views = ['front', 'three', 'side', 'back'], emo = Object.keys(EMOTIONS), acts = [['walk', 0.0], ['walk', 0.23], ['run', 0.14], ['jump', 0.1], ['jump', 0.5], ['jump', 0.9], ['wave', 0.2], ['cheer', 0.1], ['point', 0], ['dance', 0.12], ['sit', 0]];
+  const rowH = H / 3.4, big = rowH * 0.85;
+  views.forEach((v, i) => { const x = W * (i + 0.5) / 4; character(g, S, who, x, rowH * 0.95, big, { view: v }, 0.5); lab(v, x, rowH * 1.08); });
+  const cols = 8, eh = rowH * 0.55;
+  emo.forEach((e, i) => {         // busts: the face large enough to judge
+    const cw = W / cols, ch = rowH * 0.62, x = cw * ((i % cols) + 0.5), top = rowH * 1.18 + Math.floor(i / cols) * (ch + S.u * 0.035);
+    g.save(); g.beginPath(); g.rect(x - cw / 2 + 4, top, cw - 8, ch); g.clip();
+    character(g, S, who, x, top + ch * 2.15, ch * 2.4, { view: 'three', face: i % 2 ? -1 : 1, emotion: e }, 1.0); g.restore();
+    lab(e, x, top + ch + S.u * 0.025); });
+  acts.forEach(([a, p], i) => { const x = W * (i + 0.5) / acts.length, y = H * 0.955;
+    character(g, S, who, x, y, rowH * 0.5, { view: a === 'walk' || a === 'run' || a === 'sit' ? 'side' : 'front', action: a, p }, p); lab(a, x, H * 0.985); });
+}
+const MODEL_SHEET = q.get('modelsheet');
+
+// ---- Formulas: TeX from FORMULAS typeset once by MathJax into a crisp image, then drawn, tinted and revealed.
+const FORMULA = {};
+async function loadFormulas() {
+  const ids = Object.keys(FORMULAS);
+  if (!ids.length) return;
+  await new Promise((ok, fail) => {
+    window.MathJax = { svg: { fontCache: 'none' }, startup: { typeset: false } };
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js';
+    s.onload = ok; s.onerror = () => fail(new Error('MathJax did not load (network?)'));
+    document.head.appendChild(s);
+  });
+  await window.MathJax.startup.promise;
+  for (const id of ids) {
+    const svg = window.MathJax.tex2svg(FORMULAS[id], { display: true }).querySelector('svg');
+    const ex = (v) => parseFloat(v) || 1, aspect = ex(svg.getAttribute('width')) / ex(svg.getAttribute('height'));
+    const h = 480, w = Math.ceil(h * aspect);                     // rasterised large, drawn smaller: crisp at any size
+    svg.setAttribute('width', w + 'px'); svg.setAttribute('height', h + 'px'); svg.setAttribute('color', '#ffffff');
+    const img = new Image();
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(svg));
+    await img.decode();
+    FORMULA[id] = { img, aspect, tint: {} };
+  }
+}
+// Draws FORMULAS[id] centred on (x, y) (o.align: 'left' starts at x), size = its height in px, revealed left to right
+// by k (0..1). Returns its box, so labels and arrows can point at it.
+function formula(g, S, id, x, y, size, color, k = 1, o = {}) {
+  const f = FORMULA[id];
+  if (!f) throw new Error(`formula "${id}" is not in FORMULAS`);
+  const h = size, w = h * f.aspect, x0 = o.align === 'left' ? x : x - w / 2, y0 = y - h / 2;
+  let t = f.tint[color];
+  if (!t) {
+    t = document.createElement('canvas'); t.width = f.img.width; t.height = f.img.height;
+    const c = t.getContext('2d'); c.drawImage(f.img, 0, 0);
+    c.globalCompositeOperation = 'source-in'; c.fillStyle = color; c.fillRect(0, 0, t.width, t.height);
+    f.tint[color] = t;
+  }
+  g.save(); g.beginPath(); g.rect(x0 - 2, y0 - h * 0.2, (w + 4) * clamp(k), h * 1.4); g.clip();
+  g.globalAlpha *= o.alpha ?? 1; g.drawImage(t, x0, y0, w, h); g.restore();
+  return { x: x0, y: y0, w, h };
+}
+
+async function loadType(T) {
+  if (!T || !T.roles) return [];
+  const jobs = [];
+  for (const [name, r] of Object.entries(T.roles)) {
+    if (!r) continue;
+    for (const [family, url, desc] of roleFaces(r)) {
+      const f = new FontFace(family, `url(${url})`, desc);
+      jobs.push(f.load().then(() => { document.fonts.add(f); return `${name}: ${family}`; },
+        (e) => { throw new Error(`TYPE ${name} "${r.family}" failed to load ${url} (${e?.message || e}); fix the TYPE block or the fonts/ file`); }));
+    }
+  }
+  return [...new Set(await Promise.all(jobs))];
+}
+
+// font() returns a ctx.font string for a role at px, weight (any number inside the wght axis) and axes (nearest stop;
+// wdth without stops snaps to the CSS stretch keywords). Set it, then draw.
+function typeFont(T, role, px, o = {}) {
+  const r = typeRole(T, role), fb = TYPE_FALLBACK[role] || TYPE_FALLBACK.text;
+  const weight = Math.round(o.weight ?? (role === 'display' ? 700 : role === 'mono' ? 400 : 500));
+  if (!r) return `${weight} ${px}px ${fb}`;
+  let face = r.family;
+  const ax = o.axes || {};
+  if (r.stops?.length && Object.keys(ax).length) {
+    let best = null, bd = Infinity;
+    for (const s of r.stops) {
+      let d = 0;
+      for (const [k, v] of Object.entries(ax)) {
+        const span = r.axes?.[k] ? r.axes[k][1] - r.axes[k][0] || 1 : 1;
+        d += ((s[k] ?? r.axes?.[k]?.[2] ?? v) - v) ** 2 / span ** 2;
+      }
+      if (d < bd) { bd = d; best = s; }
+    }
+    face = `${r.family}~${stopKey(best)}`;
+  }
+  const stretch = ax.wdth != null && !r.stops?.some((s) => 'wdth' in s)
+    ? STRETCH.reduce((a, b) => Math.abs(b[0] - ax.wdth) < Math.abs(a[0] - ax.wdth) ? b : a)[1] : 'normal';
+  return `${o.italic ? 'italic ' : ''}${weight} ${stretch} ${px}px "${face}", ${fb}`;
+}
+
+// Tracking by size as a share of the em (typography.md §3): small text opens up, big display tightens, caps open more.
+function autoTrack(px, short, caps = false) {
+  const s = px / short;
+  if (caps) return s < 0.03 ? 0.08 : s < 0.06 ? 0.05 : s < 0.12 ? 0.03 : 0.015;
+  return s < 0.025 ? 0.015 : s < 0.06 ? 0.005 : s < 0.12 ? -0.01 : -0.02;
+}
+
+function setType(g, T, role, px, o = {}) {
+  g.font = typeFont(T, role, px, o);
+  g.letterSpacing = `${((o.track ?? autoTrack(px, o.short || 1080, o.caps)) * px).toFixed(2)}px`;
+  g.fontKerning = 'normal';
+  return g;
+}
+
+// Casing in the text's language: Turkish i/İ and ı/I need the 'tr' locale (istanbul -> İSTANBUL, IŞIK -> ışık).
+const up = (s, lang = 'tr') => String(s).toLocaleUpperCase(lang);
+const low = (s, lang = 'tr') => String(s).toLocaleLowerCase(lang);
+
+// Lines that fit maxW, with no one-word last line (widow) when it can be avoided; balance: lines of similar length.
+function wrap(g, str, maxW, balance = false) {
+  const words = String(str).split(/[ \t\n]+/).filter(Boolean);   // a no-break space (\u00A0) keeps '24.990\u00A0₺' together
+  const fit = (w) => {
+    const lines = []; let cur = '';
+    for (const word of words) {
+      const t = cur ? `${cur} ${word}` : word;
+      if (g.measureText(t).width <= w || !cur) cur = t; else { lines.push(cur); cur = word; }
+    }
+    if (cur) lines.push(cur);
+    return lines;
+  };
+  let lines = fit(maxW);
+  if (balance && lines.length > 1) {
+    let lo = maxW * 0.5, hi = maxW;
+    for (let i = 0; i < 12; i++) { const mid = (lo + hi) / 2; if (fit(mid).length > lines.length) lo = mid; else hi = mid; }
+    lines = fit(hi);
+  }
+  const n = lines.length;
+  if (n > 1 && !lines[n - 1].includes(' ')) {
+    const prev = lines[n - 2].split(' ');
+    if (prev.length > 2) { lines[n - 1] = `${prev.pop()} ${lines[n - 1]}`; lines[n - 2] = prev.join(' '); }
+  }
+  return lines;
+}
+
+// Ink above the cap height that Turkish and other Latin diacritics need (İ dot, Ğ breve, Ş/Ç cedilla below):
+// masks and boxes use these, never the cap height alone.
+function headroom(g) {
+  const cap = g.measureText('H').actualBoundingBoxAscent, acc = g.measureText('İĞÜÖÂ').actualBoundingBoxAscent;
+  const desc = Math.max(g.measureText('ŞÇgy').actualBoundingBoxDescent, 0);
+  return { cap, above: acc, below: desc };
+}
+
+// Text in by unit (char | word): each unit rises from a baseline shift inside a mask, staggered across `spread` of
+// the progress p (0..1). ease: an easing from EASE/MOTION; order: seq | reverse | center. Draw after setType().
+function typeReveal(g, str, x, y, p, o = {}) {
+  const by = o.by || 'char', spread = o.spread ?? 0.5, rise = o.rise ?? 0.9, ease = o.ease || ((k) => 1 - (1 - k) ** 3);
+  const units = by === 'word' ? String(str).split(/(\s+)/) : [...String(str)];
+  const hr = headroom(g), top = y - hr.above * 1.08, h = hr.above * 1.08 + hr.below * 1.3 + 2;
+  const total = g.measureText(str).width;
+  let cx = (g.textAlign === 'center' ? x - total / 2 : g.textAlign === 'right' ? x - total : x);
+  const align = g.textAlign; g.textAlign = 'left';
+  const n = units.length;
+  units.forEach((u, i) => {
+    const w = g.measureText(u).width;
+    const pos = n < 2 ? 0 : (o.order === 'reverse' ? 1 - i / (n - 1) : o.order === 'center' ? Math.abs(2 * i / (n - 1) - 1) : i / (n - 1));
+    const k = ease(Math.min(1, Math.max(0, (p - pos * spread) / (1 - spread || 1))));
+    if (k > 0 && u.trim()) {
+      g.save();
+      if (o.mask !== false) { g.beginPath(); g.rect(cx - 2, top, w + 4 + parseFloat(g.letterSpacing || 0), h); g.clip(); }
+      g.globalAlpha *= o.fade ? k : 1;
+      g.fillText(u, cx, y + (1 - k) * rise * h);
+      g.restore();
+    }
+    cx += w;
+  });
+  g.textAlign = align;
+}
+
+// A weight that breathes with the beat: wght between lo and hi, peak on each beat (t in s, bpm), cosine-shaped.
+const breathe = (t, bpm, lo, hi, phase = 0) => lo + (hi - lo) * (0.5 + 0.5 * Math.cos(2 * Math.PI * (t * bpm / 60 - phase)));
+
+// ---- talking-head captions (optional style; typography.md §8) ----
+// CAPTIONS from tools/captions.py: { words: [{ w, t0, t1, group, accent, punch }], groups: [{ t0, t1, words: [i…] }] }.
+// Words appear on their own spoken time (word-locked): a short pop from 0.86 scale, the spoken word in o.hi, accent
+// words in o.accentRole (a contrasting face) and o.accent colour. Screen space, centred at o.y (share of H, default
+// above the 9:16 UI zone). o: { role, accentRole, size (share of the short side), caps, ink, hi, accent, box, y, lang }.
+function kineticCaptions(g, T, cap, t, W, H, o = {}) {
+  if (!cap) return;
+  const gi = cap.groups.findIndex((gr, i) => t >= gr.t0 - 0.04 && t < (cap.groups[i + 1]?.t0 ?? gr.t1 + 0.35));
+  if (gi < 0) return;
+  const short = Math.min(W, H), px = short * (o.size ?? 0.062), lang = o.lang ?? T?.lang ?? 'tr';
+  const words = cap.groups[gi].words.map((i) => cap.words[i]);
+  const faceOf = (w) => typeFont(T, w.accent && o.accentRole ? o.accentRole : (o.role || 'display'), px,
+    { weight: w.accent ? (o.accentWeight ?? 800) : (o.weight ?? 700), italic: w.accent && o.accentItalic });
+  g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.textBaseline = 'alphabetic'; g.textAlign = 'left';
+  g.letterSpacing = `${(autoTrack(px, short, o.caps) * px).toFixed(2)}px`;
+  const items = words.map((w) => { const s = o.caps ? up(w.w, lang) : w.w; g.font = faceOf(w); return { w, s, wd: g.measureText(s).width }; });
+  const space = px * 0.28, maxW = W * 0.84, lines = [[]];
+  let lw = 0;
+  for (const it of items) {
+    if (lw && lw + space + it.wd > maxW) { lines.push([]); lw = 0; }
+    lines[lines.length - 1].push(it); lw += (lw ? space : 0) + it.wd;
+  }
+  const lead = px * 1.12, y0 = H * (o.y ?? (H > W ? 0.66 : 0.8)) - (lines.length - 1) * lead / 2;
+  lines.forEach((ln, li) => {
+    const total = ln.reduce((a, it, i) => a + it.wd + (i ? space : 0), 0);
+    let x = (W - total) / 2;
+    for (const it of ln) {
+      const k = Math.min(1, Math.max(0, (t - it.w.t0) / 0.12));
+      if (k > 0) {
+        const s = 0.86 + 0.14 * (1 + 2.2 * (k - 1) ** 3 + 1.2 * (k - 1) ** 2), y = y0 + li * lead;
+        g.save(); g.translate(x + it.wd / 2, y - px * 0.35); g.scale(s, s); g.translate(-(x + it.wd / 2), -(y - px * 0.35));
+        g.font = faceOf(it.w); g.globalAlpha = Math.min(1, k * 1.6);
+        if (o.box) { const hr = headroom(g); g.fillStyle = o.box; g.fillRect(x - px * 0.12, y - hr.above - px * 0.1, it.wd + px * 0.24, hr.above + hr.below + px * 0.22); }
+        const speaking = t >= it.w.t0 && t < it.w.t1;
+        g.fillStyle = it.w.accent ? (o.accent || '#ffd23f') : speaking ? (o.hi || o.ink || '#ffffff') : (o.ink || '#ffffff');
+        if (o.shadow !== false) { g.shadowColor = 'rgba(0,0,0,0.45)'; g.shadowBlur = px * 0.12; g.shadowOffsetY = px * 0.04; }
+        g.fillText(it.s, x, y);
+        g.restore();
+      }
+      x += it.wd + space;
+    }
+  });
+  g.restore();
+}
+
+// Punch-in on emphasis: a frame scale for the words marked punch (1 -> 1 + amount in 0.08 s, back over 0.5 s).
+function captionPunch(cap, t, amount = 0.07) {
+  let s = 1;
+  for (const w of cap?.words || []) {
+    if (!w.punch || t < w.t0 || t > w.t0 + 0.6) continue;
+    const u = t - w.t0, k = u < 0.08 ? 1 - (1 - u / 0.08) ** 3 : Math.max(0, 1 - ((u - 0.08) / 0.5)) ** 2;
+    s = Math.max(s, 1 + amount * k);
+  }
+  return s;
+}
+
+// ---- type check ----
+const lum = (hex) => {
+  const v = hex.replace('#', ''), c = [0, 2, 4].map((i) => parseInt(v.length === 3 ? v[i / 2].repeat(2) : v.slice(i, i + 2), 16) / 255);
+  const l = c.map((x) => (x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * l[0] + 0.7152 * l[1] + 0.0722 * l[2];
+};
+const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+
+// Characters the role's family does not draw (the browser would substitute another font): measured against two
+// different fallbacks; a width that changes with the fallback means the glyph came from the fallback.
+function missingGlyphs(g, family, str) {
+  const miss = new Set();
+  g.save(); g.letterSpacing = '0px';
+  for (const ch of new Set([...String(str)].filter((c) => c.trim()))) {
+    const w = (fb) => { g.font = `400 60px "${family}", ${fb}`; return g.measureText(ch).width; };
+    const a = w('monospace'), b = w('serif'), c = w('cursive');
+    if (Math.abs(a - b) > 0.01 || Math.abs(b - c) > 0.01) miss.add(ch);
+  }
+  g.restore();
+  return [...miss].join('');
+}
+
+// Minimum cap height in delivered pixels for text that must be read on a phone (typography.md §2).
+function minCap(W, H, kind = 'text') {
+  const short = Math.min(W, H), ar = W / H;
+  const base = ar < 1.25 ? 0.026 : 0.037;     // 9:16 and 1:1 fill the phone's width; 16:9 inline is ~0.56x as tall
+  return Math.round(short * base * (kind === 'legal' ? 0.8 : kind === 'display' ? 1.6 : 1));
+}
+
+// TYPE.check = { strings: { display: ['TITLE'], text: ['a line'] }, sizes: { text: 0.034, legal: 0.024 } (share of the
+// short side), maxChars: 32, palette: { bg, ink } }. Errors stop the render; warnings go to the capture log.
+function typeCheck(g, T, W, H, palette) {
+  const errors = [], warnings = [], c = (T && T.check) || {};
+  for (const [name, r] of Object.entries((T && T.roles) || {})) {
+    if (!r) continue;
+    const strs = [...(c.strings?.[name] || []), ...(T.lang === 'tr' || T.lang == null ? [TYPE_TR_TEST] : [])].join('');
+    const m = missingGlyphs(g, r.family, strs);
+    if (m) errors.push(`${name} "${r.family}" has no glyphs for: ${m}`);
+  }
+  for (const [kind, share] of Object.entries(c.sizes || {})) {
+    const role = kind === 'legal' ? 'text' : kind, px = share * Math.min(W, H);
+    g.save(); g.font = typeFont(T, role, px); const cap = g.measureText('H').actualBoundingBoxAscent; g.restore();
+    const need = minCap(W, H, kind);
+    if (Math.round(cap) < need) warnings.push(`${kind}: cap height ${cap.toFixed(0)} px < ${need} px for phone viewing at ${W}x${H}`);
+  }
+  const pal = c.palette || palette;
+  if (pal?.bg && pal?.ink) {
+    const k = contrast(pal.ink, pal.bg);
+    if (k < 3) errors.push(`ink on bg contrast ${k.toFixed(2)}:1 (needs 4.5:1 for text, 3:1 for large display)`);
+    else if (k < 4.5) warnings.push(`ink on bg contrast ${k.toFixed(2)}:1: large display only, not body or legal lines`);
+  }
+  const maxC = c.maxChars || (W < H ? 32 : 42);
+  for (const s of Object.values(c.strings || {}).flat())
+    if (s.length > maxC && !s.includes('\n')) warnings.push(`"${s.slice(0, 24)}…" is ${s.length} characters on one line (max ${maxC}); wrap() it`);
+  return { errors, warnings };
+}
+
+// ---- end of TYPE RUNTIME ----
+
+const buffer = () => { const c = Object.assign(document.createElement('canvas'), { width: W, height: H }); return { c, g: c.getContext('2d', { alpha: false }) }; };
+const bufA = buffer(), bufB = buffer(), bufSub = buffer(), bufOut = buffer();
+function drawScene(ctx, sc, t) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ctx.fillStyle = PALETTE.bg; ctx.fillRect(0, 0, W, H);
+  ctx.save(); sc.draw(ctx, clamp((t - sc.from) / (sc.to - sc.from)), t, S); ctx.restore();
+}
+const sceneAt = (t) => SCENES.find((s) => t >= s.from && t < s.to) ?? SCENES[SCENES.length - 1];
+function drawFilm(ctx, t) {                    // the picture at film time t: one scene, or a transition window
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  const j = SCENES.findIndex((s, n) => n > 0 && s.in?.dur && TRANSITION[s.in.type] && Math.abs(t - s.from) < s.in.dur / 2);
+  if (j > 0) {                                 // inside a transition window centred on the scene's start
+    const b = SCENES[j];
+    drawScene(bufA.g, SCENES[j - 1], t); drawScene(bufB.g, b, t);
+    TRANSITION[b.in.type](ctx, bufA.c, bufB.c, (t - b.from + b.in.dur / 2) / b.in.dur, b.in);
+  } else drawScene(ctx, sceneAt(t), t);
+}
+// Finishing, from FINISH (URL overrides for drafts and tests). The tone curve is a per-channel table (a 1D LUT made
+// here, no outside LUT file) applied through an SVG filter.
+const SAMPLES = Math.max(1, Math.round(+(q.get('shutter') ?? FINISH.shutter?.samples ?? 1)) || 1);
+const WEAVE = +(q.get('weave') ?? FINISH.weave) || 0, TONE = q.get('tone') === '0' ? null : FINISH.tone;
+// Blur only where something moves: the first and last sub-frames are compared at 64 px wide; under STILL (mean
+// difference, 0-255) the frame keeps one sharp draw, so a mostly still blur scene costs little render time.
+const STILL = 0.6, probe = document.createElement('canvas');
+probe.width = 64; probe.height = Math.max(1, Math.round(64 * H / W));
+const probeG = probe.getContext('2d', { willReadFrequently: true });
+const probeOf = (c) => { probeG.drawImage(c, 0, 0, probe.width, probe.height); return probeG.getImageData(0, 0, probe.width, probe.height).data; };
+const probeDiff = (a, b) => { let d = 0; for (let k = 0; k < a.length; k += 4) d += Math.abs(a[k] - b[k]) + Math.abs(a[k + 1] - b[k + 1]) + Math.abs(a[k + 2] - b[k + 2]); return d / (0.75 * a.length); };
+function printCurve({ lift, knee, contrast, split }, channel, n = 33) {
+  return Array.from({ length: n }, (_, i) => {
+    const x = i / (n - 1), y = x <= knee ? x : knee + (1 - knee) * (1 - Math.exp(-(x - knee) / (1 - knee)));
+    const s = lerp(y, y * y * (3 - 2 * y), contrast), v = lift + (1 - lift) * s;
+    return clamp(v + split * (v - 0.5) * (channel === 'R' ? 1 : channel === 'B' ? -1 : 0)).toFixed(4);
+  }).join(' ');
+}
+if (TONE) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute"><filter id="tone"
+    color-interpolation-filters="sRGB"><feComponentTransfer>${['R', 'G', 'B'].map((c) =>
+    `<feFunc${c} type="table" tableValues="${printCurve(TONE, c)}"/>`).join('')}</feComponentTransfer></filter></svg>`;
+  document.body.insertAdjacentHTML('beforeend', svg);
+}
+window.renderFrame = (frame) => {
+  if (MODEL_SHEET) { modelSheet(g, S, MODEL_SHEET); return; }
+  const t = frame / FPS;                       // time comes only from the frame index
+  const tp = LOOK.hold < FPS ? Math.floor(t * LOOK.hold + 1e-6) / LOOK.hold : t;   // picture time: on twos, each drawing holds
+  const punch = CAPTIONS ? captionPunch(CAPTIONS, t, CAPTION_STYLE.punch) : 1;
+  const sc = sceneAt(t), n = sc.blur ? SAMPLES : 1, finish = WEAVE || TONE || punch !== 1 || LOOK.grade || LOOK.bloom;
+  const target = finish ? bufOut.g : g;
+  if (n === 1) drawFilm(target, tp);
+  else {                                       // 180° shutter: n sub-frames across the open half, centred on the frame
+    const open = (FINISH.shutter?.deg ?? 180) / 360 / FPS;
+    const at = (s) => clamp(tp + ((s + 0.5) / n - 0.5) * open, sc.from, sc.to - 1e-6);   // a hard cut never blends
+    target.setTransform(1, 0, 0, 1, 0, 0); target.filter = 'none';
+    drawFilm(bufSub.g, at(0)); target.globalAlpha = 1; target.drawImage(bufSub.c, 0, 0);
+    const first = probeOf(bufSub.c);
+    drawFilm(bufSub.g, at(n - 1));
+    if (probeDiff(first, probeOf(bufSub.c)) < STILL) drawFilm(target, tp);   // nothing moves: one sharp draw
+    else {
+      target.globalAlpha = 1 / 2; target.drawImage(bufSub.c, 0, 0);
+      for (let s = 1; s < n - 1; s++) {
+        drawFilm(bufSub.g, at(s)); target.globalAlpha = 1 / (s + 2); target.drawImage(bufSub.c, 0, 0);
+      }
+    }
+    target.globalAlpha = 1;
+  }
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.filter = 'none';
+  if (finish) {                                // gate weave: a seeded sub-pixel drift of the whole frame, new every frame
+    const px = WEAVE * S.u / 1080, o = (1 + 3 * px / S.u) * punch;
+    const dx = px * (0.6 * (2 * noise1(frame * 0.37 + 11) - 1) + 0.4 * (2 * hash1(frame + 0.17) - 1));
+    const dy = 0.7 * px * (0.6 * (2 * noise1(frame * 0.31 + 47) - 1) + 0.4 * (2 * hash1(frame + 0.61) - 1));
+    const rect = [dx - W * (o - 1) / 2, dy - H * (o - 1) / 2, W * o, H * o];
+    g.filter = [LOOK.grade, TONE && 'url(#tone)'].filter(Boolean).join(' ') || 'none';
+    g.drawImage(bufOut.c, ...rect);
+    if (LOOK.bloom) {                          // highlights only: darks pushed down before the blur, then added on top
+      g.save(); g.globalCompositeOperation = 'lighter'; g.globalAlpha = LOOK.bloom;
+      g.filter = `brightness(0.55) contrast(2.4) blur(${(S.u * 0.014).toFixed(1)}px)`; g.drawImage(bufOut.c, ...rect); g.restore();
+    }
+    g.filter = 'none';
+  }
+  lookTexture(g, S); vignette(g, S, LOOK.vignette);
+  if (CAPTIONS) kineticCaptions(g, TYPE, CAPTIONS, t, W, H, CAPTION_STYLE);   // after the grade: exact type colours
+  grain(g, S, LOOK.grainHold > 1 ? Math.floor(frame / LOOK.grainHold) : frame, LOOK.grain);
+};
+window.captureFrame = (frame, type = 'image/png', quality = 0.95) => { window.renderFrame(frame); return canvas.toDataURL(type, quality); };
+
+// ============================== HELPERS (sound) ==============================
+// Small voices built from oscillators and seeded noise. Every voice takes (ctx, out, start time, ..., gain).
+function noiseBuffer(ctx, secs, salt) {
+  const b = ctx.createBuffer(1, Math.ceil(secs * ctx.sampleRate), ctx.sampleRate), d = b.getChannelData(0), r = rng(salt);
+  for (let i = 0; i < d.length; i++) d[i] = r() * 2 - 1;
+  return b;
+}
+function env(param, t, a, peak, d, end = 0.0001) { param.setValueAtTime(0.0001, t); param.exponentialRampToValueAtTime(peak, t + a); param.exponentialRampToValueAtTime(end, t + a + d); }
+function pad(ctx, out, t, dur, freqs, gain) {
+  const v = ctx.createGain(), lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 900;
+  v.gain.setValueAtTime(gain, t); v.gain.setValueAtTime(gain, t + dur - 0.6); v.gain.linearRampToValueAtTime(0.0001, t + dur);
+  v.connect(lp).connect(out);
+  for (const f of freqs) for (const det of [-7, 7]) {
+    const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f; o.detune.value = det;
+    const p = ctx.createStereoPanner(); p.pan.value = det / 10; o.connect(p).connect(v); o.start(t); o.stop(t + dur);
+  }
+}
+function kick(ctx, out, t, gain) {
+  const o = ctx.createOscillator(), v = ctx.createGain();
+  o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.18);
+  env(v.gain, t, 0.003, gain, 0.35); o.connect(v).connect(out); o.start(t); o.stop(t + 0.4);
+}
+function tick(ctx, out, t, gain) {
+  const s = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), v = ctx.createGain();
+  s.buffer = noiseBuffer(ctx, 0.06, Math.round(t * 1000)); hp.type = 'highpass'; hp.frequency.value = 6000;
+  env(v.gain, t, 0.001, gain, 0.05); s.connect(hp).connect(v).connect(out); s.start(t);
+}
+function hit(ctx, out, t, gain) {
+  kick(ctx, out, t, gain);
+  const s = ctx.createBufferSource(), lp = ctx.createBiquadFilter(), v = ctx.createGain();
+  s.buffer = noiseBuffer(ctx, 1.6, 99); lp.type = 'lowpass'; lp.frequency.setValueAtTime(3200, t); lp.frequency.exponentialRampToValueAtTime(200, t + 1.2);
+  env(v.gain, t, 0.002, gain * 0.5, 1.4); s.connect(lp).connect(v).connect(out); s.start(t);
+}
+function riser(ctx, out, t, dur, gain) {
+  const s = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), v = ctx.createGain();
+  s.buffer = noiseBuffer(ctx, dur, 42); bp.type = 'bandpass'; bp.Q.value = 4;
+  bp.frequency.setValueAtTime(300, t); bp.frequency.exponentialRampToValueAtTime(3500, t + dur);
+  v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(gain, t + dur - 0.02); v.gain.linearRampToValueAtTime(0, t + dur);
+  s.connect(bp).connect(v).connect(out); s.start(t); s.stop(t + dur);
+}
+// A whoosh into a cut is a low swell, not air: a body under 150 Hz with its 150-300 Hz harmonics (what a phone speaker
+// can play) and a faint air layer 26 dB down; it swells, accelerating, to its peak at t + dur / 2 (put that on the cut)
+// and is gone 0.25 s later. Use it for the few cuts that carry meaning; the music carries the rest.
+function whoosh(ctx, out, t, dur, gain) {
+  const peak = t + dur * 0.5, end = peak + 0.3, n = noiseBuffer(ctx, end - t, 77);
+  const layer = (type, f, q, g, pan) => {
+    const s = ctx.createBufferSource(), fl = ctx.createBiquadFilter(), v = ctx.createGain(), p = ctx.createStereoPanner();
+    s.buffer = n; fl.type = type; fl.frequency.value = f; fl.Q.value = q; p.pan.value = pan;
+    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(g * 0.1, t + dur * 0.3);
+    v.gain.exponentialRampToValueAtTime(g, peak); v.gain.exponentialRampToValueAtTime(g * 0.1, peak + 0.1);
+    v.gain.exponentialRampToValueAtTime(g * 0.01, peak + 0.25); v.gain.linearRampToValueAtTime(0, end);
+    s.connect(fl).connect(v).connect(p).connect(out); s.start(t); s.stop(end);
+  };
+  layer('lowpass', 140, 0.7, gain * 1.6, 0);            // body
+  layer('bandpass', 220, 1.2, gain * 0.6, 0);           // its harmonics: the part a phone speaker plays
+  layer('bandpass', 2800, 0.8, gain * 0.05, 0.3);       // air, 26 dB down
+}
+// Air: a real rush of air past the camera (wind, a fast object close by), never the sound of a cut.
+function air(ctx, out, t, dur, gain) {
+  const s = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), v = ctx.createGain(), p = ctx.createStereoPanner();
+  s.buffer = noiseBuffer(ctx, dur, 77); bp.type = 'bandpass'; bp.Q.value = 2;
+  bp.frequency.setValueAtTime(400, t); bp.frequency.exponentialRampToValueAtTime(3000, t + dur * 0.5); bp.frequency.exponentialRampToValueAtTime(500, t + dur);
+  p.pan.setValueAtTime(-0.8, t); p.pan.linearRampToValueAtTime(0.8, t + dur);
+  v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(gain, t + dur * 0.5); v.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  s.connect(bp).connect(v).connect(p).connect(out); s.start(t); s.stop(t + dur);
+}
+function pluck(ctx, out, t, f, gain) {
+  const o = ctx.createOscillator(), v = ctx.createGain(); o.type = 'triangle'; o.frequency.value = f;
+  env(v.gain, t, 0.004, gain, 1.2); o.connect(v).connect(out); o.start(t); o.stop(t + 1.3);
+}
+// A sustained lead that stays easy on the ear: triangle + a little saw, low-passed (<= 2.4 kHz), soft 40 ms attack.
+function lead(ctx, out, t, f, dur, gain, cutoff = 2400) {
+  const v = ctx.createGain(), lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = cutoff; lp.Q.value = 0.5;
+  v.gain.setValueAtTime(0.0001, t); v.gain.linearRampToValueAtTime(gain, t + 0.04);
+  v.gain.setValueAtTime(gain, t + Math.max(0.05, dur - 0.15)); v.gain.linearRampToValueAtTime(0.0001, t + dur);
+  lp.connect(v).connect(out);
+  for (const [type, mix] of [['triangle', 1], ['sawtooth', 0.25]]) {
+    const o = ctx.createOscillator(), m = ctx.createGain(); o.type = type; o.frequency.value = f; m.gain.value = mix;
+    o.connect(m).connect(lp); o.start(t); o.stop(t + dur);
+  }
+}
+// Foley: short filtered noise bursts for contacts. kind: step (soft, low), tap (hard, small), cloth (long, airy).
+function foley(ctx, out, t, kind, gain) {
+  const k = { step: [180, 900, 0.09], tap: [900, 3200, 0.03], cloth: [600, 3000, 0.25] }[kind] || [400, 2500, 0.08];
+  const s = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter(), v = ctx.createGain();
+  s.buffer = noiseBuffer(ctx, k[2] + 0.05, Math.round(t * 997)); hp.type = 'highpass'; hp.frequency.value = k[0];
+  lp.type = 'lowpass'; lp.frequency.value = k[1]; env(v.gain, t, 0.002, gain, k[2]);
+  s.connect(hp).connect(lp).connect(v).connect(out); s.start(t);
+}
+// Ambience bed for one scene: looped seeded noise shaped per kind, slow seeded drift, 0.3 s crossfades at the edges.
+function ambience(ctx, out, from, to, kind, gain, salt) {
+  const k = { room: [60, 450, 0.05], air: [150, 1100, 0.15], water: [300, 2200, 0.6], city: [80, 1300, 0.08] }[kind] || [80, 900, 0.1];
+  const a = Math.max(0, from - 0.3), b = Math.min(DURATION, to + 0.3), r = rng(salt);
+  const s = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter(), v = ctx.createGain();
+  s.buffer = noiseBuffer(ctx, 6, salt); s.loop = true; hp.type = 'highpass'; hp.frequency.value = k[0];
+  lp.type = 'lowpass'; lp.frequency.value = k[1];
+  v.gain.setValueAtTime(0.0001, a); v.gain.linearRampToValueAtTime(gain, a + 0.3);
+  for (let t = a + 0.3; t < b - 0.3; t += 0.5) v.gain.linearRampToValueAtTime(gain * (1 - k[2] * r()), Math.min(b - 0.3, t + 0.5));
+  v.gain.linearRampToValueAtTime(0.0001, b);
+  s.connect(hp).connect(lp).connect(v).connect(out); s.start(a, r() * 5); s.stop(b);
+}
+// The shared room: a convolution reverb from a generated, seeded impulse (decaying stereo noise, darkened by tone).
+let ROOM_IN = null;
+function makeRoom(ctx, out) {
+  const n = Math.round(ROOM.secs * ctx.sampleRate), ir = ctx.createBuffer(2, n, ctx.sampleRate);
+  for (let c = 0; c < 2; c++) {
+    const d = ir.getChannelData(c), r = rng(500 + c);
+    for (let i = 0; i < n; i++) d[i] = (r() * 2 - 1) * (1 - i / n) ** ROOM.decay;
+  }
+  const conv = ctx.createConvolver(), lp = ctx.createBiquadFilter(), ret = ctx.createGain();
+  conv.buffer = ir; lp.type = 'lowpass'; lp.frequency.value = ROOM.tone; ret.gain.value = 0.5;
+  conv.connect(lp).connect(ret).connect(out);
+  return conv;
+}
+// Send a voice to the room: wet(ctx, out, 0.3) returns a node that feeds the dry bus and the shared reverb.
+function wet(ctx, out, amount) {
+  const n = ctx.createGain(); n.connect(out);
+  if (ROOM_IN && amount > 0) { const s = ctx.createGain(); s.gain.value = amount; n.connect(s).connect(ROOM_IN); }
+  return n;
+}
+function sfx(ctx, out, e) {
+  const o = wet(ctx, out, e.wet ?? 0.2);
+  if (e.voice === 'hit') hit(ctx, o, e.at, e.gain);
+  else if (e.voice === 'whoosh') whoosh(ctx, o, e.at, e.dur ?? 0.7, e.gain);
+  else if (e.voice === 'air') air(ctx, o, e.at, e.dur ?? 0.7, e.gain);
+  else if (e.voice === 'riser') riser(ctx, o, e.at, e.dur ?? 1.6, e.gain);
+  else if (e.voice === 'tick') tick(ctx, o, e.at, e.gain);
+  else if (e.voice === 'foley') foley(ctx, o, e.at, e.kind ?? 'tap', e.gain);
+  else throw new Error(`SFX: unknown voice ${e.voice}`);
+}
+// Arrangement helpers. spans(part): [from, to) runs where the part plays, neighbouring sections merged (one voice per
+// run). beats(part, every): grid times inside those runs, half-open, so a boundary beat is played once.
+function spans(part) {
+  const out = [];
+  for (const s of ARRANGEMENT) if (s.parts.includes(part)) {
+    const last = out[out.length - 1];
+    if (last && Math.abs(last[1] - s.from) < 1e-6) last[1] = s.to; else out.push([s.from, s.to]);
+  }
+  return out;
+}
+function beats(part, every = 60 / BPM) {
+  const out = [];
+  for (const [a, b] of spans(part)) for (let n = Math.ceil(a / every - 1e-6); n * every < b - 1e-6; n++) out.push(n * every);
+  return out;
+}
+// ---- Music toolkit (KIT/references/sound.md §8): notes and chords by name, grooves as step patterns, drums and bass
+// synthesised here, so a film's music can be any genre, never only a bed and a pluck.
+const NOTE_PC = { C: 0, 'C#': 1, Db: 1, D: 2, 'D#': 3, Eb: 3, E: 4, F: 5, 'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11 };
+function midiOfName(name) {
+  const m = /^([A-G][#b]?)(-?\d)$/.exec(name);
+  if (!m) throw new Error(`note "${name}": use a name like A3, C#4, Eb2`);
+  return 12 * (+m[2] + 1) + NOTE_PC[m[1]];
+}
+const hz = (n) => 440 * 2 ** (((typeof n === 'number' ? n : midiOfName(n)) - 69) / 12);   // hz('A4') = 440, hz(69) = 440
+const CHORD = { '': [0, 4, 7], m: [0, 3, 7], 7: [0, 4, 7, 10], maj7: [0, 4, 7, 11], m7: [0, 3, 7, 10], m9: [0, 3, 7, 10, 14],
+  9: [0, 4, 7, 10, 14], add9: [0, 4, 7, 14], sus2: [0, 2, 7], sus4: [0, 5, 7], dim: [0, 3, 6], aug: [0, 4, 8], 6: [0, 4, 7, 9],
+  m6: [0, 3, 7, 9], 5: [0, 7] };
+// chord('Am7', 3): its notes in Hz from octave 3; 'C/E' puts E under it; { open: true } spreads every other note up
+function chord(name, octave = 3, o = {}) {
+  const m = /^([A-G][#b]?)([a-z0-9]*)(?:\/([A-G][#b]?))?$/.exec(name);
+  if (!m || !(m[2] in CHORD)) throw new Error(`chord "${name}": a root and one of ${Object.keys(CHORD).map((q) => q || 'major').join(', ')}`);
+  const root = midiOfName(m[1] + octave);
+  let notes = CHORD[m[2]].map((i) => root + i);
+  if (o.open) notes = notes.map((n, i) => n + (i % 2 ? 12 : 0));
+  if (m[3]) notes = [midiOfName(m[3] + (octave - 1)), ...notes];
+  return notes.map(hz);
+}
+// The chord of a progression sounding at time t: one chord per `barsEach` bars from bar `from`, looping.
+function chordAt(prog, t, barsEach = 1, from = 0) {
+  const n = Math.floor((t - bar(from)) / ((bar(1) - bar(0)) * barsEach) + 1e-6);
+  return prog[((n % prog.length) + prog.length) % prog.length];
+}
+// A groove as steps over one bar, inside the part's spans: 'x' a hit, 'X' an accent, anything else a rest; 16 steps
+// usually (8 or 12 work); swing 0..0.3 delays the off steps. Returns [{ t, accent, step }].
+function grid(part, pattern, o = {}) {
+  const steps = pattern.length, len = bar(1) - bar(0), out = [];
+  for (const [a, b] of spans(part)) {
+    for (let n = Math.floor((a - BEAT0) / len); bar(n) < b - 1e-6; n++) for (let i = 0; i < steps; i++) {
+      const c = pattern[i];
+      if (c !== 'x' && c !== 'X') continue;
+      const t = bar(n) + (i + (i % 2 ? o.swing || 0 : 0)) * len / steps;
+      if (t >= a - 1e-6 && t < b - 1e-6) out.push({ t, accent: c === 'X', step: i });
+    }
+  }
+  return out;
+}
+function snare(ctx, out, t, gain, o = {}) {           // noise crack + a short tonal body; o.tone in Hz, o.dry = tighter
+  const n = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), v = ctx.createGain();
+  n.buffer = noiseBuffer(ctx, 0.3, Math.round(t * 977) + 3); bp.type = 'bandpass'; bp.frequency.value = 1900; bp.Q.value = 0.7;
+  env(v.gain, t, 0.001, gain, o.dry ? 0.09 : 0.18); n.connect(bp).connect(v).connect(out); n.start(t);
+  const b = ctx.createOscillator(), bv = ctx.createGain(); b.frequency.setValueAtTime(o.tone || 190, t); b.frequency.exponentialRampToValueAtTime((o.tone || 190) * 0.7, t + 0.08);
+  env(bv.gain, t, 0.001, gain * 0.6, 0.08); b.connect(bv).connect(out); b.start(t); b.stop(t + 0.12);
+}
+function hat(ctx, out, t, gain, o = {}) {              // closed by default; o.open = a longer, softer ring
+  const n = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), v = ctx.createGain();
+  n.buffer = noiseBuffer(ctx, 0.5, Math.round(t * 991) + 5); hp.type = 'highpass'; hp.frequency.value = 7200;
+  env(v.gain, t, 0.001, gain, o.open ? 0.32 : 0.045); n.connect(hp).connect(v).connect(out); n.start(t);
+}
+function clap(ctx, out, t, gain) {                    // three quick bursts and a short tail
+  for (const [d, g2, len] of [[0, 1, 0.012], [0.011, 0.8, 0.012], [0.022, 1, 0.15]]) {
+    const n = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), v = ctx.createGain();
+    n.buffer = noiseBuffer(ctx, 0.25, Math.round(t * 983) + d * 1000); bp.type = 'bandpass'; bp.frequency.value = 1250; bp.Q.value = 1.2;
+    env(v.gain, t + d, 0.001, gain * g2, len); n.connect(bp).connect(v).connect(out); n.start(t + d);
+  }
+}
+function sub808(ctx, out, t, dur, f, gain, o = {}) {   // an 808 style sub: a sine that may glide in, softly driven
+  const os = ctx.createOscillator(), v = ctx.createGain(), sh = ctx.createWaveShaper(), curve = new Float32Array(256);
+  for (let i = 0; i < 256; i++) { const x = i / 127.5 - 1; curve[i] = Math.tanh(x * (o.drive || 1.6)); }
+  sh.curve = curve; os.frequency.setValueAtTime(f * (o.glideFrom || 1), t); os.frequency.exponentialRampToValueAtTime(f, t + (o.glide || 0.04));
+  v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(gain, t + 0.006); v.gain.setValueAtTime(gain, t + dur * 0.6);
+  v.gain.exponentialRampToValueAtTime(0.0001, t + dur); os.connect(sh).connect(v).connect(out); os.start(t); os.stop(t + dur + 0.02);
+}
+function bass(ctx, out, t, dur, f, gain, o = {}) {     // a played bass: saw + square an octave down, a closing filter
+  const v = ctx.createGain(), lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = o.q || 2;
+  const c = o.cutoff || 900; lp.frequency.setValueAtTime(c * 2.2, t); lp.frequency.exponentialRampToValueAtTime(c * 0.5, t + Math.min(dur, 0.35));
+  env(v.gain, t, 0.006, gain, dur); lp.connect(v).connect(out);
+  for (const [type, mul, g2] of [['sawtooth', 1, 0.7], ['square', 0.5, 0.4]]) {
+    const os = ctx.createOscillator(), gv = ctx.createGain(); os.type = type; os.frequency.value = f * mul; gv.gain.value = g2;
+    os.connect(gv).connect(lp); os.start(t); os.stop(t + dur + 0.05);
+  }
+}
+function stab(ctx, out, t, dur, freqs, gain, o = {}) {  // a chord stab: detuned saws through a low-pass, short
+  const v = ctx.createGain(), lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = o.cutoff || 2200;
+  env(v.gain, t, 0.004, gain, dur); lp.connect(v).connect(out);
+  for (const f of freqs) for (const det of [-9, 9]) {
+    const os = ctx.createOscillator(); os.type = 'sawtooth'; os.frequency.value = f; os.detune.value = det;
+    const gv = ctx.createGain(); gv.gain.value = 1 / (freqs.length * 2); os.connect(gv).connect(lp); os.start(t); os.stop(t + dur + 0.05);
+  }
+}
+function checkArrangement() {
+  const errs = [];
+  ARRANGEMENT.forEach((s, i) => {
+    const prev = ARRANGEMENT[i - 1];
+    if (s.to <= s.from) errs.push(`${s.section}: ends before it starts`);
+    if (!prev && Math.abs(s.from) > 1e-6) errs.push(`${s.section}: the first section starts at 0`);
+    if (prev && Math.abs(prev.to - s.from) > 1e-6) errs.push(`${prev.section} → ${s.section}: ${prev.to > s.from ? 'overlap' : 'gap'}`);
+    if (new Set(s.parts).size !== s.parts.length) errs.push(`${s.section}: a part is listed twice`);
+  });
+  const end = ARRANGEMENT[ARRANGEMENT.length - 1];
+  if (!end || Math.abs(end.to - DURATION) > 1e-6) errs.push('the last section ends at DURATION');
+  if (errs.length) throw new Error('ARRANGEMENT: ' + errs.join('; '));
+}
+
+// Music ducks under the narration: depth 0.3 ≈ -10 dB, down 0.15 s before a line, back over 0.4 s after it.
+function duck(param, level, lines, depth = 0.3) {
+  param.setValueAtTime(level, 0);
+  const spans = [];
+  for (const { at, dur } of [...lines].sort((a, b) => a.at - b.at)) {
+    const last = spans[spans.length - 1];
+    if (last && at - 0.15 < last[1] + 0.4) last[1] = Math.max(last[1], at + dur); else spans.push([at, at + dur]);
+  }
+  for (const [s, e] of spans) {
+    param.setValueAtTime(level, Math.max(0, s - 0.15)); param.linearRampToValueAtTime(level * depth, s);
+    param.setValueAtTime(level * depth, e); param.linearRampToValueAtTime(level, e + 0.4);
+  }
+}
+
+// Recorded instruments. sample(ctx, out, name, t, { note, vel, gain, pan }): pitched takes play the nearest recorded
+// note re-pitched to `note` ('E5' or a MIDI number; over 4 semitones from a take stops the render unless o.stretch);
+// unpitched ones pick a take by vel (0 quiet .. 1 loud). Levels are set per instrument, so the takes keep their dynamics.
+const BANK = {};
+async function loadSamples(ctx) {
+  if (!INSTRUMENTS.length) return;
+  const idx = await new Promise((ok, fail) => {
+    const x = new XMLHttpRequest(); x.open('GET', 'audio/samples/index.json');
+    x.onload = () => { try { ok(JSON.parse(x.responseText)); } catch (e) { fail(new Error('samples: audio/samples/index.json')); } };
+    x.onerror = () => fail(new Error(`samples: run tools/samples.py get ${INSTRUMENTS.join(' ')}`)); x.send();
+  });
+  for (const name of INSTRUMENTS) {
+    const takes = idx[name];
+    if (!takes) throw new Error(`samples: ${name} is not in audio/samples (tools/samples.py get ${name})`);
+    const peak = Math.max(...takes.map((t) => t.peak || 0.1));
+    BANK[name] = (await Promise.all(takes.map(async (t) => ({ buf: await loadAudio(ctx, 'audio/samples/' + t.file),
+      midi: t.midi, level: t.rms || 0.01, norm: 0.5 / peak })))).sort((a, b) => a.level - b.level);
+  }
+}
+const noteName = (m) => ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'][m % 12] + (Math.floor(m / 12) - 1);
+const midiOf = (n) => {
+  if (typeof n === 'number') return n;
+  const m = /^([A-G])(#|b)?(-?\d)$/.exec(n);
+  if (!m) throw new Error(`sample: note "${n}" (write E5, F#3 or a MIDI number)`);
+  return 'C D EF G A B'.indexOf(m[1]) + (m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0) + 12 * (+m[3] + 1);
+};
+function sample(ctx, out, name, t, o = {}) {
+  const takes = BANK[name];
+  if (!takes) throw new Error(`sample: "${name}" is not in INSTRUMENTS`);
+  const pitched = takes.filter((k) => Number.isInteger(k.midi)), vel = clamp(o.vel ?? 0.7);
+  let take = takes[Math.min(takes.length - 1, Math.floor(vel * takes.length))], rate = 1;
+  if (o.note != null && pitched.length) {
+    const want = midiOf(o.note);
+    take = pitched.reduce((a, b) => (Math.abs(b.midi - want) < Math.abs(a.midi - want) ? b : a));
+    if (Math.abs(want - take.midi) > 4 && !o.stretch) {
+      const lo = Math.min(...pitched.map((k) => k.midi)), hi = Math.max(...pitched.map((k) => k.midi));
+      throw new Error(`sample: ${name} ${o.note} is ${Math.abs(want - take.midi)} semitones from its nearest take (it plays `
+        + `${noteName(lo)}–${noteName(hi)}): an octave ${want > hi ? 'lower' : 'higher'}, another player, or { stretch: true } for an effect`);
+    }
+    rate = Math.pow(2, (want - take.midi) / 12);
+  }
+  const src = ctx.createBufferSource(), g = ctx.createGain();
+  src.buffer = take.buf; src.playbackRate.value = rate;
+  g.gain.value = (o.gain ?? 0.8) * take.norm * (o.note != null ? 0.4 + 0.6 * vel : 1);
+  let node = src.connect(g);
+  if (o.pan) { const p = ctx.createStereoPanner(); p.pan.value = o.pan; node = node.connect(p); }
+  node.connect(out); src.start(Math.max(0, t));
+  return src;
+}
+
+function loadAudio(ctx, url) {              // a local WAV next to film.html (XHR works on file:// in the capture)
+  return new Promise((ok, fail) => {
+    const x = new XMLHttpRequest(); x.open('GET', url.replace(/#/g, '%23')); x.responseType = 'arraybuffer';
+    x.onload = () => (x.status === 0 || x.status === 200) ? ctx.decodeAudioData(x.response).then(ok, fail)
+      : fail(new Error(`own music: ${url} (${x.status})`));
+    x.onerror = () => fail(new Error(`own music: could not load ${url}`)); x.send();
+  });
+}
+window.renderAudio = async () => {
+  const ctx = new OfflineAudioContext(2, Math.round(DURATION * SR), SR);
+  const bus = ctx.createGain(); duck(bus.gain, 0.8, VO);
+  const lim = ctx.createDynamicsCompressor();  // safety only; loudness is set afterwards by master_audio.py
+  lim.threshold.value = -6; lim.knee.value = 6; lim.ratio.value = 8; lim.attack.value = 0.003; lim.release.value = 0.15;
+  bus.connect(lim).connect(ctx.destination);
+  ROOM_IN = makeRoom(ctx, bus);
+  await loadSamples(ctx);
+  SCENES.forEach((s, i) => { if (s.amb) ambience(ctx, wet(ctx, bus, 0.15), s.from, s.to, s.amb.kind, s.amb.gain, 300 + i); });
+  for (const e of SFX) sfx(ctx, bus, e);
+  if (OWN_MUSIC) {
+    const src = ctx.createBufferSource(), gain = ctx.createGain();
+    src.buffer = await loadAudio(ctx, OWN_MUSIC.file); gain.gain.value = OWN_MUSIC.gain ?? 0.8;
+    src.connect(gain).connect(bus); src.start(0);
+  } else score(ctx, bus);
+  return ctx.startRendering();
+};
+
+window.READY = loadType(TYPE).then(loadFormulas).then(() => document.fonts.ready).then(() => {
+  const qc = typeCheck(g, TYPE, W, H, PALETTE);  // missing glyphs or unreadable contrast stop here; warnings go to the log
+  if (qc.errors.length) throw new Error('type check: ' + qc.errors.join(' · '));
+  if (!OWN_MUSIC) checkArrangement();          // the user's own song brings its own arrangement
+  return { frames: FRAMES, fps: FPS, width: W, height: H, renderer: 'canvas2d', qc: qc.warnings,
+           title: TITLE, bounds: SCENES.map((s) => s.from).concat(DURATION), vo: VO.length,
+           sfx: SFX.map((e) => [Math.round(e.at * 100) / 100, e.voice, e.dur ?? null]),
+           palette: PALETTE, lookPalette: LOOK.palette, families: Object.values(TYPE.roles || {}).filter(Boolean).map((r) => r.family) };
+});
+
+// Text check (make.py runs it on drafts and finals, ?textcheck=1 only; renders never take this path). Every fillText and
+// strokeText on a full-frame canvas is watched: its ink is the pixels it changed. Ink of two lines stacked over each
+// other on the same pixels is an overlap; a piece of type whose face is within 2:1 of what is around half or more of
+// its letters is low contrast. window.textCheck(frame) draws one frame and returns what it found there.
+if (q.get('textcheck')) {
+  const P = CanvasRenderingContext2D.prototype, owners = new WeakMap(), calls = [];
+  let frameStart = 0, found = [];
+  const lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+  const lum = (r, gg, b) => 0.2126 * lin(r) + 0.7152 * lin(gg) + 0.0722 * lin(b);
+  const rgbOf = (s) => {
+    if (typeof s !== 'string') return null;
+    if (s[0] === '#' && s.length === 7) return [1, 3, 5].map((i) => parseInt(s.slice(i, i + 2), 16));
+    const m = s.match(/rgba?\(([^)]+)\)/);
+    return m ? m[1].split(',').slice(0, 3).map(Number) : null;
+  };
+  const watch = (orig, stroke) => function (str, x, y, ...rest) {
+    const cv = this.canvas, s = String(str);
+    if (cv.width !== W || cv.height !== H || !s.trim() || this.globalAlpha < 0.6) return orig.call(this, str, x, y, ...rest);
+    const m = this.measureText(s), T = this.getTransform();
+    const pts = [[x - m.actualBoundingBoxLeft, y - m.actualBoundingBoxAscent], [x + m.actualBoundingBoxRight, y - m.actualBoundingBoxAscent],
+      [x - m.actualBoundingBoxLeft, y + m.actualBoundingBoxDescent], [x + m.actualBoundingBoxRight, y + m.actualBoundingBoxDescent]]
+      .map(([px, py]) => [T.a * px + T.c * py + T.e, T.b * px + T.d * py + T.f]);
+    const pad = 3 + (this.shadowBlur || 0) + Math.abs(this.shadowOffsetX || 0) + Math.abs(this.shadowOffsetY || 0);
+    const x0 = Math.max(0, Math.floor(Math.min(...pts.map((p) => p[0])) - pad)), x1 = Math.min(W, Math.ceil(Math.max(...pts.map((p) => p[0])) + pad));
+    const y0 = Math.max(0, Math.floor(Math.min(...pts.map((p) => p[1])) - pad)), y1 = Math.min(H, Math.ceil(Math.max(...pts.map((p) => p[1])) + pad));
+    if (x1 - x0 < 2 || y1 - y0 < 2) return orig.call(this, str, x, y, ...rest);
+    const before = this.getImageData(x0, y0, x1 - x0, y1 - y0).data;
+    const result = orig.call(this, str, x, y, ...rest);
+    const after = this.getImageData(x0, y0, x1 - x0, y1 - y0).data;
+    const cap = Math.abs(T.d) * m.actualBoundingBoxAscent, base = T.b * x + T.d * y + T.f;
+    const left = Math.min(...pts.map((p) => p[0])), right = Math.max(...pts.map((p) => p[0]));
+    const last = calls.length > frameStart ? calls[calls.length - 1] : null, same = last && last.cv === cv;
+    // the same string again at about the same place is a layer of one piece of type (extrusion, shadow, outline + fill)
+    const layer = same && last.s === s && Math.abs(last.base - base) < 0.3 * cap && Math.abs(last.left - left) < 0.3 * cap;
+    // apart: how far a baseline lies outside a piece of type's baselines (all its layers, an extrusion runs deep)
+    const apart = (st, b) => Math.max(0, st.lo - b, b - st.hi);
+    let run = same && apart(last.stack, base) <= 0.6 * Math.min(last.cap, cap) ? last.run : null;   // bouncing letters stay one line
+    if (run && !layer) { run.label += (left - run.right > 0.25 * cap ? ' ' : '') + s; run.right = Math.max(run.right, right); }
+    else if (!run) run = { label: s, right };
+    let stack = layer ? last.stack : null;
+    if (!stack) { if (last) settle(last.stack); stack = { run, ink: null, alpha: 0, cap: 0, overlapped: false, lo: base, hi: base }; }
+    if (!stroke) { stack.ink = rgbOf(this.fillStyle); stack.alpha = this.globalAlpha; }   // a gradient face: colour unknown, not judged
+    Object.assign(stack, { after, bw: x1 - x0, bh: y1 - y0, cap: Math.max(stack.cap, cap), lo: Math.min(stack.lo, base), hi: Math.max(stack.hi, base) });
+    const id = calls.push({ s, base, cap, cv, run, left, right, stack }) - 1;
+    let own = owners.get(cv);
+    if (!own) { own = new Int32Array(W * H).fill(-1); owners.set(cv, own); }
+    const hits = new Map(), bw = x1 - x0;
+    for (let i = 0, n = before.length / 4; i < n; i++) {
+      const k = i * 4;
+      if (Math.abs(after[k] - before[k]) + Math.abs(after[k + 1] - before[k + 1]) + Math.abs(after[k + 2] - before[k + 2]) <= 30) continue;
+      const idx = (y0 + Math.floor(i / bw)) * W + x0 + (i % bw), prev = own[idx];
+      if (prev >= frameStart && calls[prev].run !== run && calls[prev].s !== s) hits.set(prev, (hits.get(prev) || 0) + 1);
+      own[idx] = id;
+    }
+    for (const [prev, px] of hits) {          // only lines stacked over each other: letters side by side may touch by design
+      const o = calls[prev], wide = Math.min(o.right - o.left, right - left);
+      const gap = Math.max(0, o.stack.lo - stack.hi, stack.lo - o.stack.hi);
+      const stacked = gap > 0.6 * Math.min(o.cap, cap) && Math.min(o.right, right) - Math.max(o.left, left) > 0.3 * wide;
+      if (stacked && px >= 6) { found.push({ kind: 'overlap', a: o.run, b: run, px }); stack.overlapped = true; }
+    }
+    return result;
+  };
+  // The finished piece of type: its face (the last fill colour) against what is right around each letter after every
+  // layer is drawn, so an outline or a shadow that separates the letters counts. A face that fills its whole box has
+  // nothing around it: the type is lost in a ground of its own colour.
+  function settle(st) {
+    if (!st || st.done) return;
+    st.done = true;
+    if (!st.ink || st.overlapped || st.alpha < 0.85 || st.cap < 6) return;
+    const [ir, ig, ib] = st.ink, li = lum(ir, ig, ib), { after, bw, bh } = st, R = Math.max(3, Math.round(st.cap * 0.12));
+    const face = (xx, yy) => { const k = (yy * bw + xx) * 4; return Math.abs(after[k] - ir) + Math.abs(after[k + 1] - ig) + Math.abs(after[k + 2] - ib) < 48; };
+    let faces = 0, low = 0, all = 0;
+    for (let yy = 0; yy < bh; yy++) for (let xx = 0; xx < bw; xx++) {
+      if (!face(xx, yy)) continue;
+      faces++;
+      if ((xx + yy) % 2) continue;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        let best = 0, edge = false;
+        for (let d = 1; d <= R; d++) {
+          const nx = xx + dx * d, ny = yy + dy * d;
+          if (nx < 0 || ny < 0 || nx >= bw || ny >= bh) break;
+          if (!edge && face(nx, ny)) continue;
+          edge = true;
+          const k = (ny * bw + nx) * 4, lb = lum(after[k], after[k + 1], after[k + 2]);
+          best = Math.max(best, (Math.max(li, lb) + 0.05) / (Math.min(li, lb) + 0.05));
+        }
+        if (edge) { all++; if (best < 2) low++; }
+      }
+    }
+    const share = faces > 0.7 * bw * bh ? 100 : all >= 20 ? Math.round((100 * low) / all) : 0;
+    if (share >= 50) found.push({ kind: 'contrast', run: st.run, share });
+  }
+  P.fillText = watch(P.fillText, false);
+  P.strokeText = watch(P.strokeText, true);
+  window.textCheck = (frame) => {
+    frameStart = calls.length; found = []; window.renderFrame(frame);
+    if (calls.length > frameStart) settle(calls[calls.length - 1].stack);
+    const out = new Map();                       // one finding per line pair (overlap) or line (contrast), the worst kept
+    for (const f of found) {
+      const r = f.kind === 'overlap' ? { kind: 'overlap', a: f.a.label, b: f.b.label, px: f.px } : { kind: 'contrast', s: f.run.label, share: f.share };
+      if (r.kind === 'overlap' && r.a === r.b) continue;
+      const key = r.kind === 'overlap' ? [r.a, r.b].sort().join('\u0000') : 'c\u0000' + r.s, old = out.get(key);
+      if (!old || (r.px ?? r.share) > (old.px ?? old.share)) out.set(key, r);
+    }
+    return [...out.values()];
+  };
+}
+
+// Preview in a normal browser: click renders the soundtrack offline and plays picture and sound together.
+// The audio clock picks the frame; nothing is fed back into the render.
+if (!q.get('capture')) {
+  let frame = 0, playing = false, audio = null, src = null, t0 = 0, offset = 0;
+  const hud = document.getElementById('hud');
+  const stop = () => { if (src) { src.stop(); src = null; } playing = false; };
+  const play = async () => {
+    audio ??= new AudioContext();
+    const buf = await window.renderAudio();
+    src = audio.createBufferSource(); src.buffer = buf; src.connect(audio.destination);
+    offset = frame / FPS; t0 = audio.currentTime; src.start(0, offset); playing = true;
+    src.onended = () => { if (playing) { playing = false; frame = 0; } };
+  };
+  addEventListener('click', () => (playing ? stop() : play()));
+  addEventListener('keydown', (e) => {
+    if (e.code === 'Space') playing ? stop() : play();
+    if (e.code === 'ArrowRight') { stop(); frame = Math.min(FRAMES - 1, frame + 1); }
+    if (e.code === 'ArrowLeft') { stop(); frame = Math.max(0, frame - 1); }
+  });
+  const loop = () => {
+    if (playing) frame = Math.min(FRAMES - 1, Math.floor((audio.currentTime - t0 + offset) * FPS));
+    window.renderFrame(frame);
+    hud.textContent = `${TITLE} · frame ${frame}/${FRAMES - 1} · t=${(frame / FPS).toFixed(2)}s · ${playing ? 'playing' : 'click to play with sound'}`;
+    requestAnimationFrame(loop);
+  };
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>

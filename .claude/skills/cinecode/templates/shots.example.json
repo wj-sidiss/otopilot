@@ -1,0 +1,244 @@
+{
+  "title": "<film title> (the shape: wordless, 30 s, 9:16)",
+  "version": 1,
+  "fps": 24,
+  "width": 1080,
+  "height": 1920,
+  "duration_frames": 720,
+  "seed": 4217,
+  "look": "<the look id from the card>",
+  "shots": [
+    {
+      "id": "S01",
+      "start": 0,
+      "end": 72,
+      "location": "<the place>",
+      "description": "<what the camera sees, in one sentence: the hook, already moving>",
+      "action": "<what the subject does from frame 1>",
+      "reads": [
+        {
+          "t": [
+            0.0,
+            1.5
+          ],
+          "read": "<what the viewer reads first>"
+        },
+        {
+          "t": [
+            1.5,
+            3.0
+          ],
+          "read": "<the question it opens>"
+        }
+      ],
+      "camera": {
+        "size": "WS",
+        "angle": "high",
+        "lens_mm": 24,
+        "move": {
+          "line": "crane down, 3 s, fast ease-out, onto <the subject>",
+          "type": "crane-down",
+          "speed": "fast",
+          "moving_at_start": true
+        }
+      },
+      "hook": "motion from frame 1: <what is already moving>",
+      "action_from_frame_1": true,
+      "sound": "<what makes a sound here>; <the signature sound, first heard>",
+      "transition": "cut",
+      "status": "planned",
+      "vo": "",
+      "text_on_screen": []
+    },
+    {
+      "id": "S02",
+      "start": 72,
+      "end": 192,
+      "location": "<a closer spot inside it>",
+      "description": "<what the camera sees, in one sentence>",
+      "action": "<one action of the subject>",
+      "reads": [
+        {
+          "t": [
+            0.0,
+            2.0
+          ],
+          "read": "<what the viewer reads>"
+        },
+        {
+          "t": [
+            2.0,
+            5.0
+          ],
+          "read": "<what the viewer reads>"
+        }
+      ],
+      "camera": {
+        "size": "CU",
+        "angle": "low",
+        "lens_mm": 50,
+        "move": {
+          "line": "dolly in, 5 s, slow inertia, toward <the detail that matters>",
+          "type": "push-in",
+          "speed": "slow",
+          "moving_at_start": true
+        }
+      },
+      "sound": "<what makes a sound here>",
+      "transition": "cut",
+      "status": "planned",
+      "vo": "",
+      "text_on_screen": []
+    },
+    {
+      "id": "S03",
+      "start": 192,
+      "end": 336,
+      "location": "<the place>",
+      "description": "<what the camera sees, in one sentence>",
+      "action": "<what changes while the camera holds>",
+      "reads": [
+        {
+          "t": [
+            0.0,
+            3.0
+          ],
+          "read": "<what the viewer reads>"
+        },
+        {
+          "t": [
+            3.0,
+            6.0
+          ],
+          "read": "<what the viewer reads>"
+        }
+      ],
+      "camera": {
+        "size": "MS",
+        "angle": "eye",
+        "lens_mm": 35,
+        "move": {
+          "type": "locked"
+        }
+      },
+      "sound": "<what makes a sound here>",
+      "transition": "cut",
+      "status": "planned",
+      "vo": "",
+      "text_on_screen": []
+    },
+    {
+      "id": "S04",
+      "start": 336,
+      "end": 432,
+      "location": "<the closer spot>",
+      "description": "<what the camera sees, in one sentence>",
+      "action": "<what the subject does under it>",
+      "reads": [
+        {
+          "t": [
+            0.0,
+            4.0
+          ],
+          "read": "<what the viewer reads>"
+        }
+      ],
+      "camera": {
+        "size": "MCU",
+        "angle": "low",
+        "lens_mm": 35,
+        "move": {
+          "line": "tilt up, 4 s, slow inertia, from <one thing> to <another>",
+          "type": "tilt-up",
+          "speed": "slow",
+          "moving_at_start": true
+        }
+      },
+      "sound": "<what makes a sound here>",
+      "transition": "cut",
+      "status": "planned",
+      "vo": "",
+      "text_on_screen": []
+    },
+    {
+      "id": "S05",
+      "start": 432,
+      "end": 528,
+      "location": "<above the place>",
+      "description": "<what the camera sees, in one sentence>",
+      "action": "<the turn's action>",
+      "reads": [
+        {
+          "t": [
+            0.0,
+            2.0
+          ],
+          "read": "<what the viewer reads>"
+        },
+        {
+          "t": [
+            2.0,
+            4.0
+          ],
+          "read": "<what the viewer reads>"
+        }
+      ],
+      "camera": {
+        "size": "WS",
+        "angle": "low",
+        "lens_mm": 24,
+        "move": {
+          "line": "tilt up, 4 s, medium ease-out, following <the subject>",
+          "type": "tilt-up",
+          "speed": "medium",
+          "moving_at_start": true
+        }
+      },
+      "sound": "<what makes a sound here>",
+      "transition": "cut",
+      "status": "planned",
+      "vo": "",
+      "text_on_screen": []
+    },
+    {
+      "id": "S06",
+      "start": 528,
+      "end": 720,
+      "location": "<the place, later>",
+      "description": "<the ending: what the camera sees, held for its seconds>",
+      "action": "<the last action>",
+      "reads": [
+        {
+          "t": [
+            0.0,
+            3.0
+          ],
+          "read": "<what the viewer reads>"
+        },
+        {
+          "t": [
+            3.0,
+            8.0
+          ],
+          "read": "<what the viewer is left with>"
+        }
+      ],
+      "camera": {
+        "size": "WS",
+        "angle": "eye",
+        "lens_mm": 35,
+        "move": {
+          "line": "push-in on detail, 8 s, slow ease-in-out, toward <the last image>",
+          "type": "push-in",
+          "speed": "slow",
+          "moving_at_start": true
+        }
+      },
+      "sound": "<the signature sound, changed>",
+      "transition": "end on the held image (2.5 s)",
+      "status": "planned",
+      "vo": "",
+      "text_on_screen": []
+    }
+  ]
+}

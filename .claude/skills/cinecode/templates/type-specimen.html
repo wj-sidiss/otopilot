@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Type specimen card</title>
+<style>html, body { margin: 0; background: #111; } canvas { display: block; max-width: 100vw; max-height: 100vh; margin: auto; }</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script type="module">
+// TYPE SPECIMEN CARD: one dealt pairing set in the film's own look at the deliverable aspect, rendered by capture.mjs.
+// deal.py deal type writes type/specimens.json and copies this file and type.mjs into type/. Then, per pairing i:
+//   node tools/capture.mjs --url type/specimen.html --frames 0 --format jpeg --out review/type-<i> \
+//     --params "i=0&w=1080&h=1920&purpose=ad&title=<the%20film's%20title>&bg=0b0d12&ink=f2efe6&accent=ff5a36&still=../review/frame.jpg"
+// Params: i (pairing index), w, h, purpose (cinematic | ad), title, sub, lang (tr | en), bg / ink / accent / dim (hex
+// without #), still (a frame or style frame behind a scrim), dir (type direction JSON from type_extract.py: case,
+// align, title_share, tracking), cta, price, legal, name: the film's own words; what is not given is not drawn. The card fails (no image) when a font does not load or lacks a glyph.
+import { loadType, setType, typeFont, up, wrap, headroom, typeCheck, contrast, minCap } from './type.mjs';
+
+const q = new URLSearchParams(location.search);
+const W = +q.get('w') || 1080, H = +q.get('h') || 1920, short = Math.min(W, H);
+const hex = (k, d) => `#${(q.get(k) || d).replace('#', '')}`;
+const PAL = { bg: hex('bg', '0b0d12'), ink: hex('ink', 'f2efe6'), accent: hex('accent', 'ff5a36'), dim: hex('dim', '8a90a0') };
+const purpose = q.get('purpose') || 'cinematic', lang = q.get('lang') || 'tr';
+const canvas = document.getElementById('c'); canvas.width = W; canvas.height = H;
+const g = canvas.getContext('2d', { alpha: false });
+let TX = 0.04, LX = 0.032;                       // set in setup() from the text role's own cap height
+
+async function json(url) { const r = await fetch(url); if (!r.ok) throw new Error(`${url}: ${r.status}`); return r.json(); }
+function image(url) { return new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => no(new Error(`still ${url} not found`)); im.src = url; }); }
+
+async function setup() {
+  const spec = await json(q.get('spec') || 'specimens.json');
+  const pair = spec.pairings[+q.get('i') || 0];
+  if (!pair) throw new Error('no pairing at this index');
+  const T = { lang, roles: pair.roles };
+  const capT = (pair.roles.text && pair.roles.text.cap) || 0.66;   // text sizes from the phone minimum, so the card passes its own check
+  TX = Math.max(0.034, minCap(W, H, 'text') / capT / short * 1.02); LX = Math.max(0.026, minCap(W, H, 'legal') / capT / short * 1.02);
+  const dir = q.get('dir') ? await json(q.get('dir')) : (spec.direction || {});
+  const still = q.get('still') ? await image(q.get('still')) : null;
+  await loadType(T);
+  await document.fonts.ready;
+  const title = q.get('title') || spec.title || (lang === 'tr' ? 'Başlık' : 'Title');
+  const ACC_TR = 'İğneli Şükrü Çığlık Öğün';           // the accent's mandatory Turkish render test (never trust latin-ext)
+  const T2 = { ...T, check: { strings: { display: [title], text: [q.get('sub') || ''], accent: [q.get('acc') || '', ACC_TR] }, sizes: { text: TX, legal: LX }, palette: PAL } };
+  const qc = typeCheck(g, T2, W, H, PAL);
+  if (qc.errors.length) throw new Error(qc.errors.join(' · '));
+  return { pair, T, dir, still, title, qc };
+}
+
+function draw({ pair, T, dir, still, title, qc }) {
+  const m = short * 0.07, x0 = m, x1 = W - m, colW = x1 - x0;
+  g.fillStyle = PAL.bg; g.fillRect(0, 0, W, H);
+  if (still) {                                     // the film's own frame, cover-fit, under a scrim for legibility
+    const s = Math.max(W / still.width, H / still.height), iw = still.width * s, ih = still.height * s;
+    g.drawImage(still, (W - iw) / 2, (H - ih) / 2, iw, ih);
+    const sc = g.createLinearGradient(0, 0, 0, H);
+    sc.addColorStop(0, PAL.bg + 'cc'); sc.addColorStop(0.5, PAL.bg + '66'); sc.addColorStop(1, PAL.bg + 'ee');
+    g.fillStyle = sc; g.fillRect(0, 0, W, H);
+  }
+  const caps = (dir.case || 'mixed') === 'caps', wide = W > H * 1.2;
+  const center = (dir.align || (purpose === 'cinematic' && !wide ? 'center' : 'left')) === 'center';
+  const mono = T.roles.mono ? 'mono' : 'text', fam = (r) => (r ? r.family : '-');
+  g.textBaseline = 'alphabetic'; g.textAlign = 'left';
+
+  // header: pairing and families, small tracked caps
+  let y = m * 1.2;
+  setType(g, T, mono, short * 0.022, { short, caps: true, weight: 500 });
+  g.fillStyle = PAL.dim;
+  g.fillText(up(`${pair.id} · ${fam(T.roles.display)} + ${fam(T.roles.text)}${T.roles.mono ? ' + ' + fam(T.roles.mono) : ''}`, 'en'), x0, y);
+  y += short * 0.02;
+  g.fillRect(x0, y, colW, Math.max(1, short * 0.0015));
+  const top = y + m * 0.6;
+
+  // ad block, anchored at the bottom: only the film's own words (legal, price, CTA, a name): nothing invented
+  let bottom = H - m * 0.9;
+  if (purpose === 'ad' && (q.get('legal') || q.get('price') || q.get('cta') || q.get('name'))) {
+    if (q.get('legal')) {
+      setType(g, T, 'text', short * LX, { short, weight: 400 });
+      g.fillStyle = PAL.dim;
+      const ll = wrap(g, q.get('legal'), colW).reverse();
+      for (const l of ll) { g.fillText(l, x0, bottom); bottom -= short * LX * 1.35; }
+    }
+    const ch = short * 0.09, cy = bottom - short * 0.03;
+    if (q.get('price')) {
+      setType(g, T, 'display', short * 0.08, { short, weight: 800 });
+      g.fillStyle = PAL.ink; g.fillText(q.get('price'), x0, cy);
+    }
+    if (q.get('cta')) {
+      const cta = up(q.get('cta'), lang);
+      setType(g, T, 'text', short * 0.036, { short, caps: true, weight: 700 });
+      const cw = g.measureText(cta).width + short * 0.09;
+      g.fillStyle = PAL.accent; g.beginPath(); g.roundRect(x1 - cw, cy - ch * 0.74, cw, ch, ch / 2); g.fill();
+      g.fillStyle = PAL.bg; g.textAlign = 'center'; g.fillText(cta, x1 - cw / 2, cy); g.textAlign = 'left';
+    }
+    bottom = cy - ch - short * 0.06;
+    if (q.get('name')) {
+      const lh = short * 0.085;
+      setType(g, T, 'text', short * TX * 1.1, { short, weight: 600 });
+      const name = q.get('name'), nw = g.measureText(name).width;
+      g.fillStyle = PAL.ink; g.fillRect(x0, bottom - lh * 0.7, nw + short * 0.06, lh);
+      g.fillStyle = PAL.bg; g.fillText(name, x0 + short * 0.03, bottom);
+      bottom -= lh + short * 0.05;
+    }
+  } else bottom -= short * 0.05;
+
+  // columns: one for portrait and square, title | details for wide frames
+  const L = wide ? { a: x0, b: x0 + colW * 0.58 } : { a: x0, b: x1 };
+  const R = wide ? { a: x0 + colW * 0.64, b: x1, y: top + m * 0.4 } : null;
+  const lw = L.b - L.a, ax = center ? (L.a + L.b) / 2 : L.a;
+
+  // title: display role, sized by the direction's title share or the purpose default, never more than 3 lines
+  let px = short * (dir.title_share || (purpose === 'cinematic' ? 0.12 : 0.13));
+  const tStr = caps ? up(title, lang) : title, SU = pair.setup || {},
+    tOpt = () => ({ short, caps, weight: dir.weight || SU.display?.wght || 700, axes: SU.display?.axes, track: dir.tracking_em ?? (typeof dir.tracking === 'number' ? dir.tracking : undefined) });
+  setType(g, T, 'display', px, tOpt());
+  while (wrap(g, tStr, lw).length > 3 && px > short * 0.05) { px *= 0.92; setType(g, T, 'display', px, tOpt()); }
+  const lines = wrap(g, tStr, lw, true), hr = headroom(g), lead = px * (caps ? 1.02 : 0.98) + hr.above - hr.cap;
+  const block = (lines.length - 1) * lead;
+  y = purpose === 'cinematic' ? Math.max(top + hr.above, (wide ? (top + bottom) / 2 : H * 0.36) - block / 2) : top + hr.above + m * 0.4;
+  g.fillStyle = PAL.ink; g.textAlign = center ? 'center' : 'left';
+  lines.forEach((l, i) => { g.fillText(l, ax, y); if (i < lines.length - 1) y += lead; });
+  if (T.roles.accent) {                            // mixed card: the accent tucked into the dominant baseline (typography.md §12)
+    const lastW = g.measureText(lines[lines.length - 1]).width, domCap = hr.cap, acc = q.get('acc') || (lang === 'tr' ? 'çığlık' : 'shout');
+    const SA = SU.accent || {};
+    let apx = px * 0.5;
+    g.save(); g.font = typeFont(T, 'accent', apx, { weight: SA.wght || 400, italic: SA.italic });
+    const accCap = g.measureText('H').actualBoundingBoxAscent || apx * 0.65;
+    apx *= (domCap * 0.5) / accCap;                  // accent cap height = 50 % of the dominant's
+    g.font = typeFont(T, 'accent', apx, { weight: SA.wght || 400, italic: SA.italic }); g.letterSpacing = '0px';
+    const aw = g.measureText(acc).width, ah = g.measureText(acc).actualBoundingBoxAscent;
+    const endX = center ? ax + lastW / 2 : ax + lastW, axc = Math.min(x1 - aw / 2, endX - aw * 0.35);
+    const ay = y + ah * (1 - 0.22);                  // its top 22 % overlaps the dominant baseline
+    g.translate(axc, ay - ah / 2); g.rotate(-4 * Math.PI / 180); g.textAlign = 'center';
+    g.fillStyle = PAL.accent; g.fillText(acc, 0, ah / 2);
+    g.restore();
+    y = ay;
+  }
+  y += hr.below + short * 0.01;
+
+  // subtitle and a label
+  const sub = q.get('sub') || '';                                       // drawn only when the film gives one
+  setType(g, T, 'text', short * TX * 1.15, { short, weight: SU.text?.wght || 400 });
+  g.fillStyle = PAL.ink;
+  for (const l of sub ? wrap(g, sub, lw * 0.92, true) : []) { y += short * TX * 1.5; g.fillText(l, ax, y); }
+  y += short * 0.065;
+  setType(g, T, 'text', short * TX, { short, caps: true, weight: 600 });
+  g.fillStyle = PAL.accent; g.fillText(up(lang === 'tr' ? 'yönetmen · görüntü · müzik' : 'director · camera · music', lang), ax, y);
+  g.textAlign = 'left';
+
+  // details while they fit: numerals, the Turkish line, a paragraph
+  const col = R || { a: x0, b: x1, y: y + short * 0.04 };
+  let dy = col.y;
+  const fits = (h) => dy + h <= bottom;
+  const row = (role, size, weight, color, str, gap) => {
+    setType(g, T, role, short * size, role === 'accent' ? { short, weight, italic: SU.accent?.italic, track: 0 } : { short, weight });
+    const ls = wrap(g, str, col.b - col.a), h = ls.length * short * gap;
+    if (!fits(h + short * 0.02)) return false;
+    g.fillStyle = color;
+    for (const l of ls) { dy += short * gap; g.fillText(l, col.a, dy); }
+    dy += short * 0.02;
+    return true;
+  };
+  row(mono, 0.05, 500, PAL.ink, '0123456789  24.990\u00A0₺  %35', 0.07)
+    && row('display', 0.06, 600, PAL.ink, 'İĞŞÇÖÜ ığşçöü', 0.08)
+    && (!T.roles.accent || row('accent', 0.06, SU.accent?.wght || 400, PAL.accent, 'İğneli Şükrü Çığlık Öğün', 0.08))
+    && row('text', TX, 400, PAL.dim, `${up('ışık', 'tr')} / ${up('istanbul', 'tr')}: Pijamalı hasta yağız şoföre çabucak güvendi.`, TX * 1.35);
+
+  // QC footer: the measured facts the reviewer checks
+  setType(g, T, mono, short * 0.018, { short, weight: 400 });
+  g.fillStyle = PAL.dim; g.textAlign = 'right';
+  const nw = qc.warnings.length;
+  g.fillText(`contrast ${contrast(PAL.ink, PAL.bg).toFixed(1)}:1 · glyphs ok${nw ? ` · ${nw} warning${nw > 1 ? 's' : ''}` : ''}`, x1, H - m * 0.3);
+  g.textAlign = 'left';
+}
+
+let state = null;
+window.READY = setup().then((s) => { state = s; draw(s); return { frames: 1, fps: 1, width: W, height: H, renderer: 'canvas2d type specimen', qc: s.qc.warnings }; });
+window.renderFrame = () => draw(state);
+window.captureFrame = (i, type = 'image/png', quality = 0.95) => { draw(state); return canvas.toDataURL(type, quality); };
+</script>
+</body>
+</html>

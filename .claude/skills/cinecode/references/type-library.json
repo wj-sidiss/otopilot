@@ -1,0 +1,9238 @@
+{
+ "version": 3,
+ "checked": "2026-10-16",
+ "method": "Fontsource API metadata; Turkish coverage, OpenType features and axes read from the font tables (cmap, GSUB, fvar) of the pinned web files; foundry repositories for local-only fonts; Fontshare licence page for ITF-FFL; full-font features, cap/x-height (OS/2) and Turkish locl from the font files; Velvetyne files at pinned GitLab commits; Fontshare web files for Fontshare coverage",
+ "turkish_test": "İıĞğŞşÇçÖöÜü",
+ "cdn": {
+  "static": "https://cdn.jsdelivr.net/npm/@fontsource/{pkg}@{version}/files/{pkg}-{subset}-{weight}-{style}.woff2",
+  "variable": "https://cdn.jsdelivr.net/npm/@fontsource-variable/{pkg}@{version}/files/{pkg}-{subset}-{file}-{style}.woff2"
+ },
+ "pins": {
+  "google_fonts_commit": "1d0e46c7933245c8180fe83e47917961c913bbdb",
+  "fontsource_npm": "5.3.0 (see each font)"
+ },
+ "look_families": {
+  "realist-cinematic": "photographic realism, documentary, epic landscapes, chiaroscuro",
+  "noir-night": "night, rain, neon, fog, horror",
+  "period-classic": "silent film, engraving, period drama, pastoral",
+  "storybook-handmade": "storybook, picture book, papercut, watercolour, ink, clay, puppets",
+  "retro-futurist": "synthwave, VHS, Y2K, space-age",
+  "glossy-commercial": "product studio, food, travel, fashion",
+  "editorial-minimal": "Scandinavian minimal, explainers, isometric, magazine layouts",
+  "kinetic-bold": "kinetic type, music video, sports, comics, cartoons",
+  "tech-ui": "software UI, data, space observatory, code"
+ },
+ "look_map": {
+  "cinematic-realistic": [
+   "realist-cinematic"
+  ],
+  "anime-cel": [
+   "kinetic-bold",
+   "storybook-handmade"
+  ],
+  "pastel-storybook": [
+   "storybook-handmade"
+  ],
+  "claymation": [
+   "storybook-handmade"
+  ],
+  "papercut-collage": [
+   "storybook-handmade"
+  ],
+  "retro-synthwave-vhs": [
+   "retro-futurist"
+  ],
+  "glossy-commercial": [
+   "glossy-commercial"
+  ],
+  "handmade-ink": [
+   "storybook-handmade",
+   "period-classic"
+  ],
+  "ink-wash": [
+   "storybook-handmade"
+  ],
+  "shadow-puppet": [
+   "storybook-handmade",
+   "period-classic"
+  ],
+  "silent-film": [
+   "period-classic"
+  ],
+  "watercolor": [
+   "storybook-handmade"
+  ],
+  "archive-lighttable": [
+   "period-classic",
+   "realist-cinematic"
+  ],
+  "art-deco": [
+   "period-classic",
+   "glossy-commercial"
+  ],
+  "ascii-crt": [
+   "tech-ui",
+   "retro-futurist"
+  ],
+  "backrooms": [
+   "noir-night",
+   "realist-cinematic"
+  ],
+  "blueprint": [
+   "tech-ui",
+   "editorial-minimal"
+  ],
+  "brick-toy": [
+   "kinetic-bold",
+   "storybook-handmade"
+  ],
+  "briefing-board": [
+   "editorial-minimal",
+   "storybook-handmade"
+  ],
+  "cel-anime-80s": [
+   "retro-futurist",
+   "kinetic-bold"
+  ],
+  "crayon-book": [
+   "storybook-handmade"
+  ],
+  "dark-keynote": [
+   "tech-ui",
+   "glossy-commercial"
+  ],
+  "data-physical": [
+   "editorial-minimal",
+   "tech-ui"
+  ],
+  "dataviz": [
+   "editorial-minimal",
+   "tech-ui"
+  ],
+  "engraving": [
+   "period-classic"
+  ],
+  "game-show": [
+   "kinetic-bold",
+   "retro-futurist"
+  ],
+  "glass-product": [
+   "glossy-commercial",
+   "tech-ui"
+  ],
+  "halftone-dossier": [
+   "period-classic",
+   "editorial-minimal"
+  ],
+  "hd-2d": [
+   "retro-futurist",
+   "storybook-handmade"
+  ],
+  "hologram-hud": [
+   "tech-ui",
+   "retro-futurist"
+  ],
+  "impasto": [
+   "storybook-handmade",
+   "period-classic"
+  ],
+  "iso-infographic": [
+   "editorial-minimal",
+   "tech-ui"
+  ],
+  "lidar-survey": [
+   "tech-ui",
+   "realist-cinematic"
+  ],
+  "living-screencast": [
+   "tech-ui",
+   "editorial-minimal"
+  ],
+  "lowpoly-island": [
+   "storybook-handmade",
+   "editorial-minimal"
+  ],
+  "microgame": [
+   "kinetic-bold",
+   "retro-futurist"
+  ],
+  "microscope": [
+   "realist-cinematic",
+   "tech-ui"
+  ],
+  "midcentury-toon": [
+   "kinetic-bold",
+   "period-classic"
+  ],
+  "one-line": [
+   "editorial-minimal",
+   "storybook-handmade"
+  ],
+  "paper-lantern": [
+   "storybook-handmade"
+  ],
+  "paper-popup": [
+   "storybook-handmade",
+   "kinetic-bold"
+  ],
+  "papercut-red": [
+   "storybook-handmade",
+   "period-classic"
+  ],
+  "pictogram-motion": [
+   "kinetic-bold",
+   "editorial-minimal"
+  ],
+  "pixel-rpg": [
+   "retro-futurist",
+   "kinetic-bold"
+  ],
+  "risograph": [
+   "editorial-minimal",
+   "kinetic-bold"
+  ],
+  "rubber-hose": [
+   "kinetic-bold",
+   "period-classic"
+  ],
+  "satellite-briefing": [
+   "tech-ui",
+   "realist-cinematic"
+  ],
+  "scifi-toon": [
+   "kinetic-bold",
+   "retro-futurist"
+  ],
+  "silkscreen-poster": [
+   "period-classic",
+   "kinetic-bold"
+  ],
+  "spy-titles": [
+   "period-classic",
+   "kinetic-bold"
+  ],
+  "stained-glass": [
+   "period-classic",
+   "storybook-handmade"
+  ],
+  "swiss-motion": [
+   "editorial-minimal",
+   "kinetic-bold"
+  ],
+  "teardown": [
+   "tech-ui",
+   "glossy-commercial"
+  ],
+  "tilt-shift": [
+   "realist-cinematic",
+   "storybook-handmade"
+  ],
+  "ukiyoe": [
+   "period-classic",
+   "storybook-handmade"
+  ],
+  "urban-sketch": [
+   "storybook-handmade",
+   "editorial-minimal"
+  ],
+  "vox-explainer": [
+   "editorial-minimal",
+   "kinetic-bold"
+  ],
+  "white-model": [
+   "editorial-minimal",
+   "realist-cinematic"
+  ],
+  "whiteboard": [
+   "editorial-minimal",
+   "storybook-handmade"
+  ],
+  "woodcut": [
+   "period-classic",
+   "storybook-handmade"
+  ],
+  "line-boil": [
+   "kinetic-bold",
+   "storybook-handmade"
+  ],
+  "liquid-motion": [
+   "glossy-commercial",
+   "kinetic-bold"
+  ],
+  "shape-morph": [
+   "editorial-minimal",
+   "glossy-commercial"
+  ],
+  "sticker-explainer": [
+   "editorial-minimal",
+   "tech-ui"
+  ],
+  "variety-captions": [
+   "kinetic-bold"
+  ]
+ },
+ "fonts": [
+  {
+   "id": "fraunces",
+   "family": "Fraunces",
+   "foundry": "Undercase Type",
+   "designers": "Undercase Type, Phaedra Charles, Flavia Zimbardi",
+   "source": "https://github.com/undercasetype/Fraunces",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/fraunces/OFL.txt"
+   },
+   "category": "serif",
+   "roles": [
+    "display",
+    "text"
+   ],
+   "tags": [
+    "serif",
+    "old-style",
+    "warm",
+    "quirky",
+    "literary"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "period-classic",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "opsz": [
+     9.0,
+     144.0,
+     14.0
+    ],
+    "wght": [
+     100.0,
+     900.0,
+     400.0
+    ],
+    "SOFT": [
+     0.0,
+     100.0,
+     0.0
+    ],
+    "WONK": [
+     0.0,
+     1.0,
+     0.0
+    ]
+   },
+   "features": [
+    "kern",
+    "liga",
+    "rvrn"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "fraunces",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/fraunces",
+     "version": "5.3.0",
+     "file": "full"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/fraunces/Fraunces%5BSOFT%2CWONK%2Copsz%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": true,
+   "note": "SOFT and WONK axes: the same word goes from crisp to soft; opsz 144 for titles, 9-14 for small lines",
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.482
+   },
+   "features_full": [
+    "case",
+    "liga",
+    "ss01"
+   ]
+  },
+  {
+   "id": "instrument-serif",
+   "family": "Instrument Serif",
+   "foundry": "Instrument",
+   "designers": "Rodrigo Fuenzalida, Jordan Egstad",
+   "source": "https://github.com/Instrument/instrument-serif",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/instrumentserif/OFL.txt"
+   },
+   "category": "serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "serif",
+    "condensed",
+    "elegant",
+    "editorial",
+    "quiet"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "realist-cinematic",
+    "glossy-commercial"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "kern",
+    "liga"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "instrument-serif",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/instrumentserif/InstrumentSerif-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "a condensed display serif with an italic; large and quiet, one weight",
+   "metrics": {
+    "cap": 0.72,
+    "x": 0.51
+   },
+   "features_full": [
+    "case",
+    "dlig",
+    "liga",
+    "ss01"
+   ]
+  },
+  {
+   "id": "dm-serif-display",
+   "family": "DM Serif Display",
+   "foundry": "Colophon Foundry",
+   "designers": "Colophon Foundry",
+   "source": "https://github.com/googlefonts/dm-fonts",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/dmserifdisplay/OFL.txt"
+   },
+   "category": "serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "serif",
+    "high-contrast",
+    "luxurious",
+    "warm"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "period-classic"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "frac",
+    "kern",
+    "liga"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "dm-serif-display",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/dmserifdisplay/DMSerifDisplay-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "high contrast at large sizes; keep above 48 px at 1080",
+   "metrics": {
+    "cap": 0.66,
+    "x": 0.481
+   },
+   "features_full": [
+    "dlig",
+    "frac",
+    "liga"
+   ]
+  },
+  {
+   "id": "bodoni-moda",
+   "family": "Bodoni Moda",
+   "foundry": "indestructible type*",
+   "designers": "Owen Earl",
+   "source": "https://github.com/indestructible-type/Bodoni",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/bodonimoda/OFL.txt"
+   },
+   "category": "serif",
+   "roles": [
+    "display",
+    "text"
+   ],
+   "tags": [
+    "serif",
+    "didone",
+    "high-contrast",
+    "luxurious",
+    "elegant"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "period-classic",
+    "editorial-minimal"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "opsz": [
+     6.0,
+     96.0,
+     11.0
+    ],
+    "wght": [
+     400.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "frac",
+    "kern",
+    "liga",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "bodoni-moda",
+    "version": "5.3.0",
+    "weights": [
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/bodoni-moda",
+     "version": "5.3.0",
+     "file": "standard"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/bodonimoda/BodoniModa%5Bopsz%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "opsz 6-96: the didone hairlines stay printable at small sizes",
+   "metrics": {
+    "cap": 0.75,
+    "x": 0.46
+   },
+   "features_full": [
+    "c2sc",
+    "case",
+    "dlig",
+    "frac",
+    "hlig",
+    "liga",
+    "lnum",
+    "onum",
+    "pnum",
+    "smcp",
+    "ss01",
+    "ss02",
+    "ss03",
+    "tnum"
+   ]
+  },
+  {
+   "id": "gloock",
+   "family": "Gloock",
+   "foundry": "Duarte Pinto",
+   "designers": "Duarte Pinto",
+   "source": "https://github.com/duartp/gloock",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/gloock/OFL.txt"
+   },
+   "category": "serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "serif",
+    "high-contrast",
+    "loud",
+    "editorial"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "gloock",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/gloock/Gloock-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "heavy contrast serif for one-word cards",
+   "metrics": {
+    "cap": 0.75,
+    "x": 0.508
+   },
+   "features_full": [
+    "case",
+    "frac",
+    "liga",
+    "pnum",
+    "tnum",
+    "zero"
+   ]
+  },
+  {
+   "id": "young-serif",
+   "family": "Young Serif",
+   "foundry": "Bastien Sozeau / noirblancrouge",
+   "designers": "Bastien Sozeau",
+   "source": "https://github.com/noirblancrouge/YoungSerif",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/youngserif/OFL.txt"
+   },
+   "category": "serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "serif",
+    "heavy",
+    "warm",
+    "friendly",
+    "nostalgic"
+   ],
+   "looks": [
+    "storybook-handmade",
+    "glossy-commercial"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "calt",
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "lnum",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "young-serif",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/youngserif/YoungSerif-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "a sturdy 1970s-flavoured serif; food, craft, children",
+   "metrics": {
+    "cap": 0.75,
+    "x": 0.5
+   },
+   "features_full": [
+    "calt",
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "lnum",
+    "onum",
+    "pnum",
+    "tnum",
+    "zero"
+   ]
+  },
+  {
+   "id": "cormorant",
+   "family": "Cormorant",
+   "foundry": "Catharsis Fonts",
+   "designers": "Christian Thalmann",
+   "source": "https://github.com/CatharsisFonts/Cormorant",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/cormorant/OFL.txt"
+   },
+   "category": "serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "serif",
+    "garalde",
+    "elegant",
+    "romantic",
+    "fragile"
+   ],
+   "looks": [
+    "period-classic",
+    "realist-cinematic"
+   ],
+   "purposes": [
+    "cinematic"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wght": [
+     300.0,
+     700.0,
+     400.0
+    ]
+   },
+   "features": [
+    "calt",
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "lnum",
+    "numr",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "cormorant",
+    "version": "5.3.0",
+    "weights": [
+     300,
+     400,
+     500,
+     600,
+     700
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/cormorant",
+     "version": "5.3.0",
+     "file": "wght"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/cormorant/Cormorant%5Bwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "very fine at small sizes: titles only, never under 40 px at 1080",
+   "metrics": {
+    "cap": 0.625,
+    "x": 0.386
+   },
+   "features_full": [
+    "c2sc",
+    "calt",
+    "case",
+    "cv01",
+    "cv02",
+    "cv05",
+    "cv06",
+    "cv07",
+    "dlig",
+    "frac",
+    "hlig",
+    "liga",
+    "lnum",
+    "onum",
+    "smcp",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "ss06",
+    "ss09",
+    "ss10",
+    "ss12",
+    "ss13",
+    "ss14",
+    "ss15",
+    "tnum",
+    "zero"
+   ]
+  },
+  {
+   "id": "libre-caslon-display",
+   "family": "Libre Caslon Display",
+   "foundry": "Impallari Type",
+   "designers": "Impallari Type",
+   "source": "https://github.com/impallari/Libre-Caslon-Display",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "serif",
+    "transitional",
+    "literary",
+    "classic"
+   ],
+   "looks": [
+    "period-classic",
+    "realist-cinematic"
+   ],
+   "purposes": [
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "libre-caslon-display",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "Caslon for large literary titles",
+   "metrics": {
+    "cap": 0.69,
+    "x": 0.424
+   }
+  },
+  {
+   "id": "newsreader",
+   "family": "Newsreader",
+   "foundry": "Production Type",
+   "designers": "Production Type",
+   "source": "https://github.com/productiontype/Newsreader",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/newsreader/OFL.txt"
+   },
+   "category": "serif",
+   "roles": [
+    "text",
+    "display"
+   ],
+   "tags": [
+    "serif",
+    "transitional",
+    "editorial",
+    "quiet"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "editorial-minimal",
+    "period-classic"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "opsz": [
+     6.0,
+     72.0,
+     16.0
+    ],
+    "wght": [
+     200.0,
+     800.0,
+     400.0
+    ]
+   },
+   "features": [
+    "kern",
+    "liga",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "newsreader",
+    "version": "5.3.0",
+    "weights": [
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/newsreader",
+     "version": "5.3.0",
+     "file": "standard"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/newsreader/Newsreader%5Bopsz%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "opsz 6-72: one family from captions to titles",
+   "metrics": {
+    "cap": 0.67,
+    "x": 0.426
+   },
+   "features_full": [
+    "case",
+    "liga",
+    "pnum",
+    "tnum"
+   ]
+  },
+  {
+   "id": "imbue",
+   "family": "Imbue",
+   "foundry": "Tyler Finck",
+   "designers": "Tyler Finck, ETC",
+   "source": "https://github.com/Etcetera-Type-Co/Imbue",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/imbue/OFL.txt"
+   },
+   "category": "serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "serif",
+    "didone",
+    "condensed",
+    "fashion",
+    "elegant"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "editorial-minimal",
+    "period-classic"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "opsz": [
+     10.0,
+     100.0,
+     10.0
+    ],
+    "wght": [
+     100.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "imbue",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/imbue",
+     "version": "5.3.0",
+     "file": "standard"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/imbue/Imbue%5Bopsz%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "condensed didone with opsz 10-100; tall fashion titles",
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.523
+   },
+   "features_full": [
+    "c2sc",
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "lnum",
+    "onum",
+    "smcp",
+    "zero"
+   ]
+  },
+  {
+   "id": "piazzolla",
+   "family": "Piazzolla",
+   "foundry": "Huerta Tipográfica",
+   "designers": "Juan Pablo del Peral, HT Fonts",
+   "source": "https://github.com/huertatipografica/piazzolla",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "serif",
+   "roles": [
+    "text",
+    "display"
+   ],
+   "tags": [
+    "serif",
+    "sturdy",
+    "literary",
+    "warm"
+   ],
+   "looks": [
+    "storybook-handmade",
+    "realist-cinematic"
+   ],
+   "purposes": [
+    "cinematic"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "opsz": [
+     8.0,
+     30.0,
+     14.0
+    ],
+    "wght": [
+     100.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "calt",
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "piazzolla",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/piazzolla",
+     "version": "5.3.0",
+     "file": "standard"
+    }
+   },
+   "badass_libre_fonts": false,
+   "note": "robust text serif with opsz 8-30, good for subtitles on texture",
+   "metrics": {
+    "cap": 0.644,
+    "x": 0.478
+   }
+  },
+  {
+   "id": "sorts-mill-goudy",
+   "family": "Sorts Mill Goudy",
+   "foundry": "The League of Moveable Type",
+   "designers": "Barry Schwartz",
+   "source": "https://www.theleagueofmoveabletype.com/sorts-mill-goudy",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/sortsmillgoudy/OFL.txt"
+   },
+   "category": "serif",
+   "roles": [
+    "text",
+    "display"
+   ],
+   "tags": [
+    "serif",
+    "old-style",
+    "antique",
+    "literary"
+   ],
+   "looks": [
+    "period-classic",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "lnum",
+    "numr"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "sorts-mill-goudy",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/sortsmillgoudy/SortsMillGoudy-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "Goudy revival: intertitles, period letters",
+   "metrics": {
+    "cap": 0.713,
+    "x": 0.442
+   },
+   "features_full": [
+    "c2sc",
+    "case",
+    "dlig",
+    "frac",
+    "hist",
+    "liga",
+    "lnum",
+    "salt",
+    "smcp"
+   ]
+  },
+  {
+   "id": "redaction",
+   "family": "Redaction",
+   "foundry": "Titus Kaphar & Reginald Dwayne Betts project (MCKL)",
+   "designers": "Jeremy Mickel, Forest Young",
+   "source": "https://www.redaction.us",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://www.redaction.us/"
+   },
+   "category": "serif",
+   "roles": [
+    "display",
+    "text"
+   ],
+   "tags": [
+    "serif",
+    "degraded",
+    "documentary",
+    "political",
+    "archival"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "noir-night"
+   ],
+   "purposes": [
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "frac",
+    "kern",
+    "numr",
+    "sups"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "redaction",
+    "version": "5.3.0",
+    "weights": [
+     400,
+     700
+    ],
+    "styles": [
+     "normal",
+     "italic"
+    ],
+    "subsets": [
+     "latin"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "sibling packages redaction-10 … -100 are progressively degraded cuts: swap one step per beat for decay or memory",
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.47
+   },
+   "features_full": [
+    "frac"
+   ]
+  },
+  {
+   "id": "ibm-plex-serif",
+   "family": "IBM Plex Serif",
+   "foundry": "IBM / Bold Monday",
+   "designers": "Mike Abbink, Bold Monday",
+   "source": "https://github.com/IBM/plex",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/ibmplexserif/OFL.txt"
+   },
+   "category": "serif",
+   "roles": [
+    "text"
+   ],
+   "tags": [
+    "serif",
+    "slab-ish",
+    "technical",
+    "neutral"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "tech-ui"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "ibm-plex-serif",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/ibmplexserif/IBMPlexSerif-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "with Plex Sans and Plex Mono: one superfamily voice",
+   "metrics": {
+    "cap": 0.698,
+    "x": 0.516
+   },
+   "features_full": [
+    "frac",
+    "liga",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "zero"
+   ]
+  },
+  {
+   "id": "danfo",
+   "family": "Danfo",
+   "foundry": "Afrotype",
+   "designers": "Afrotype, Seyi Olusanya, Eyiyemi Adegbite, David Udoh, Mirko Velimirović",
+   "source": "https://github.com/Afrotype/danfo",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "display",
+    "signage",
+    "loud",
+    "playful"
+   ],
+   "looks": [
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "ELSH": [
+     0.0,
+     100.0,
+     0.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "danfo",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/danfo",
+     "version": "5.3.0",
+     "file": "full"
+    }
+   },
+   "badass_libre_fonts": false,
+   "note": "ELSH axis (element shape) from Lagos bus lettering; animate it on the beat",
+   "metrics": {
+    "cap": 0.716,
+    "x": 0.5
+   }
+  },
+  {
+   "id": "bricolage-grotesque",
+   "family": "Bricolage Grotesque",
+   "foundry": "Mathieu Triay",
+   "designers": "Mathieu Triay",
+   "source": "https://github.com/ateliertriay/bricolage",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/bricolagegrotesque/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display",
+    "text"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "quirky",
+    "friendly",
+    "warm"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "glossy-commercial",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "opsz": [
+     12.0,
+     96.0,
+     14.0
+    ],
+    "wdth": [
+     75.0,
+     100.0,
+     100.0
+    ],
+    "wght": [
+     200.0,
+     800.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "bricolage-grotesque",
+    "version": "5.3.0",
+    "weights": [
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/bricolage-grotesque",
+     "version": "5.3.0",
+     "file": "standard"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/bricolagegrotesque/BricolageGrotesque%5Bopsz%2Cwdth%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "opsz 12-96 and wdth 75-100: ink traps grow with size",
+   "metrics": {
+    "cap": 0.66,
+    "x": 0.528
+   },
+   "features_full": [
+    "case",
+    "frac",
+    "lnum",
+    "onum",
+    "pnum",
+    "tnum"
+   ]
+  },
+  {
+   "id": "space-grotesk",
+   "family": "Space Grotesk",
+   "foundry": "Florian Karsten",
+   "designers": "Florian Karsten",
+   "source": "https://github.com/floriankarsten/space-grotesk",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/spacegrotesk/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display",
+    "text"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "technical",
+    "quirky"
+   ],
+   "looks": [
+    "tech-ui",
+    "retro-futurist"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "wght": [
+     300.0,
+     700.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "space-grotesk",
+    "version": "5.3.0",
+    "weights": [
+     300,
+     400,
+     500,
+     600,
+     700
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/space-grotesk",
+     "version": "5.3.0",
+     "file": "wght"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/spacegrotesk/SpaceGrotesk%5Bwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "pairs with Space Mono as one voice",
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.486
+   },
+   "features_full": [
+    "case",
+    "frac",
+    "liga",
+    "lnum",
+    "onum",
+    "pnum",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "tnum",
+    "zero"
+   ]
+  },
+  {
+   "id": "syne",
+   "family": "Syne",
+   "foundry": "Bonjour Monde",
+   "designers": "Bonjour Monde, Lucas Descroix, George Triantafyllakos",
+   "source": "https://gitlab.com/bonjour-monde/fonderie/syne-typeface",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/syne/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "sans",
+    "wide",
+    "artistic",
+    "loud",
+    "experimental"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "retro-futurist",
+    "editorial-minimal"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "wght": [
+     400.0,
+     800.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "lnum",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "syne",
+    "version": "5.3.0",
+    "weights": [
+     400,
+     500,
+     600,
+     700,
+     800
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/syne",
+     "version": "5.3.0",
+     "file": "wght"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/syne/Syne%5Bwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "the weight axis also widens the letters: 800 is a different, wide voice",
+   "metrics": {
+    "cap": 0.65,
+    "x": 0.5
+   },
+   "features_full": [
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "lnum",
+    "onum",
+    "pnum",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "tnum"
+   ]
+  },
+  {
+   "id": "unbounded",
+   "family": "Unbounded",
+   "foundry": "NaN",
+   "designers": "NaN",
+   "source": "https://github.com/googlefonts/unbounded",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/unbounded/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "sans",
+    "wide",
+    "rounded",
+    "geometric",
+    "futuristic"
+   ],
+   "looks": [
+    "tech-ui",
+    "kinetic-bold",
+    "retro-futurist"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "wght": [
+     200.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "unbounded",
+    "version": "5.3.0",
+    "weights": [
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/unbounded",
+     "version": "5.3.0",
+     "file": "wght"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/unbounded/Unbounded%5Bwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "wide rounded display for launches",
+   "metrics": {
+    "cap": 0.75,
+    "x": 0.566
+   },
+   "features_full": [
+    "case",
+    "frac",
+    "liga",
+    "pnum",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "tnum"
+   ]
+  },
+  {
+   "id": "familjen-grotesk",
+   "family": "Familjen Grotesk",
+   "foundry": "Familjen STHLM",
+   "designers": "Familjen STHLM AB",
+   "source": "https://github.com/Familjen-Sthlm/Familjen-Grotesk",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/familjengrotesk/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "text",
+    "display"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "warm",
+    "editorial"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "realist-cinematic"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wght": [
+     400.0,
+     700.0,
+     400.0
+    ]
+   },
+   "features": [
+    "calt",
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "familjen-grotesk",
+    "version": "5.3.0",
+    "weights": [
+     400,
+     500,
+     600,
+     700
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/familjen-grotesk",
+     "version": "5.3.0",
+     "file": "wght"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/familjengrotesk/FamiljenGrotesk%5Bwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "calm grotesque with character in a, g and y",
+   "metrics": {
+    "cap": 0.65,
+    "x": 0.5
+   },
+   "features_full": [
+    "calt",
+    "case",
+    "frac",
+    "liga",
+    "pnum",
+    "ss02",
+    "ss05",
+    "tnum",
+    "zero"
+   ]
+  },
+  {
+   "id": "schibsted-grotesk",
+   "family": "Schibsted Grotesk",
+   "foundry": "Bakken & Bæck for Schibsted",
+   "designers": "Bakken & Bæck, Henrik Kongsvoll",
+   "source": "https://github.com/schibsted/schibsted-grotesk",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "text",
+    "label"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "news",
+    "neutral"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wght": [
+     400.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "calt",
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "schibsted-grotesk",
+    "version": "5.3.0",
+    "weights": [
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/schibsted-grotesk",
+     "version": "5.3.0",
+     "file": "wght"
+    }
+   },
+   "badass_libre_fonts": false,
+   "note": "newsroom grotesque: labels, lower thirds, legal lines",
+   "metrics": {
+    "cap": 0.703,
+    "x": 0.527
+   }
+  },
+  {
+   "id": "epilogue",
+   "family": "Epilogue",
+   "foundry": "Etcetera Type Co",
+   "designers": "Tyler Finck, ETC",
+   "source": "https://github.com/Etcetera-Type-Co/Epilogue",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "text",
+    "display"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "quirky",
+    "editorial"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wght": [
+     100.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "epilogue",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/epilogue",
+     "version": "5.3.0",
+     "file": "wght"
+    }
+   },
+   "badass_libre_fonts": false,
+   "note": "squarish grotesque, black weight for posters",
+   "metrics": {
+    "cap": 0.738,
+    "x": 0.531
+   }
+  },
+  {
+   "id": "anybody",
+   "family": "Anybody",
+   "foundry": "Etcetera Type Co",
+   "designers": "Tyler Finck",
+   "source": "https://github.com/Etcetera-Type-Co/Anybody",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/anybody/OFL.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "sans",
+    "variable-width",
+    "kinetic",
+    "loud",
+    "sporty"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "retro-futurist"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wdth": [
+     50.0,
+     150.0,
+     100.0
+    ],
+    "wght": [
+     100.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "anybody",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/anybody",
+     "version": "5.3.0",
+     "file": "standard"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/anybody/Anybody%5Bwdth%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "wdth 50-150 and wght 100-900: stretch with the music",
+   "metrics": {
+    "cap": 0.675,
+    "x": 0.593
+   },
+   "features_full": [
+    "case",
+    "frac",
+    "liga",
+    "pnum",
+    "ss01",
+    "tnum",
+    "zero"
+   ]
+  },
+  {
+   "id": "archivo",
+   "family": "Archivo",
+   "foundry": "Omnibus-Type",
+   "designers": "Omnibus-Type",
+   "source": "https://github.com/Omnibus-Type/Archivo",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/archivo/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display",
+    "text",
+    "label"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "industrial",
+    "sporty"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "editorial-minimal"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wdth": [
+     62.0,
+     125.0,
+     100.0
+    ],
+    "wght": [
+     100.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "archivo",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/archivo",
+     "version": "5.3.0",
+     "file": "standard"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/archivo/Archivo%5Bwdth%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "wdth 62-125: condensed labels and expanded headlines from one file",
+   "metrics": {
+    "cap": 0.686,
+    "x": 0.526
+   },
+   "features_full": [
+    "case",
+    "frac",
+    "liga",
+    "lnum",
+    "onum",
+    "pnum",
+    "tnum",
+    "zero"
+   ]
+  },
+  {
+   "id": "league-spartan",
+   "family": "League Spartan",
+   "foundry": "The League of Moveable Type",
+   "designers": "Matt Bailey, Tyler Finck",
+   "source": "https://www.theleagueofmoveabletype.com/league-spartan",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/leaguespartan/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "sans",
+    "geometric",
+    "bold",
+    "modernist"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "period-classic",
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "wght": [
+     100.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "calt",
+    "frac",
+    "kern",
+    "liga"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "league-spartan",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/league-spartan",
+     "version": "5.3.0",
+     "file": "wght"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/leaguespartan/LeagueSpartan%5Bwght%5D.ttf"
+   },
+   "badass_libre_fonts": true,
+   "note": "geometric display in the Futura tradition",
+   "metrics": {
+    "cap": 0.66,
+    "x": 0.41
+   },
+   "features_full": [
+    "calt",
+    "case",
+    "frac",
+    "liga",
+    "ss01",
+    "ss02"
+   ]
+  },
+  {
+   "id": "league-gothic",
+   "family": "League Gothic",
+   "foundry": "The League of Moveable Type",
+   "designers": "Tyler Finck, Caroline Hadilaksono, Micah Rich",
+   "source": "https://www.theleagueofmoveabletype.com/league-gothic",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/leaguegothic/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "sans",
+    "condensed",
+    "gothic",
+    "classic",
+    "poster"
+   ],
+   "looks": [
+    "period-classic",
+    "realist-cinematic"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {
+    "wdth": [
+     75.0,
+     100.0,
+     100.0
+    ]
+   },
+   "features": [
+    "kern",
+    "liga"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "league-gothic",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/league-gothic",
+     "version": "5.3.0",
+     "file": "standard"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/leaguegothic/LeagueGothic%5Bwdth%5D.ttf"
+   },
+   "badass_libre_fonts": true,
+   "note": "Alternate Gothic lineage, wdth 75-100: posters, trailers, westerns",
+   "metrics": {
+    "cap": 0.735,
+    "x": 0.547
+   },
+   "features_full": [
+    "case",
+    "liga",
+    "ss01"
+   ]
+  },
+  {
+   "id": "ibm-plex-sans",
+   "family": "IBM Plex Sans",
+   "foundry": "IBM / Bold Monday",
+   "designers": "Mike Abbink, Bold Monday",
+   "source": "https://github.com/IBM/plex",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/ibmplexsans/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "text",
+    "label"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "technical",
+    "neutral"
+   ],
+   "looks": [
+    "tech-ui",
+    "editorial-minimal"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wdth": [
+     75.0,
+     100.0,
+     100.0
+    ],
+    "wght": [
+     100.0,
+     700.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "ibm-plex-sans",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/ibm-plex-sans",
+     "version": "5.3.0",
+     "file": "standard"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/ibmplexsans/IBMPlexSans%5Bwdth%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "wdth 75-100 includes the condensed cut",
+   "metrics": {
+    "cap": 0.698,
+    "x": 0.516
+   },
+   "features_full": [
+    "frac",
+    "liga",
+    "lnum",
+    "onum",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "ss06",
+    "zero"
+   ]
+  },
+  {
+   "id": "mona-sans",
+   "family": "Mona Sans",
+   "foundry": "GitHub",
+   "designers": "Tobias Bjerrome Ahlin, Github, Degarism Studio, Sebastian Carewe",
+   "source": "https://github.com/github/mona-sans",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display",
+    "text"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "variable-width",
+    "technical"
+   ],
+   "looks": [
+    "tech-ui",
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wdth": [
+     75.0,
+     125.0,
+     100.0
+    ],
+    "wght": [
+     200.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "mona-sans",
+    "version": "5.3.0",
+    "weights": [
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/mona-sans",
+     "version": "5.3.0",
+     "file": "standard"
+    }
+   },
+   "badass_libre_fonts": false,
+   "note": "wdth 75-125: one family for labels and wide headlines",
+   "metrics": {
+    "cap": 0.729,
+    "x": 0.525
+   }
+  },
+  {
+   "id": "instrument-sans",
+   "family": "Instrument Sans",
+   "foundry": "Instrument",
+   "designers": "Rodrigo Fuenzalida, Jordan Egstad",
+   "source": "https://github.com/Instrument/instrument-sans",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/instrumentsans/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "text",
+    "label"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "neutral",
+    "editorial"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial",
+    "realist-cinematic"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wdth": [
+     75.0,
+     100.0,
+     100.0
+    ],
+    "wght": [
+     400.0,
+     700.0,
+     400.0
+    ]
+   },
+   "features": [
+    "kern",
+    "liga",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "instrument-sans",
+    "version": "5.3.0",
+    "weights": [
+     400,
+     500,
+     600,
+     700
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/instrument-sans",
+     "version": "5.3.0",
+     "file": "standard"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/instrumentsans/InstrumentSans%5Bwdth%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "companion to Instrument Serif; wdth 75-100",
+   "metrics": {
+    "cap": 0.72,
+    "x": 0.51
+   },
+   "features_full": [
+    "case",
+    "liga",
+    "pnum",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "ss06",
+    "ss07",
+    "ss08",
+    "ss09",
+    "ss10",
+    "ss11",
+    "ss12",
+    "tnum"
+   ]
+  },
+  {
+   "id": "geist",
+   "family": "Geist",
+   "foundry": "Vercel",
+   "designers": "Andrés Briganti, Mateo Zaragoza, Guillermo Rauch, Evil Rabbit, José Rago, Facundo Santana",
+   "source": "https://github.com/vercel/geist-font",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/geist/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "text",
+    "label"
+   ],
+   "tags": [
+    "sans",
+    "geometric",
+    "technical",
+    "clean"
+   ],
+   "looks": [
+    "tech-ui",
+    "editorial-minimal"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wght": [
+     100.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "geist",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/geist",
+     "version": "5.3.0",
+     "file": "wght"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/geist/Geist%5Bwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "interface sans for UI hero shots",
+   "metrics": {
+    "cap": 0.71,
+    "x": 0.53
+   },
+   "features_full": [
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "pnum",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "ss06",
+    "ss07",
+    "ss08",
+    "ss09",
+    "ss10",
+    "ss11",
+    "tnum"
+   ]
+  },
+  {
+   "id": "host-grotesk",
+   "family": "Host Grotesk",
+   "foundry": "Element Type",
+   "designers": "Element Type, Doğukan Karapınar, İbrahim Kaçtıoğlu",
+   "source": "https://fonts.google.com/specimen/Host+Grotesk",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "text",
+    "label"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "friendly",
+    "clean"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "editorial-minimal"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wght": [
+     300.0,
+     800.0,
+     400.0
+    ]
+   },
+   "features": [
+    "calt",
+    "frac",
+    "kern",
+    "liga"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "host-grotesk",
+    "version": "5.3.0",
+    "weights": [
+     300,
+     400,
+     500,
+     600,
+     700,
+     800
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/host-grotesk",
+     "version": "5.3.0",
+     "file": "wght"
+    }
+   },
+   "badass_libre_fonts": false,
+   "note": "friendly product grotesque (by Turkish designers Doğukan Karapınar and İbrahim Kaçtıoğlu)",
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.496
+   }
+  },
+  {
+   "id": "apfel-grotezk",
+   "family": "Apfel Grotezk",
+   "foundry": "Collletttivo",
+   "designers": "Luigi Gorlero",
+   "source": "https://www.collletttivo.it/",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://www.collletttivo.it/licensing"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "quirky",
+    "editorial",
+    "independent"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "dlig",
+    "frac",
+    "kern",
+    "ordn",
+    "sups"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "apfel-grotezk",
+    "version": "5.3.0",
+    "weights": [
+     400,
+     700
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "from the Italian open collective Collletttivo; one latin file carries Turkish",
+   "metrics": {
+    "cap": 0.65,
+    "x": 0.5
+   },
+   "features_full": [
+    "dlig",
+    "frac"
+   ]
+  },
+  {
+   "id": "anton",
+   "family": "Anton",
+   "foundry": "Vernon Adams",
+   "designers": "Vernon Adams",
+   "source": "https://github.com/googlefonts/AntonFont",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "sans",
+    "condensed",
+    "impact",
+    "poster",
+    "loud"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "realist-cinematic"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "anton",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "trailer caps; track +2-4 % in caps",
+   "metrics": {
+    "cap": 0.859,
+    "x": 0.732
+   }
+  },
+  {
+   "id": "climate-crisis",
+   "family": "Climate Crisis",
+   "foundry": "Helsingin Sanomat",
+   "designers": "Daniel Coull, Eino Korkala",
+   "source": "https://kampanjat.hs.fi/climatefont/",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/climatecrisis/OFL.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "display",
+    "data-driven",
+    "political",
+    "documentary"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "editorial-minimal"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {
+    "YEAR": [
+     1979.0,
+     2050.0,
+     1979.0
+    ]
+   },
+   "features": [
+    "calt",
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "climate-crisis",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/climate-crisis",
+     "version": "5.3.0",
+     "file": "full"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/climatecrisis/ClimateCrisis%5BYEAR%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "YEAR axis 1979-2050 melts the letters with Arctic sea-ice data: tie it to a date counter",
+   "metrics": {
+    "cap": 0.75,
+    "x": 0.62
+   },
+   "features_full": [
+    "calt",
+    "case",
+    "dlig",
+    "frac",
+    "liga"
+   ]
+  },
+  {
+   "id": "bungee",
+   "family": "Bungee",
+   "foundry": "David Jonathan Ross",
+   "designers": "David Jonathan Ross",
+   "source": "https://github.com/djrrb/Bungee",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/bungee/OFL.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "display",
+    "signage",
+    "urban",
+    "loud",
+    "vertical"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "retro-futurist"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "kern",
+    "vert"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "bungee",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/bungee/Bungee-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "street signage; has vertical forms (vert)",
+   "metrics": {
+    "cap": 0.72,
+    "x": 0.5
+   },
+   "features_full": [
+    "liga",
+    "ornm",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "ss06",
+    "ss07",
+    "ss09",
+    "ss10",
+    "ss11",
+    "ss12",
+    "vert"
+   ]
+  },
+  {
+   "id": "shrikhand",
+   "family": "Shrikhand",
+   "foundry": "Jonny Pinhorn",
+   "designers": "Jonny Pinhorn",
+   "source": "https://github.com/jonpinhorn/shrikhand",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "display",
+    "script-ish",
+    "sweet",
+    "playful"
+   ],
+   "looks": [
+    "storybook-handmade",
+    "glossy-commercial",
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "kern",
+    "liga",
+    "pres"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "shrikhand",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "Gujarati-lettering-inspired italic display; food, candy, festive",
+   "metrics": {
+    "cap": 0.669,
+    "x": 0.52
+   }
+  },
+  {
+   "id": "tilt-warp",
+   "family": "Tilt Warp",
+   "foundry": "Andy Clymer",
+   "designers": "Andy Clymer",
+   "source": "https://github.com/googlefonts/Tilt-Fonts",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/tiltwarp/OFL.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "display",
+    "3d",
+    "rotating",
+    "playful"
+   ],
+   "looks": [
+    "retro-futurist",
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "XROT": [
+     -45.0,
+     45.0,
+     0.0
+    ],
+    "YROT": [
+     -45.0,
+     45.0,
+     0.0
+    ]
+   },
+   "features": [
+    "kern"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "tilt-warp",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/tilt-warp",
+     "version": "5.3.0",
+     "file": "full"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/tiltwarp/TiltWarp%5BXROT%2CYROT%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "XROT and YROT axes -45..45: turn the letters in fake 3D",
+   "metrics": {
+    "cap": 0.68,
+    "x": 0.517
+   },
+   "features_full": [
+    "dlig",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04"
+   ]
+  },
+  {
+   "id": "dela-gothic-one",
+   "family": "Dela Gothic One",
+   "foundry": "artakana",
+   "designers": "artakana",
+   "source": "https://github.com/syakuzen/DelaGothic",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "display",
+    "heavy",
+    "gothic",
+    "loud"
+   ],
+   "looks": [
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "liga",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "dela-gothic-one",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "very heavy gothic for impact cards",
+   "metrics": {
+    "cap": 0.726,
+    "x": 0.54
+   }
+  },
+  {
+   "id": "major-mono-display",
+   "family": "Major Mono Display",
+   "foundry": "Emre Parlak",
+   "designers": "Emre Parlak",
+   "source": "https://github.com/googlefonts/majormono",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/majormonodisplay/OFL.txt"
+   },
+   "category": "monospace",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "mono",
+    "display",
+    "geometric",
+    "futuristic",
+    "retro"
+   ],
+   "looks": [
+    "retro-futurist",
+    "tech-ui"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "frac",
+    "kern",
+    "liga",
+    "pnum",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "major-mono-display",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/majormonodisplay/MajorMonoDisplay-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "monospaced geometric display by a Turkish designer; mixed-case forms",
+   "metrics": {
+    "cap": 0.696,
+    "x": 0.696
+   },
+   "features_full": [
+    "case",
+    "frac",
+    "liga",
+    "pnum",
+    "tnum"
+   ]
+  },
+  {
+   "id": "jetbrains-mono",
+   "family": "JetBrains Mono",
+   "foundry": "JetBrains",
+   "designers": "JetBrains, Philipp Nurullin, Konstantin Bulenkov",
+   "source": "https://github.com/JetBrains/JetBrainsMono",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/jetbrainsmono/OFL.txt"
+   },
+   "category": "monospace",
+   "roles": [
+    "mono"
+   ],
+   "tags": [
+    "mono",
+    "technical",
+    "code"
+   ],
+   "looks": [
+    "tech-ui"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "ital": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "wght": [
+     100.0,
+     800.0,
+     400.0
+    ]
+   },
+   "features": [
+    "calt",
+    "frac",
+    "kern"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "jetbrains-mono",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/jetbrains-mono",
+     "version": "5.3.0",
+     "file": "wght"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/jetbrainsmono/JetBrainsMono%5Bwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "code on screen; tall x-height reads small",
+   "metrics": {
+    "cap": 0.73,
+    "x": 0.55
+   },
+   "features_full": [
+    "calt",
+    "case",
+    "frac",
+    "zero"
+   ]
+  },
+  {
+   "id": "ibm-plex-mono",
+   "family": "IBM Plex Mono",
+   "foundry": "IBM / Bold Monday",
+   "designers": "Mike Abbink, Bold Monday",
+   "source": "https://github.com/IBM/plex",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/ibmplexmono/OFL.txt"
+   },
+   "category": "monospace",
+   "roles": [
+    "mono"
+   ],
+   "tags": [
+    "mono",
+    "technical",
+    "neutral"
+   ],
+   "looks": [
+    "tech-ui",
+    "editorial-minimal",
+    "realist-cinematic"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "numr"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "ibm-plex-mono",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/ibmplexmono/IBMPlexMono-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "timestamps, data captions",
+   "metrics": {
+    "cap": 0.698,
+    "x": 0.516
+   },
+   "features_full": [
+    "frac",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "zero"
+   ]
+  },
+  {
+   "id": "space-mono",
+   "family": "Space Mono",
+   "foundry": "Colophon Foundry",
+   "designers": "Colophon Foundry",
+   "source": "https://github.com/googlefonts/spacemono",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/spacemono/OFL.txt"
+   },
+   "category": "monospace",
+   "roles": [
+    "mono",
+    "display"
+   ],
+   "tags": [
+    "mono",
+    "retro",
+    "quirky",
+    "editorial"
+   ],
+   "looks": [
+    "retro-futurist",
+    "editorial-minimal"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "dnom",
+    "frac",
+    "kern",
+    "numr"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "space-mono",
+    "version": "5.3.0",
+    "weights": [
+     400,
+     700
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/spacemono/SpaceMono-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "retro-futurist mono with character",
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.496
+   },
+   "features_full": [
+    "case",
+    "dlig",
+    "frac",
+    "onum",
+    "ss01",
+    "ss02"
+   ]
+  },
+  {
+   "id": "martian-mono",
+   "family": "Martian Mono",
+   "foundry": "Evil Martians",
+   "designers": "Roman Shamin, Evil Martians",
+   "source": "https://github.com/evilmartians/mono",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/martianmono/OFL.txt"
+   },
+   "category": "monospace",
+   "roles": [
+    "mono"
+   ],
+   "tags": [
+    "mono",
+    "variable-width",
+    "technical"
+   ],
+   "looks": [
+    "tech-ui",
+    "retro-futurist"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "wdth": [
+     75.0,
+     112.5,
+     100.0
+    ],
+    "wght": [
+     100.0,
+     800.0,
+     400.0
+    ]
+   },
+   "features": [
+    "calt",
+    "dnom",
+    "frac",
+    "kern",
+    "numr"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "martian-mono",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/martian-mono",
+     "version": "5.3.0",
+     "file": "standard"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/martianmono/MartianMono%5Bwdth%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "wdth 75-112: monospace that narrows for long data lines",
+   "metrics": {
+    "cap": 0.8,
+    "x": 0.6
+   },
+   "features_full": [
+    "calt",
+    "case",
+    "cv01",
+    "cv02",
+    "frac"
+   ]
+  },
+  {
+   "id": "fragment-mono",
+   "family": "Fragment Mono",
+   "foundry": "Wei Huang",
+   "designers": "Wei Huang, URW Design Studio",
+   "source": "https://github.com/weiweihuanghuang/fragment-mono",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "monospace",
+   "roles": [
+    "mono"
+   ],
+   "tags": [
+    "mono",
+    "grotesque",
+    "clean"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "tech-ui"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "calt",
+    "frac",
+    "kern"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "fragment-mono",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "Helvetica-flavoured mono: labels and credits",
+   "metrics": {
+    "cap": 0.699,
+    "x": 0.524
+   }
+  },
+  {
+   "id": "commit-mono",
+   "family": "Commit Mono",
+   "foundry": "Eigil Nikolajsen",
+   "designers": "Eigil Nikolajsen",
+   "source": "https://github.com/eigilnikolajsen/commit-mono",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "monospace",
+   "roles": [
+    "mono"
+   ],
+   "tags": [
+    "mono",
+    "neutral",
+    "technical"
+   ],
+   "looks": [
+    "tech-ui",
+    "editorial-minimal"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "calt",
+    "cv01",
+    "cv02",
+    "cv03",
+    "cv04",
+    "cv05",
+    "cv06",
+    "cv07",
+    "cv08",
+    "cv09",
+    "cv10",
+    "cv11",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin web files, weight 400",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "commit-mono",
+    "version": "5.3.0",
+    "weights": [
+     200,
+     300,
+     400,
+     500,
+     600,
+     700
+    ],
+    "styles": [
+     "normal",
+     "italic"
+    ],
+    "subsets": [
+     "latin"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "character variants cv01-cv11; one latin file carries Turkish",
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.54
+   }
+  },
+  {
+   "id": "league-mono",
+   "family": "League Mono",
+   "foundry": "The League of Moveable Type",
+   "designers": "Tyler Finck",
+   "source": "https://github.com/theleagueof/league-mono",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "monospace",
+   "roles": [
+    "mono"
+   ],
+   "tags": [
+    "mono",
+    "geometric",
+    "editorial"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "retro-futurist"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "case",
+    "kern",
+    "ordn",
+    "pnum",
+    "salt",
+    "ss01",
+    "tnum"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin web files, weight 400",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "league-mono",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "mono with stylistic set ss01; one latin file carries Turkish",
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.5
+   }
+  },
+  {
+   "id": "basteleur",
+   "family": "Basteleur",
+   "foundry": "Velvetyne Type Foundry",
+   "designers": "Keussel",
+   "source": "https://gitlab.com/velvetyne/basteleur",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://gitlab.com/velvetyne/basteleur/-/raw/f32302d63d46e9b996f329648b0f2df01c9190f5/LICENSE.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "serif",
+    "blackletter-ish",
+    "sinister",
+    "folk",
+    "handmade",
+    "independent"
+   ],
+   "looks": [
+    "noir-night",
+    "period-classic",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "case",
+    "liga",
+    "ordn",
+    "ss01",
+    "sups"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of fonts/otf/Basteleur-Bold.otf at the pinned GitLab commit",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "local",
+    "where": "https://gitlab.com/velvetyne/basteleur",
+    "commit": "f32302d63d46e9b996f329648b0f2df01c9190f5",
+    "file": "fonts/otf/Basteleur-Bold.otf",
+    "files": "fonts/basteleur/ (download fonts/otf/Basteleur-Bold.otf at the pinned commit once, with the user's OK; GitLab sends no CORS headers, so the page loads it from fonts/)"
+   },
+   "badass_libre_fonts": false,
+   "note": "woodcut-flavoured display for folk tales and horror",
+   "foundry_page": "https://velvetyne.fr/fonts/basteleur/",
+   "metrics": {
+    "cap": 0.745,
+    "x": 0.55
+   },
+   "features_full": [
+    "case",
+    "liga",
+    "ss01"
+   ]
+  },
+  {
+   "id": "le-murmure",
+   "family": "Le Murmure",
+   "foundry": "Velvetyne Type Foundry",
+   "designers": "Jérémy Landes (Studio Triple)",
+   "source": "https://gitlab.com/velvetyne/murmure",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://gitlab.com/velvetyne/murmure/-/raw/7cfa8faf6ce6fe8d030410913b6147931cdc2ecb/LICENSE.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "sans",
+    "condensed",
+    "editorial",
+    "fashion",
+    "independent"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "dlig",
+    "liga",
+    "lnum",
+    "onum",
+    "ordn",
+    "salt",
+    "ss01-ss10",
+    "titl",
+    "zero"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of fonts/le-murmure.otf at the pinned GitLab commit",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "local",
+    "where": "https://gitlab.com/velvetyne/murmure",
+    "commit": "7cfa8faf6ce6fe8d030410913b6147931cdc2ecb",
+    "file": "fonts/le-murmure.otf",
+    "files": "fonts/le-murmure/ (download fonts/le-murmure.otf at the pinned commit once, with the user's OK; GitLab sends no CORS headers, so the page loads it from fonts/)"
+   },
+   "badass_libre_fonts": false,
+   "note": "tall condensed display with ten stylistic sets",
+   "foundry_page": "https://velvetyne.fr/fonts/le-murmure/",
+   "metrics": {
+    "cap": 0.811,
+    "x": 0.667
+   },
+   "features_full": [
+    "dlig",
+    "liga",
+    "lnum",
+    "onum",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "ss06",
+    "ss07",
+    "ss08",
+    "ss09",
+    "ss10",
+    "titl",
+    "zero"
+   ]
+  },
+  {
+   "id": "ouroboros",
+   "family": "Ouroboros",
+   "foundry": "Velvetyne Type Foundry",
+   "designers": "Ariel Martín Pérez",
+   "source": "https://gitlab.com/velvetyne/ouroboros",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://gitlab.com/velvetyne/ouroboros/-/raw/660bf83a5c6c5f3d500173e80fe51f74c046fdc2/LICENSE.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "display",
+    "occult",
+    "retro",
+    "psychedelic",
+    "independent"
+   ],
+   "looks": [
+    "retro-futurist",
+    "noir-night"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "calt",
+    "case",
+    "dlig",
+    "liga",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of fonts/Ouroboros-Regular.otf at the pinned GitLab commit",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "local",
+    "where": "https://gitlab.com/velvetyne/ouroboros",
+    "commit": "660bf83a5c6c5f3d500173e80fe51f74c046fdc2",
+    "file": "fonts/Ouroboros-Regular.otf",
+    "files": "fonts/ouroboros/ (download fonts/Ouroboros-Regular.otf at the pinned commit once, with the user's OK; GitLab sends no CORS headers, so the page loads it from fonts/)"
+   },
+   "badass_libre_fonts": false,
+   "note": "sinuous 1970s-occult display",
+   "foundry_page": "https://velvetyne.fr/fonts/ouroboros/",
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.5
+   },
+   "features_full": [
+    "calt",
+    "case",
+    "dlig",
+    "liga",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03"
+   ]
+  },
+  {
+   "id": "trickster",
+   "family": "Trickster",
+   "foundry": "Velvetyne Type Foundry",
+   "designers": "see the repository",
+   "source": "https://gitlab.com/velvetyne/Trickster",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://gitlab.com/velvetyne/Trickster/-/raw/751b1fa5fd5293614d0eb4df4962ec195fa243ab/LICENSE.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "display",
+    "quirky",
+    "fable",
+    "handmade",
+    "independent"
+   ],
+   "looks": [
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "calt",
+    "liga",
+    "onum",
+    "ss01-ss06",
+    "swsh"
+   ],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of fonts/Trickster-Reg.otf at the pinned GitLab commit",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "local",
+    "where": "https://gitlab.com/velvetyne/Trickster",
+    "commit": "751b1fa5fd5293614d0eb4df4962ec195fa243ab",
+    "file": "fonts/Trickster-Reg.otf",
+    "files": "fonts/trickster/ (download fonts/Trickster-Reg.otf at the pinned commit once, with the user's OK; GitLab sends no CORS headers, so the page loads it from fonts/)"
+   },
+   "badass_libre_fonts": false,
+   "note": "mischievous display with swashes",
+   "foundry_page": "https://velvetyne.fr/fonts/trickster/",
+   "metrics": {
+    "cap": 0.76,
+    "x": 0.58
+   },
+   "features_full": [
+    "calt",
+    "liga",
+    "onum",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "ss06",
+    "swsh"
+   ]
+  },
+  {
+   "id": "clash-display",
+   "family": "Clash Display",
+   "foundry": "Indian Type Foundry (Fontshare)",
+   "designers": "Indian Type Foundry",
+   "source": "https://www.fontshare.com/fonts/clash-display",
+   "licence": {
+    "id": "ITF-FFL",
+    "url": "https://www.fontshare.com/licenses/itf-ffl"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "sans",
+    "grotesque",
+    "display",
+    "bold",
+    "contemporary"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "glossy-commercial"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "wght": [
+     200,
+     700
+    ]
+   },
+   "features": [],
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontshare web file (400/500)",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "local",
+    "where": "https://www.fontshare.com/fonts/clash-display",
+    "files": "fonts/clash-display/ (the user downloads from Fontshare; free for commercial video; never committed, shared or subset)"
+   },
+   "badass_libre_fonts": false,
+   "note": "contemporary display grotesk",
+   "metrics": {
+    "cap": 0.67,
+    "x": 0.494
+   },
+   "features_full": [
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "salt"
+   ]
+  },
+  {
+   "id": "boska",
+   "family": "Boska",
+   "foundry": "Indian Type Foundry (Fontshare)",
+   "designers": "Barbara Bigosińska",
+   "source": "https://www.fontshare.com/fonts/boska",
+   "licence": {
+    "id": "ITF-FFL",
+    "url": "https://www.fontshare.com/licenses/itf-ffl"
+   },
+   "category": "serif",
+   "roles": [
+    "display",
+    "text"
+   ],
+   "tags": [
+    "editorial",
+    "elegant",
+    "luxurious",
+    "serif"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "realist-cinematic"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "wght": [
+     200,
+     900
+    ]
+   },
+   "features": [
+    "case",
+    "frac",
+    "liga",
+    "lnum",
+    "onum",
+    "pnum",
+    "salt",
+    "smcp",
+    "tnum"
+   ],
+   "features_full": [
+    "case",
+    "frac",
+    "liga",
+    "lnum",
+    "onum",
+    "pnum",
+    "salt",
+    "smcp",
+    "tnum"
+   ],
+   "metrics": {
+    "cap": 0.715,
+    "x": 0.485
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "Fontshare CDN woff2 (400/500)",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "local",
+    "where": "https://www.fontshare.com/fonts/boska",
+    "files": "fonts/boska/ (the user downloads from Fontshare; free for commercial video; never committed, shared or subset)"
+   },
+   "badass_libre_fonts": false,
+   "note": "Sharp contemporary serif with smcp, onum/lnum and tnum and a Turkish locl. ITF Free Font License: free for video and ads, no redistribution, no modification or subsetting"
+  },
+  {
+   "id": "cabinet-grotesk",
+   "family": "Cabinet Grotesk",
+   "foundry": "Indian Type Foundry (Fontshare)",
+   "designers": "Indian Type Foundry",
+   "source": "https://www.fontshare.com/fonts/cabinet-grotesk",
+   "licence": {
+    "id": "ITF-FFL",
+    "url": "https://www.fontshare.com/licenses/itf-ffl"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display",
+    "text"
+   ],
+   "tags": [
+    "editorial",
+    "friendly",
+    "loud",
+    "sans"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial",
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "wght": [
+     100,
+     900
+    ]
+   },
+   "features": [
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05"
+   ],
+   "features_full": [
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05"
+   ],
+   "metrics": {
+    "cap": 0.67,
+    "x": 0.48
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "Fontshare CDN woff2 (400/500)",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "local",
+    "where": "https://www.fontshare.com/fonts/cabinet-grotesk",
+    "files": "fonts/cabinet-grotesk/ (the user downloads from Fontshare; free for commercial video; never committed, shared or subset)"
+   },
+   "badass_libre_fonts": false,
+   "note": "Grotesk with ss01-ss05 and a Turkish locl. ITF Free Font License (no redistribution, no modification)"
+  },
+  {
+   "id": "sentient",
+   "family": "Sentient",
+   "foundry": "Indian Type Foundry (Fontshare)",
+   "designers": "Noopur Choksi",
+   "source": "https://www.fontshare.com/fonts/sentient",
+   "licence": {
+    "id": "ITF-FFL",
+    "url": "https://www.fontshare.com/licenses/itf-ffl"
+   },
+   "category": "serif",
+   "roles": [
+    "text",
+    "display"
+   ],
+   "tags": [
+    "editorial",
+    "elegant",
+    "quiet",
+    "serif"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial",
+    "realist-cinematic"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "wght": [
+     200,
+     700
+    ]
+   },
+   "features": [
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "lnum",
+    "onum",
+    "salt",
+    "ss01",
+    "ss02"
+   ],
+   "features_full": [
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "lnum",
+    "onum",
+    "salt",
+    "ss01",
+    "ss02"
+   ],
+   "metrics": {
+    "cap": 0.685,
+    "x": 0.502
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "Fontshare CDN woff2 (400/500)",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "local",
+    "where": "https://www.fontshare.com/fonts/sentient",
+    "files": "fonts/sentient/ (the user downloads from Fontshare; free for commercial video; never committed, shared or subset)"
+   },
+   "badass_libre_fonts": false,
+   "note": "Calm text serif with onum/lnum and a Turkish locl. ITF Free Font License (no redistribution, no modification)"
+  },
+  {
+   "id": "big-shoulders",
+   "family": "Big Shoulders",
+   "foundry": "Patric King (for the City of Chicago)",
+   "designers": "Patric King",
+   "source": "https://fonts.google.com/specimen/Big+Shoulders",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/bigshoulders/OFL.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display",
+    "numerals"
+   ],
+   "tags": [
+    "brutal",
+    "display",
+    "industrial",
+    "loud"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "realist-cinematic"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "opsz": [
+     10,
+     72
+    ],
+    "wght": [
+     100,
+     900
+    ]
+   },
+   "features": [
+    "frac",
+    "liga"
+   ],
+   "features_full": [
+    "c2sc",
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "salt",
+    "smcp",
+    "ss01"
+   ],
+   "metrics": {
+    "cap": 0.8,
+    "x": 0.6
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "full font + Fontsource latin/latin-ext files",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "big-shoulders",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/big-shoulders",
+     "version": "5.3.0",
+     "file": "standard"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/bigshoulders/BigShoulders%5Bopsz%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "Condensed industrial sans with opsz 10-72 (display and text cuts in one file); smcp; scoreboards, stencils, signage"
+  },
+  {
+   "id": "chunk-five",
+   "family": "Chunk Five",
+   "foundry": "The League of Moveable Type (Meredith Mandel)",
+   "designers": "The League of Moveable Type (Meredith Mandel)",
+   "source": "https://github.com/theleagueof/chunk",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/theleagueof/chunk@12a243f3fb7c7a68844901023f7d95d6eaf14104/Open%20Font%20License.markdown"
+   },
+   "category": "serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "handmade",
+    "loud",
+    "retro",
+    "serif",
+    "warm"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {},
+   "features": [],
+   "features_full": [],
+   "metrics": {
+    "cap": 0.699,
+    "x": 0.5
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "Fontsource latin file (whole font) + GitHub source",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "chunk-five",
+    "version": "5.3.0",
+    "weights": [
+     800
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/theleagueof/chunk@12a243f3fb7c7a68844901023f7d95d6eaf14104/ChunkFive-Regular.otf"
+   },
+   "badass_libre_fonts": false,
+   "note": "Ultra-bold slab; one weight; Americana, signage"
+  },
+  {
+   "id": "grenze-gotisch",
+   "family": "Grenze Gotisch",
+   "foundry": "Omnibus-Type (Renata Polastri)",
+   "designers": "Omnibus-Type",
+   "source": "https://fonts.google.com/specimen/Grenze+Gotisch",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/grenzegotisch/OFL.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "display",
+    "dramatic",
+    "occult",
+    "retro"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "cinematic"
+   ],
+   "axes": {
+    "wght": [
+     100,
+     900
+    ]
+   },
+   "features": [
+    "frac",
+    "liga",
+    "lnum",
+    "pnum",
+    "tnum"
+   ],
+   "features_full": [
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "lnum",
+    "onum",
+    "pnum",
+    "salt",
+    "ss01",
+    "tnum",
+    "zero"
+   ],
+   "metrics": {
+    "cap": 0.603,
+    "x": 0.448
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "full font + Fontsource latin/latin-ext files",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "grenze-gotisch",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/grenze-gotisch",
+     "version": "5.3.0",
+     "file": "wght"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/grenzegotisch/GrenzeGotisch%5Bwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "Blackletter hybrid with wght 100-900, readable at title sizes; folk horror and fable titles"
+  },
+  {
+   "id": "mourier",
+   "family": "Mourier",
+   "foundry": "Velvetyne (after Eric Mourier, 1971)",
+   "designers": "Velvetyne (after Eric Mourier, 1971)",
+   "source": "https://gitlab.com/velvetyne/mourier",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://gitlab.com/velvetyne/mourier/-/raw/02c6e2d3aa23b3b8b625f50b7a912baa02e055f5/LICENSE.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "display",
+    "futurist",
+    "geometric",
+    "retro"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "retro-futurist"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05"
+   ],
+   "features_full": [
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05"
+   ],
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.5
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "fonts/Mourier-Regular.otf at the pinned GitLab commit",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "local",
+    "where": "https://gitlab.com/velvetyne/mourier",
+    "commit": "02c6e2d3aa23b3b8b625f50b7a912baa02e055f5",
+    "file": "fonts/Mourier-Regular.otf",
+    "files": "fonts/mourier/ (download fonts/Mourier-Regular.otf at the pinned commit once, with the user's OK; GitLab sends no CORS headers, so the page loads it from fonts/)"
+   },
+   "badass_libre_fonts": false,
+   "note": "Quasi-abstract geometric letters from 1971 with five stylistic sets. Local only"
+  },
+  {
+   "id": "sligoil",
+   "family": "Sligoil",
+   "foundry": "Velvetyne (Ariel Martín Pérez)",
+   "designers": "Velvetyne (Ariel Martín Pérez)",
+   "source": "https://gitlab.com/velvetyne/sligoil",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://gitlab.com/velvetyne/sligoil/-/raw/d6d999088dff79d3fab81c5661e52f2caa2c479d/LICENSE.txt"
+   },
+   "category": "monospace",
+   "roles": [
+    "mono",
+    "display",
+    "label"
+   ],
+   "tags": [
+    "mono",
+    "playful",
+    "raw-print",
+    "retro"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "calt",
+    "dlig",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04"
+   ],
+   "features_full": [
+    "calt",
+    "dlig",
+    "salt",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04"
+   ],
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.54
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "fonts/otf/Sligoil-Micro.otf at the pinned GitLab commit",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "local",
+    "where": "https://gitlab.com/velvetyne/sligoil",
+    "commit": "d6d999088dff79d3fab81c5661e52f2caa2c479d",
+    "file": "fonts/otf/Sligoil-Micro.otf",
+    "files": "fonts/sligoil/ (download fonts/otf/Sligoil-Micro.otf at the pinned commit once, with the user's OK; GitLab sends no CORS headers, so the page loads it from fonts/)"
+   },
+   "badass_libre_fonts": false,
+   "note": "Mono with huge ink traps in optical cuts (Micro to Big); risograph and zine looks"
+  },
+  {
+   "id": "ojuju",
+   "family": "Ojuju",
+   "foundry": "Ụdị Foundry (Chisaokwu Joboson, Mirko Velimirović)",
+   "designers": "Ụdị Foundry, Chisaokwu Joboson, Mirko Velimirović",
+   "source": "https://fonts.google.com/specimen/Ojuju",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/ojuju/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "loud",
+    "organic",
+    "playful",
+    "sans"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "kinetic-bold",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "wght": [
+     200,
+     800
+    ]
+   },
+   "features": [
+    "frac",
+    "pnum",
+    "tnum"
+   ],
+   "features_full": [
+    "case",
+    "dtls",
+    "frac",
+    "pnum",
+    "tnum",
+    "zero"
+   ],
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.48
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "full font + Fontsource latin/latin-ext files",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "ojuju",
+    "version": "5.3.0",
+    "weights": [
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/ojuju",
+     "version": "5.3.0",
+     "file": "wght"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/ojuju/Ojuju%5Bwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "Igbo-inspired display grotesk with ink cuts; dtls, tnum"
+  },
+  {
+   "id": "recursive",
+   "family": "Recursive",
+   "foundry": "Arrow Type (Stephen Nixon)",
+   "designers": "Arrow Type, Stephen Nixon",
+   "source": "https://fonts.google.com/specimen/Recursive",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/recursive/OFL.txt"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "mono",
+    "text",
+    "display"
+   ],
+   "tags": [
+    "cold",
+    "handmade",
+    "playful",
+    "sans",
+    "technical",
+    "warm"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial",
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "slnt": [
+     -15,
+     0
+    ],
+    "wght": [
+     300,
+     1000
+    ],
+    "CASL": [
+     0,
+     1
+    ],
+    "CRSV": [
+     0,
+     1
+    ],
+    "MONO": [
+     0,
+     1
+    ]
+   },
+   "features": [
+    "frac",
+    "pnum"
+   ],
+   "features_full": [
+    "afrc",
+    "case",
+    "dlig",
+    "frac",
+    "liga",
+    "pnum",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "ss05",
+    "ss06",
+    "ss07",
+    "ss08",
+    "ss09",
+    "ss10",
+    "ss11",
+    "ss12",
+    "ss20",
+    "titl",
+    "zero"
+   ],
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.526
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "full font + Fontsource latin/latin-ext files",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "recursive",
+    "version": "5.3.0",
+    "weights": [
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/recursive",
+     "version": "5.3.0",
+     "file": "full"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/recursive/Recursive%5BCASL%2CCRSV%2CMONO%2Cslnt%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "MONO 0-1, CASL 0-1, CRSV, slnt and wght 300-1000: sans to mono and linear to casual in one file; animate MONO or CASL on a beat"
+  },
+  {
+   "id": "shantell-sans",
+   "family": "Shantell Sans",
+   "foundry": "Shantell Martin, Arrow Type, Anya Danilova",
+   "designers": "Shantell Martin, Arrow Type, Anya Danilova",
+   "source": "https://fonts.google.com/specimen/Shantell+Sans",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/shantellsans/OFL.txt"
+   },
+   "category": "display",
+   "roles": [
+    "text",
+    "display",
+    "label"
+   ],
+   "tags": [
+    "display",
+    "friendly",
+    "handmade",
+    "playful",
+    "warm"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {
+    "wght": [
+     300,
+     800
+    ],
+    "BNCE": [
+     -100,
+     100
+    ],
+    "INFM": [
+     0,
+     100
+    ],
+    "SPAC": [
+     0,
+     100
+    ]
+   },
+   "features": [
+    "frac",
+    "liga",
+    "tnum"
+   ],
+   "features_full": [
+    "calt",
+    "case",
+    "frac",
+    "liga",
+    "ss01",
+    "ss02",
+    "ss03",
+    "ss04",
+    "tnum",
+    "zero"
+   ],
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.485
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "full font + Fontsource latin/latin-ext files",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "shantell-sans",
+    "version": "5.3.0",
+    "weights": [
+     300,
+     400,
+     500,
+     600,
+     700,
+     800
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/shantell-sans",
+     "version": "5.3.0",
+     "file": "full"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/shantellsans/ShantellSans%5BBNCE%2CINFM%2CSPAC%2Cwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "Marker handwriting with BNCE (bounce), INFM (informality) and SPAC axes: real hand-made jitter, seeded per glyph through BNCE"
+  },
+  {
+   "id": "special-elite",
+   "family": "Special Elite",
+   "foundry": "Astigmatic",
+   "designers": "Astigmatic",
+   "source": "https://fonts.google.com/specimen/Special+Elite",
+   "licence": {
+    "id": "Apache-2.0",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/apache/specialelite/LICENSE.txt"
+   },
+   "category": "display",
+   "roles": [
+    "label",
+    "text"
+   ],
+   "tags": [
+    "display",
+    "nostalgic",
+    "raw-print",
+    "retro"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "frac",
+    "liga"
+   ],
+   "features_full": [
+    "frac",
+    "liga"
+   ],
+   "metrics": {
+    "cap": 0.348,
+    "x": 0.258
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "full font + Fontsource latin/latin-ext files",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "special-elite",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/apache/specialelite/SpecialElite-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "Worn typewriter; dossiers, letters, archival captions. Apache 2.0"
+  },
+  {
+   "id": "pixelify-sans",
+   "family": "Pixelify Sans",
+   "foundry": "Stefie Justprince",
+   "designers": "Stefie Justprince",
+   "source": "https://fonts.google.com/specimen/Pixelify+Sans",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/pixelifysans/OFL.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display",
+    "label"
+   ],
+   "tags": [
+    "display",
+    "playful",
+    "retro"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "retro-futurist"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "wght": [
+     400,
+     700
+    ]
+   },
+   "features": [
+    "frac",
+    "liga"
+   ],
+   "features_full": [
+    "case",
+    "dlig",
+    "frac",
+    "liga"
+   ],
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.45
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "full font + Fontsource latin/latin-ext files",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "pixelify-sans",
+    "version": "5.3.0",
+    "weights": [
+     400,
+     500,
+     600,
+     700
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/pixelify-sans",
+     "version": "5.3.0",
+     "file": "wght"
+    },
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/pixelifysans/PixelifySans%5Bwght%5D.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "Pixel sans with wght 400-700; game and Y2K looks"
+  },
+  {
+   "id": "monoton",
+   "family": "Monoton",
+   "foundry": "Vernon Adams",
+   "designers": "Vernon Adams",
+   "source": "https://fonts.google.com/specimen/Monoton",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/monoton/OFL.txt"
+   },
+   "category": "display",
+   "roles": [
+    "display"
+   ],
+   "tags": [
+    "display",
+    "loud",
+    "nostalgic",
+    "retro"
+   ],
+   "looks": [
+    "retro-futurist"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [],
+   "features_full": [],
+   "metrics": {
+    "cap": 0.809,
+    "x": 0.703
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "full font + Fontsource latin/latin-ext files",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "monoton",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "full": "https://cdn.jsdelivr.net/gh/google/fonts@1d0e46c7933245c8180fe83e47917961c913bbdb/ofl/monoton/Monoton-Regular.ttf"
+   },
+   "badass_libre_fonts": false,
+   "note": "Inline neon tube caps; one weight; glow it, never stroke it"
+  },
+  {
+   "id": "caveat-brush",
+   "family": "Caveat Brush",
+   "foundry": "Impallari Type",
+   "designers": "Impallari Type",
+   "source": "https://fonts.google.com/specimen/Caveat+Brush",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "handwriting",
+   "roles": [
+    "accent"
+   ],
+   "tags": [
+    "script",
+    "brush",
+    "handmade",
+    "warm",
+    "energetic"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "storybook-handmade",
+    "glossy-commercial"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "dnom",
+    "frac",
+    "liga",
+    "numr"
+   ],
+   "features_full": null,
+   "metrics": {
+    "cap": 0.66,
+    "x": 0.42
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400, incl. 'İğneli Şükrü Çığlık Öğün'",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "caveat-brush",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "a quick brush hand for one or two words over a heavy grotesque"
+  },
+  {
+   "id": "sedgwick-ave-display",
+   "family": "Sedgwick Ave Display",
+   "foundry": "Pedro Vergani, Kevin Burke",
+   "designers": "Pedro Vergani, Kevin Burke",
+   "source": "https://fonts.google.com/specimen/Sedgwick+Ave+Display",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "handwriting",
+   "roles": [
+    "accent"
+   ],
+   "tags": [
+    "script",
+    "graffiti",
+    "urban",
+    "loud",
+    "handmade"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "retro-futurist"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "liga"
+   ],
+   "features_full": null,
+   "metrics": {
+    "cap": 0.95,
+    "x": 0.65
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400, incl. 'İğneli Şükrü Çığlık Öğün'",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "sedgwick-ave-display",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "graffiti hand-style; one word, tucked into a black wide display"
+  },
+  {
+   "id": "yellowtail",
+   "family": "Yellowtail",
+   "foundry": "Astigmatic",
+   "designers": "Astigmatic",
+   "source": "https://fonts.google.com/specimen/Yellowtail",
+   "licence": {
+    "id": "Apache-2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0"
+   },
+   "category": "handwriting",
+   "roles": [
+    "accent"
+   ],
+   "tags": [
+    "script",
+    "retro",
+    "signage",
+    "americana",
+    "warm"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "period-classic",
+    "glossy-commercial"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [],
+   "features_full": null,
+   "metrics": null,
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400, incl. 'İğneli Şükrü Çığlık Öğün'",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "yellowtail",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "1950s sign-painter script; a single word over condensed caps"
+  },
+  {
+   "id": "marck-script",
+   "family": "Marck Script",
+   "foundry": "Denis Masharov",
+   "designers": "Denis Masharov",
+   "source": "https://fonts.google.com/specimen/Marck+Script",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "handwriting",
+   "roles": [
+    "accent"
+   ],
+   "tags": [
+    "script",
+    "handwriting",
+    "casual",
+    "personal"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "axes": {},
+   "features": [],
+   "features_full": null,
+   "metrics": {
+    "cap": 0.638,
+    "x": 0.263
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400, incl. 'İğneli Şükrü Çığlık Öğün'",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "marck-script",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "a light personal hand; the human note beside an industrial display"
+  },
+  {
+   "id": "kalam",
+   "family": "Kalam",
+   "foundry": "Indian Type Foundry",
+   "designers": "Indian Type Foundry",
+   "source": "https://fonts.google.com/specimen/Kalam",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "handwriting",
+   "roles": [
+    "accent"
+   ],
+   "tags": [
+    "script",
+    "handwriting",
+    "marker",
+    "friendly"
+   ],
+   "looks": [
+    "storybook-handmade",
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "liga"
+   ],
+   "features_full": null,
+   "metrics": {
+    "cap": 0.739,
+    "x": 0.526
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400, incl. 'İğneli Şükrü Çığlık Öğün'",
+    "locl_TRK": false
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "kalam",
+    "version": "5.3.0",
+    "weights": [
+     300,
+     400,
+     700
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "felt-marker handwriting (use Bold) for a friendly aside"
+  },
+  {
+   "id": "mynerve",
+   "family": "Mynerve",
+   "foundry": "Carolina Short",
+   "designers": "Carolina Short",
+   "source": "https://fonts.google.com/specimen/Mynerve",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "handwriting",
+   "roles": [
+    "accent"
+   ],
+   "tags": [
+    "script",
+    "handwriting",
+    "school",
+    "playful"
+   ],
+   "looks": [
+    "storybook-handmade",
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {},
+   "features": [
+    "calt",
+    "dnom",
+    "frac",
+    "liga",
+    "numr"
+   ],
+   "features_full": null,
+   "metrics": {
+    "cap": 0.67,
+    "x": 0.42
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400, incl. 'İğneli Şükrü Çığlık Öğün'",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "mynerve",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": true,
+   "note": "a quick school-notebook hand; one word next to a heavy gothic"
+  },
+  {
+   "id": "square-peg",
+   "family": "Square Peg",
+   "foundry": "Robert Leuschke",
+   "designers": "Robert Leuschke",
+   "source": "https://fonts.google.com/specimen/Square+Peg",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "handwriting",
+   "roles": [
+    "accent"
+   ],
+   "tags": [
+    "script",
+    "handwriting",
+    "fine",
+    "elegant",
+    "quirky"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {},
+   "features": [
+    "frac",
+    "liga"
+   ],
+   "features_full": null,
+   "metrics": {
+    "cap": 0.6,
+    "x": 0.26
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400, incl. 'İğneli Şükrü Çığlık Öğün'",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "square-peg",
+    "version": "5.3.0",
+    "weights": [
+     400
+    ],
+    "styles": [
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ]
+   },
+   "badass_libre_fonts": false,
+   "note": "a fine, tall casual hand; needs size, never small"
+  },
+  {
+   "id": "figtree",
+   "family": "Figtree",
+   "foundry": "Erik Kennedy",
+   "designers": "Erik Kennedy",
+   "source": "https://fonts.google.com/specimen/Figtree",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "sans-serif",
+   "roles": [
+    "text",
+    "label"
+   ],
+   "tags": [
+    "sans",
+    "geometric",
+    "friendly",
+    "clean"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial",
+    "kinetic-bold"
+   ],
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "axes": {
+    "wght": [
+     300.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "numr",
+    "pnum",
+    "tnum"
+   ],
+   "features_full": null,
+   "metrics": {
+    "cap": 0.7,
+    "x": 0.5
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400, incl. 'İğneli Şükrü Çığlık Öğün'",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "figtree",
+    "version": "5.3.0",
+    "weights": [
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/figtree",
+     "version": "5.3.0",
+     "file": "wght"
+    }
+   },
+   "badass_libre_fonts": false,
+   "note": "clean geometric text face for subtitles and body beside expressive displays"
+  },
+  {
+   "id": "geist-mono",
+   "family": "Geist Mono",
+   "foundry": "Vercel",
+   "designers": "Andrés Briganti, Mateo Zaragoza, Guillermo Rauch, Evil Rabbit, José Rago, Facundo Santana",
+   "source": "https://fonts.google.com/specimen/Geist+Mono",
+   "licence": {
+    "id": "OFL-1.1",
+    "url": "https://openfontlicense.org"
+   },
+   "category": "monospace",
+   "roles": [
+    "mono"
+   ],
+   "tags": [
+    "mono",
+    "technical",
+    "clean"
+   ],
+   "looks": [
+    "tech-ui",
+    "editorial-minimal"
+   ],
+   "purposes": [
+    "ad"
+   ],
+   "axes": {
+    "wght": [
+     100.0,
+     900.0,
+     400.0
+    ]
+   },
+   "features": [
+    "dnom",
+    "frac",
+    "numr"
+   ],
+   "features_full": null,
+   "metrics": {
+    "cap": 0.71,
+    "x": 0.53
+   },
+   "turkish": {
+    "status": "verified",
+    "missing": "",
+    "method": "cmap of the Fontsource latin+latin-ext web files, weight 400, incl. 'İğneli Şükrü Çığlık Öğün'",
+    "locl_TRK": true
+   },
+   "load": {
+    "method": "fontsource",
+    "pkg": "geist-mono",
+    "version": "5.3.0",
+    "weights": [
+     100,
+     200,
+     300,
+     400,
+     500,
+     600,
+     700,
+     800,
+     900
+    ],
+    "styles": [
+     "italic",
+     "normal"
+    ],
+    "subsets": [
+     "latin",
+     "latin-ext"
+    ],
+    "variable": {
+     "pkg": "@fontsource-variable/geist-mono",
+     "version": "5.3.0",
+     "file": "wght"
+    }
+   },
+   "badass_libre_fonts": false,
+   "note": "the mono for labels and data beside Geist or Bricolage"
+  }
+ ],
+ "pairings": [
+  {
+   "id": "velvet-noir",
+   "display": "fraunces",
+   "text": "instrument-sans",
+   "mono": "ibm-plex-mono",
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "noir-night",
+    "period-classic",
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "editorial",
+    "grotesque",
+    "literary",
+    "mono",
+    "neutral",
+    "old-style",
+    "sans",
+    "serif",
+    "technical",
+    "warm"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "old-style display serif (opsz 144, WONK 1) over a neutral grotesque: contrast of structure, similar x-height",
+   "setup": {
+    "display": {
+     "wght": 600,
+     "axes": {
+      "opsz": 144.0,
+      "SOFT": 50,
+      "WONK": 1.0
+     }
+    },
+    "text": {
+     "wght": 500
+    }
+   },
+   "accent": null
+  },
+  {
+   "id": "didone-gala",
+   "display": "bodoni-moda",
+   "text": "schibsted-grotesk",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "period-classic"
+   ],
+   "tags": [
+    "didone",
+    "elegant",
+    "grotesque",
+    "high-contrast",
+    "luxurious",
+    "news",
+    "sans",
+    "serif"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "hairline didone for the name, a news grotesque for every fact",
+   "accent": null
+  },
+  {
+   "id": "editorial-whisper",
+   "display": "instrument-serif",
+   "text": "geist",
+   "mono": "jetbrains-mono",
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial",
+    "tech-ui"
+   ],
+   "tags": [
+    "clean",
+    "code",
+    "condensed",
+    "editorial",
+    "elegant",
+    "geometric",
+    "mono",
+    "quiet",
+    "sans",
+    "serif",
+    "technical"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "condensed serif at large size, clean geometric sans small: one quiet voice",
+   "accent": null
+  },
+  {
+   "id": "chicago-steel",
+   "display": "big-shoulders",
+   "text": "ibm-plex-sans",
+   "mono": "ibm-plex-mono",
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "kinetic-bold"
+   ],
+   "tags": [
+    "brutal",
+    "civic",
+    "condensed",
+    "display",
+    "grotesque",
+    "industrial",
+    "mono",
+    "neutral",
+    "sans",
+    "technical"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "civic condensed caps with the Plex system for data and captions",
+   "accent": null
+  },
+  {
+   "id": "condensed-western",
+   "display": "league-gothic",
+   "text": "newsreader",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "period-classic",
+    "realist-cinematic"
+   ],
+   "tags": [
+    "classic",
+    "condensed",
+    "editorial",
+    "gothic",
+    "poster",
+    "sans",
+    "serif",
+    "transitional"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "poster gothic caps over a transitional text serif (opsz for small lines)",
+   "accent": null
+  },
+  {
+   "id": "bricolage-play",
+   "display": "bricolage-grotesque",
+   "text": "fragment-mono",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "glossy-commercial",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "clean",
+    "friendly",
+    "grotesque",
+    "mono",
+    "quirky",
+    "sans"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "a characterful grotesque (opsz 96) with a plain mono for prices and labels",
+   "accent": null
+  },
+  {
+   "id": "syne-wide",
+   "display": "syne",
+   "text": "martian-mono",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "retro-futurist",
+    "kinetic-bold",
+    "editorial-minimal"
+   ],
+   "tags": [
+    "artistic",
+    "experimental",
+    "loud",
+    "mono",
+    "sans",
+    "technical",
+    "variable-width",
+    "wide"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "Syne 800 (wide) against a narrow mono: width contrast",
+   "accent": null
+  },
+  {
+   "id": "unbounded-launch",
+   "display": "unbounded",
+   "text": "instrument-sans",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial",
+    "kinetic-bold",
+    "tech-ui"
+   ],
+   "tags": [
+    "bold",
+    "futuristic",
+    "grotesque",
+    "neutral",
+    "playful",
+    "rounded",
+    "sans",
+    "wide"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "wide rounded display, neutral narrow grotesque for the details",
+   "setup": {
+    "display": {
+     "wght": 700
+    },
+    "text": {
+     "wght": 500
+    }
+   },
+   "accent": null
+  },
+  {
+   "id": "caslon-quiet",
+   "display": "libre-caslon-display",
+   "text": "familjen-grotesk",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "period-classic",
+    "realist-cinematic"
+   ],
+   "tags": [
+    "classic",
+    "grotesque",
+    "literary",
+    "sans",
+    "serif",
+    "transitional",
+    "warm"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "Caslon title with a warm grotesque: literary but current",
+   "accent": null
+  },
+  {
+   "id": "gloock-poster",
+   "display": "gloock",
+   "text": "space-mono",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "kinetic-bold"
+   ],
+   "tags": [
+    "editorial",
+    "high-contrast",
+    "loud",
+    "mono",
+    "quirky",
+    "retro",
+    "serif"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "heavy contrast serif with a characterful mono",
+   "accent": null
+  },
+  {
+   "id": "imbue-tall",
+   "display": "imbue",
+   "text": "epilogue",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "editorial-minimal"
+   ],
+   "tags": [
+    "condensed",
+    "didone",
+    "fashion",
+    "grotesque",
+    "quirky",
+    "sans",
+    "serif"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "tall condensed didone, squarish grotesque below",
+   "accent": null
+  },
+  {
+   "id": "cormorant-elegy",
+   "display": "cormorant",
+   "text": "mona-sans",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "period-classic",
+    "realist-cinematic"
+   ],
+   "tags": [
+    "elegant",
+    "garalde",
+    "grotesque",
+    "romantic",
+    "sans",
+    "serif",
+    "variable-width"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "fragile garalde titles, sturdy grotesque captions",
+   "accent": null
+  },
+  {
+   "id": "redaction-dossier",
+   "display": "redaction",
+   "text": "commit-mono",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "noir-night"
+   ],
+   "tags": [
+    "archival",
+    "degraded",
+    "documentary",
+    "mono",
+    "neutral",
+    "serif",
+    "technical"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "degrading serif (swap redaction-10…100 per beat) with a neutral mono for the record",
+   "accent": null
+  },
+  {
+   "id": "anybody-stretch",
+   "display": "anybody",
+   "text": "jetbrains-mono",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "kinetic-bold",
+    "retro-futurist"
+   ],
+   "tags": [
+    "brutal",
+    "code",
+    "kinetic",
+    "mono",
+    "sans",
+    "sporty",
+    "technical",
+    "variable-width"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "wdth 50-150 moving with the beat; mono for scores and numbers",
+   "setup": {
+    "display": {
+     "wght": 800,
+     "axes": {
+      "wdth": 100
+     },
+     "kinetic": "wdth 60..140"
+    },
+    "text": {
+     "wght": 500
+    }
+   },
+   "accent": null
+  },
+  {
+   "id": "archivo-sport",
+   "display": "archivo",
+   "text": "martian-mono",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "editorial-minimal"
+   ],
+   "tags": [
+    "grotesque",
+    "industrial",
+    "mono",
+    "sans",
+    "sporty",
+    "technical",
+    "variable-width"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "expanded headline, condensed labels, mono stats",
+   "accent": null
+  },
+  {
+   "id": "climate-data",
+   "display": "climate-crisis",
+   "text": "ibm-plex-mono",
+   "mono": null,
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "editorial-minimal"
+   ],
+   "tags": [
+    "data-driven",
+    "display",
+    "documentary",
+    "mono",
+    "neutral",
+    "political",
+    "technical"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "YEAR axis on a date counter, mono for the figures",
+   "accent": null
+  },
+  {
+   "id": "bungee-street",
+   "display": "bungee",
+   "text": "space-grotesk",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial",
+    "kinetic-bold",
+    "retro-futurist"
+   ],
+   "tags": [
+    "display",
+    "grotesque",
+    "loud",
+    "playful",
+    "sans",
+    "signage",
+    "technical",
+    "urban"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "signage display with a technical grotesque",
+   "setup": {
+    "display": {},
+    "text": {
+     "wght": 500
+    }
+   },
+   "accent": null
+  },
+  {
+   "id": "shrikhand-sweet",
+   "display": "shrikhand",
+   "text": "host-grotesk",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "storybook-handmade",
+    "glossy-commercial"
+   ],
+   "tags": [
+    "display",
+    "festive",
+    "friendly",
+    "grotesque",
+    "playful",
+    "sans",
+    "script-ish",
+    "sweet"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "lettering-like italic display, friendly grotesque for price and CTA",
+   "accent": null
+  },
+  {
+   "id": "young-folk",
+   "display": "young-serif",
+   "text": "mona-sans",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "storybook-handmade",
+    "glossy-commercial"
+   ],
+   "tags": [
+    "grotesque",
+    "heavy",
+    "nostalgic",
+    "sans",
+    "serif",
+    "variable-width",
+    "warm"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "chunky 70s serif, neutral variable grotesque",
+   "accent": null
+  },
+  {
+   "id": "dela-impact",
+   "display": "dela-gothic-one",
+   "text": "geist",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "kinetic-bold"
+   ],
+   "tags": [
+    "display",
+    "geometric",
+    "gothic",
+    "heavy",
+    "loud",
+    "sans",
+    "technical"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "one heavy word per card, a clean sans for everything else",
+   "accent": null
+  },
+  {
+   "id": "danfo-signal",
+   "display": "danfo",
+   "text": "space-mono",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "kinetic-bold"
+   ],
+   "tags": [
+    "display",
+    "loud",
+    "mono",
+    "playful",
+    "quirky",
+    "retro",
+    "signage"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "ELSH axis on the beat with a retro mono",
+   "accent": null
+  },
+  {
+   "id": "tilt-3d",
+   "display": "tilt-warp",
+   "text": "jetbrains-mono",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "retro-futurist",
+    "kinetic-bold"
+   ],
+   "tags": [
+    "3d",
+    "clean",
+    "code",
+    "display",
+    "mono",
+    "playful",
+    "rotating",
+    "technical"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "fake-3D rotation axes, a quiet mono",
+   "accent": null
+  },
+  {
+   "id": "major-terminal",
+   "display": "major-mono-display",
+   "text": "geist",
+   "mono": "jetbrains-mono",
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "retro-futurist",
+    "tech-ui"
+   ],
+   "tags": [
+    "code",
+    "display",
+    "futuristic",
+    "geometric",
+    "mono",
+    "retro",
+    "sans",
+    "tech",
+    "technical"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "geometric mono display, clean sans text, code mono",
+   "setup": {
+    "display": {},
+    "text": {
+     "wght": 400
+    }
+   },
+   "accent": null
+  },
+  {
+   "id": "plex-system",
+   "display": "ibm-plex-serif",
+   "text": "ibm-plex-sans",
+   "mono": "ibm-plex-mono",
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "tech-ui"
+   ],
+   "tags": [
+    "grotesque",
+    "mono",
+    "neutral",
+    "sans",
+    "serif",
+    "slab-ish",
+    "superfamily",
+    "technical"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "one superfamily: serif, sans and mono share proportions",
+   "accent": null
+  },
+  {
+   "id": "piazzolla-book",
+   "display": "piazzolla",
+   "text": "instrument-sans",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "storybook-handmade",
+    "realist-cinematic"
+   ],
+   "tags": [
+    "grotesque",
+    "literary",
+    "neutral",
+    "sans",
+    "serif",
+    "sturdy",
+    "warm"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "sturdy book serif, neutral grotesque labels",
+   "accent": null
+  },
+  {
+   "id": "dm-serif-lux",
+   "display": "dm-serif-display",
+   "text": "geist",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "glossy-commercial"
+   ],
+   "tags": [
+    "geometric",
+    "high-contrast",
+    "luxurious",
+    "sans",
+    "serif",
+    "technical",
+    "warm"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "high contrast serif name, clean geometric sans details",
+   "accent": null
+  },
+  {
+   "id": "goudy-intertitle",
+   "display": "sorts-mill-goudy",
+   "text": "league-spartan",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "period-classic",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "antique",
+    "bold",
+    "geometric",
+    "modernist",
+    "old-style",
+    "sans",
+    "serif"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "Goudy intertitles with geometric caps labels (period pairing)",
+   "accent": null
+  },
+  {
+   "id": "apfel-editorial",
+   "display": "apfel-grotezk",
+   "text": "newsreader",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "editorial",
+    "grotesque",
+    "independent",
+    "quirky",
+    "sans",
+    "serif",
+    "transitional"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "independent grotesque display over a text serif",
+   "accent": null
+  },
+  {
+   "id": "anton-trailer",
+   "display": "anton",
+   "text": "newsreader",
+   "mono": null,
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "kinetic-bold"
+   ],
+   "tags": [
+    "condensed",
+    "editorial",
+    "impact",
+    "sans",
+    "serif",
+    "trailer",
+    "transitional"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "trailer caps over a quiet serif",
+   "accent": null
+  },
+  {
+   "id": "league-voice",
+   "display": "league-spartan",
+   "text": "league-mono",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "period-classic"
+   ],
+   "tags": [
+    "bold",
+    "editorial",
+    "geometric",
+    "modernist",
+    "mono",
+    "sans"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "one foundry voice: geometric display and its mono",
+   "accent": null
+  },
+  {
+   "id": "space-voice",
+   "display": "space-grotesk",
+   "text": "space-mono",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "tech-ui",
+    "retro-futurist"
+   ],
+   "tags": [
+    "grotesque",
+    "mono",
+    "quirky",
+    "retro",
+    "sans",
+    "technical"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "grotesque and the mono it grew from",
+   "accent": null
+  },
+  {
+   "id": "ouroboros-occult",
+   "display": "ouroboros",
+   "text": "space-mono",
+   "mono": null,
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "retro-futurist",
+    "noir-night"
+   ],
+   "tags": [
+    "display",
+    "mono",
+    "occult",
+    "psychedelic",
+    "quirky",
+    "retro"
+   ],
+   "turkish": "verified",
+   "local_files": true,
+   "why": "Velvetyne display (local file) with a retro mono",
+   "accent": null
+  },
+  {
+   "id": "basteleur-folk",
+   "display": "basteleur",
+   "text": "instrument-sans",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "noir-night",
+    "period-classic",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "blackletter-ish",
+    "folk",
+    "grotesque",
+    "handmade",
+    "neutral",
+    "sans",
+    "serif",
+    "sinister"
+   ],
+   "turkish": "verified",
+   "local_files": true,
+   "why": "woodcut display (local file) with a neutral grotesque",
+   "accent": null
+  },
+  {
+   "id": "murmure-fashion",
+   "display": "le-murmure",
+   "text": "newsreader",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial"
+   ],
+   "tags": [
+    "condensed",
+    "editorial",
+    "fashion",
+    "sans",
+    "serif",
+    "transitional"
+   ],
+   "turkish": "verified",
+   "local_files": true,
+   "why": "tall condensed display (local file) with a text serif",
+   "accent": null
+  },
+  {
+   "id": "trickster-fable",
+   "display": "trickster",
+   "text": "piazzolla",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "storybook-handmade"
+   ],
+   "tags": [
+    "display",
+    "fable",
+    "handmade",
+    "literary",
+    "quirky",
+    "serif",
+    "sturdy"
+   ],
+   "turkish": "verified",
+   "local_files": true,
+   "why": "swash display (local file) with a book serif",
+   "accent": null
+  },
+  {
+   "id": "quiet-cinema",
+   "display": "instrument-serif",
+   "text": "familjen-grotesk",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "realist-cinematic"
+   ],
+   "tags": [
+    "condensed",
+    "elegant",
+    "grotesque",
+    "quiet",
+    "sans",
+    "serif",
+    "warm"
+   ],
+   "why": "A condensed sharp serif for the title, a warm grotesk with ink traps for captions; both narrow, both restrained.",
+   "setup": {
+    "display": {
+     "wght": 400,
+     "italic": true
+    },
+    "text": {
+     "wght": 500
+    }
+   },
+   "mood": "elegant-quiet",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "noir-didone",
+   "display": "bodoni-moda",
+   "text": "ibm-plex-sans",
+   "mono": null,
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "realist-cinematic"
+   ],
+   "tags": [
+    "didone",
+    "dramatic",
+    "elegant",
+    "grotesque",
+    "high-contrast",
+    "sans",
+    "serif",
+    "technical"
+   ],
+   "why": "Hairline contrast at opsz 96 against a condensed industrial sans (wdth 85): glamour over machinery.",
+   "setup": {
+    "display": {
+     "wght": 500,
+     "axes": {
+      "opsz": 96.0
+     }
+    },
+    "text": {
+     "wght": 500,
+     "axes": {
+      "wdth": 85
+     }
+    }
+   },
+   "mood": "dramatic-elegant",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "museum-light",
+   "display": "cormorant",
+   "text": "archivo",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "classical",
+    "elegant",
+    "garalde",
+    "grotesque",
+    "industrial",
+    "sans",
+    "serif"
+   ],
+   "why": "Garamond-born display capitals with small caps for labels; Archivo semi-condensed keeps captions modern and legible.",
+   "setup": {
+    "display": {
+     "wght": 500
+    },
+    "text": {
+     "wght": 500,
+     "axes": {
+      "wdth": 87
+     }
+    }
+   },
+   "mood": "classical",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "documentary-plain",
+   "display": "newsreader",
+   "text": "ibm-plex-sans",
+   "mono": "ibm-plex-mono",
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "realist-cinematic"
+   ],
+   "tags": [
+    "documentary",
+    "editorial",
+    "grotesque",
+    "honest",
+    "mono",
+    "neutral",
+    "sans",
+    "serif",
+    "technical",
+    "transitional"
+   ],
+   "why": "News serif headlines (opsz 72), Plex Sans for names and Plex Mono for dates and data: a newspaper's hierarchy.",
+   "setup": {
+    "display": {
+     "wght": 600,
+     "axes": {
+      "opsz": 72.0
+     }
+    },
+    "text": {
+     "wght": 500
+    },
+    "mono": {
+     "wght": 400
+    }
+   },
+   "mood": "honest-documentary",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "picture-book",
+   "display": "young-serif",
+   "text": "shantell-sans",
+   "mono": null,
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "storybook-handmade"
+   ],
+   "tags": [
+    "display",
+    "friendly",
+    "handmade",
+    "heavy",
+    "serif",
+    "warm"
+   ],
+   "why": "A round heavy serif title and the narrator's own marker hand for captions (INFM 40, BNCE seeded per glyph).",
+   "setup": {
+    "display": {
+     "wght": 400
+    },
+    "text": {
+     "wght": 500,
+     "axes": {
+      "INFM": 40,
+      "BNCE": 20
+     }
+    }
+   },
+   "mood": "warm-handmade",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "literary",
+   "display": "gloock",
+   "text": "newsreader",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "dramatic",
+    "editorial",
+    "high-contrast",
+    "literary",
+    "loud",
+    "serif",
+    "transitional"
+   ],
+   "why": "A heavy-contrast serif title over a quiet news serif with optical sizes: a book jacket.",
+   "setup": {
+    "display": {
+     "wght": 400
+    },
+    "text": {
+     "wght": 400,
+     "axes": {
+      "opsz": 24
+     }
+    }
+   },
+   "mood": "literary-dramatic",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "folk-horror",
+   "display": "grenze-gotisch",
+   "text": "cormorant",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "dark",
+    "display",
+    "dramatic",
+    "elegant",
+    "folk",
+    "garalde",
+    "occult",
+    "serif"
+   ],
+   "why": "A blackletter gothic for the title, a fragile garalde for the lines: old print, a cold room.",
+   "setup": {
+    "display": {
+     "wght": 600
+    },
+    "text": {
+     "wght": 400
+    }
+   },
+   "mood": "dark-folk",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "alchemy",
+   "display": "ouroboros",
+   "text": "sorts-mill-goudy",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "antique",
+    "display",
+    "occult",
+    "old-style",
+    "retro",
+    "serif"
+   ],
+   "why": "Ritual flared capitals (Velvetyne) over a warm Goudy text with small caps.",
+   "setup": {
+    "display": {},
+    "text": {
+     "wght": 400
+    }
+   },
+   "mood": "occult",
+   "turkish": "verified",
+   "local_files": true,
+   "accent": null
+  },
+  {
+   "id": "tarot",
+   "display": "basteleur",
+   "text": "newsreader",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "storybook-handmade"
+   ],
+   "tags": [
+    "blackletter-ish",
+    "editorial",
+    "folk",
+    "occult",
+    "serif",
+    "sinister",
+    "transitional"
+   ],
+   "why": "A woodcut display for the card names, a news serif with optical sizes for the reading.",
+   "setup": {
+    "display": {},
+    "text": {
+     "wght": 400,
+     "axes": {
+      "opsz": 18
+     }
+    }
+   },
+   "mood": "occult-folk",
+   "turkish": "verified",
+   "local_files": true,
+   "accent": null
+  },
+  {
+   "id": "print-edition",
+   "display": "redaction",
+   "text": "space-mono",
+   "mono": null,
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "storybook-handmade"
+   ],
+   "tags": [
+    "degraded",
+    "documentary",
+    "mono",
+    "print",
+    "quirky",
+    "raw",
+    "retro",
+    "serif"
+   ],
+   "why": "Redaction's eroded grades give real ink loss; Space Mono labels read like a stamp. Swap grades over time for decay.",
+   "setup": {
+    "display": {
+     "grade": "redaction-50"
+    },
+    "text": {
+     "wght": 400
+    }
+   },
+   "mood": "raw-print",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "typewriter-archive",
+   "display": "special-elite",
+   "text": "newsreader",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "archival",
+    "display",
+    "editorial",
+    "nostalgic",
+    "raw-print",
+    "serif",
+    "transitional"
+   ],
+   "why": "A worn typewriter for dossiers and dates, a news serif for the narration cards.",
+   "setup": {
+    "display": {},
+    "text": {
+     "wght": 400,
+     "axes": {
+      "opsz": 16
+     }
+    }
+   },
+   "mood": "nostalgic-archival",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "vhs-memory",
+   "display": "instrument-serif",
+   "text": "space-mono",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "retro-futurist"
+   ],
+   "tags": [
+    "condensed",
+    "elegant",
+    "lofi",
+    "mono",
+    "nostalgic",
+    "quirky",
+    "retro",
+    "serif"
+   ],
+   "why": "A quiet condensed serif for memory, a retro mono for the timestamp: a home video label.",
+   "setup": {
+    "display": {
+     "italic": true
+    },
+    "text": {}
+   },
+   "mood": "nostalgic-lofi",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "neon-arcade",
+   "display": "monoton",
+   "text": "space-grotesk",
+   "mono": "jetbrains-mono",
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "retro-futurist"
+   ],
+   "tags": [
+    "code",
+    "display",
+    "grotesque",
+    "loud",
+    "mono",
+    "neon",
+    "nostalgic",
+    "retro",
+    "sans",
+    "technical"
+   ],
+   "why": "Inline tube capitals glow; a geometric grotesk and a code mono keep the information clean.",
+   "setup": {
+    "display": {},
+    "text": {
+     "wght": 500
+    },
+    "mono": {
+     "wght": 500
+    }
+   },
+   "mood": "retro-neon",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "turning-title",
+   "display": "tilt-warp",
+   "text": "martian-mono",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "kinetic-bold",
+    "retro-futurist"
+   ],
+   "tags": [
+    "3d",
+    "display",
+    "mono",
+    "playful",
+    "rotating",
+    "technical",
+    "variable-width"
+   ],
+   "why": "XROT/YROT turn the letters in 3D on the beat; a width-variable mono answers below.",
+   "setup": {
+    "display": {
+     "axes": {
+      "XROT": 0,
+      "YROT": 0
+     },
+     "kinetic": "YROT -30..30"
+    },
+    "text": {
+     "wght": 400,
+     "axes": {
+      "wdth": 100
+     }
+    }
+   },
+   "mood": "playful-3d",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "observatory",
+   "display": "syne",
+   "text": "ibm-plex-mono",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "realist-cinematic"
+   ],
+   "tags": [
+    "artistic",
+    "cold",
+    "mono",
+    "neutral",
+    "poetic",
+    "sans",
+    "technical",
+    "wide"
+   ],
+   "why": "Syne widens as it gains weight, so the title can open like a horizon; Plex Mono carries coordinates.",
+   "setup": {
+    "display": {
+     "wght": 700,
+     "kinetic": "wght 400..800"
+    },
+    "text": {
+     "wght": 400
+    }
+   },
+   "mood": "cold-poetic",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "nordic-minimal",
+   "display": "instrument-sans",
+   "text": "newsreader",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "calm",
+    "editorial",
+    "grotesque",
+    "minimal",
+    "neutral",
+    "sans",
+    "serif",
+    "transitional"
+   ],
+   "why": "A condensed precise sans for titles (wdth 75), a quiet serif for the lines: generous space, one accent.",
+   "setup": {
+    "display": {
+     "wght": 600,
+     "axes": {
+      "wdth": 75.0
+     }
+    },
+    "text": {
+     "wght": 400,
+     "axes": {
+      "opsz": 18
+     }
+    }
+   },
+   "mood": "calm-minimal",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "premium-product",
+   "display": "clash-display",
+   "text": "geist",
+   "mono": "jetbrains-mono",
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial"
+   ],
+   "tags": [
+    "code",
+    "confident",
+    "display",
+    "geometric",
+    "grotesque",
+    "mono",
+    "premium",
+    "sans",
+    "technical"
+   ],
+   "why": "A tight neo-grotesk headline, a product-UI sans for claims, tabular figures for prices.",
+   "setup": {
+    "display": {
+     "wght": 600
+    },
+    "text": {
+     "wght": 500,
+     "features": {
+      "tnum": 1
+     }
+    },
+    "mono": {
+     "wght": 500
+    }
+   },
+   "mood": "confident-premium",
+   "turkish": "verified",
+   "local_files": true,
+   "accent": null
+  },
+  {
+   "id": "launch-friendly",
+   "display": "bricolage-grotesque",
+   "text": "geist",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial"
+   ],
+   "tags": [
+    "friendly",
+    "geometric",
+    "grotesque",
+    "quirky",
+    "sans",
+    "tech",
+    "technical"
+   ],
+   "why": "Bricolage at opsz 96 and wdth 75 shows its quirks in the headline; Geist keeps the UI and CTA sober.",
+   "setup": {
+    "display": {
+     "wght": 700,
+     "axes": {
+      "opsz": 96.0,
+      "wdth": 75.0
+     }
+    },
+    "text": {
+     "wght": 500
+    }
+   },
+   "mood": "friendly-tech",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "fashion-editorial",
+   "display": "imbue",
+   "text": "space-grotesk",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "realist-cinematic"
+   ],
+   "tags": [
+    "condensed",
+    "didone",
+    "editorial",
+    "elegant",
+    "grotesque",
+    "sans",
+    "serif",
+    "technical"
+   ],
+   "why": "A tall condensed didone (opsz high) against a geometric grotesk: a magazine cover.",
+   "setup": {
+    "display": {
+     "wght": 500,
+     "axes": {
+      "opsz": 100.0
+     }
+    },
+    "text": {
+     "wght": 400
+    }
+   },
+   "mood": "elegant-editorial",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "luxe-serif",
+   "display": "boska",
+   "text": "cabinet-grotesk",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "glossy-commercial"
+   ],
+   "tags": [
+    "editorial",
+    "elegant",
+    "friendly",
+    "loud",
+    "luxurious"
+   ],
+   "why": "A sharp serif with real small caps and tabular figures for prices; a grotesk with stylistic sets for claims.",
+   "setup": {
+    "display": {
+     "wght": 500
+    },
+    "text": {
+     "wght": 500
+    }
+   },
+   "mood": "luxurious",
+   "turkish": "verified",
+   "local_files": true,
+   "accent": null
+  },
+  {
+   "id": "stadium",
+   "display": "big-shoulders",
+   "text": "space-grotesk",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "realist-cinematic"
+   ],
+   "tags": [
+    "brutal",
+    "display",
+    "grotesque",
+    "industrial",
+    "loud",
+    "sans",
+    "sport",
+    "technical"
+   ],
+   "why": "Condensed scoreboard capitals (opsz 72) with tabular figures, a geometric grotesk for the rest.",
+   "setup": {
+    "display": {
+     "wght": 800,
+     "axes": {
+      "opsz": 72
+     }
+    },
+    "text": {
+     "wght": 500,
+     "features": {
+      "tnum": 1
+     }
+    }
+   },
+   "mood": "loud-sport",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "cartoon-bounce",
+   "display": "shrikhand",
+   "text": "shantell-sans",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "cartoon",
+    "display",
+    "friendly",
+    "handmade",
+    "playful",
+    "script-ish",
+    "sweet"
+   ],
+   "why": "A lettering-like italic display with a bouncing marker text face: Saturday-morning energy.",
+   "setup": {
+    "display": {
+     "kinetic": "MORF 0..60"
+    },
+    "text": {
+     "wght": 500,
+     "axes": {
+      "BNCE": 30
+     }
+    }
+   },
+   "mood": "playful-cartoon",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "pixel-game",
+   "display": "pixelify-sans",
+   "text": "martian-mono",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "retro-futurist"
+   ],
+   "tags": [
+    "display",
+    "mono",
+    "playful",
+    "retro",
+    "technical",
+    "variable-width"
+   ],
+   "why": "Pixel titles over a crisp variable mono; set the pixel face on whole pixels.",
+   "setup": {
+    "display": {
+     "wght": 600
+    },
+    "text": {
+     "wght": 400
+    }
+   },
+   "mood": "playful-retro",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "kitchen-notes",
+   "display": "fraunces",
+   "text": "shantell-sans",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "cozy",
+    "display",
+    "friendly",
+    "handmade",
+    "old-style",
+    "serif",
+    "warm"
+   ],
+   "why": "A soft wonky serif for the dish, a hand-drawn marker (Shantell Sans) for the notes in the margin.",
+   "setup": {
+    "display": {
+     "wght": 700,
+     "axes": {
+      "opsz": 144.0,
+      "SOFT": 100.0,
+      "WONK": 1.0
+     }
+    },
+    "text": {
+     "wght": 500
+    }
+   },
+   "mood": "cozy-warm",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "travel-cover",
+   "display": "le-murmure",
+   "text": "instrument-sans",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial",
+    "realist-cinematic"
+   ],
+   "tags": [
+    "bold",
+    "condensed",
+    "editorial",
+    "grotesque",
+    "neutral",
+    "sans"
+   ],
+   "why": "Tall cut display caps for the place, a neutral sans for distances and names.",
+   "setup": {
+    "display": {},
+    "text": {
+     "wght": 500
+    }
+   },
+   "mood": "editorial-bold",
+   "turkish": "verified",
+   "local_files": true,
+   "accent": null
+  },
+  {
+   "id": "melting-data",
+   "display": "climate-crisis",
+   "text": "ibm-plex-sans",
+   "mono": "ibm-plex-mono",
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "realist-cinematic"
+   ],
+   "tags": [
+    "data",
+    "data-driven",
+    "display",
+    "grotesque",
+    "mono",
+    "neutral",
+    "political",
+    "sans",
+    "technical",
+    "urgent"
+   ],
+   "why": "The YEAR axis melts the headline as the data moves; Plex carries the numbers.",
+   "setup": {
+    "display": {
+     "axes": {
+      "YEAR": 1979.0
+     },
+     "kinetic": "YEAR 1979..2050"
+    },
+    "text": {
+     "wght": 500
+    },
+    "mono": {
+     "wght": 400
+    }
+   },
+   "mood": "urgent-data",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "one-voice-code",
+   "display": "recursive",
+   "text": "recursive",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial"
+   ],
+   "tags": [
+    "cold",
+    "handmade",
+    "playful",
+    "technical"
+   ],
+   "why": "Recursive alone: Sans Linear for headlines, Mono Casual for code; animate MONO or CASL as the software comes alive.",
+   "setup": {
+    "display": {
+     "wght": 800,
+     "axes": {
+      "MONO": 0,
+      "CASL": 0
+     }
+    },
+    "text": {
+     "wght": 400,
+     "axes": {
+      "MONO": 1,
+      "CASL": 1
+     }
+    }
+   },
+   "mood": "cold-technical-playful",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "software-ui",
+   "display": "geist",
+   "text": "geist",
+   "mono": "jetbrains-mono",
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial"
+   ],
+   "tags": [
+    "code",
+    "geometric",
+    "mono",
+    "precise",
+    "product",
+    "sans",
+    "technical"
+   ],
+   "why": "Geist for interface and copy, JetBrains Mono for code: the product speaks for itself.",
+   "setup": {
+    "display": {
+     "wght": 700
+    },
+    "text": {
+     "wght": 400
+    },
+    "mono": {
+     "wght": 400
+    }
+   },
+   "mood": "precise-product",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "summer-anime",
+   "display": "ojuju",
+   "text": "familjen-grotesk",
+   "mono": null,
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "bright",
+    "energetic",
+    "grotesque",
+    "loud",
+    "organic",
+    "playful",
+    "sans",
+    "warm"
+   ],
+   "why": "Ojuju's ink cuts give a hand-cut title card; Familjen keeps subtitles friendly.",
+   "setup": {
+    "display": {
+     "wght": 800
+    },
+    "text": {
+     "wght": 500
+    }
+   },
+   "mood": "bright-energetic",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "pop-chrome",
+   "display": "tilt-warp",
+   "text": "unbounded",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "glossy-commercial",
+    "kinetic-bold",
+    "retro-futurist"
+   ],
+   "tags": [
+    "3d",
+    "display",
+    "loud",
+    "playful",
+    "rotating",
+    "rounded",
+    "sans",
+    "wide"
+   ],
+   "why": "Fake-3D rotating display letters over a wide rounded sans: loud pop packaging.",
+   "setup": {
+    "display": {
+     "kinetic": "EDPT 0..200"
+    },
+    "text": {
+     "wght": 500
+    }
+   },
+   "mood": "loud-playful",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "mosaic-mystic",
+   "display": "trickster",
+   "text": "cormorant",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "display",
+    "elegant",
+    "fable",
+    "garalde",
+    "ornate",
+    "quirky",
+    "serif"
+   ],
+   "why": "A mischievous swash display over Garamond-born capitals.",
+   "setup": {
+    "display": {
+     "features": {
+      "swsh": 1
+     }
+    },
+    "text": {
+     "wght": 500
+    }
+   },
+   "mood": "ornate",
+   "turkish": "verified",
+   "local_files": true,
+   "accent": null
+  },
+  {
+   "id": "geometric-1971",
+   "display": "mourier",
+   "text": "martian-mono",
+   "mono": null,
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "retro-futurist"
+   ],
+   "tags": [
+    "abstract",
+    "display",
+    "futurist",
+    "geometric",
+    "mono",
+    "technical",
+    "variable-width"
+   ],
+   "why": "Abstract 1971 geometric letters for the title, a width-variable mono for all text.",
+   "setup": {
+    "display": {},
+    "text": {
+     "wght": 400
+    }
+   },
+   "mood": "geometric-abstract",
+   "turkish": "verified",
+   "local_files": true,
+   "accent": null
+  },
+  {
+   "id": "riso-zine",
+   "display": "apfel-grotezk",
+   "text": "sligoil",
+   "mono": null,
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "grotesque",
+    "indie",
+    "mono",
+    "playful",
+    "quirky",
+    "raw-print",
+    "sans",
+    "zine"
+   ],
+   "why": "Collletttivo's eccentric grotesk with Velvetyne's ink-trap mono: a risograph zine.",
+   "setup": {
+    "display": {
+     "wght": 700
+    },
+    "text": {}
+   },
+   "mood": "indie-zine",
+   "turkish": "verified",
+   "local_files": true,
+   "accent": null
+  },
+  {
+   "id": "americana",
+   "display": "league-gothic",
+   "text": "sorts-mill-goudy",
+   "mono": null,
+   "purposes": [
+    "cinematic"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "americana",
+    "antique",
+    "condensed",
+    "gothic",
+    "old-style",
+    "sans",
+    "serif"
+   ],
+   "why": "Condensed League Gothic caps for the place, a Goudy Oldstyle text: two League classics.",
+   "setup": {
+    "display": {
+     "axes": {
+      "wdth": 85
+     }
+    },
+    "text": {
+     "wght": 400
+    }
+   },
+   "mood": "americana",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "noir-condensed",
+   "display": "imbue",
+   "text": "geist",
+   "mono": null,
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "retro-futurist"
+   ],
+   "tags": [
+    "condensed",
+    "didone",
+    "geometric",
+    "noir",
+    "sans",
+    "serif",
+    "technical"
+   ],
+   "why": "A condensed Didone at opsz 100 for the title, a sober sans for labels.",
+   "setup": {
+    "display": {
+     "wght": 400,
+     "axes": {
+      "opsz": 100.0
+     }
+    },
+    "text": {
+     "wght": 400
+    }
+   },
+   "mood": "noir",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "slab-poster",
+   "display": "chunk-five",
+   "text": "league-spartan",
+   "mono": null,
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "bold",
+    "geometric",
+    "handmade",
+    "loud",
+    "retro",
+    "sans"
+   ],
+   "why": "An ultra-bold slab over a geometric gothic: a fairground poster.",
+   "setup": {
+    "display": {},
+    "text": {
+     "wght": 500
+    }
+   },
+   "mood": "retro-loud",
+   "turkish": "verified",
+   "local_files": false,
+   "accent": null
+  },
+  {
+   "id": "quiet-product",
+   "display": "sentient",
+   "text": "instrument-sans",
+   "mono": null,
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial"
+   ],
+   "tags": [
+    "calm",
+    "editorial",
+    "elegant",
+    "grotesque",
+    "neutral",
+    "premium",
+    "quiet",
+    "sans"
+   ],
+   "why": "A calm text serif for the claim, a precise sans for the CTA and legal line.",
+   "setup": {
+    "display": {
+     "wght": 500
+    },
+    "text": {
+     "wght": 500
+    }
+   },
+   "mood": "calm-premium",
+   "turkish": "verified",
+   "local_files": true,
+   "accent": null
+  },
+  {
+   "id": "mixed-archivo-brush",
+   "display": "archivo",
+   "text": "archivo",
+   "mono": "jetbrains-mono",
+   "accent": "caveat-brush",
+   "card": "mixed",
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "glossy-commercial"
+   ],
+   "tags": [
+    "brush",
+    "grotesque",
+    "handmade",
+    "industrial",
+    "mixed",
+    "sans",
+    "script",
+    "script-accent"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "Archivo Expanded Black carries the line; one Caveat Brush word adds the hand; a JetBrains Mono label stays small.",
+   "setup": {
+    "display": {
+     "wght": 900,
+     "axes": {
+      "wdth": 125
+     }
+    },
+    "accent": {
+     "wght": 400
+    },
+    "text": {
+     "wght": 500
+    }
+   }
+  },
+  {
+   "id": "mixed-unbounded-sedgwick",
+   "display": "unbounded",
+   "text": "unbounded",
+   "mono": "space-mono",
+   "accent": "sedgwick-ave-display",
+   "card": "mixed",
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "retro-futurist"
+   ],
+   "tags": [
+    "graffiti",
+    "mixed",
+    "rounded",
+    "sans",
+    "script",
+    "script-accent",
+    "urban",
+    "wide"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "Unbounded Black, wide and round, with one graffiti word from Sedgwick Ave Display; Space Mono for the tiny label.",
+   "setup": {
+    "display": {
+     "wght": 900
+    },
+    "accent": {
+     "wght": 400
+    },
+    "text": {
+     "wght": 400
+    }
+   }
+  },
+  {
+   "id": "mixed-anton-yellowtail",
+   "display": "anton",
+   "text": "figtree",
+   "mono": null,
+   "accent": "yellowtail",
+   "card": "mixed",
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "period-classic"
+   ],
+   "tags": [
+    "condensed",
+    "impact",
+    "mixed",
+    "retro",
+    "sans",
+    "script",
+    "script-accent",
+    "signage"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "Anton condensed caps and one Yellowtail sign-painter word: contrast of structure and slope only.",
+   "setup": {
+    "display": {
+     "wght": 400
+    },
+    "accent": {
+     "wght": 400
+    },
+    "text": {
+     "wght": 500
+    }
+   }
+  },
+  {
+   "id": "mixed-shoulders-marck",
+   "display": "big-shoulders",
+   "text": "big-shoulders",
+   "mono": "ibm-plex-mono",
+   "accent": "marck-script",
+   "card": "mixed",
+   "purposes": [
+    "cinematic",
+    "ad"
+   ],
+   "looks": [
+    "realist-cinematic",
+    "kinetic-bold"
+   ],
+   "tags": [
+    "brutal",
+    "casual",
+    "display",
+    "handwriting",
+    "industrial",
+    "mixed",
+    "script",
+    "script-accent"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "Big Shoulders Display Black, civic and industrial, with a personal Marck Script note; Plex Mono for dates.",
+   "setup": {
+    "display": {
+     "wght": 900,
+     "axes": {
+      "opsz": 72
+     }
+    },
+    "accent": {
+     "wght": 400
+    },
+    "text": {
+     "wght": 500,
+     "axes": {
+      "opsz": 10
+     }
+    }
+   }
+  },
+  {
+   "id": "mixed-bricolage-instrument",
+   "display": "bricolage-grotesque",
+   "text": "bricolage-grotesque",
+   "mono": "geist-mono",
+   "accent": "instrument-serif",
+   "card": "mixed",
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial"
+   ],
+   "tags": [
+    "condensed",
+    "elegant",
+    "grotesque",
+    "mixed",
+    "quirky",
+    "sans",
+    "script-accent",
+    "serif"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "Bricolage ExtraBold at wdth 75 with an Instrument Serif Italic word: structure + slope, an editorial cover.",
+   "setup": {
+    "display": {
+     "wght": 800,
+     "axes": {
+      "wdth": 75
+     }
+    },
+    "accent": {
+     "wght": 400,
+     "italic": true
+    },
+    "text": {
+     "wght": 400
+    }
+   }
+  },
+  {
+   "id": "mixed-anybody-kalam",
+   "display": "anybody",
+   "text": "anybody",
+   "mono": null,
+   "accent": "kalam",
+   "card": "mixed",
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "handwriting",
+    "kinetic",
+    "marker",
+    "mixed",
+    "sans",
+    "script",
+    "script-accent",
+    "variable-width"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "Anybody at wdth 150 Black fills the frame; one Kalam Bold word is the friendly aside.",
+   "setup": {
+    "display": {
+     "wght": 900,
+     "axes": {
+      "wdth": 150
+     }
+    },
+    "accent": {
+     "wght": 700
+    },
+    "text": {
+     "wght": 400
+    }
+   }
+  },
+  {
+   "id": "mixed-dela-mynerve",
+   "display": "dela-gothic-one",
+   "text": "figtree",
+   "mono": null,
+   "accent": "mynerve",
+   "card": "mixed",
+   "purposes": [
+    "ad"
+   ],
+   "looks": [
+    "kinetic-bold",
+    "storybook-handmade"
+   ],
+   "tags": [
+    "display",
+    "gothic",
+    "handwriting",
+    "heavy",
+    "mixed",
+    "school",
+    "script",
+    "script-accent"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "Dela Gothic One, very heavy, with a Mynerve notebook word; Figtree for any subtitles.",
+   "setup": {
+    "display": {
+     "wght": 400
+    },
+    "accent": {
+     "wght": 400
+    },
+    "text": {
+     "wght": 500
+    }
+   }
+  },
+  {
+   "id": "mixed-syne-squarepeg",
+   "display": "syne",
+   "text": "figtree",
+   "mono": null,
+   "accent": "square-peg",
+   "card": "mixed",
+   "purposes": [
+    "ad",
+    "cinematic"
+   ],
+   "looks": [
+    "editorial-minimal",
+    "glossy-commercial"
+   ],
+   "tags": [
+    "artistic",
+    "fine",
+    "handwriting",
+    "mixed",
+    "sans",
+    "script",
+    "script-accent",
+    "wide"
+   ],
+   "turkish": "verified",
+   "local_files": false,
+   "why": "Syne ExtraBold (wide) with a fine Square Peg word; subtitles in Figtree (Inter only as the user's own choice).",
+   "setup": {
+    "display": {
+     "wght": 800
+    },
+    "accent": {
+     "wght": 400
+    },
+    "text": {
+     "wght": 400
+    }
+   }
+  }
+ ],
+ "excluded_no_turkish": [
+  {
+   "family": "Avara",
+   "foundry": "Velvetyne",
+   "missing": "ĞğŞş"
+  },
+  {
+   "family": "Bagel Fat One",
+   "foundry": "Google Fonts",
+   "missing": "İĞğŞş"
+  },
+  {
+   "family": "Bagnard",
+   "foundry": "Sébastien Sanfilippo (Open Foundry pick)",
+   "missing": "İĞğŞş"
+  },
+  {
+   "family": "Blackout",
+   "foundry": "League of Moveable Type",
+   "missing": "all twelve"
+  },
+  {
+   "family": "Bluu Next",
+   "foundry": "Jean-Baptiste Morizot (Velvetyne)",
+   "missing": "İĞğŞş"
+  },
+  {
+   "family": "Compagnon",
+   "foundry": "Velvetyne",
+   "missing": "İĞğş"
+  },
+  {
+   "family": "DSEG7",
+   "foundry": "keshikan",
+   "missing": "letters (digits only)"
+  },
+  {
+   "family": "Fredoka",
+   "foundry": "Google Fonts",
+   "missing": "İĞğŞş"
+  },
+  {
+   "family": "Gulax",
+   "foundry": "Velvetyne",
+   "missing": "İĞğ"
+  },
+  {
+   "family": "Happy Times at the IKOB",
+   "foundry": "Velvetyne",
+   "missing": "İĞğŞş"
+  },
+  {
+   "family": "Interlope",
+   "foundry": "Velvetyne",
+   "missing": "İıĞğŞş"
+  },
+  {
+   "family": "Junction",
+   "foundry": "League of Moveable Type",
+   "missing": "İŞş"
+  },
+  {
+   "family": "Knewave",
+   "foundry": "League of Moveable Type",
+   "missing": "İıĞğŞş"
+  },
+  {
+   "family": "Mess",
+   "foundry": "Velvetyne",
+   "missing": "İĞğŞş"
+  },
+  {
+   "family": "Norwester",
+   "foundry": "Jamie Wilson",
+   "missing": "all twelve"
+  },
+  {
+   "family": "Orbitron",
+   "foundry": "League of Moveable Type",
+   "missing": "İĞğŞş"
+  },
+  {
+   "family": "Ostrich Sans",
+   "foundry": "League of Moveable Type",
+   "missing": "İĞğŞş"
+  },
+  {
+   "family": "Silkscreen",
+   "foundry": "Google Fonts",
+   "missing": "İıĞğŞş"
+  },
+  {
+   "family": "Sixtyfour",
+   "foundry": "Jens Kutilek",
+   "missing": "İĞğŞş"
+  },
+  {
+   "family": "Sporting Grotesque",
+   "foundry": "Velvetyne",
+   "missing": "İĞğŞş"
+  },
+  {
+   "family": "Tanker",
+   "foundry": "Fontshare",
+   "missing": "ı"
+  },
+  {
+   "family": "UnifrakturMaguntia",
+   "foundry": "Google Fonts",
+   "missing": "İıĞğŞş"
+  },
+  {
+   "family": "VG5000",
+   "foundry": "Velvetyne",
+   "missing": "İĞğŞş"
+  },
+  {
+   "family": "Workbench / Sixtyfour",
+   "foundry": "Jens Kutílek",
+   "missing": "İĞğŞş"
+  }
+ ],
+ "kept_out": {
+  "overused": [
+   "Inter",
+   "Roboto",
+   "Montserrat",
+   "Poppins",
+   "Bebas Neue",
+   "Playfair Display",
+   "EB Garamond",
+   "Caveat"
+  ],
+  "licence_unconfirmed": [
+   "Lack (Velvetyne): no licence file in its repository when checked"
+  ],
+  "turkish_unverified": [
+   "Gap Sans (Open Foundry)",
+   "Zodiak (Fontshare)"
+  ]
+ }
+}

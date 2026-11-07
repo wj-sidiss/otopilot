@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>cinecode starter: three.js scene with a look preset</title>
+<style>html,body{margin:0;background:#000}canvas{display:block;max-width:100vw;max-height:100vh;height:auto;margin:0 auto}</style>
+<script type="importmap">{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/",
+  "postprocessing": "https://cdn.jsdelivr.net/npm/postprocessing@6.39.5/build/index.js" } }</script>
+</head>
+<body>
+<script type="module">
+// Frame contract used by tools/capture.mjs:
+//   window.READY            Promise<{frames, fps, width, height, renderer}>
+//   window.renderFrame(i)   draws frame i; a pure function of (i, seed)
+//   window.captureFrame(i)  renderFrame(i) + returns a PNG/JPEG data URL
+// URL params: look=<preset id from looks.mjs>, w, h (default 1920x1080; 1080x1920 for 9:16), seed, capture=1,
+//             samples=<n> (motion blur sub-frames, 1 = off), weave=<px at 1080> (gate weave)
+//
+// This is a test scene: a palette-driven set of shapes so a look can be judged in seconds. Replace the
+// "world" block with the film's scene and keep the rest. Hook rule: the camera moves from frame 0.
+//
+//   node tools/capture.mjs --url engine/scene.html --probe
+//   node tools/capture.mjs --url engine/scene.html --verify --params "look=anime-cel"
+//   node tools/capture.mjs --url engine/scene.html --out review/look --start 0 --end 0 --params "look=anime-cel&w=960&h=540"
+import * as THREE from 'three';
+import { LOOKS, buildLook, makeMaterial, heldTime, drawOverlay } from './looks.mjs';
+import { loadType, typeCheck, TYPE_FALLBACK } from './type.mjs';
+
+const q = new URLSearchParams(location.search);
+const W = +q.get('w') || 1920, H = +q.get('h') || 1080, SEED = +q.get('seed') || 7;
+const look = LOOKS[q.get('look') || 'cinematic-realistic'];
+if (!look) throw new Error(`unknown look "${q.get('look')}"; choose one of ${Object.keys(LOOKS).join(', ')}`);
+const FPS = look.render.fps, DURATION = 4, FRAMES = Math.round(FPS * DURATION);
+
+const renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(1); renderer.setSize(W, H, false);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;   // soft shadows (finish.md)
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(W > H ? 35 : 55, W / H, 0.1, 200);
+
+// ---------------------------------------------------------------- world (replace with the film's scene)
+const [bg, groundC, mainC, secondC, accentC] = look.palette.map((h) => new THREE.Color(h));
+scene.background = bg.clone();
+if (look.light.fog) scene.fog = new THREE.FogExp2(bg.getHex(), look.light.fog);
+const X = look.light.exposure || 1;
+const key = new THREE.DirectionalLight(0xffffff, look.light.intensity * X);
+scene.add(key, new THREE.HemisphereLight(bg, groundC, look.light.ambient * 2 * X));
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), makeMaterial(look, groundC));
+ground.rotation.x = -Math.PI / 2; ground.userData.noOutline = true;
+const tower = new THREE.Mesh(new THREE.BoxGeometry(1.2, 3.2, 1.2), makeMaterial(look, mainC)); tower.position.set(-1.6, 1.6, 0);
+const ball = new THREE.Mesh(new THREE.SphereGeometry(0.75, 48, 32), makeMaterial(look, secondC)); ball.position.set(0.5, 0.75, 0.6);
+const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(0.42, 0.15, 160, 24), makeMaterial(look, accentC)); knot.position.set(2.0, 1.1, -0.5);
+scene.add(ground, tower, ball, knot);
+key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.radius = 4;
+for (const m of [tower, ball, knot]) m.castShadow = true;
+ground.receiveShadow = true;
+
+// Named camera moves (dolly, orbit, dolly zoom, rack focus, handheld, FPV, retime): ./camera.mjs, references/camera-moves.md
+const setTime = (t, frame) => {                              // every pixel is a function of t (and frame) only
+  const u = t / DURATION, s = 0.35 * u + 0.65 * u * u * (3 - 2 * u);   // already moving on frame 0
+  const r = (W > H ? 10.5 : 12) - s * 2.0;                    // orbit + push in
+  camera.position.set(Math.sin(0.4 - s * 0.9) * r, 2.6 - s * 0.6, Math.cos(0.4 - s * 0.9) * r);
+  camera.lookAt(0.2, 1.0, 0);
+  const tc = heldTime(look, frame, FPS);                     // characters on twos when the look asks for it
+  knot.rotation.set(tc * 0.8, tc * 0.6, 0);
+  ball.position.y = 0.75 + Math.abs(Math.sin(tc * 3.0)) * 0.6;
+  const az = look.light.azimuthDeg * Math.PI / 180, el = look.light.elevationDeg * Math.PI / 180;
+  key.position.set(Math.sin(az) * 10, Math.sin(el) * 10, -Math.cos(az) * 10);
+};
+// The film's type by role, the same shape as film.html's TYPE (KIT/references/typography.md; chosen in the TYPE
+// DIRECTION step from KIT/references/type-library.json). A failed load or a missing glyph stops the render.
+const TYPE = { lang: 'tr', roles: { display: null, text: null, mono: null }, check: { strings: {}, sizes: { text: 0.042 } } };
+const typeStack = (role) => (TYPE.roles[role] ? `"${TYPE.roles[role].family}", ${TYPE_FALLBACK[role]}` : TYPE_FALLBACK[role]);
+// On-screen text (<= 6 words per card) and subtitles (only when asked; at most 2 languages, stacked).
+const OVERLAY = [
+  // { t: [1.0, 3.2], text: 'Six words at most here', y: 0.42 },
+  // { t: [2.0, 3.8], sub: ['Primary language line', 'Second language line'] },
+];
+// ----------------------------------------------------------------
+
+const lk = buildLook({ renderer, scene, camera, look, fps: FPS, seed: SEED, setTime });
+const out = document.createElement('canvas'); out.width = W; out.height = H; document.body.appendChild(out);
+const g2 = out.getContext('2d');
+// Motion blur (180° shutter: sub-frames across the open half, centred on the frame, averaged; render time × samples,
+// so raise it for the fast shots and test one shot first) and gate weave (seeded drift of the whole frame).
+const SAMPLES = Math.max(1, Math.round(+(q.get('samples') ?? look.render.motionSamples ?? 1)) || 1);
+const OPEN = (look.render.shutterDeg ?? 180) / 360, WEAVE = +(q.get('weave') ?? look.post?.weave ?? 0) || 0;
+const acc = document.createElement('canvas'); acc.width = W; acc.height = H;
+const ga = acc.getContext('2d');
+const hash = (n) => { const s = Math.sin(n * 127.1 + SEED * 311.7) * 43758.5453; return s - Math.floor(s); };
+// Blur only where something moves: the first and last sub-frames are compared at 64 px wide; under STILL (mean
+// difference, 0-255) the frame keeps one sharp render, so a mostly still shot costs little render time.
+const STILL = 0.6, probe = document.createElement('canvas');
+probe.width = 64; probe.height = Math.max(1, Math.round(64 * H / W));
+const probeG = probe.getContext('2d', { willReadFrequently: true });
+const probeOf = (c) => { probeG.drawImage(c, 0, 0, probe.width, probe.height); return probeG.getImageData(0, 0, probe.width, probe.height).data; };
+const probeDiff = (a, b) => { let d = 0; for (let k = 0; k < a.length; k += 4) d += Math.abs(a[k] - b[k]) + Math.abs(a[k + 1] - b[k + 1]) + Math.abs(a[k + 2] - b[k + 2]); return d / (0.75 * a.length); };
+window.renderFrame = (i) => {
+  const at = (s) => Math.max(0, (i + (SAMPLES > 1 ? ((s + 0.5) / SAMPLES - 0.5) * OPEN : 0)) / FPS);
+  lk.render(i, at(0)); ga.globalAlpha = 1; ga.drawImage(renderer.domElement, 0, 0);
+  if (SAMPLES > 1) {
+    const first = probeOf(acc);
+    lk.render(i, at(SAMPLES - 1));
+    if (probeDiff(first, probeOf(renderer.domElement)) < STILL) { lk.render(i, i / FPS); ga.drawImage(renderer.domElement, 0, 0); }
+    else {
+      ga.globalAlpha = 1 / 2; ga.drawImage(renderer.domElement, 0, 0);
+      for (let s = 1; s < SAMPLES - 1; s++) { lk.render(i, at(s)); ga.globalAlpha = 1 / (s + 2); ga.drawImage(renderer.domElement, 0, 0); }
+    }
+  }
+  ga.globalAlpha = 1;
+  const px = WEAVE * Math.min(W, H) / 1080, o = 1 + 3 * px / Math.min(W, H);
+  const dx = px * (2 * hash(i + 0.17) - 1), dy = 0.7 * px * (2 * hash(i + 0.61) - 1);
+  g2.drawImage(acc, dx - W * (o - 1) / 2, dy - H * (o - 1) / 2, W * o, H * o);
+  drawOverlay(g2, OVERLAY, i / FPS, W, H, { font: typeStack('text'), display: typeStack('display') });
+};
+window.captureFrame = (i, type = 'image/png', quality = 0.95) => { window.renderFrame(i); return out.toDataURL(type, quality); };
+window.READY = loadType(TYPE).then(() => document.fonts.ready).then(() => {
+  const words = (k) => OVERLAY.flatMap((o) => (k === 'display' ? [o.text] : o.sub || []).filter(Boolean));
+  TYPE.check.strings = { ...TYPE.check.strings, display: [...(TYPE.check.strings.display || []), ...words('display')],
+                         text: [...(TYPE.check.strings.text || []), ...words('text')] };   // the overlay's own words are checked
+  const qc = typeCheck(g2, TYPE, W, H, null);    // no palette: contrast depends on the 3D frame, judged on the stills
+  if (qc.errors.length) throw new Error('type check: ' + qc.errors.join(' · '));
+  return { frames: FRAMES, fps: FPS, width: W, height: H, renderer: 'three.js r' + THREE.REVISION, qc: qc.warnings };
+});
+
+if (!q.get('capture')) {                                     // preview: wall clock -> frame index, never fed back
+  let frame = 0, last = performance.now(), acc = 0;
+  const loop = (now) => { acc += now - last; last = now;
+    while (acc >= 1000 / FPS) { frame = (frame + 1) % FRAMES; acc -= 1000 / FPS; }
+    window.renderFrame(frame); requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>

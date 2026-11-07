@@ -5,6 +5,7 @@ Bu depo iki iş yapar. Kullanıcı bir istek yazar, sen aşağıdaki akışı **
 kendin seç. Yalnızca kılavuzun "kullanıcıya sor" dediği yerlerde ya da konu/tarif hiç yoksa tek kısa soru sor.
 
 1. **YouTube / Shorts / Reels / TikTok videosu**: konudan bitmiş MP4 + altyazı + kapak + yayın paketi.
+1d. **Kodla film (cinecode)**: kredisiz kısa film, belgesel, reklam, müzik videosu (`.claude/skills/cinecode`).
 2. **AI influencer (Ai Infapp)**: sanal bir insan yaratıp kilitler, her istemde aynı kimliği korur;
    sahne, prompt, görsel ve paylaşım metni üretir. Ayrıca Etsy baskı tasarımı, fotoroman, reklam görseli.
 
@@ -192,6 +193,18 @@ node studyo.js kur <ad> [--muzik muzik.mp3] [--altyazisiz]  # klipleri birleşti
 - `"karakter": ["yuz.jpg"]` tüm referans sahnelerine aynı yüzü ekler (tutarlılık). `"model"`, `"cozunurluk"`, `"sure"` dosyada değiştirilebilir; varsayılan en ucuzu `minimax-h3` 768p (~20 kredi/sn, 6 sn sahne ≈ 120 kredi).
 - Aynı fotoğraf+istem ikinci kez ücretli üretilmez; fotoğraf ya da mod değişirse yeni çekimdir. İlk kullanımda tek sahneyle başla.
 - **İzin:** yalnız kullanıcının kendi fotoğrafı/videosu ya da yazılı izin verilen kişi. Ünlü, başkasının fotoğrafı, telifli film/dizi sahnesi YOK (kullanıcının kendi çekimi olmalı). Yayında yapay zekâ ürünü olduğunu belirtmesini öner.
+
+## 1d. Kodla film (cinecode): kısa film, belgesel, reklam, müzik videosu, açıklayıcı (ÜCRETSİZ, kredi harcamaz)
+
+Kullanıcı "kısa film", "kodla film", "animasyon", "belgesel", "reklam filmi", "müzik videosu", "şarkıma klip", "bunun gibi bir video" derse ya da AI video kredisi olmadan film isterse:
+**`.claude/skills/cinecode/SKILL.md` yeteneğini kullan** (Claude Code bu klasörü kendiliğinden tanır; Codex ve diğer ajanlar SKILL.md'yi okuyup uygular).
+Her kare başsız Chrome'da koddan çizilir (three.js 3B, 2B, kil, kâğıt, piksel, hareketli grafik…), ses Web Audio ile kodda ya da açık lisanslı kayıtlardan, ses -14 LUFS'a ayarlanır; bitmiş MP4 + kalite raporu. Hızlı mod (tek `film.html`, ~3 dk'ya kadar) ve Film modu (stil karesi, animatik, 3B, katmanlı ses; uzun belgeseller).
+
+- Gerekenler: Node 22+, **Python 3.9+**, ffmpeg, Chrome/Edge. Python yoksa kullanıcıya söyle ve onayla kur (`winget install Python.Python.3.12`). Windows'ta `python3` yerine `python` çalışır.
+- Filmler depo kökünde `Filmler/` (ya da `Films/`) altına açılır; bu klasörler repoya girmez.
+- Kitin bekçi kancaları yalnız yetenek Claude Code oturumunda devreye girince çalışır; dışarıda `GUARD OFF` der (film yine çalışır).
+- Dış ses isteğe bağlıdır (kullanıcının Gemini/ElevenLabs anahtarı ya da ücretsiz Türkçe ses); anahtar yoksa film yine sesli olur (müzik ve efektler kodda).
+- Kaynak: [cinecode](https://github.com/sarpstar/cinecode) (Sarp Yıldız, MIT; stil kütüphanesinin bir kısmı LemoLab, MIT). En yeni sürüm: `npm run cinecode-guncelle`. Ayrıntı ve atıf: `docs/ATIF-cinecode.md`.
 
 ## 2. AI influencer (Ai Infapp) — HTTP API ile
 

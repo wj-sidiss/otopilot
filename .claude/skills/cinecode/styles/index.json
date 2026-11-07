@@ -1,0 +1,834 @@
+{
+ "source": "https://github.com/lemomo-ai/lemo-opuscar",
+ "commit": "d33bdea74eeecde3922b0fbad227f0d3dc7afe75",
+ "licence": "MIT (styles/LICENSE-lemo-opuscar)",
+ "note": "Style recipes by LemoLab. Section 10 (Engine) describes their demo engine, not part of this kit. Entries with \"source\": \"cinecode\" are the kit's own recipes (no poster); styles/aliases.json maps the names people use (\"vox\", \"ghibli\") to recipes.",
+ "styles": [
+  {
+   "id": "archive-lighttable",
+   "name": "Archive Light Table",
+   "category": "Evidence Films",
+   "base": "cinematic-realistic",
+   "essence": "Real archive objects (glass negatives, slides, letters, telegrams, clippings, drawings) lie on a cool, backlit light table. A loupe comes down on one of them, and inside the glass the object comes alive: a negative turns positive, a line of type lights up, a number lifts off the page, a photograph opens into depth. Precise catalogue numbers, dates and readings are pinned to the objects. Clean, modern and quiet, with no vintage filter.",
+   "uses": [
+    "Brand history & anniversaries",
+    "Documentary & archive explainers",
+    "Museum & collection stories"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/archive-lighttable/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/archive-lighttable"
+  },
+  {
+   "id": "art-deco",
+   "name": "Art Deco",
+   "category": "Graphic & Type",
+   "base": "glossy-commercial",
+   "essence": "Black lacquer, engraved gold line and airbrushed geometry: a 1930s poster that moves. Every composition has a centre axis, transitions open or close along it, and light arrives as bulbs switching on one by one.",
+   "uses": [
+    "Luxury & hospitality",
+    "Galas",
+    "Invitations"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/art-deco/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/art-deco"
+  },
+  {
+   "id": "ascii-crt",
+   "name": "ASCII / CRT Terminal",
+   "category": "Graphic & Type",
+   "base": "retro-synthwave-vhs",
+   "essence": "Everything on screen is a real character on a monospace grid, lit by the phosphor of an old monochrome CRT.",
+   "uses": [
+    "Developer tools",
+    "Sci-fi",
+    "Tech brands"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/ascii-crt/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/ascii-crt"
+  },
+  {
+   "id": "backrooms",
+   "name": "Liminal Found Footage",
+   "category": "Cinema & Eras",
+   "base": "cinematic-realistic",
+   "essence": "Camcorder tapes recovered from empty, endless, fluorescent-lit spaces. Rules instead of monsters.",
+   "uses": [
+    "Horror",
+    "Mystery & ARG",
+    "Game teasers"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/backrooms/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/backrooms"
+  },
+  {
+   "id": "blueprint",
+   "name": "Blueprint",
+   "category": "Graphic & Type",
+   "base": "handmade-ink",
+   "essence": "Engineering drawings that come alive on a sheet of cyanotype paper: white technical line work on Prussian blue, drawn in drafting order, with annotations that move.",
+   "uses": [
+    "Engineering",
+    "Hardware launches",
+    "Tech explainers"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/blueprint/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/blueprint"
+  },
+  {
+   "id": "brick-toy",
+   "name": "Brick Toy",
+   "category": "Materials & 3D",
+   "base": "claymation",
+   "essence": "Stop-motion toy-brick films shot like macro photography on a real desk: a world built from interlocking plastic bricks with round studs, animated a pose at a time.",
+   "uses": [
+    "Toys & kids",
+    "Product builds",
+    "Space"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/brick-toy/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/brick-toy"
+  },
+  {
+   "id": "briefing-board",
+   "name": "Engineering Briefing Board",
+   "category": "Evidence Films",
+   "base": "papercut-collage",
+   "essence": "One real whiteboard wall, filmed: window light on enamel, ghosts of erased marker, frame and tray. Cut-out photographs of real things land on it with weight; tags, magnets, a ruler and stamps are pinned to it; marker ink draws itself in three colours with fixed meanings. The camera rides the lines from fact to fact and only at the end pulls back to show the whole briefing.",
+   "uses": [
+    "Engineering decisions",
+    "Option comparisons",
+    "Briefings & explainers"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/briefing-board/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/briefing-board"
+  },
+  {
+   "id": "cel-anime-80s",
+   "name": "80s Cel Anime",
+   "category": "Cartoon & Anime",
+   "base": "anime-cel",
+   "essence": "Hand-painted cel animation from the golden age of Japanese OVAs, re-created in code: flat two-tone cels over airbrushed backgrounds, backlit neon, limited-animation timing, played back as a late-80s videotape on a CRT television.",
+   "uses": [
+    "Music videos",
+    "Game trailers",
+    "Nostalgia"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/cel-anime-80s/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/cel-anime-80s"
+  },
+  {
+   "id": "crayon-book",
+   "name": "Crayon Picture Book",
+   "category": "Hand-drawn & Painting",
+   "base": "pastel-storybook",
+   "essence": "A picture-book page drawn live in wax crayon on toothy paper, with a watercolour wash that reveals what the crayon was hiding.",
+   "uses": [
+    "Picture books",
+    "Bedtime stories",
+    "Kids' learning"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/crayon-book/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/crayon-book"
+  },
+  {
+   "id": "dark-keynote",
+   "name": "Dark Tech Keynote",
+   "category": "Information & Keynote",
+   "base": "glossy-commercial",
+   "essence": "A software launch film where the interface itself is the star: near-black gradient, hairline grid, soft light, one brand accent, and UI that moves with snap-grid precision. Light reveals, one giant number, and a sound design that is as ordered as the pixels.",
+   "uses": [
+    "Product launches",
+    "SaaS",
+    "Keynotes"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/dark-keynote/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/dark-keynote"
+  },
+  {
+   "id": "data-physical",
+   "name": "Data Physicalization",
+   "category": "Evidence Films",
+   "base": "glossy-commercial",
+   "essence": "Real statistics built as real objects: every unit is a countable piece of material (a plate, a block, a coin, a bar) stacked to exact scale on a crafted base, shot like a product in a studio — soft key, long shadows, shallow depth of field, physically based materials. The camera reads a number at the edge of one plate, follows the data as it grows, and pulls back until the chart is an installation.",
+   "uses": [
+    "Annual reports & ESG",
+    "Investor communications",
+    "Energy & climate statistics"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/data-physical/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/data-physical"
+  },
+  {
+   "id": "dataviz",
+   "name": "Data Storytelling",
+   "category": "Information & Keynote",
+   "base": "glossy-commercial",
+   "essence": "A chart that tells a story: real data, drawn mark by mark on cream paper by a red–blue pencil, with handwritten notes pinned to the numbers. The chart itself is the camera, the rhythm and the plot.",
+   "uses": [
+    "Data journalism",
+    "Reports",
+    "Climate & science"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/dataviz/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/dataviz"
+  },
+  {
+   "id": "engraving",
+   "name": "Copperplate Engraving",
+   "category": "Print & Printmaking",
+   "base": "handmade-ink",
+   "essence": "An intaglio plate that engraves itself: a burin cuts swelling lines into copper, a proof is pulled, and the figure builds up — outline, hatching, cross-hatching — until engraved lettering, magnified details and a hand-laid wash make a finished plate.",
+   "uses": [
+    "Museum labels",
+    "Science explainers",
+    "Brand heritage"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/engraving/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/engraving"
+  },
+  {
+   "id": "game-show",
+   "name": "Game Show Flat",
+   "category": "Games",
+   "base": "retro-synthwave-vhs",
+   "essence": "A rhythm-game variety show in flat vector: toy-like mascots with thick ink outlines on candy-coloured stripes and sunbursts, every hit landing on a fixed tempo grid, call-and-response patterns, and a judgement word when each round is won.",
+   "uses": [
+    "Tech timelines",
+    "Year in review",
+    "Variety shows"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/game-show/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/game-show"
+  },
+  {
+   "id": "glass-product",
+   "name": "Glass Product Render",
+   "category": "Materials & 3D",
+   "base": "glossy-commercial",
+   "essence": "Launch-film product rendering in transparent and frosted glass: a dark-field studio, strip-light sweeps, dispersion, caustics, light travelling inside the object, slow exploded views that snap shut on a downbeat.",
+   "uses": [
+    "Product launches",
+    "Consumer tech",
+    "Beauty"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/glass-product/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/glass-product"
+  },
+  {
+   "id": "halftone-dossier",
+   "name": "Halftone Dossier",
+   "category": "Print & Printmaking",
+   "base": "handmade-ink",
+   "essence": "A retro print case file: cream archive paper, overprinted halftone dots in a few flat inks, huge heavy headlines with misregistered shadows, rubber stamps that slam, and thick-outlined characters. The film is a file that is read out one exhibit at a time.",
+   "uses": [
+    "Humour",
+    "Pet content",
+    "Social shorts"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/halftone-dossier/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/halftone-dossier"
+  },
+  {
+   "id": "hd-2d",
+   "name": "HD-2D",
+   "category": "Games",
+   "base": "claymation",
+   "essence": "Hand-made pixel sprites standing like paper cut-outs inside a lit, fogged, fully 3D diorama, shot from a high three-quarter angle through a tilt-shift lens: a toy world where every lamp throws a real shadow.",
+   "uses": [
+    "Game trailers",
+    "Fantasy",
+    "Story films"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/hd-2d/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/hd-2d"
+  },
+  {
+   "id": "hologram-hud",
+   "name": "Sci-fi Hologram HUD",
+   "category": "Information & Keynote",
+   "base": "retro-synthwave-vhs",
+   "essence": "An object is scanned into a glowing wireframe. Target boxes lock onto its parts; each opens in a local exploded view, a leader pulls out, and its number rolls from garbage glyphs into the real value. It may light up, once, into a solid hologram.",
+   "uses": [
+    "Product spec walkthroughs",
+    "Launch & crowdfunding videos",
+    "Trade-show screens"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/hologram-hud/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/hologram-hud"
+  },
+  {
+   "id": "impasto",
+   "name": "Impasto Oil Painting",
+   "category": "Hand-drawn & Painting",
+   "base": "handmade-ink",
+   "essence": "Thick oil paint laid with a palette knife: big, flat, sharp-edged planes of colour, raked by light so every ridge of paint shows. Clarity first: value structure before texture, hard edges at the focus, calm planes everywhere else.",
+   "uses": [
+    "Music videos",
+    "Art & culture",
+    "Emotional ads"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/impasto/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/impasto"
+  },
+  {
+   "id": "ink-wash",
+   "name": "Chinese Ink Wash",
+   "category": "Hand-drawn & Painting",
+   "base": "handmade-ink",
+   "essence": "Xieyi ink painting on rice paper, animated: blank paper is space, one brushstroke is a mountain, a wave, a gesture or a cut.",
+   "uses": [
+    "Wuxia",
+    "Cultural brands",
+    "Poetry"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/ink-wash/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/ink-wash"
+  },
+  {
+   "id": "iso-infographic",
+   "name": "Isometric Infographic",
+   "category": "Information & Keynote",
+   "base": "glossy-commercial",
+   "essence": "A system diagram comes alive: an isometric diorama of flat three-tone blocks, thin ink labels and Isotype numbers, where things open up to show their insides and the numbers are drawn, not stated.",
+   "uses": [
+    "Process explainers",
+    "Supply chains",
+    "Annual reports"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/iso-infographic/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/iso-infographic"
+  },
+  {
+   "id": "lidar-survey",
+   "name": "LiDAR Survey",
+   "category": "Evidence Films",
+   "base": "retro-synthwave-vhs",
+   "essence": "Real airborne laser points of a real place, floating in the dark as a measured cloud; a scan line or a cutting plane passes through them and the points condense into a solid, raking-lit surface, which is then measured with hairline instruments. One designed camera move carries the whole film: the cloud is something you fly through, not a picture you look at.",
+   "uses": [
+    "Archaeology & heritage",
+    "Forestry & environment",
+    "Infrastructure & site surveys"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/lidar-survey/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/lidar-survey"
+  },
+  {
+   "id": "living-screencast",
+   "name": "Living Screencast",
+   "category": "Information & Keynote",
+   "base": "glossy-commercial",
+   "essence": "A product walkthrough that looks like a real screen recording, where a low-resolution mascot lives inside a high-resolution interface and acts out what the software is doing.",
+   "uses": [
+    "Product tutorials",
+    "Feature launches",
+    "Onboarding"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/living-screencast/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/living-screencast"
+  },
+  {
+   "id": "lowpoly-island",
+   "name": "Low-poly Isometric Island",
+   "category": "Materials & 3D",
+   "base": "pastel-storybook",
+   "essence": "A tiny faceted world seen through an orthographic isometric lens: everything is a geometric block, and everything that appears arrives with a bounce and a note.",
+   "uses": [
+    "Game trailers",
+    "World building",
+    "Calm content"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/lowpoly-island/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/lowpoly-island"
+  },
+  {
+   "id": "microgame",
+   "name": "Microgame Frenzy",
+   "category": "Games",
+   "base": "retro-synthwave-vhs",
+   "essence": "A rapid-fire party-game film: one command word, a few seconds, one action. Every microgame is drawn in a completely different art style, and the film keeps getting faster.",
+   "uses": [
+    "Game trailers",
+    "Onboarding",
+    "Social shorts"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/microgame/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/microgame"
+  },
+  {
+   "id": "microscope",
+   "name": "Microscope Story",
+   "category": "Evidence Films",
+   "base": "cinematic-realistic",
+   "essence": "Real, licence-clean microscopy of a real specimen, seen as it is, and one continuous change of scale that carries the viewer from the glass slide in the hand to a single cell. Focus breathes when the magnification changes, a focal plane sweeps when the camera lands, and every scale bar, field of view and reading comes from the image's own metadata.",
+   "uses": [
+    "Biomedicine & pathology",
+    "Materials & surface science",
+    "Skincare & cosmetic science"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/microscope/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/microscope"
+  },
+  {
+   "id": "midcentury-toon",
+   "name": "Mid-century Cartoon",
+   "category": "Cartoon & Anime",
+   "base": "papercut-collage",
+   "essence": "1950s flat colour and limited animation for \"follow along\" films: colour printed a few pixels off its broken ink line, bodies that hold still while hands do the work, abstract colour-block rooms, a calm classroom narrator, and a cool-jazz combo.",
+   "uses": [
+    "Product set-up guides",
+    "Help-centre explainers",
+    "How-to steps"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/midcentury-toon/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/midcentury-toon"
+  },
+  {
+   "id": "one-line",
+   "name": "One-line Drawing",
+   "category": "Hand-drawn & Painting",
+   "base": "handmade-ink",
+   "essence": "A single ink line that never leaves the paper. Everything on screen is that one line being drawn; scenes don't cut, they morph.",
+   "uses": [
+    "Brand stories",
+    "Life milestones",
+    "Minimal ads"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/one-line/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/one-line"
+  },
+  {
+   "id": "paper-lantern",
+   "name": "Paper-cut Lightbox",
+   "category": "East Asian Traditions",
+   "base": "papercut-collage",
+   "essence": "A layered paper-cut shadow box (纸雕灯) lit from behind: 6–9 sheets of cut card stacked in a shallow box, a warm light glowing through the paper, windows and moons burning through holes, soft shadows falling from each layer onto the next. The frame is the box; the camera is a macro lens inside a lamp.",
+   "uses": [
+    "Festivals",
+    "Gift brands",
+    "Cultural stories"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/paper-lantern/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/paper-lantern"
+  },
+  {
+   "id": "paper-popup",
+   "name": "Paper Pop-up Book",
+   "category": "Materials & 3D",
+   "base": "papercut-collage",
+   "essence": "A pop-up book on a real desk becomes a stage: flat cut-paper actors with white borders perform in front of paper sets that spring up from the page, under real lamp light and a real macro lens.",
+   "uses": [
+    "Children's books",
+    "Game trailers",
+    "Story films"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/paper-popup/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/paper-popup"
+  },
+  {
+   "id": "papercut-red",
+   "name": "Red Paper-cut",
+   "category": "East Asian Traditions",
+   "base": "papercut-collage",
+   "essence": "Chinese window-flower paper-cuts brought to life: jointed red cut-outs on paper grounds, where the cut *is* the drawing and the holes are where the light gets in.",
+   "uses": [
+    "Lunar New Year",
+    "Festive greetings",
+    "Folk tales"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/papercut-red/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/papercut-red"
+  },
+  {
+   "id": "pictogram-motion",
+   "name": "Pictogram Motion",
+   "category": "Graphic & Type",
+   "base": "glossy-commercial",
+   "essence": "A beat-locked flash-card film built from three things only: a **square-grid \"core graphic\"** of circles, half-discs and tiny patterned cells whose rows slide past each other; **geometric pictograms** made of round-capped bars and a disc head; and **bold bilingual type** that slides up out of masks. Every cut lands on a drum hit.",
+   "uses": [
+    "Sports events",
+    "Visual identity",
+    "Event openers"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/pictogram-motion/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/pictogram-motion"
+  },
+  {
+   "id": "pixel-rpg",
+   "name": "16-bit Pixel RPG",
+   "category": "Games",
+   "base": "retro-synthwave-vhs",
+   "essence": "A short film that looks, sounds and *behaves* like a mid-90s console role-playing game: 320×180 pixels, a limited indexed palette, text boxes that type, menus, save files, chip music with echo.",
+   "uses": [
+    "Game trailers",
+    "Recaps",
+    "Nostalgia"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/pixel-rpg/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/pixel-rpg"
+  },
+  {
+   "id": "risograph",
+   "name": "Risograph Print",
+   "category": "Print & Printmaking",
+   "base": "handmade-ink",
+   "essence": "Animation that looks printed, frame by frame, on a stencil duplicator: two or three translucent spot inks overprinted on warm paper, halftone dots, ink grain, and plates that never quite line up.",
+   "uses": [
+    "Indie brands",
+    "Zines",
+    "Lifestyle"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/risograph/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/risograph"
+  },
+  {
+   "id": "rubber-hose",
+   "name": "1930s Rubber Hose Cartoon",
+   "category": "Cartoon & Anime",
+   "base": "anime-cel",
+   "essence": "Black-and-white hand-inked cartoons where every object is alive and swings to a hot jazz band.",
+   "uses": [
+    "Food & drink",
+    "Retro ads",
+    "Kids"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/rubber-hose/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/rubber-hose"
+  },
+  {
+   "id": "satellite-briefing",
+   "name": "Satellite Briefing",
+   "category": "Evidence Films",
+   "base": "cinematic-realistic",
+   "essence": "Real satellite imagery of a real place, graded down to an analyst's grey, with thin white measurement lines drawn on the ground: a lock-on reticle, outlines, a range line, one reading. One continuous zoom built from stacked imagery plates carries the viewer from orbit to the ground and back, and time can run inside one locked frame.",
+   "uses": [
+    "Climate & environment",
+    "Investigations & news explainers",
+    "Geography & history"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/satellite-briefing/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/satellite-briefing"
+  },
+  {
+   "id": "scifi-toon",
+   "name": "Sci-Fi Sitcom Toon",
+   "category": "Cartoon & Anime",
+   "base": "anime-cel",
+   "essence": "Adult-animation sci-fi sitcom: thick boiling outlines, flat colour, a duo whose reactions don't match, a glowing portal, and one palette per world.",
+   "uses": [
+    "Comedy",
+    "Tech brands",
+    "Social shorts"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/scifi-toon/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/scifi-toon"
+  },
+  {
+   "id": "shadow-puppet",
+   "name": "Shadow Puppetry",
+   "category": "East Asian Traditions",
+   "base": "papercut-collage",
+   "essence": "Chinese shadow theatre: translucent dyed-hide puppets, carved like lace, pressed against a cotton screen and lit from behind by oil lamps.",
+   "uses": [
+    "Myths & folklore",
+    "Heritage",
+    "Festivals"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/shadow-puppet/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/shadow-puppet"
+  },
+  {
+   "id": "silent-film",
+   "name": "1920s Silent Film",
+   "category": "Cinema & Eras",
+   "base": "cinematic-realistic",
+   "essence": "An engraved-illustration silent film projected in a picture house: ink line and silver wash, a 4:3 print that flickers and weaves between velvet curtains, intertitles instead of voices, and a cinema pianist who plays every beat.",
+   "uses": [
+    "Comedy",
+    "Retro brands",
+    "Silent storytelling"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/silent-film/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/silent-film"
+  },
+  {
+   "id": "silkscreen-poster",
+   "name": "Silkscreen Travel Poster",
+   "category": "Print & Printmaking",
+   "base": "papercut-collage",
+   "essence": "Opaque, hard-edged flat inks pulled one colour at a time through a screen: 4–6 inks per poster, stepped colour bands instead of gradients, thin paper-white gaps where the registration slips. Information is revealed the way the print is made: one layer, one beat.",
+   "uses": [
+    "Trail & destination guides",
+    "Tourism promos",
+    "Event posters"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/silkscreen-poster/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/silkscreen-poster"
+  },
+  {
+   "id": "spy-titles",
+   "name": "60s Spy Title Sequence",
+   "category": "Graphic & Type",
+   "base": "papercut-collage",
+   "essence": "A cut-paper, four-ink opening title sequence for a film that never existed: silhouettes move through sets built out of the credits themselves, every brass stab is a cut, and a title is assembled from the pieces.",
+   "uses": [
+    "Title sequences",
+    "Event openers",
+    "Trailers"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/spy-titles/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/spy-titles"
+  },
+  {
+   "id": "stained-glass",
+   "name": "Stained Glass",
+   "category": "Graphic & Type",
+   "base": "anime-cel",
+   "essence": "A medieval stained-glass window seen from inside a dark stone hall, alive only where the sun touches it: light is the clock, the camera and the story.",
+   "uses": [
+    "Legends",
+    "Heritage",
+    "Holiday stories"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/stained-glass/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/stained-glass"
+  },
+  {
+   "id": "swiss-motion",
+   "name": "Swiss Motion Graphics",
+   "category": "Graphic & Type",
+   "base": "glossy-commercial",
+   "essence": "International Typographic Style in motion: a modular grid, one typeface, one signal colour, and movement as exact as a printing press.",
+   "uses": [
+    "Brand identity",
+    "Events",
+    "Design education"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/swiss-motion/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/swiss-motion"
+  },
+  {
+   "id": "teardown",
+   "name": "Exploded Teardown",
+   "category": "Evidence Films",
+   "base": "glossy-commercial",
+   "essence": "A real product, built from its own engineering files (CAD, PCB layout, bill of materials), lit like a studio packshot and taken apart in front of the camera: the layers lift on one axis, the camera travels between them, every part is named with the numbers its files contain, and it closes again into one object.",
+   "uses": [
+    "Hardware launches",
+    "E-commerce product pages",
+    "Technical marketing & spec explainers"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/teardown/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/teardown"
+  },
+  {
+   "id": "tilt-shift",
+   "name": "Tilt-Shift Miniature",
+   "category": "Materials & 3D",
+   "base": "claymation",
+   "essence": "A real-looking place photographed from high above with a tilted lens and a time-lapse camera, so the whole world reads as a tabletop model.",
+   "uses": [
+    "City promos",
+    "Real estate",
+    "Transport"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/tilt-shift/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/tilt-shift"
+  },
+  {
+   "id": "ukiyoe",
+   "name": "Ukiyo-e",
+   "category": "East Asian Traditions",
+   "base": "handmade-ink",
+   "essence": "Edo-period woodblock prints brought to life: flat colour blocks, carved ink lines, bokashi skies, paper you can feel, and a camera that moves over the print like an unrolling handscroll.",
+   "uses": [
+    "Travel",
+    "Japanese culture",
+    "Poetry"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/ukiyoe/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/ukiyoe"
+  },
+  {
+   "id": "urban-sketch",
+   "name": "Urban Sketch · Pen & Wash",
+   "category": "Hand-drawn & Painting",
+   "base": "handmade-ink",
+   "essence": "A sketchbook page drawn on location: fine sepia fineliner lines that wobble, overshoot and never quite close, with loose transparent watercolour dropped on top. The colour sits slightly off the lines, spills over them, and dissolves into cream cold-press paper at the page edge.",
+   "uses": [
+    "City & travel",
+    "Architecture",
+    "Lifestyle brands"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/urban-sketch/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/urban-sketch"
+  },
+  {
+   "id": "vox-explainer",
+   "name": "Vox Explainer",
+   "category": "Evidence Films",
+   "base": "papercut-collage",
+   "essence": "A documentary \"why\" film made of paper: torn cards, cut-out archive photos and documents on a warm desk, a marker that circles the detail that matters, bold condensed type on paper strips, and a narrator who answers one question with one sourced fact per shot.",
+   "uses": [
+    "Explainers",
+    "News & current events",
+    "Brand history",
+    "YouTube essays"
+   ],
+   "poster": null,
+   "demo": null,
+   "source": "cinecode"
+  },
+  {
+   "id": "watercolor",
+   "name": "Watercolor Brush",
+   "category": "Hand-drawn & Painting",
+   "base": "pastel-storybook",
+   "essence": "A hand-painted journal page that paints itself: translucent brush strokes with dry-brush flying white on warm cotton paper, hand-written notes beside what is painted, nothing drawn with a vector line.",
+   "uses": [
+    "Nature documentary",
+    "Travel",
+    "Science explainers"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/watercolor/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/watercolor"
+  },
+  {
+   "id": "white-model",
+   "name": "Projection on White Model",
+   "category": "Evidence Films",
+   "base": "glossy-commercial",
+   "essence": "A pure white massing model of a real place stands on a plinth in a dark room, and a projector paints data onto it as light: one layer at a time, falling on the surfaces that face it, spilling a little past the plate. The model never changes; only the light on it does.",
+   "uses": [
+    "Urban planning & real estate",
+    "Exhibitions & showrooms",
+    "City data & history"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/white-model/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/white-model"
+  },
+  {
+   "id": "whiteboard",
+   "name": "Whiteboard Explainer",
+   "category": "Hand-drawn & Painting",
+   "base": "handmade-ink",
+   "essence": "An explainer drawn live on one glossy dry-erase board: single-line handwriting that is actually *written* stroke by stroke, floating markers with no hand, magnets that can move, an eraser that can rewind, and a camera that travels across the board instead of cutting.",
+   "uses": [
+    "Explainers",
+    "Online courses",
+    "Science"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/whiteboard/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/whiteboard"
+  },
+  {
+   "id": "woodcut",
+   "name": "Woodcut Print",
+   "category": "Print & Printmaking",
+   "base": "handmade-ink",
+   "essence": "A relief print that carves itself: every frame is a black wood block, and light only exists where a knife has cut it away. One colour at most, and only for the thing that burns.",
+   "uses": [
+    "Folk tales",
+    "Craft brands",
+    "Book trailers"
+   ],
+   "poster": "https://raw.githubusercontent.com/lemomo-ai/lemo-opuscar/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/woodcut/poster.jpg",
+   "demo": "https://github.com/lemomo-ai/lemo-opuscar/tree/d33bdea74eeecde3922b0fbad227f0d3dc7afe75/styles/woodcut"
+  },
+  {
+   "id": "line-boil",
+   "name": "Line Boil",
+   "category": "Cartoon & Anime",
+   "base": "anime-cel",
+   "essence": "Hand-drawn cel animation that breathes: outlines tremble from drawing to drawing, poses hold on twos, fast moves stretch into one smear frame, and hand-drawn smoke, splashes and sparks sit on clean shapes.",
+   "uses": [
+    "Comedy shorts",
+    "Character gags",
+    "Playful brand films",
+    "Music videos"
+   ],
+   "poster": null,
+   "demo": null,
+   "source": "cinecode"
+  },
+  {
+   "id": "liquid-motion",
+   "name": "Liquid Motion",
+   "category": "Materials & 3D",
+   "base": "glossy-commercial",
+   "essence": "Shapes behave like thick glossy liquid: drops fall and squash, blobs merge with stretched necks and snap apart, a wave floods the frame as the transition, and the mark forms out of a single drop.",
+   "uses": [
+    "Logo stings",
+    "Drinks and food",
+    "Music videos",
+    "Loops"
+   ],
+   "poster": null,
+   "demo": null,
+   "source": "cinecode"
+  },
+  {
+   "id": "shape-morph",
+   "name": "Shape Morph Chain",
+   "category": "Graphic & Type",
+   "base": "glossy-commercial",
+   "essence": "One hero shape keeps becoming the next meaningful thing on the beat, through a simple bridge shape, its parts changing together, until it ends as the mark; the story is told by the outline.",
+   "uses": [
+    "Product stories",
+    "Brand values",
+    "Processes in steps",
+    "Loops"
+   ],
+   "poster": null,
+   "demo": null,
+   "source": "cinecode"
+  },
+  {
+   "id": "sticker-explainer",
+   "name": "Sticker Explainer",
+   "category": "Information & Keynote",
+   "base": "papercut-collage",
+   "essence": "A knowledge film on one huge calm canvas: cut-out photos with thick white borders like stickers, flat icons and exact charts, and one continuous camera gliding and zooming from fact to fact.",
+   "uses": [
+    "Science and economics explainers",
+    "How it works",
+    "Data stories",
+    "YouTube essays"
+   ],
+   "poster": null,
+   "demo": null,
+   "source": "cinecode"
+  },
+  {
+   "id": "variety-captions",
+   "name": "Variety Captions",
+   "category": "Graphic & Type",
+   "base": "glossy-commercial",
+   "essence": "Decorated, emotional captions from variety-show editing: fat rounded letters with layered outlines pop onto the footage with a bounce and a sound, and burst frames, sweat drops and sparkles comment on each moment.",
+   "uses": [
+    "Pet and life vlogs",
+    "Comedy edits",
+    "Interview highlights",
+    "Vertical shorts"
+   ],
+   "poster": null,
+   "demo": null,
+   "source": "cinecode"
+  },
+  {
+   "id": "visual-proof",
+   "name": "Visual Proof",
+   "category": "Information & Keynote",
+   "base": "cinematic-realistic",
+   "essence": "Mathematics and science built on screen from shapes: each quantity keeps its colour, the equation assembles out of the shapes it describes, one label at a time, the camera gliding with the thought.",
+   "uses": [
+    "Math and science explainers",
+    "Algorithms",
+    "Physics laws",
+    "Statistics explained"
+   ],
+   "poster": null,
+   "demo": null,
+   "source": "cinecode"
+  }
+ ]
+}

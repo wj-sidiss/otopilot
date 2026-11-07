@@ -1,0 +1,411 @@
+{
+ "note": "Names people use for a style, mapped to the nearest recipes (first = closest) and the base family. Grammar only: a name never means copying a studio's work.",
+ "aliases": [
+  {
+   "names": [
+    "vox",
+    "vox explainer",
+    "video essay",
+    "video essayi"
+   ],
+   "styles": [
+    "vox-explainer",
+    "halftone-dossier",
+    "archive-lighttable"
+   ],
+   "family": "papercut-collage",
+   "note": "paper cards, marker circles, a narrator, sourced facts"
+  },
+  {
+   "names": [
+    "road runner",
+    "looney tunes",
+    "tom and jerry",
+    "pink panther",
+    "pembe panter",
+    "slapstick",
+    "goofy",
+    "komik çizgi",
+    "cartoon comedy",
+    "chuck jones"
+   ],
+   "styles": [
+    "rubber-hose",
+    "midcentury-toon",
+    "scifi-toon"
+   ],
+   "family": "anime-cel",
+   "note": "timing-led slapstick: squash and stretch, smears, holds before the fall"
+  },
+  {
+   "names": [
+    "kurzgesagt",
+    "in a nutshell"
+   ],
+   "styles": [
+    "iso-infographic",
+    "midcentury-toon"
+   ],
+   "family": "glossy-commercial",
+   "note": "flat vector diorama, soft gradients, one round mascot species; build the flat-vector look on these grammars"
+  },
+  {
+   "names": [
+    "apple",
+    "apple keynote",
+    "apple reklamı",
+    "apple ad"
+   ],
+   "styles": [
+    "dark-keynote",
+    "glass-product"
+   ],
+   "family": "glossy-commercial",
+   "note": "near-black stage, one product, slow light, big quiet type"
+  },
+  {
+   "names": [
+    "stripe",
+    "linear",
+    "saas launch",
+    "saas"
+   ],
+   "styles": [
+    "dark-keynote",
+    "living-screencast",
+    "iso-infographic"
+   ],
+   "family": "glossy-commercial",
+   "note": "real interface as the star, one accent colour"
+  },
+  {
+   "names": [
+    "ghibli",
+    "studio ghibli",
+    "miyazaki"
+   ],
+   "styles": [
+    "cel-anime-80s",
+    "watercolor"
+   ],
+   "family": "anime-cel",
+   "note": "painted skies and backgrounds, cel characters, wind in everything"
+  },
+  {
+   "names": [
+    "akira",
+    "city pop",
+    "80s anime",
+    "80'ler anime"
+   ],
+   "styles": [
+    "cel-anime-80s"
+   ],
+   "family": "anime-cel"
+  },
+  {
+   "names": [
+    "spider-verse",
+    "spiderverse",
+    "örümcek-adam",
+    "comic book"
+   ],
+   "styles": [
+    "halftone-dossier",
+    "risograph"
+   ],
+   "family": "handmade-ink",
+   "note": "halftone dots, misregistration, held frames on twos"
+  },
+  {
+   "names": [
+    "wes anderson"
+   ],
+   "styles": [
+    "paper-popup",
+    "tilt-shift"
+   ],
+   "family": "pastel-storybook",
+   "note": "symmetry, pastel sets, flat frontal staging, whip pans"
+  },
+  {
+   "names": [
+    "pixar",
+    "disney 3d",
+    "dreamworks"
+   ],
+   "styles": [],
+   "family": "pastel-storybook",
+   "note": "no recipe: soft rounded 3D on the family; claymation for a handmade feel"
+  },
+  {
+   "names": [
+    "aardman",
+    "wallace and gromit",
+    "stop motion",
+    "stop-motion"
+   ],
+   "styles": [
+    "brick-toy"
+   ],
+   "family": "claymation",
+   "note": "claymation family with thumbprints and on-twos motion"
+  },
+  {
+   "names": [
+    "lego"
+   ],
+   "styles": [
+    "brick-toy"
+   ],
+   "family": "claymation"
+  },
+  {
+   "names": [
+    "saul bass",
+    "60s titles",
+    "60'lar jenerik",
+    "bond titles"
+   ],
+   "styles": [
+    "spy-titles",
+    "silkscreen-poster"
+   ],
+   "family": "papercut-collage"
+  },
+  {
+   "names": [
+    "cuphead",
+    "fleischer",
+    "1930s cartoon",
+    "30'lar çizgi film"
+   ],
+   "styles": [
+    "rubber-hose"
+   ],
+   "family": "handmade-ink"
+  },
+  {
+   "names": [
+    "rick and morty",
+    "futurama",
+    "adult animation"
+   ],
+   "styles": [
+    "scifi-toon"
+   ],
+   "family": "anime-cel"
+  },
+  {
+   "names": [
+    "ted-ed",
+    "rsa animate",
+    "whiteboard explainer"
+   ],
+   "styles": [
+    "whiteboard",
+    "midcentury-toon"
+   ],
+   "family": "handmade-ink"
+  },
+  {
+   "names": [
+    "hokusai",
+    "ukiyo-e",
+    "ukiyoe"
+   ],
+   "styles": [
+    "ukiyoe",
+    "woodcut"
+   ],
+   "family": "handmade-ink"
+  },
+  {
+   "names": [
+    "bauhaus",
+    "swiss",
+    "dieter rams"
+   ],
+   "styles": [
+    "swiss-motion",
+    "pictogram-motion"
+   ],
+   "family": "glossy-commercial"
+  },
+  {
+   "names": [
+    "true crime",
+    "netflix documentary",
+    "belgesel",
+    "documentary"
+   ],
+   "styles": [
+    "archive-lighttable",
+    "briefing-board",
+    "satellite-briefing"
+   ],
+   "family": "cinematic-realistic"
+  },
+  {
+   "names": [
+    "octopath",
+    "hd-2d"
+   ],
+   "styles": [
+    "hd-2d"
+   ],
+   "family": "retro-synthwave-vhs"
+  },
+  {
+   "names": [
+    "16-bit",
+    "snes",
+    "pixel art",
+    "final fantasy"
+   ],
+   "styles": [
+    "pixel-rpg",
+    "hd-2d"
+   ],
+   "family": "retro-synthwave-vhs"
+  },
+  {
+   "names": [
+    "stranger things",
+    "synthwave",
+    "80s",
+    "80'ler",
+    "vhs"
+   ],
+   "styles": [
+    "backrooms",
+    "ascii-crt"
+   ],
+   "family": "retro-synthwave-vhs",
+   "note": "neon titles and VHS texture live in the family; backrooms for camcorder footage"
+  },
+  {
+   "names": [
+    "the economist",
+    "financial times",
+    "bloomberg",
+    "data journalism"
+   ],
+   "styles": [
+    "dataviz",
+    "data-physical"
+   ],
+   "family": "glossy-commercial"
+  },
+  {
+   "names": [
+    "villeneuve",
+    "nolan",
+    "a24",
+    "blockbuster"
+   ],
+   "styles": [],
+   "family": "cinematic-realistic",
+   "note": "no recipe: the cinematic family with the purpose-cinematic rules"
+  },
+  {
+   "names": [
+    "line boil",
+    "frame by frame",
+    "cel animation",
+    "kare kare çizim"
+   ],
+   "styles": [
+    "line-boil"
+   ],
+   "family": "anime-cel"
+  },
+  {
+   "names": [
+    "liquid",
+    "metaball",
+    "sıvı",
+    "liquid logo"
+   ],
+   "styles": [
+    "liquid-motion"
+   ],
+   "family": "glossy-commercial"
+  },
+  {
+   "names": [
+    "shape morph",
+    "morph",
+    "şekil dönüşümü"
+   ],
+   "styles": [
+    "shape-morph"
+   ],
+   "family": "glossy-commercial"
+  },
+  {
+   "names": [
+    "variety show",
+    "hanazi",
+    "kinetic captions",
+    "komik altyazı",
+    "efektli altyazı"
+   ],
+   "styles": [
+    "variety-captions"
+   ],
+   "family": "glossy-commercial"
+  },
+  {
+   "names": [
+    "paperclip",
+    "sticker explainer",
+    "çıkartma anlatım"
+   ],
+   "styles": [
+    "sticker-explainer"
+   ],
+   "family": "papercut-collage"
+  },
+  {
+   "names": [
+    "3blue1brown",
+    "3b1b",
+    "manim",
+    "matematik anlatımı",
+    "math explainer",
+    "görsel ispat",
+    "visual proof"
+   ],
+   "styles": [
+    "visual-proof"
+   ],
+   "family": "cinematic-realistic",
+   "note": "colour is meaning, shapes become symbols, typeset math, a calm glide"
+  },
+  {
+   "names": [
+    "linocut",
+    "lino cut",
+    "lino print",
+    "linol",
+    "linol baskı",
+    "linoleum",
+    "relief print",
+    "block print",
+    "woodblock print",
+    "baskı resim",
+    "oyma baskı",
+    "ağaç baskı",
+    "printmaking",
+    "gravür baskı"
+   ],
+   "styles": [
+    "woodcut",
+    "engraving"
+   ],
+   "family": "handmade-ink",
+   "note": "black is the block, white is what the knife removed; cuts follow the form; a second colour slightly off register"
+  }
+ ]
+}

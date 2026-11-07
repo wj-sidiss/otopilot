@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>cinecode starter: a shader test scene (dependency-free)</title>
+<style>
+  html, body { margin: 0; background: #000; color: #aaa; font: 12px/1.4 ui-monospace, Menlo, monospace; }
+  canvas { display: block; max-width: 100vw; height: auto; margin: 0 auto; }
+  #hud { position: fixed; left: 8px; bottom: 6px; opacity: .7; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud"></div>
+<script>
+// Contract used by capture.mjs (tools/capture.mjs in a film):
+//   window.READY            Promise<{frames, fps, width, height, renderer}>; resolves when assets are loaded
+//   window.renderFrame(i)   draws frame i synchronously; pure function of (i, SEED)
+//   window.captureFrame(i)  renderFrame(i) + returns a PNG/JPEG data URL of the canvas
+// URL params: w, h (picture size, default 1920x1080; use 1080x1920 for 9:16), seed, capture=1 (no preview loop)
+// Works offline: no libraries, one fragment shader. Its world (terrain, one solid, a low sun, haze, dust) only tests the
+// techniques (ray marching, soft shadows, aerial perspective, particles) and the GPU probe: every film replaces it with
+// its own world, and none of it is a default.
+
+const q = new URLSearchParams(location.search);
+const W = +q.get('w') || 1920;
+const H = +q.get('h') || 1080;
+const SEED = +q.get('seed') || 7;
+const FPS = 24;
+const DURATION = 6;                       // seconds
+const FRAMES = Math.round(FPS * DURATION);
+
+const canvas = document.getElementById('c');
+canvas.width = W; canvas.height = H;
+const gl = canvas.getContext('webgl2', { antialias: false, preserveDrawingBuffer: true, alpha: false });
+if (!gl) throw new Error('WebGL2 not available');
+
+const VERT = `#version 300 es
+in vec2 p; void main() { gl_Position = vec4(p, 0.0, 1.0); }`;
+
+const FRAG = `#version 300 es
+precision highp float;
+uniform vec2  uRes;
+uniform float uTime;      // seconds
+uniform float uFrame;     // frame index
+uniform float uDur;       // shot duration, seconds
+uniform float uSeed;
+uniform float uFocal;     // focal length in mm, full-frame (36 mm wide) equivalent
+out vec4 outColor;
+
+// ---------- seeded hash / noise (no Math.random anywhere) ----------
+float hash12(vec2 p) {
+  vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.x + p3.y) * p3.z);
+}
+float noise(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  vec2 s = vec2(uSeed * 17.13, uSeed * 7.31);
+  float a = hash12(i + s), b = hash12(i + vec2(1, 0) + s);
+  float c = hash12(i + vec2(0, 1) + s), d = hash12(i + vec2(1, 1) + s);
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+float fbm(vec2 p) {
+  float h = 0.0, a = 0.5;
+  for (int i = 0; i < 5; i++) { h += a * noise(p); p = p * 2.03 + vec2(1.7, 9.2); a *= 0.5; }
+  return h;
+}
+
+// ---------- world ----------
+float terrain(vec2 p) {
+  float base = fbm(p * 0.035) * 6.0;
+  float dunes = 1.0 - abs(sin(p.x * 0.05 + p.y * 0.012 + fbm(p * 0.02) * 4.0));
+  float h = base + dunes * dunes * 1.6 + fbm(p * 0.6) * 0.08;
+  float away = smoothstep(4.0, 14.0, length(p));              // flatten the plinth area
+  return mix(fbm(vec2(0.0)) * 6.0 + 0.3, h, away);
+}
+float BASE_Y;
+vec3 MONO_C;                                                     // monolith centre (set in main)
+const vec3 MONO = vec3(0.9, 4.2, 0.28);                          // half extents: 1.8 x 8.4 x 0.56 m
+
+// Exact ray / axis-aligned box intersection. Returns distance or -1; writes the face normal.
+float boxHit(vec3 ro, vec3 rd, vec3 c, vec3 b, out vec3 n) {
+  vec3 m = 1.0 / rd, o = ro - c, k = abs(m) * b;
+  vec3 t1 = -m * o - k, t2 = -m * o + k;
+  float tN = max(max(t1.x, t1.y), t1.z), tF = min(min(t2.x, t2.y), t2.z);
+  if (tN > tF || tF < 0.0) return -1.0;
+  n = -sign(rd) * step(t1.yzx, t1.xyz) * step(t1.zxy, t1.xyz);
+  return tN;
+}
+
+// Heightfield march. A ray that runs out of steps close to the ground counts as a hit
+// (otherwise grazing rays leak sky colour through thin dune crests).
+float terrainHit(vec3 ro, vec3 rd, float tmax) {
+  float t = 0.5;
+  for (int i = 0; i < 320; i++) {
+    vec3 p = ro + rd * t;
+    float h = p.y - terrain(p.xz);
+    if (h < 0.0015 * t) return t;
+    t += max(h * 0.42, 0.004 * t);
+    if (t > tmax) return -1.0;
+  }
+  return t < tmax ? t : -1.0;
+}
+
+vec3 terrainNormal(vec2 p, float t) {
+  float e = 0.02 + 0.0015 * t;                                   // wider footprint far away = less aliasing
+  return normalize(vec3(terrain(p - vec2(e, 0)) - terrain(p + vec2(e, 0)), 2.0 * e,
+                        terrain(p - vec2(0, e)) - terrain(p + vec2(0, e))));
+}
+
+const vec3 SUN = normalize(vec3(0.16, 0.055, 1.0));              // the test's key light
+const vec3 SUN_COL = vec3(1.0, 0.62, 0.36) * 9.0;
+
+vec3 sky(vec3 rd) {
+  float h = max(rd.y, 0.0);
+  vec3 col = mix(vec3(1.05, 0.52, 0.30), vec3(0.10, 0.14, 0.28), pow(h, 0.45));
+  float s = max(dot(rd, SUN), 0.0);
+  col += SUN_COL * 0.04 * pow(s, 12.0);                          // wide glow
+  col += vec3(1.0, 0.35, 0.18) * 0.6 * pow(s, 90.0);             // cheap halation-like red ring
+  col += SUN_COL * smoothstep(0.99994, 0.99997, s) * 3.0;        // sun disc (HDR)
+  return col;
+}
+
+float sunShadow(vec3 p) {
+  vec3 n;
+  if (boxHit(p, SUN, MONO_C, MONO, n) > 0.0) return 0.0;        // the monolith's long shadow
+  float res = 1.0, t = 0.3;                                       // soft self-shadow of the dunes
+  for (int i = 0; i < 32; i++) {
+    vec3 q = p + SUN * t;
+    float h = q.y - terrain(q.xz);
+    res = min(res, 12.0 * h / t);
+    t += clamp(h * 0.6, 0.3, 4.0);
+    if (res < 0.01 || t > 80.0) break;
+  }
+  return clamp(res, 0.0, 1.0);
+}
+
+vec3 aces(vec3 x) { return clamp(x * (2.51 * x + 0.03) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0); }
+
+void main() {
+  BASE_Y = terrain(vec2(0.0));
+  MONO_C = vec3(0.0, BASE_Y + MONO.y - 0.4, 0.0);
+  vec2 uv = (gl_FragCoord.xy / uRes) * 2.0 - 1.0;                // -1..1
+  float aspect = uRes.x / uRes.y;
+
+  // Camera: dolly in + slight crane down. Already moving on frame 0, still moving at the cut.
+  float s = clamp(uTime / uDur, 0.0, 1.0);
+  float u = 1.0 - (1.0 - s) * (1.0 - s);                       // ease-out: fastest on frame 0 (hook rule)
+  vec3 ro = vec3(mix(-12.0, -1.6, u), 0.0, mix(-52.0, -28.0, u));   // push in + truck right: parallax
+  ro.y = terrain(ro.xz) + mix(2.4, 1.7, u);
+  vec3 target = vec3(0.6, BASE_Y + 3.6, 0.0);
+  vec3 fw = normalize(target - ro);
+  vec3 rt = normalize(cross(fw, vec3(0, 1, 0)));
+  vec3 up = cross(rt, fw);
+  float tanH = 18.0 / uFocal;                                    // tan(hFOV/2) for a 36 mm wide sensor
+  vec3 rd = normalize(fw + uv.x * tanH * rt + uv.y * (tanH / aspect) * up);
+
+  vec3 nM;
+  float tM = boxHit(ro, rd, MONO_C, MONO, nM);
+  float tT = terrainHit(ro, rd, tM > 0.0 ? tM : 600.0);
+
+  vec3 col;
+  float t = tT > 0.0 ? tT : tM;
+  if (t > 0.0) {
+    vec3 p = ro + rd * t;
+    vec3 amb;
+    if (tT > 0.0) {
+      vec3 n = terrainNormal(p.xz, t);
+      float dif = max(dot(n, SUN), 0.0) * sunShadow(p + n * 0.05);
+      amb = mix(vec3(0.10, 0.08, 0.10), vec3(0.16, 0.20, 0.32), n.y * 0.5 + 0.5);
+      float r = length(max(abs(p.xz - MONO_C.xz) - MONO.xz, 0.0));   // distance to the monolith footprint
+      float ao = mix(0.35, 1.0, smoothstep(0.0, 2.5, r));            // contact occlusion grounds it
+      vec3 sand = vec3(0.60, 0.46, 0.33) * (0.85 + 0.3 * fbm(p.xz * 3.0));
+      col = sand * (SUN_COL * 0.12 * dif + amb * 0.9 * ao);
+    } else {
+      vec3 n = nM;
+      amb = mix(vec3(0.10, 0.08, 0.10), vec3(0.16, 0.20, 0.32), n.y * 0.5 + 0.5);
+      float dif = max(dot(n, SUN), 0.0);
+      float lift = smoothstep(0.0, 2.0, p.y - BASE_Y);                // darker where it meets the sand
+      vec3 stone = vec3(0.02, 0.02, 0.024) * (0.8 + 0.4 * fbm(p.xy * 4.0 + p.z));
+      float rim = pow(1.0 - abs(dot(n, rd)), 4.0) * pow(max(dot(rd, SUN), 0.0), 2.0);
+      col = stone * (amb * 0.6 * mix(0.5, 1.0, lift) + SUN_COL * 0.05 * dif) + SUN_COL * 0.03 * rim;
+    }
+    // Aerial perspective (a technique, when a film's world has air): distance haze toward the sun
+    float fogAmt = 1.0 - exp(-max(t - 10.0, 0.0) * 0.0065);
+    vec3 fogCol = mix(vec3(0.30, 0.19, 0.16), SUN_COL * 0.07, pow(max(dot(rd, SUN), 0.0), 5.0));
+    col = mix(col, fogCol, fogAmt);
+  } else {
+    col = sky(rd);
+  }
+
+  // Particles: two parallax layers, pure function of time, lit by the sun
+  for (int k = 0; k < 2; k++) {
+    float sc = k == 0 ? 90.0 : 45.0;
+    vec2 q = gl_FragCoord.xy / uRes.y * sc + vec2(uTime * (k == 0 ? 2.2 : 4.0), -uTime * 0.6) + float(k) * 31.7;
+    vec2 cell = floor(q);
+    vec2 f = fract(q) - 0.5;
+    float r = hash12(cell + uSeed);
+    vec2 off = vec2(hash12(cell + 3.1), hash12(cell + 7.7)) - 0.5;
+    float m = smoothstep(0.06, 0.0, length(f - off * 0.6)) * step(0.93, r);
+    col += m * SUN_COL * 0.010 * (0.3 + pow(max(dot(rd, SUN), 0.0), 3.0));
+  }
+
+  // Display: exposure, filmic tone map, gamma, vignette, grain (seeded per frame)
+  col = aces(col * 0.8);
+  col = pow(col, vec3(1.0 / 2.2));
+  float vig = smoothstep(1.55, 0.35, length(uv * vec2(1.0, 0.75)));
+  col *= mix(0.72, 1.0, vig);
+  float g = hash12(gl_FragCoord.xy + vec2(uFrame * 37.0, uFrame * 91.0) + uSeed) - 0.5;
+  float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
+  col += g * 0.045 * (0.35 + 0.65 * (1.0 - abs(luma * 2.0 - 1.0)));  // more grain in the mids
+  outColor = vec4(clamp(col, 0.0, 1.0), 1.0);
+}`;
+
+function compile(type, src) {
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src); gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+  return s;
+}
+const prog = gl.createProgram();
+gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
+gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
+gl.linkProgram(prog);
+if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+gl.useProgram(prog);
+
+const buf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+const loc = gl.getAttribLocation(prog, 'p');
+gl.enableVertexAttribArray(loc);
+gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+const U = {};
+for (const n of ['uRes', 'uTime', 'uFrame', 'uDur', 'uSeed', 'uFocal']) U[n] = gl.getUniformLocation(prog, n);
+gl.viewport(0, 0, W, H);
+
+window.renderFrame = (frame) => {
+  const t = frame / FPS;                  // time comes only from the frame index
+  gl.uniform2f(U.uRes, W, H);
+  gl.uniform1f(U.uTime, t);
+  gl.uniform1f(U.uFrame, frame);
+  gl.uniform1f(U.uDur, DURATION);
+  gl.uniform1f(U.uSeed, SEED);
+  gl.uniform1f(U.uFocal, 40.0);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  gl.finish();
+};
+
+window.captureFrame = (frame, type = 'image/png', quality = 0.95) => {
+  window.renderFrame(frame);
+  return canvas.toDataURL(type, quality);
+};
+
+const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+const renderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+window.READY = Promise.resolve({ frames: FRAMES, fps: FPS, width: W, height: H, renderer });
+
+// Preview loop for a normal browser window only. It maps the wall clock to a frame index
+// and never feeds state back into the render. Space = pause, arrows = step one frame.
+if (!q.get('capture')) {
+  let frame = 0, playing = true, last = performance.now(), acc = 0;
+  const hud = document.getElementById('hud');
+  addEventListener('keydown', (e) => {
+    if (e.code === 'Space') playing = !playing;
+    if (e.code === 'ArrowRight') { playing = false; frame = Math.min(FRAMES - 1, frame + 1); }
+    if (e.code === 'ArrowLeft') { playing = false; frame = Math.max(0, frame - 1); }
+  });
+  const loop = (now) => {
+    if (playing) { acc += now - last; while (acc >= 1000 / FPS) { frame = (frame + 1) % FRAMES; acc -= 1000 / FPS; } }
+    last = now;
+    window.renderFrame(frame);
+    hud.textContent = `frame ${frame}/${FRAMES - 1}  t=${(frame / FPS).toFixed(3)}s  ${renderer}`;
+    requestAnimationFrame(loop);
+  };
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>
