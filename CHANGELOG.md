@@ -2,6 +2,12 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.24.0] — 2026-11-07 — 3B model bulucu
+
+### Eklenenler
+- **`node model-bul.js`: açık lisanslı 3B model arama ve indirme.** Kaynaklar: Poly Haven (~520 model, CC0), NASA 3D Resources (~260 `.glb`, kamu malı), Smithsonian 3D (müze taramaları, uçaklar, eserler; Open Access) ve Sketchfab (arama anahtarsız, yalnız CC0 ve CC BY; indirme için ücretsiz `SKETCHFAB_TOKEN`). Sonuçlar numaralanır, `indir <no>` tek bir `.glb` verir (Poly Haven'ın glTF + doku dosyaları tek GLB'ye paketlenir), `KAYNAK.txt`'e lisans ve açıklamaya yapıştırılacak atıf yazılır; `--is <iş>` modeli Stüdyo işinin `girdi/` klasörüne kopyalayıp `ATIF.txt`'e ekler. Geçici ağ kopmasında 2 kez yeniden dener. Gerçek indirmeyle denendi (gemi, 1903 Wright Flyer, Hubble) ve 3B çizicide çizildi.
+- **Draco sıkıştırmalı modeller** (Smithsonian) ürün sahnesinde açılır; model platformun üstüne oturur. Smithsonian'da parça parça kalite dosyaları yerine modelin tamamı seçilir.
+
 ## [1.23.0] — 2026-11-07 — Kodla film (cinecode), Türkçe telaffuz paketi, W.J. Sidis video şablonu
 
 ### Eklenenler
