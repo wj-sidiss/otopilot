@@ -1,6 +1,6 @@
 {
   "name": "otopilot",
-  "version": "1.22.0",
+  "version": "1.23.0",
   "description": "Video icerik otomasyon paneli (localhost) — YouTube, Shorts, Reels, TikTok",
   "private": true,
   "scripts": {
