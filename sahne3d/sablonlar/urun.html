@@ -25,10 +25,16 @@
   const urun = new THREE.Group(); sahne.add(urun);
   let hazir = Promise.resolve();
   if (P.model) {
-    hazir = import("three/addons/loaders/GLTFLoader.js").then(m => new m.GLTFLoader().loadAsync(P.model)).then(g => {
+    hazir = Promise.all([import("three/addons/loaders/GLTFLoader.js"), import("three/addons/loaders/DRACOLoader.js")]).then(([m, d]) => {
+      const yukle = new m.GLTFLoader(), draco = new d.DRACOLoader();
+      draco.setDecoderPath("/three/examples/jsm/libs/draco/gltf/");   // Draco sikistirmali modeller (Smithsonian vb.)
+      yukle.setDRACOLoader(draco);
+      return yukle.loadAsync(P.model);
+    }).then(g => {
       const o = g.scene, b = new THREE.Box3().setFromObject(o).getSize(new THREE.Vector3());
       o.scale.setScalar(2.0 / Math.max(b.x, b.y, b.z));
       o.position.sub(new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3()));
+      o.position.y += -1.01 - new THREE.Box3().setFromObject(o).min.y;   // modelin tabani platformun ustune oturur
       o.traverse(n => { if (n.isMesh) n.castShadow = true; });
       urun.add(o);
     });
