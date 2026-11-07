@@ -1,0 +1,20 @@
+{
+  "name": "sidis-video-sablonu",
+  "private": true,
+  "description": "W.J. Sidis tarzı (1910'lar gazete/daktilo) Remotion video şablonu: 30 dk'lık örnek uzun video + pilot Shorts",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "kontrol": "tsc -p ."
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.539",
+    "@remotion/fonts": "^4.0.539",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "^4.0.539"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "typescript": "^7.0.2"
+  }
+}
