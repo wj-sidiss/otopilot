@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Surum otomasyonu.
-//   1) npm run surum -- patch|minor|major|x.y.z "Baslik"   -> surumu yukseltir, CHANGELOG'a taslak bolum ekler (commit yok)
+//   1) npm run surum -- patch|minor|major|x.y.z "Baslik"   -> surumu yukseltir, CHANGELOG'a taslak bolum ekler (commit yok;
+//      en ustte "## [Yayınlanmamış]" varsa taslak eklenmez, o bolum yeni surumun basligini alir)
 //   2) CHANGELOG'daki TASLAK satirini doldur
 //   3) npm run surum -- --yayinla                           -> kapi + commit + etiket (vX.Y.Z) + push (main)
 // Taslak doluyken, kapi kapaliyken ya da etiket zaten varken yayin reddedilir.
@@ -38,10 +39,18 @@ function degistir(tur, baslik, tarih = new Date().toISOString().slice(0, 10)) {
   let cl = fs.readFileSync(P("CHANGELOG.md"), "utf8");
   const crlf = cl.includes("\r\n");
   cl = cl.replace(/\r\n/g, "\n");
-  const bolum = `## [${yeni}] — ${tarih} — ${baslik}\n\n### Eklenenler\n- TASLAK: buraya yaz\n\n`;
-  cl = cl.replace(/^## \[/m, bolum + "## [");
+  cl = changelogBolumu(cl, yeni, tarih, baslik);
   fs.writeFileSync(P("CHANGELOG.md"), crlf ? cl.replace(/\n/g, "\r\n") : cl);
   return { eski, yeni };
+}
+
+// CHANGELOG'a yeni surum bolumu. En ustteki bolum "## [Yayınlanmamış]" ise yeni surum basligina DONUSTURULUR
+// (icerigi korunur, taslak eklenmez); yoksa ilk bolumun ustune TASLAK bolum eklenir.
+function changelogBolumu(cl, yeni, tarih, baslik) {
+  const baslikSatiri = `## [${yeni}] — ${tarih} — ${baslik}`;
+  const ilk = /^## \[([^\]]*)\][^\n]*$/m.exec(cl);
+  if (ilk && ilk[1] === "Yayınlanmamış") return cl.slice(0, ilk.index) + baslikSatiri + cl.slice(ilk.index + ilk[0].length);
+  return cl.replace(/^## \[/m, `${baslikSatiri}\n\n### Eklenenler\n- TASLAK: buraya yaz\n\n## [`);
 }
 
 function git(...a) { return execFileSync("git", a, { cwd: KOK, encoding: "utf8" }).trim(); }
@@ -81,4 +90,4 @@ function main(argv) {
 }
 
 if (require.main === module) process.exit(main(process.argv.slice(2)));
-module.exports = { sonraki, degistir };
+module.exports = { sonraki, degistir, changelogBolumu };

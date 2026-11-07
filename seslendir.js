@@ -5,11 +5,13 @@
 //   node seslendir.js <is> --yeniden              guncel olsa bile bastan uret
 //   node seslendir.js <is> --motor edge|azure|piper|voxcpm|sistem|otomatik
 //   node seslendir.js <is> --ses voxcpm:tok_anlatici      VoxCPM2 hazir sesi (yerel GPU; sesler/voxcpm2/)
-//   node seslendir.js --test <cikti.mp3> [--ses X] [--metin "..."] [--motor M]    5 sn ornek
+//   node seslendir.js <is> --telaffuz-kapali              Turkce telaffuz paketini bu kosu icin kapat (konu.json "telaffuzPaketi": false)
+//   node seslendir.js --test <cikti.mp3> [--ses X] [--metin "..."] [--motor M] [--telaffuz-kapali]    5 sn ornek
 //   node seslendir.js --liste-sesler                      VoxCPM2 sesleri + kurulum durumu, dile gore Edge sesleri
 //
 // Ses, hiz, dil ve okunus konu.json'dan okunur; komut satiri onu ezer ("ses": "tr-TR-AhmetNeural",
-// "sesHizi": "+7%", "dil": "tr", "okunus": {"GPU": "G P U"}, "sesMotoru": "otomatik").
+// "sesHizi": "+7%", "dil": "tr", "okunus": {"GPU": "G P U"}, "sesMotoru": "otomatik", "telaffuzPaketi": true).
+// Turkce telaffuz paketi (lib/telaffuz.js) varsayilan acik: yalniz ses metnine; diksiyon raporu: node diksiyon.js <is>.
 // Motorlar: edge (varsayilan, ucretsiz, RESMI DEGIL), azure (resmi, anahtar ister), piper (yerel),
 // voxcpm (yerel ekran karti, VOXCPM_KOK ister; ses "voxcpm:<ad>", ad verilmezse dile gore varsayilan),
 // sistem (isletim sisteminin sesi: robotik, kurulum yok; o dilde ses yoksa calismaz, baska dilde OKUMAZ).
@@ -52,7 +54,7 @@ function sesleriListele() {
 
 async function ana(argv) {
   const { konum, bayrak } = ortak.argumanCoz(argv, {
-    deger: ["test", "ses", "metin", "motor", "hiz", "dil"], mantik: ["yeniden", "liste-sesler"],
+    deger: ["test", "ses", "metin", "motor", "hiz", "dil"], mantik: ["yeniden", "liste-sesler", "telaffuz-kapali"],
   });
 
   if (bayrak["liste-sesler"]) { sesleriListele(); return; }
@@ -68,6 +70,7 @@ async function ana(argv) {
       motorSecimi: typeof bayrak.motor === "string" ? bayrak.motor : "otomatik",
       hiz: typeof bayrak.hiz === "string" ? bayrak.hiz : ayar.sesHizi,
       dil: typeof bayrak.dil === "string" ? bayrak.dil : undefined,
+      telaffuzPaketi: bayrak["telaffuz-kapali"] ? false : undefined,
     });
     ortak.sonuc(r);
     return;
@@ -101,6 +104,7 @@ async function ana(argv) {
       dizin, ses, hiz, dil,
       motorSecimi: typeof bayrak.motor === "string" ? bayrak.motor : (k.sesMotoru || "otomatik"),
       okunus: k.okunus || {}, yeniden: !!bayrak.yeniden, hedefSn: k.hedefSaniye,
+      telaffuzPaketi: bayrak["telaffuz-kapali"] ? false : k.telaffuzPaketi !== false,
       teknikMaxSn: k.format && k.format !== "long" ? ortak.formatSiniri(k.format).teknikMaxSn : null,
     });
     if (r.atlandi) ortak.sonuc({ atlandi: true, neden: r.neden });

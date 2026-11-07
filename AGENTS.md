@@ -136,6 +136,15 @@ kullanıcıya açık programları kapatmasını söyle, `.env`'e `RENDER_DUSUK_B
 tekrar çalıştır; biten ara dosyalar korunur.
 Ayar alanlarının tam listesi: `KONU-JSON.md` (geçiş, müzik, altyazı biçimi, ses vb. `uretim/<is>/konu.json`).
 
+**Türkçe telaffuz paketi (kendiliğinden açık):** `dil: tr` seste YouTube, Shorts, vidIQ, ChatGPT, Claude, iPhone, podcast, AI/YZ gibi
+130'u aşkın yabancı ad Türkçe söylenişiyle okunur (`data/telaffuz-tr.json`), paragraf başındaki selam "Merhaba," → "Merhaba!" olur
+("Merhaba, ben Efe." → "Merhaba! Ben Efe."; ardından "önce" geliyorsa dokunulmaz). Yalnız sese
+gider; senaryoya ve altyazıya "Yutup" gibi uydurma yazım KOYMA, adları doğru yaz. Senaryodan sonra, seslendirmeden önce
+`node diksiyon.js <is>` çalıştır (VoxCPM sesinde `--motor voxcpm`): okunuşu olmayan yabancı kelimeyi `konu.json` `okunus` sözlüğüne ekle
+(yerleşik girişi de ezer), uzun cümleyi böl, şapka belirsizliğini (hala/hâlâ, kar/kâr) senaryoda düzelt, VoxCPM'de cümle başı "Önce"yi
+anlamı koruyarak yeniden kur, `ek-uyumu` uyarısında (`API'ye` → seste "Ey Pi Ay'ye") eki ya da ekli hâli `okunus`'a ekle. Kullanıcı
+`okunus` anahtarı yerleşik girişle aynıysa (`"youtube"` / `"YouTube"`) o adın tüm yazılışlarına uygulanır. Çıkış `1` = risk var (uyarı), `0` = temiz. Kapatmak: `"telaffuzPaketi": false` ya da `seslendir.js --telaffuz-kapali`.
+
 Seslendirmede `403` alırsan: `npm install msedge-tts@latest --ignore-scripts --no-save` çalıştır (Microsoft'un ücretsiz sesi
 zaman zaman kural değiştirir), `seslendir.js`'i yeniden başlat; tamamlanan paragraflar tekrar üretilmez.
 Edge `Unexpected server response: 200` ile düşerse bu paket güncellemesiyle düzelmez (Microsoft el sıkışmayı reddediyordur): `node seslendir.js <is> --motor sistem` ile işletim sistemi sesini kullan, tamamlanan paragraflar korunur; `otomatik` motor bunu zaten kendiliğinden yapar.
