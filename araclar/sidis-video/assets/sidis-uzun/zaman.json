@@ -1,0 +1,3417 @@
+{
+ "fps": 30,
+ "toplamSn": 1854.94,
+ "tahmini": false,
+ "bolumler": [
+  {
+   "no": 1,
+   "bas": 0.6,
+   "son": 30.38,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Merhaba!",
+     "bas": 0.6,
+     "son": 2.2
+    },
+    {
+     "no": 2,
+     "metin": "Bin dokuz yüz on yılının ocak ayında, Harvard'da bir salon dolusu profesörün önüne on bir yaşında bir çocuk çıkıyor.",
+     "bas": 2.55,
+     "son": 10.87
+    },
+    {
+     "no": 3,
+     "metin": "Adı William James Sidis.",
+     "bas": 11.22,
+     "son": 13.14
+    },
+    {
+     "no": 4,
+     "metin": "Konusu da dördüncü boyut.",
+     "bas": 13.49,
+     "son": 15.73
+    },
+    {
+     "no": 5,
+     "metin": "Ertesi gün gazeteler onu \"harika çocuk\" diye yazıyor.",
+     "bas": 16.08,
+     "son": 19.92
+    },
+    {
+     "no": 6,
+     "metin": "Ama Sidis'in hayatı boyunca en çok istediği şey, kameralardan ve gazetecilerden uzak durmaktı.",
+     "bas": 20.27,
+     "son": 26.99
+    },
+    {
+     "no": 7,
+     "metin": "Yüzünün değil, fikirlerinin konuşulmasını istiyordu.",
+     "bas": 27.34,
+     "son": 30.38
+    }
+   ]
+  },
+  {
+   "no": 2,
+   "bas": 32.38,
+   "son": 63.28,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Ben de bu kanalda yüzümü göstermiyorum.",
+     "bas": 32.38,
+     "son": 34.62
+    },
+    {
+     "no": 2,
+     "metin": "Ama bir şey üretmek istiyorum.",
+     "bas": 34.97,
+     "son": 37.85
+    },
+    {
+     "no": 3,
+     "metin": "Sorun şu: yüzün yoksa, zamanın yoksa ve büyük bir bütçen yoksa, düzenli video nasıl çıkarırsın?",
+     "bas": 38.2,
+     "son": 44.92
+    },
+    {
+     "no": 4,
+     "metin": "Son birkaç haftadır bu sorunun cevabını arıyorum.",
+     "bas": 45.27,
+     "son": 48.47
+    },
+    {
+     "no": 5,
+     "metin": "Klod ile, yani yapay zekâyla, kendi küçük video fabrikamı kurdum.",
+     "bas": 48.82,
+     "son": 53.94
+    },
+    {
+     "no": 6,
+     "metin": "Senaryo, ses, animasyon, ekran kaydı, kontrol, hepsi bu fabrikadan çıkıyor.",
+     "bas": 54.29,
+     "son": 60.85
+    },
+    {
+     "no": 7,
+     "metin": "Şu an izlediğin video da oradan çıktı.",
+     "bas": 61.2,
+     "son": 63.28
+    }
+   ]
+  },
+  {
+   "no": 3,
+   "bas": 65.28,
+   "son": 87.8,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Bu videoda sana o fabrikayı parça parça göstereceğim.",
+     "bas": 65.28,
+     "son": 69.28
+    },
+    {
+     "no": 2,
+     "metin": "Neyin işe yaradığını, neyin yaramadığını, nerede para yaktığımı ve nerede bedava çözüm bulduğumu anlatacağım.",
+     "bas": 69.63,
+     "son": 77.31
+    },
+    {
+     "no": 3,
+     "metin": "Ve videonun sonunda, bu sistemin kodunu sana ücretsiz veriyorum.",
+     "bas": 77.66,
+     "son": 81.18
+    },
+    {
+     "no": 4,
+     "metin": "Açık kaynak, herkes kullanabilir.",
+     "bas": 81.53,
+     "son": 83.61
+    },
+    {
+     "no": 5,
+     "metin": "Ama önce, neden böyle bir şeye ihtiyaç duyduğumu anlatayım.",
+     "bas": 83.96,
+     "son": 87.8
+    }
+   ]
+  },
+  {
+   "no": 4,
+   "bas": 89.8,
+   "son": 117.56,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Bir video düşün.",
+     "bas": 89.8,
+     "son": 90.76
+    },
+    {
+     "no": 2,
+     "metin": "Uğraşıyorsun, kurguluyorsun, paylaşıyorsun.",
+     "bas": 91.11,
+     "son": 94.31
+    },
+    {
+     "no": 3,
+     "metin": "Altına biri yazıyor: bunu yapay zekâ yapmış.",
+     "bas": 94.66,
+     "son": 98.34
+    },
+    {
+     "no": 4,
+     "metin": "Ve haklı.",
+     "bas": 98.69,
+     "son": 99.97
+    },
+    {
+     "no": 5,
+     "metin": "Çünkü o videoyu gözü hemen tanıyor.",
+     "bas": 100.32,
+     "son": 103.2
+    },
+    {
+     "no": 6,
+     "metin": "Aynı ses, aynı yazı girişi, aynı renk geçişi, aynı hareket.",
+     "bas": 103.55,
+     "son": 107.23
+    },
+    {
+     "no": 7,
+     "metin": "Herkes aynı aracı, aynı ayarla kullanınca, bütün videolar birbirine benziyor.",
+     "bas": 107.58,
+     "son": 111.74
+    },
+    {
+     "no": 8,
+     "metin": "Sorun yapay zekâda değil.",
+     "bas": 112.09,
+     "son": 114.33
+    },
+    {
+     "no": 9,
+     "metin": "Sorun, herkesin aynı düğmeye basması.",
+     "bas": 114.68,
+     "son": 117.56
+    }
+   ]
+  },
+  {
+   "no": 5,
+   "bas": 119.56,
+   "son": 157.05,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Benim ilk denemelerim de tam olarak buydu.",
+     "bas": 119.56,
+     "son": 121.96
+    },
+    {
+     "no": 2,
+     "metin": "Bir yapay zekâ video aracına bir cümle yazdım, karşıma güzel ama ruhsuz bir şey çıktı.",
+     "bas": 122.31,
+     "son": 127.75
+    },
+    {
+     "no": 3,
+     "metin": "Sonra fiyatlara baktım.",
+     "bas": 128.1,
+     "son": 130.18
+    },
+    {
+     "no": 4,
+     "metin": "Yapay zekâyla gerçekçi video üretmek, saniye başına ödenen bir şey.",
+     "bas": 130.53,
+     "son": 134.69
+    },
+    {
+     "no": 5,
+     "metin": "Benim kullandığım platformda, en iyi modellerde bir saniyelik video seksen krediye yakın tutuyordu.",
+     "bas": 135.04,
+     "son": 141.28
+    },
+    {
+     "no": 6,
+     "metin": "Bir dakikalık bir film için binlerce kredi demek bu.",
+     "bas": 141.63,
+     "son": 144.99
+    },
+    {
+     "no": 7,
+     "metin": "Bir kere üç bin yedi yüz kredilik bir fragman ürettim, sonucu beğenmedim ve o kredi gitti.",
+     "bas": 145.34,
+     "son": 150.78
+    },
+    {
+     "no": 8,
+     "metin": "O gün şunu anladım: her şeyi yapay zekâ video modeline yaptırırsan, bu iş çok pahalı bir hobiye dönüşüyor.",
+     "bas": 151.13,
+     "son": 157.05
+    }
+   ]
+  },
+  {
+   "no": 6,
+   "bas": 159.05,
+   "son": 184.03,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Ben başka bir yol seçtim.",
+     "bas": 159.05,
+     "son": 160.81
+    },
+    {
+     "no": 2,
+     "metin": "Videoyu kodla çizmek.",
+     "bas": 161.16,
+     "son": 162.44
+    },
+    {
+     "no": 3,
+     "metin": "Yani yapay zekâya \"bana video üret\" demek yerine, \"bana bu videoyu çizen programı yaz\" demek.",
+     "bas": 162.79,
+     "son": 168.55
+    },
+    {
+     "no": 4,
+     "metin": "Aradaki fark çok büyük.",
+     "bas": 168.9,
+     "son": 170.18
+    },
+    {
+     "no": 5,
+     "metin": "Video modeli her seferinde baştan zar atar.",
+     "bas": 170.53,
+     "son": 172.93
+    },
+    {
+     "no": 6,
+     "metin": "Kod ise her seferinde aynı şeyi çizer, ve sen onu istediğin gibi düzeltebilirsin.",
+     "bas": 173.28,
+     "son": 178.56
+    },
+    {
+     "no": 7,
+     "metin": "Bu videodaki her çizgi, her damga, her daktilo yazısı, kodla çiziliyor.",
+     "bas": 178.91,
+     "son": 184.03
+    }
+   ]
+  },
+  {
+   "no": 7,
+   "bas": 186.03,
+   "son": 200.29,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Fabrikanın beş istasyonu var.",
+     "bas": 186.03,
+     "son": 188.11
+    },
+    {
+     "no": 2,
+     "metin": "Birincisi senaryo.",
+     "bas": 188.46,
+     "son": 189.74
+    },
+    {
+     "no": 3,
+     "metin": "İkincisi ses.",
+     "bas": 190.09,
+     "son": 191.21
+    },
+    {
+     "no": 4,
+     "metin": "Üçüncüsü zamanlama, yani sesle görüntüyü birbirine kilitlemek.",
+     "bas": 191.56,
+     "son": 195.4
+    },
+    {
+     "no": 5,
+     "metin": "Dördüncüsü görüntü.",
+     "bas": 195.75,
+     "son": 197.03
+    },
+    {
+     "no": 6,
+     "metin": "Beşincisi kontrol.",
+     "bas": 197.38,
+     "son": 198.5
+    },
+    {
+     "no": 7,
+     "metin": "Şimdi sırayla gidelim.",
+     "bas": 198.85,
+     "son": 200.29
+    }
+   ]
+  },
+  {
+   "no": 8,
+   "bas": 202.29,
+   "son": 233.25,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Birinci istasyon: senaryo.",
+     "bas": 202.29,
+     "son": 204.05
+    },
+    {
+     "no": 2,
+     "metin": "Çoğu kişi yapay zekâya \"bana bir video senaryosu yaz\" der ve ortalama bir metin alır.",
+     "bas": 204.4,
+     "son": 210.16
+    },
+    {
+     "no": 3,
+     "metin": "Ben senaryoyu Klod ile birlikte yazıyorum, ama kuralları ben koyuyorum.",
+     "bas": 210.51,
+     "son": 214.19
+    },
+    {
+     "no": 4,
+     "metin": "İlk kural: ilk cümle kanca olmalı.",
+     "bas": 214.54,
+     "son": 216.94
+    },
+    {
+     "no": 5,
+     "metin": "İzleyici ilk üç saniyede kalıp kalmayacağına karar veriyor.",
+     "bas": 217.29,
+     "son": 220.33
+    },
+    {
+     "no": 6,
+     "metin": "İkinci kural: rakam ya da iddia varsa, doğrulanmış olacak.",
+     "bas": 220.68,
+     "son": 224.36
+    },
+    {
+     "no": 7,
+     "metin": "Uydurma istatistik yok.",
+     "bas": 224.71,
+     "son": 225.99
+    },
+    {
+     "no": 8,
+     "metin": "Üçüncü kural: kimseye para kazandırma sözü yok.",
+     "bas": 226.34,
+     "son": 229.7
+    },
+    {
+     "no": 9,
+     "metin": "Bu kanalda \"şunu yap, zengin ol\" cümlesi geçmeyecek.",
+     "bas": 230.05,
+     "son": 233.25
+    }
+   ]
+  },
+  {
+   "no": 9,
+   "bas": 235.25,
+   "son": 262.98,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Senaryoyu yazarken bir şey daha yapıyorum.",
+     "bas": 235.25,
+     "son": 237.33
+    },
+    {
+     "no": 2,
+     "metin": "Her bölümü bir benzetmeyle açıyorum.",
+     "bas": 237.68,
+     "son": 240.08
+    },
+    {
+     "no": 3,
+     "metin": "Mesela kanal sayfası anlatacaksam, onu bir dükkâna benzetiyorum.",
+     "bas": 240.43,
+     "son": 244.11
+    },
+    {
+     "no": 4,
+     "metin": "Tabela, vitrin, raflar.",
+     "bas": 244.46,
+     "son": 246.06
+    },
+    {
+     "no": 5,
+     "metin": "Soyut bir şeyi somut bir şeye bağlayınca, hem anlatması kolaylaşıyor hem de izleyici kafasında bir resim kuruyor.",
+     "bas": 246.41,
+     "son": 253.77
+    },
+    {
+     "no": 6,
+     "metin": "Bu videoda o benzetme Sidis.",
+     "bas": 254.12,
+     "son": 256.68
+    },
+    {
+     "no": 7,
+     "metin": "Harika çocuk, gazeteler, tramvay biletleri.",
+     "bas": 257.03,
+     "son": 259.91
+    },
+    {
+     "no": 8,
+     "metin": "Birazdan neden tramvay bileti dediğimi anlayacaksın.",
+     "bas": 260.26,
+     "son": 262.98
+    }
+   ]
+  },
+  {
+   "no": 10,
+   "bas": 264.98,
+   "son": 288.65,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Senaryo bittikten sonra, Klod'a bir şey daha yaptırıyorum.",
+     "bas": 264.98,
+     "son": 268.82
+    },
+    {
+     "no": 2,
+     "metin": "Metni okunuşa göre hazırlıyor.",
+     "bas": 269.17,
+     "son": 270.77
+    },
+    {
+     "no": 3,
+     "metin": "Çünkü yapay zekâ sesleri bazı kelimeleri bozuyor.",
+     "bas": 271.12,
+     "son": 274.16
+    },
+    {
+     "no": 4,
+     "metin": "Mesela \"Klod\" kelimesini yazıyla doğru yazarsan, ses onu \"Kılaud\" diye okuyabiliyor.",
+     "bas": 274.51,
+     "son": 279.31
+    },
+    {
+     "no": 5,
+     "metin": "Bu yüzden ekranda doğru yazım, seste ise okunuş yazımı kullanıyoruz.",
+     "bas": 279.66,
+     "son": 284.62
+    },
+    {
+     "no": 6,
+     "metin": "Bunu ileride ayrıca anlatacağım, çünkü bunun için ayrı bir araç yaptım.",
+     "bas": 284.97,
+     "son": 288.65
+    }
+   ]
+  },
+  {
+   "no": 11,
+   "bas": 290.65,
+   "son": 315.82,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "İkinci istasyon: ses.",
+     "bas": 290.65,
+     "son": 292.25
+    },
+    {
+     "no": 2,
+     "metin": "Ve itiraf edeyim, bu fabrikada en çok canımı yakan istasyon burası oldu.",
+     "bas": 292.6,
+     "son": 296.76
+    },
+    {
+     "no": 3,
+     "metin": "Yüzümü göstermiyorum ama sesim olsun istedim.",
+     "bas": 297.11,
+     "son": 299.83
+    },
+    {
+     "no": 4,
+     "metin": "Kendi sesimi klonlamaya karar verdim.",
+     "bas": 300.18,
+     "son": 302.58
+    },
+    {
+     "no": 5,
+     "metin": "Elimde altı saniyelik bir video vardı, telefonla çekilmiş.",
+     "bas": 302.93,
+     "son": 306.29
+    },
+    {
+     "no": 6,
+     "metin": "Dedim ki, altı saniye yeter.",
+     "bas": 306.64,
+     "son": 308.4
+    },
+    {
+     "no": 7,
+     "metin": "Yerel bir ses modeli kullandım, kendi bilgisayarımda çalışan, ücretsiz bir model.",
+     "bas": 308.75,
+     "son": 313.55
+    },
+    {
+     "no": 8,
+     "metin": "Sesi verdim, metni verdim, bekledim.",
+     "bas": 313.9,
+     "son": 315.82
+    }
+   ]
+  },
+  {
+   "no": 12,
+   "bas": 317.82,
+   "son": 340.65,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Sonuç?",
+     "bas": 317.82,
+     "son": 318.62
+    },
+    {
+     "no": 2,
+     "metin": "Ses benim.",
+     "bas": 318.97,
+     "son": 319.61
+    },
+    {
+     "no": 3,
+     "metin": "Ama burnumdan konuşuyorum.",
+     "bas": 319.96,
+     "son": 321.72
+    },
+    {
+     "no": 4,
+     "metin": "Biraz kalınlaştırdım.",
+     "bas": 322.07,
+     "son": 323.35
+    },
+    {
+     "no": 5,
+     "metin": "Bu sefer boğuldu.",
+     "bas": 323.7,
+     "son": 324.82
+    },
+    {
+     "no": 6,
+     "metin": "Tonlamayı düzeltmeye çalıştım, heyecan katmaya çalıştım.",
+     "bas": 325.17,
+     "son": 328.85
+    },
+    {
+     "no": 7,
+     "metin": "Üç ayar, üç deneme, üç kere aynı cevap: olmamış.",
+     "bas": 329.2,
+     "son": 332.56
+    },
+    {
+     "no": 8,
+     "metin": "Hatta bir gece boyunca on yedi dakikalık bir videoyu bu sesle seslendirdim.",
+     "bas": 332.91,
+     "son": 337.23
+    },
+    {
+     "no": 9,
+     "metin": "Sabah dinledim.",
+     "bas": 337.58,
+     "son": 338.54
+    },
+    {
+     "no": 10,
+     "metin": "Boğuk, düz ve heyecansız.",
+     "bas": 338.89,
+     "son": 340.65
+    }
+   ]
+  },
+  {
+   "no": 13,
+   "bas": 342.65,
+   "son": 366.38,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Sonra şunu fark ettim.",
+     "bas": 342.65,
+     "son": 344.41
+    },
+    {
+     "no": 2,
+     "metin": "Sorun ayarda değil, örnekteymiş.",
+     "bas": 344.76,
+     "son": 347.16
+    },
+    {
+     "no": 3,
+     "metin": "Altı saniyede ne tonlama var ne heyecan.",
+     "bas": 347.51,
+     "son": 350.07
+    },
+    {
+     "no": 4,
+     "metin": "Model, ne verirsen onu taklit ediyor.",
+     "bas": 350.42,
+     "son": 353.14
+    },
+    {
+     "no": 5,
+     "metin": "Düz bir örnek verirsen, düz bir ses alırsın.",
+     "bas": 353.49,
+     "son": 355.73
+    },
+    {
+     "no": 6,
+     "metin": "Bu sefer sessiz bir odada, otuz yedi saniyelik, canlı, enerjik bir kayıt yaptım.",
+     "bas": 356.08,
+     "son": 361.2
+    },
+    {
+     "no": 7,
+     "metin": "Fark bir anda geldi.",
+     "bas": 361.55,
+     "son": 363.31
+    },
+    {
+     "no": 8,
+     "metin": "Şu an dinlediğin ses de o kayıttan.",
+     "bas": 363.66,
+     "son": 366.38
+    }
+   ]
+  },
+  {
+   "no": 14,
+   "bas": 368.38,
+   "son": 395.63,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Ama asıl dersi ekran kartım verdi.",
+     "bas": 368.38,
+     "son": 370.78
+    },
+    {
+     "no": 2,
+     "metin": "Benim kartım sekiz gigabaytlık.",
+     "bas": 371.13,
+     "son": 372.89
+    },
+    {
+     "no": 3,
+     "metin": "Ses modeli tek başına bunun altı buçuk gigabaytını yiyor.",
+     "bas": 373.24,
+     "son": 377.4
+    },
+    {
+     "no": 4,
+     "metin": "Uzun örnek verince, model her cümlede o örneği de hafızada tutuyor.",
+     "bas": 377.75,
+     "son": 381.75
+    },
+    {
+     "no": 5,
+     "metin": "Uzun bir cümle geldiğinde, hafıza taşıyor ve üretim duruyor.",
+     "bas": 382.1,
+     "son": 384.98
+    },
+    {
+     "no": 6,
+     "metin": "Çözüm basit ama sinir bozucu: cümleleri kısa tut, düşerse kaldığı yerden devam et.",
+     "bas": 385.33,
+     "son": 390.77
+    },
+    {
+     "no": 7,
+     "metin": "Kısacası, klon için iyi kayıt lazım.",
+     "bas": 391.12,
+     "son": 393.84
+    },
+    {
+     "no": 8,
+     "metin": "İyi kayıt için de iyi bir kart.",
+     "bas": 394.19,
+     "son": 395.63
+    }
+   ]
+  },
+  {
+   "no": 15,
+   "bas": 397.63,
+   "son": 426.67,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Peki kartın yoksa?",
+     "bas": 397.63,
+     "son": 398.91
+    },
+    {
+     "no": 2,
+     "metin": "O zaman iki yol var.",
+     "bas": 399.26,
+     "son": 400.22
+    },
+    {
+     "no": 3,
+     "metin": "Birincisi, hazır yapay zekâ sesleri.",
+     "bas": 400.57,
+     "son": 403.13
+    },
+    {
+     "no": 4,
+     "metin": "Kullandığım platformda dakikası birkaç düzine krediye geliyor, kaliteli ve heyecanlı.",
+     "bas": 403.48,
+     "son": 408.92
+    },
+    {
+     "no": 5,
+     "metin": "İkincisi, tamamen bedava seçenekler.",
+     "bas": 409.27,
+     "son": 411.99
+    },
+    {
+     "no": 6,
+     "metin": "Mesela tarayıcıların sesli okuma motoru.",
+     "bas": 412.34,
+     "son": 415.06
+    },
+    {
+     "no": 7,
+     "metin": "Ücretsiz, kurulum yok, ama biraz daha robotik.",
+     "bas": 415.41,
+     "son": 418.61
+    },
+    {
+     "no": 8,
+     "metin": "Ben üçünü de kullandım.",
+     "bas": 418.96,
+     "son": 420.4
+    },
+    {
+     "no": 9,
+     "metin": "Kısa videolarda hazır ses, uzun videolarda kendi klonum, aceleye geldiğinde bedava motor.",
+     "bas": 420.75,
+     "son": 426.67
+    }
+   ]
+  },
+  {
+   "no": 16,
+   "bas": 428.67,
+   "son": 461.04,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Şimdi o okunuş meselesine dönelim.",
+     "bas": 428.67,
+     "son": 430.91
+    },
+    {
+     "no": 2,
+     "metin": "Türkçe, yapay zekâ sesleri için zor bir dil.",
+     "bas": 431.26,
+     "son": 433.82
+    },
+    {
+     "no": 3,
+     "metin": "\"Ağaç\" kelimesindeki yumuşak g'yi yutuyor, kısaltmaları harf harf okumuyor, yabancı marka adlarını Türkçe gibi okuyor.",
+     "bas": 434.17,
+     "son": 441.85
+    },
+    {
+     "no": 4,
+     "metin": "Bunun için küçük bir telaffuz paketi yaptım.",
+     "bas": 442.2,
+     "son": 444.76
+    },
+    {
+     "no": 5,
+     "metin": "İçinde yüz otuzdan fazla kelime var.",
+     "bas": 445.11,
+     "son": 447.03
+    },
+    {
+     "no": 6,
+     "metin": "Her biri için \"ekranda böyle yaz, seste böyle oku\" kuralı.",
+     "bas": 447.38,
+     "son": 451.38
+    },
+    {
+     "no": 7,
+     "metin": "Sistem metni sese göndermeden önce bu sözlükten geçiriyor.",
+     "bas": 451.73,
+     "son": 455.57
+    },
+    {
+     "no": 8,
+     "metin": "Ve seslendirmeden sonra bir rapor çıkarıyor: hangi kelimeler riskliydi, hangileri düzeltildi.",
+     "bas": 455.92,
+     "son": 461.04
+    }
+   ]
+  },
+  {
+   "no": 17,
+   "bas": 463.04,
+   "son": 491.06,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Ses bitince, her cümleyi tek tek kontrol ediyorum.",
+     "bas": 463.04,
+     "son": 466.08
+    },
+    {
+     "no": 2,
+     "metin": "Ama kulakla değil.",
+     "bas": 466.43,
+     "son": 468.03
+    },
+    {
+     "no": 3,
+     "metin": "Bir konuşma tanıma modeli, sesi yeniden yazıya çeviriyor.",
+     "bas": 468.38,
+     "son": 471.58
+    },
+    {
+     "no": 4,
+     "metin": "Sonra o yazıyı benim metnimle karşılaştırıyor.",
+     "bas": 471.93,
+     "son": 476.25
+    },
+    {
+     "no": 5,
+     "metin": "Eğer model \"taslağı\" yerine \"tasarı\" duyduysa, o cümle işaretleniyor.",
+     "bas": 476.6,
+     "son": 480.44
+    },
+    {
+     "no": 6,
+     "metin": "İşaretlenen cümleler farklı bir rastgelelikle yeniden üretiliyor ve daha iyi olanı seçiliyor.",
+     "bas": 480.79,
+     "son": 485.91
+    },
+    {
+     "no": 7,
+     "metin": "On yedi dakikalık bir videoda, yanlış okunan yirmi beş cümleyi böyle yakaladım.",
+     "bas": 486.26,
+     "son": 491.06
+    }
+   ]
+  },
+  {
+   "no": 18,
+   "bas": 493.06,
+   "son": 511.1,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Üçüncü istasyon: zamanlama.",
+     "bas": 493.06,
+     "son": 495.62
+    },
+    {
+     "no": 2,
+     "metin": "Bu kısım görünmez ama videoyu kazandıran kısım bu.",
+     "bas": 495.97,
+     "son": 499.17
+    },
+    {
+     "no": 3,
+     "metin": "Ekrana bir yazı geliyor, tam o kelime söylenirken gelmeli.",
+     "bas": 499.52,
+     "son": 502.4
+    },
+    {
+     "no": 4,
+     "metin": "Bir damga vuruluyor, tam o kelimede vurulmalı.",
+     "bas": 502.75,
+     "son": 505.31
+    },
+    {
+     "no": 5,
+     "metin": "Yarım saniye kayarsa, izleyici neyin yanlış olduğunu bilmez ama bir şeylerin ters gittiğini hisseder.",
+     "bas": 505.66,
+     "son": 511.1
+    }
+   ]
+  },
+  {
+   "no": 19,
+   "bas": 513.1,
+   "son": 537.73,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Bunun için her kelimenin zamanını çıkarıyorum.",
+     "bas": 513.1,
+     "son": 515.5
+    },
+    {
+     "no": 2,
+     "metin": "Ses kayıttan konuşma tanıma modeline giriyor, model her kelimenin başladığı ve bittiği anı veriyor.",
+     "bas": 515.85,
+     "son": 522.25
+    },
+    {
+     "no": 3,
+     "metin": "Animasyonun her parçası saniyeye değil, kelimeye bağlı.",
+     "bas": 522.6,
+     "son": 526.6
+    },
+    {
+     "no": 4,
+     "metin": "Yani \"şu yazı onuncu saniyede gelsin\" demiyorum.",
+     "bas": 526.95,
+     "son": 529.35
+    },
+    {
+     "no": 5,
+     "metin": "\"Şu yazı, 'olmamış' kelimesinde gelsin\" diyorum.",
+     "bas": 529.7,
+     "son": 532.74
+    },
+    {
+     "no": 6,
+     "metin": "Böylece sesi değiştirsem bile, animasyon kendini yeni sese göre ayarlıyor.",
+     "bas": 533.09,
+     "son": 537.73
+    }
+   ]
+  },
+  {
+   "no": 20,
+   "bas": 539.73,
+   "son": 569.06,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Bunun bana ne kazandırdığını bir örnekle anlatayım.",
+     "bas": 539.73,
+     "son": 542.45
+    },
+    {
+     "no": 2,
+     "metin": "İki uzun videoyu bitirmiştim, toplam yarım saat.",
+     "bas": 542.8,
+     "son": 545.52
+    },
+    {
+     "no": 3,
+     "metin": "Sesi beğenmedim, değiştirmek istedim.",
+     "bas": 545.87,
+     "son": 547.95
+    },
+    {
+     "no": 4,
+     "metin": "Normalde bu, bütün videoyu baştan render etmek demek, yani saatlerce bilgisayar başında beklemek.",
+     "bas": 548.3,
+     "son": 554.38
+    },
+    {
+     "no": 5,
+     "metin": "Ama her cümlenin zamanı elimde olduğu için, yeni sesi parça parça kestim, her cümleyi eski yerine oturttum.",
+     "bas": 554.73,
+     "son": 560.97
+    },
+    {
+     "no": 6,
+     "metin": "Sığmayan cümleyi biraz hızlandırdım.",
+     "bas": 561.32,
+     "son": 563.4
+    },
+    {
+     "no": 7,
+     "metin": "Videoyu hiç render etmeden, sadece sesini değiştirdim.",
+     "bas": 563.75,
+     "son": 566.79
+    },
+    {
+     "no": 8,
+     "metin": "Bütün iş birkaç dakika sürdü.",
+     "bas": 567.14,
+     "son": 569.06
+    }
+   ]
+  },
+  {
+   "no": 21,
+   "bas": 571.06,
+   "son": 587.98,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Dördüncü istasyon: görüntü.",
+     "bas": 571.06,
+     "son": 573.14
+    },
+    {
+     "no": 2,
+     "metin": "Burası fabrikanın en eğlenceli kısmı.",
+     "bas": 573.49,
+     "son": 575.73
+    },
+    {
+     "no": 3,
+     "metin": "Görüntüleri Rimoşın diye bir araçla çiziyorum.",
+     "bas": 576.08,
+     "son": 578.32
+    },
+    {
+     "no": 4,
+     "metin": "Kısaca, videoyu bir web sayfası gibi yazıyorsun, o da her kareyi fotoğraflayıp videoya çeviriyor.",
+     "bas": 578.67,
+     "son": 584.59
+    },
+    {
+     "no": 5,
+     "metin": "Klod bu kodu yazıyor, ben ne istediğimi anlatıyorum.",
+     "bas": 584.94,
+     "son": 587.98
+    }
+   ]
+  },
+  {
+   "no": 22,
+   "bas": 589.98,
+   "son": 615.57,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Ama burada çok önemli bir kural koydum.",
+     "bas": 589.98,
+     "son": 592.22
+    },
+    {
+     "no": 2,
+     "metin": "Her videonun bir stil rehberi var.",
+     "bas": 592.57,
+     "son": 594.65
+    },
+    {
+     "no": 3,
+     "metin": "Renkler, yazı tipleri, karakterler, geçişler, hepsi önceden yazılı.",
+     "bas": 595.0,
+     "son": 599.64
+    },
+    {
+     "no": 4,
+     "metin": "Bu video için rehber şu: bin dokuz yüz onların gazete kâğıdı, mürekkep siyahı, damga kırmızısı, daktilo yazısı.",
+     "bas": 599.99,
+     "son": 608.47
+    },
+    {
+     "no": 5,
+     "metin": "Rehber olmadan yapay zekâ her seferinde ortalama bir şey çizer.",
+     "bas": 608.82,
+     "son": 612.34
+    },
+    {
+     "no": 6,
+     "metin": "Rehberle, her sahne aynı defterden çıkmış gibi durur.",
+     "bas": 612.69,
+     "son": 615.57
+    }
+   ]
+  },
+  {
+   "no": 23,
+   "bas": 617.57,
+   "son": 642.9,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Peki tramvay biletleri nereden çıktı?",
+     "bas": 617.57,
+     "son": 619.81
+    },
+    {
+     "no": 2,
+     "metin": "Sidis'in tuhaf bir hobisi vardı.",
+     "bas": 620.16,
+     "son": 622.08
+    },
+    {
+     "no": 3,
+     "metin": "Tramvay aktarma biletleri biriktirirdi.",
+     "bas": 622.43,
+     "son": 624.83
+    },
+    {
+     "no": 4,
+     "metin": "Bunun üzerine takma adla koca bir kitap bile yazdı.",
+     "bas": 625.18,
+     "son": 628.22
+    },
+    {
+     "no": 5,
+     "metin": "Ben de bu kanalda her sayacı, her rozeti bir tramvay bileti gibi çiziyorum.",
+     "bas": 628.57,
+     "son": 632.57
+    },
+    {
+     "no": 6,
+     "metin": "Delikli kenar, seri numarası, eski mürekkep.",
+     "bas": 632.92,
+     "son": 636.44
+    },
+    {
+     "no": 7,
+     "metin": "Küçük bir detay, ama kanala bir kimlik veriyor.",
+     "bas": 636.79,
+     "son": 639.83
+    },
+    {
+     "no": 8,
+     "metin": "İzleyici bir bileti gördüğünde, bu kanalı hatırlıyor.",
+     "bas": 640.18,
+     "son": 642.9
+    }
+   ]
+  },
+  {
+   "no": 24,
+   "bas": 644.9,
+   "son": 666.68,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Karakterler de öyle.",
+     "bas": 644.9,
+     "son": 646.5
+    },
+    {
+     "no": 2,
+     "metin": "Bu kanalın iki karakteri var.",
+     "bas": 646.85,
+     "son": 648.61
+    },
+    {
+     "no": 3,
+     "metin": "Biri W.J., kasketli, gözlüklü, üstünde baş harfleri yazan bir kazakla.",
+     "bas": 648.96,
+     "son": 654.08
+    },
+    {
+     "no": 4,
+     "metin": "Diğeri ise bir daktilo.",
+     "bas": 654.43,
+     "son": 656.51
+    },
+    {
+     "no": 5,
+     "metin": "Yapay zekâyı bir robot olarak değil, gözleri olan eski bir daktilo olarak çiziyorum.",
+     "bas": 656.86,
+     "son": 661.82
+    },
+    {
+     "no": 6,
+     "metin": "Çünkü yapay zekâ benim için bir yazı makinesi.",
+     "bas": 662.17,
+     "son": 664.89
+    },
+    {
+     "no": 7,
+     "metin": "Ona ne yazdırırsan onu yazıyor.",
+     "bas": 665.24,
+     "son": 666.68
+    }
+   ]
+  },
+  {
+   "no": 25,
+   "bas": 668.68,
+   "son": 697.02,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Peki gerçek ekran görüntüleri?",
+     "bas": 668.68,
+     "son": 670.6
+    },
+    {
+     "no": 2,
+     "metin": "Bazen bir şeyi anlatmak için gerçekten ekranı göstermem lazım.",
+     "bas": 670.95,
+     "son": 674.63
+    },
+    {
+     "no": 3,
+     "metin": "Mesela Klod'a bir şey yazdığımı ve cevabın geldiğini.",
+     "bas": 674.98,
+     "son": 678.34
+    },
+    {
+     "no": 4,
+     "metin": "Bunu taklit etmek istemedim, gerçeğini göstermek istedim.",
+     "bas": 678.69,
+     "son": 681.89
+    },
+    {
+     "no": 5,
+     "metin": "İlk denememde ayrı bir tarayıcı açtım, Klod'un sitesine girip ekranı otomatik kaydetmeye çalıştım.",
+     "bas": 682.24,
+     "son": 688.0
+    },
+    {
+     "no": 6,
+     "metin": "Site beni bot sandı ve bir güvenlik doğrulamasına takıldım.",
+     "bas": 688.35,
+     "son": 692.99
+    },
+    {
+     "no": 7,
+     "metin": "O doğrulamayı aşmaya çalışmadım, çünkü bu doğru bir yol değil.",
+     "bas": 693.34,
+     "son": 697.02
+    }
+   ]
+  },
+  {
+   "no": 26,
+   "bas": 699.02,
+   "son": 724.45,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Onun yerine kendi tarayıcıma döndüm.",
+     "bas": 699.02,
+     "son": 701.26
+    },
+    {
+     "no": 2,
+     "metin": "Klod, benim tarayıcımda arka planda bir sekme açıyor, isteği yazıyor, cevabı bekliyor ve her adımda ekranın fotoğrafını alıyor.",
+     "bas": 701.61,
+     "son": 709.29
+    },
+    {
+     "no": 3,
+     "metin": "Sonra bu fotoğraflar videoda arka arkaya, yumuşak geçişlerle oynuyor.",
+     "bas": 709.64,
+     "son": 715.72
+    },
+    {
+     "no": 4,
+     "metin": "Böylece videodaki her ekran gerçek.",
+     "bas": 716.07,
+     "son": 718.63
+    },
+    {
+     "no": 5,
+     "metin": "Ama burada bir sorun daha çıktı.",
+     "bas": 718.98,
+     "son": 721.06
+    },
+    {
+     "no": 6,
+     "metin": "Ekranın kenarında benim adım ve eski sohbetlerim görünüyordu.",
+     "bas": 721.41,
+     "son": 724.45
+    }
+   ]
+  },
+  {
+   "no": 27,
+   "bas": 726.45,
+   "son": 752.87,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Çözüm yine kodda.",
+     "bas": 726.45,
+     "son": 727.73
+    },
+    {
+     "no": 2,
+     "metin": "Kayıttan önce yan menüyü kapatıyoruz.",
+     "bas": 728.08,
+     "son": 730.48
+    },
+    {
+     "no": 3,
+     "metin": "Sonra her fotoğraftan sadece ortadaki sohbet sütununu kesiyoruz.",
+     "bas": 730.83,
+     "son": 735.47
+    },
+    {
+     "no": 4,
+     "metin": "Yeni sohbet sayfasının altında kişisel öneriler çıkıyorsa, onları otomatik buluyoruz ve bulanıklaştırıyoruz.",
+     "bas": 735.82,
+     "son": 742.22
+    },
+    {
+     "no": 5,
+     "metin": "Bunu bir kere kurdun mu, her videoda kendiliğinden çalışıyor.",
+     "bas": 742.57,
+     "son": 745.77
+    },
+    {
+     "no": 6,
+     "metin": "Kısa videolarımın hepsi bu yöntemle çekildi.",
+     "bas": 746.12,
+     "son": 749.0
+    },
+    {
+     "no": 7,
+     "metin": "On kısa video, gerçek ekranlarla, tek oturumda.",
+     "bas": 749.35,
+     "son": 752.87
+    }
+   ]
+  },
+  {
+   "no": 28,
+   "bas": 754.87,
+   "son": 777.67,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Beşinci istasyon: kontrol.",
+     "bas": 754.87,
+     "son": 756.63
+    },
+    {
+     "no": 2,
+     "metin": "Bu, en çok sevdiğim kısım.",
+     "bas": 756.98,
+     "son": 758.9
+    },
+    {
+     "no": 3,
+     "metin": "Bir sahneyi bir yapay zekâ ajanı çiziyor.",
+     "bas": 759.25,
+     "son": 761.49
+    },
+    {
+     "no": 4,
+     "metin": "Sonra o sahneyi hiç görmemiş başka bir ajan açıyor ve denetliyor.",
+     "bas": 761.84,
+     "son": 765.84
+    },
+    {
+     "no": 5,
+     "metin": "Yazı üst üste biniyor mu?",
+     "bas": 766.19,
+     "son": 767.63
+    },
+    {
+     "no": 6,
+     "metin": "Türkçe harfler doğru mu?",
+     "bas": 767.98,
+     "son": 769.42
+    },
+    {
+     "no": 7,
+     "metin": "Bir şey ekrandan taşıyor mu?",
+     "bas": 769.77,
+     "son": 771.37
+    },
+    {
+     "no": 8,
+     "metin": "Damga bir yazının üstünü mü kapatıyor?",
+     "bas": 771.72,
+     "son": 773.96
+    },
+    {
+     "no": 9,
+     "metin": "Ajan videoyu kare kare fotoğraflıyor ve her kareye bakıyor.",
+     "bas": 774.31,
+     "son": 777.67
+    }
+   ]
+  },
+  {
+   "no": 29,
+   "bas": 779.67,
+   "son": 803.02,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Bu kanalın ilk kısa videosunu yaparken, kontrol ajanı on tane sorun buldu ve hepsini düzeltti.",
+     "bas": 779.67,
+     "son": 785.27
+    },
+    {
+     "no": 2,
+     "metin": "Mesela \"olmamış\" damgası, üç denemenin üstünü kapatıyordu.",
+     "bas": 785.62,
+     "son": 790.1
+    },
+    {
+     "no": 3,
+     "metin": "Mesela \"Ğ\" harfinin şapkası damganın mürekkep dokusunda kayboluyordu.",
+     "bas": 790.45,
+     "son": 794.77
+    },
+    {
+     "no": 4,
+     "metin": "Mesela karakterin elleri pençe gibi görünüyordu.",
+     "bas": 795.12,
+     "son": 798.32
+    },
+    {
+     "no": 5,
+     "metin": "Ben bunların yarısını fark etmezdim.",
+     "bas": 798.67,
+     "son": 800.91
+    },
+    {
+     "no": 6,
+     "metin": "Ajan fark etti.",
+     "bas": 801.26,
+     "son": 803.02
+    }
+   ]
+  },
+  {
+   "no": 30,
+   "bas": 805.02,
+   "son": 830.0,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Ama son söz hep bende.",
+     "bas": 805.02,
+     "son": 807.42
+    },
+    {
+     "no": 2,
+     "metin": "Ajan \"bitti\" dediğinde, ben birkaç kareye bakıyorum.",
+     "bas": 807.77,
+     "son": 810.81
+    },
+    {
+     "no": 3,
+     "metin": "Ses seviyesini ölçüyorum, YouTube için uygun mu diye.",
+     "bas": 811.16,
+     "son": 814.04
+    },
+    {
+     "no": 4,
+     "metin": "Renklerin doğru çıkıp çıkmadığına bakıyorum, çünkü bazı oynatıcılar renkleri soluk gösterebiliyor.",
+     "bas": 814.39,
+     "son": 819.83
+    },
+    {
+     "no": 5,
+     "metin": "Hepsi tamam ise, video çıkıyor.",
+     "bas": 820.18,
+     "son": 822.26
+    },
+    {
+     "no": 6,
+     "metin": "Prompt yazdım, video çıktı, paylaştım diye bir şey yok.",
+     "bas": 822.61,
+     "son": 826.61
+    },
+    {
+     "no": 7,
+     "metin": "Böyle yaparsan zaten herkesinkine benzeyen bir şey çıkıyor.",
+     "bas": 826.96,
+     "son": 830.0
+    }
+   ]
+  },
+  {
+   "no": 31,
+   "bas": 832.0,
+   "son": 867.41,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Şimdi sana bu kanalın ilk kısa videosunun nasıl yapıldığını baştan sona göstereyim.",
+     "bas": 832.0,
+     "son": 837.76
+    },
+    {
+     "no": 2,
+     "metin": "Konu belliydi: sesimi klonladım, burnumdan konuşuyordum.",
+     "bas": 838.11,
+     "son": 841.95
+    },
+    {
+     "no": 3,
+     "metin": "Önce senaryoyu yazdım, kırk saniyelik, yüz kelimeye yakın.",
+     "bas": 842.3,
+     "son": 846.46
+    },
+    {
+     "no": 4,
+     "metin": "Sonra Klod'a bir sahne planı verdim.",
+     "bas": 846.81,
+     "son": 849.21
+    },
+    {
+     "no": 5,
+     "metin": "Bu planda her vuruş bir kelimeye bağlıydı.",
+     "bas": 849.56,
+     "son": 852.28
+    },
+    {
+     "no": 6,
+     "metin": "\"Altı saniyelik\" denince bir tramvay bileti gelsin, üstünde altı saniye yazsın.",
+     "bas": 852.63,
+     "son": 857.27
+    },
+    {
+     "no": 7,
+     "metin": "\"Burnumdan konuşuyorum\" denince W.J. şaşırsın ve kırmızı bir damga vurulsun.",
+     "bas": 857.62,
+     "son": 862.9
+    },
+    {
+     "no": 8,
+     "metin": "\"Olmamış\" denince koca bir damga inip üç denemenin üstünü çizsin.",
+     "bas": 863.25,
+     "son": 867.41
+    }
+   ]
+  },
+  {
+   "no": 32,
+   "bas": 869.41,
+   "son": 897.3,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Sonra iki ajan açtım.",
+     "bas": 869.41,
+     "son": 871.49
+    },
+    {
+     "no": 2,
+     "metin": "Birincisi yapımcı.",
+     "bas": 871.84,
+     "son": 873.12
+    },
+    {
+     "no": 3,
+     "metin": "Bütün sahneyi kurdu, karakterleri çizdi, damgaları, biletleri, daktilo yazısını yaptı.",
+     "bas": 873.47,
+     "son": 878.91
+    },
+    {
+     "no": 4,
+     "metin": "Kendi çalışmasının on dört farklı karesini fotoğrafladı ve kendi hatalarını düzeltti.",
+     "bas": 879.26,
+     "son": 883.9
+    },
+    {
+     "no": 5,
+     "metin": "Mesela son karelerde video çöküyordu, çünkü ekrandan hiç çıkmayan nesnelerin bitiş zamanı yoktu.",
+     "bas": 884.25,
+     "son": 890.49
+    },
+    {
+     "no": 6,
+     "metin": "Onu düzeltti.",
+     "bas": 890.84,
+     "son": 892.44
+    },
+    {
+     "no": 7,
+     "metin": "Düşünen pozda karakterin eli kafasının arkasında kalıyordu.",
+     "bas": 892.79,
+     "son": 895.99
+    },
+    {
+     "no": 8,
+     "metin": "Onu da düzeltti.",
+     "bas": 896.34,
+     "son": 897.3
+    }
+   ]
+  },
+  {
+   "no": 33,
+   "bas": 899.3,
+   "son": 926.23,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "İkinci ajan ise bir denetçi.",
+     "bas": 899.3,
+     "son": 901.06
+    },
+    {
+     "no": 2,
+     "metin": "Videoyu hiç görmemişti.",
+     "bas": 901.41,
+     "son": 902.85
+    },
+    {
+     "no": 3,
+     "metin": "Saniyede bir kare çıkardı, otuz dokuz kareye tek tek baktı.",
+     "bas": 903.2,
+     "son": 906.4
+    },
+    {
+     "no": 4,
+     "metin": "Ve on sorun buldu.",
+     "bas": 906.75,
+     "son": 908.03
+    },
+    {
+     "no": 5,
+     "metin": "Damga denemelerin üstünü kapatıyordu, aşağı taşıdı.",
+     "bas": 908.38,
+     "son": 911.74
+    },
+    {
+     "no": 6,
+     "metin": "Altyazıda iki kelime aynı anda yanıyordu, düzeltti.",
+     "bas": 912.09,
+     "son": 915.45
+    },
+    {
+     "no": 7,
+     "metin": "Daktilo sürekli göz kırpıyordu, bunu sadece son cümleye ve son karelere indirdi.",
+     "bas": 915.8,
+     "son": 921.08
+    },
+    {
+     "no": 8,
+     "metin": "Karakterin açık elleri pençe gibi görünüyordu, parmakları kalınlaştırdı.",
+     "bas": 921.43,
+     "son": 926.23
+    }
+   ]
+  },
+  {
+   "no": 34,
+   "bas": 928.23,
+   "son": 944.19,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Bütün bu süreç yaklaşık on sekiz dakika sürdü.",
+     "bas": 928.23,
+     "son": 930.79
+    },
+    {
+     "no": 2,
+     "metin": "Ben bu sırada başka bir işle uğraşıyordum.",
+     "bas": 931.14,
+     "son": 933.38
+    },
+    {
+     "no": 3,
+     "metin": "Döndüğümde önümde sessiz bir önizleme vardı.",
+     "bas": 933.73,
+     "son": 936.45
+    },
+    {
+     "no": 4,
+     "metin": "İzledim, beğendim, sesi ekledim.",
+     "bas": 936.8,
+     "son": 938.56
+    },
+    {
+     "no": 5,
+     "metin": "İşte fabrikanın asıl gücü bu: ben fikri ve zevki veriyorum, makineler tekrarı yapıyor.",
+     "bas": 938.91,
+     "son": 944.19
+    }
+   ]
+  },
+  {
+   "no": 35,
+   "bas": 946.19,
+   "son": 969.41,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Peki sıfırdan başlayan biri bunu nasıl kurar?",
+     "bas": 946.19,
+     "son": 948.59
+    },
+    {
+     "no": 2,
+     "metin": "Sana yedi adımlık bir yol haritası vereyim.",
+     "bas": 948.94,
+     "son": 951.02
+    },
+    {
+     "no": 3,
+     "metin": "Birinci adım: bir kimlik seç.",
+     "bas": 951.37,
+     "son": 953.45
+    },
+    {
+     "no": 4,
+     "metin": "Bir karakter, bir dönem, bir renk paleti.",
+     "bas": 953.8,
+     "son": 956.36
+    },
+    {
+     "no": 5,
+     "metin": "Benim için Sidis, gazete kâğıdı ve damga kırmızısı.",
+     "bas": 956.71,
+     "son": 959.75
+    },
+    {
+     "no": 6,
+     "metin": "Senin için başka bir şey olabilir: bir uzay istasyonu, bir mutfak, bir eski bilgisayar ekranı.",
+     "bas": 960.1,
+     "son": 966.34
+    },
+    {
+     "no": 7,
+     "metin": "Önemli olan, her videoda aynı dünyada olman.",
+     "bas": 966.69,
+     "son": 969.41
+    }
+   ]
+  },
+  {
+   "no": 36,
+   "bas": 971.41,
+   "son": 988.01,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "İkinci adım: bu kimliği bir stil rehberine yaz.",
+     "bas": 971.41,
+     "son": 974.61
+    },
+    {
+     "no": 2,
+     "metin": "Renk kodları, yazı tipleri, karakterlerin pozları, geçişler.",
+     "bas": 974.96,
+     "son": 979.44
+    },
+    {
+     "no": 3,
+     "metin": "Bir sayfa yeter.",
+     "bas": 979.79,
+     "son": 980.91
+    },
+    {
+     "no": 4,
+     "metin": "Bu sayfayı her videoda yapay zekâya ver.",
+     "bas": 981.26,
+     "son": 983.98
+    },
+    {
+     "no": 5,
+     "metin": "Rehber olmadan her video ayrı bir kanaldan çıkmış gibi durur.",
+     "bas": 984.33,
+     "son": 988.01
+    }
+   ]
+  },
+  {
+   "no": 37,
+   "bas": 990.01,
+   "son": 1010.77,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Üçüncü adım: bir ses seç ve ona sadık kal.",
+     "bas": 990.01,
+     "son": 993.37
+    },
+    {
+     "no": 2,
+     "metin": "Kendi sesin olursa en iyisi, ama iyi bir kayıtla.",
+     "bas": 993.72,
+     "son": 996.6
+    },
+    {
+     "no": 3,
+     "metin": "Sessiz bir oda, telefonu ağzına bir karış mesafede tut, otuz kırk saniye canlı bir şey oku.",
+     "bas": 996.95,
+     "son": 1002.39
+    },
+    {
+     "no": 4,
+     "metin": "Kendi sesin olmayacaksa, hazır seslerden birini seç ve her videoda onu kullan.",
+     "bas": 1002.74,
+     "son": 1007.7
+    },
+    {
+     "no": 5,
+     "metin": "İzleyici sesi de kimliğin bir parçası olarak hatırlıyor.",
+     "bas": 1008.05,
+     "son": 1010.77
+    }
+   ]
+  },
+  {
+   "no": 38,
+   "bas": 1012.77,
+   "son": 1027.1,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Dördüncü adım: senaryoyu kelimeye bağlı yaz.",
+     "bas": 1012.77,
+     "son": 1015.81
+    },
+    {
+     "no": 2,
+     "metin": "Her önemli kelimenin yanına, o anda ekranda ne olacağını not et.",
+     "bas": 1016.16,
+     "son": 1019.84
+    },
+    {
+     "no": 3,
+     "metin": "Bu, hem senin hem de yapay zekânın işini kolaylaştırır.",
+     "bas": 1020.19,
+     "son": 1024.35
+    },
+    {
+     "no": 4,
+     "metin": "Zaten videonun yarısı bu notlarda saklıdır.",
+     "bas": 1024.7,
+     "son": 1027.1
+    }
+   ]
+  },
+  {
+   "no": 39,
+   "bas": 1029.1,
+   "son": 1046.85,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Beşinci adım: küçük başla.",
+     "bas": 1029.1,
+     "son": 1030.86
+    },
+    {
+     "no": 2,
+     "metin": "İlk videon kırk saniyelik bir kısa video olsun.",
+     "bas": 1031.21,
+     "son": 1033.93
+    },
+    {
+     "no": 3,
+     "metin": "Tek sahne, iki karakter, üç damga.",
+     "bas": 1034.28,
+     "son": 1037.64
+    },
+    {
+     "no": 4,
+     "metin": "Bunu beğenene kadar düzelt.",
+     "bas": 1037.99,
+     "son": 1039.59
+    },
+    {
+     "no": 5,
+     "metin": "Sonra uzun videoya geç.",
+     "bas": 1039.94,
+     "son": 1042.02
+    },
+    {
+     "no": 6,
+     "metin": "Kısa videoda kurduğun her parça, uzun videoda tekrar işine yarayacak.",
+     "bas": 1042.37,
+     "son": 1046.85
+    }
+   ]
+  },
+  {
+   "no": 40,
+   "bas": 1048.85,
+   "son": 1063.18,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Altıncı adım: kontrolü otomatikleştir.",
+     "bas": 1048.85,
+     "son": 1052.05
+    },
+    {
+     "no": 2,
+     "metin": "Her videodan sonra kare kare bakan bir denetçi kur.",
+     "bas": 1052.4,
+     "son": 1055.44
+    },
+    {
+     "no": 3,
+     "metin": "Yazı taşması, harf hatası, ses seviyesi.",
+     "bas": 1055.79,
+     "son": 1058.51
+    },
+    {
+     "no": 4,
+     "metin": "İlk birkaç videoda bunu elle yaparsın, sonra yapay zekâya devredersin.",
+     "bas": 1058.86,
+     "son": 1063.18
+    }
+   ]
+  },
+  {
+   "no": 41,
+   "bas": 1065.18,
+   "son": 1081.62,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Yedinci adım: her hatayı bir kurala çevir.",
+     "bas": 1065.18,
+     "son": 1068.06
+    },
+    {
+     "no": 2,
+     "metin": "Bir dosya aç, adı kurallar olsun.",
+     "bas": 1068.41,
+     "son": 1070.49
+    },
+    {
+     "no": 3,
+     "metin": "Her hata yaptığında, nedeniyle birlikte bir satır ekle.",
+     "bas": 1070.84,
+     "son": 1074.2
+    },
+    {
+     "no": 4,
+     "metin": "İki ay sonra o dosya, senin kanalının hafızası olacak.",
+     "bas": 1074.55,
+     "son": 1077.91
+    },
+    {
+     "no": 5,
+     "metin": "Ve yapay zekâ her işe o dosyayı okuyarak başlayacak.",
+     "bas": 1078.26,
+     "son": 1081.62
+    }
+   ]
+  },
+  {
+   "no": 42,
+   "bas": 1083.62,
+   "son": 1108.41,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Şimdi bana en çok sorulan sorulara geçelim.",
+     "bas": 1083.62,
+     "son": 1086.34
+    },
+    {
+     "no": 2,
+     "metin": "Birinci soru: yapay zekâ sesiyle video yüklemek Yutup'ta sorun olur mu?",
+     "bas": 1086.69,
+     "son": 1091.17
+    },
+    {
+     "no": 3,
+     "metin": "Yükleme sırasında Yutup sana soruyor: bu videoda değiştirilmiş ya da sentetik içerik var mı?",
+     "bas": 1091.52,
+     "son": 1097.12
+    },
+    {
+     "no": 4,
+     "metin": "Gerçekçi görünen bir kişi ya da olay yapay olarak üretildiyse, evet demen gerekiyor.",
+     "bas": 1097.47,
+     "son": 1101.95
+    },
+    {
+     "no": 5,
+     "metin": "Ben şüphede kaldığımda her zaman evet diyorum.",
+     "bas": 1102.3,
+     "son": 1104.86
+    },
+    {
+     "no": 6,
+     "metin": "Dürüst olmak, sonradan sorun yaşamaktan iyidir.",
+     "bas": 1105.21,
+     "son": 1108.41
+    }
+   ]
+  },
+  {
+   "no": 43,
+   "bas": 1110.41,
+   "son": 1130.85,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "İkinci soru: bu videolarla para kazanılır mı?",
+     "bas": 1110.41,
+     "son": 1113.61
+    },
+    {
+     "no": 2,
+     "metin": "Sana bir rakam veremem, vermem de doğru olmaz.",
+     "bas": 1113.96,
+     "son": 1116.84
+    },
+    {
+     "no": 3,
+     "metin": "Kazanç; konuya, izleyiciye, ülkeye ve sürekliliğe göre çok değişiyor.",
+     "bas": 1117.19,
+     "son": 1121.83
+    },
+    {
+     "no": 4,
+     "metin": "Benim söyleyebileceğim şu: düzenli ve kendine ait içerik üreten kanallar zamanla büyüyor.",
+     "bas": 1122.18,
+     "son": 1127.62
+    },
+    {
+     "no": 5,
+     "metin": "Hızlı para vaadi veren her videoya şüpheyle bak.",
+     "bas": 1127.97,
+     "son": 1130.85
+    }
+   ]
+  },
+  {
+   "no": 44,
+   "bas": 1132.85,
+   "son": 1148.94,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Üçüncü soru: müzik nereden?",
+     "bas": 1132.85,
+     "son": 1134.45
+    },
+    {
+     "no": 2,
+     "metin": "Telif hakkı olan bir şarkıyı videoya koyarsan, video ya engellenir ya da kazancı başkasına gider.",
+     "bas": 1134.8,
+     "son": 1140.56
+    },
+    {
+     "no": 3,
+     "metin": "Ben müziği ya yapay zekâyla üretiyorum ya da lisansı açık kaynaklardan alıyorum.",
+     "bas": 1140.91,
+     "son": 1145.71
+    },
+    {
+     "no": 4,
+     "metin": "Her müziğin nereden geldiğini bir dosyaya not ediyorum.",
+     "bas": 1146.06,
+     "son": 1148.94
+    }
+   ]
+  },
+  {
+   "no": 45,
+   "bas": 1150.94,
+   "son": 1168.18,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Dördüncü soru: Türkçe yapay zekâ sesleri yeterince iyi mi?",
+     "bas": 1150.94,
+     "son": 1154.62
+    },
+    {
+     "no": 2,
+     "metin": "Bir yıl öncesine göre çok daha iyi, ama hâlâ mükemmel değil.",
+     "bas": 1154.97,
+     "son": 1158.01
+    },
+    {
+     "no": 3,
+     "metin": "Özellikle yumuşak g, kısaltmalar ve yabancı kelimeler sorun çıkarıyor.",
+     "bas": 1158.36,
+     "son": 1162.68
+    },
+    {
+     "no": 4,
+     "metin": "O yüzden telaffuz paketini yaptım.",
+     "bas": 1163.03,
+     "son": 1164.79
+    },
+    {
+     "no": 5,
+     "metin": "Ve o yüzden son dinlemeyi her zaman kendim yapıyorum.",
+     "bas": 1165.14,
+     "son": 1168.18
+    }
+   ]
+  },
+  {
+   "no": 46,
+   "bas": 1170.18,
+   "son": 1186.65,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Beşinci soru: bunu yapmak için kod bilmem gerekiyor mu?",
+     "bas": 1170.18,
+     "son": 1173.86
+    },
+    {
+     "no": 2,
+     "metin": "Hayır.",
+     "bas": 1174.21,
+     "son": 1175.01
+    },
+    {
+     "no": 3,
+     "metin": "Ben de kodu Klod'a yazdırıyorum.",
+     "bas": 1175.36,
+     "son": 1177.44
+    },
+    {
+     "no": 4,
+     "metin": "Ama ne istediğini net anlatabilmen gerekiyor.",
+     "bas": 1177.79,
+     "son": 1180.83
+    },
+    {
+     "no": 5,
+     "metin": "Ve çıkan sonuca eleştirel bakabilmen.",
+     "bas": 1181.18,
+     "son": 1183.42
+    },
+    {
+     "no": 6,
+     "metin": "Kod bilgisi değil, göz ve sabır gerekiyor.",
+     "bas": 1183.77,
+     "son": 1186.65
+    }
+   ]
+  },
+  {
+   "no": 47,
+   "bas": 1188.65,
+   "son": 1219.42,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Şimdi gelelim herkesin merak ettiği kısma: bu iş kaça mal oluyor?",
+     "bas": 1188.65,
+     "son": 1193.29
+    },
+    {
+     "no": 2,
+     "metin": "Dürüst bir tablo vereyim.",
+     "bas": 1193.64,
+     "son": 1194.92
+    },
+    {
+     "no": 3,
+     "metin": "Senaryo: Klod aboneliğimin içinde, ek maliyet yok.",
+     "bas": 1195.27,
+     "son": 1198.31
+    },
+    {
+     "no": 4,
+     "metin": "Ses: kendi klonumla bedava, ama ekran kartım saatlerce çalışıyor.",
+     "bas": 1198.66,
+     "son": 1203.3
+    },
+    {
+     "no": 5,
+     "metin": "Hazır sesle, yarım saatlik bir video birkaç yüz krediye geliyor.",
+     "bas": 1203.65,
+     "son": 1207.81
+    },
+    {
+     "no": 6,
+     "metin": "Görüntü: tamamen kodla, bedava.",
+     "bas": 1208.16,
+     "son": 1210.4
+    },
+    {
+     "no": 7,
+     "metin": "Müzik: parça başına birkaç düzine kredi.",
+     "bas": 1210.75,
+     "son": 1213.31
+    },
+    {
+     "no": 8,
+     "metin": "Gerçekçi yapay zekâ video klipleri: işte orası pahalı, ve ben onları neredeyse hiç kullanmıyorum.",
+     "bas": 1213.66,
+     "son": 1219.42
+    }
+   ]
+  },
+  {
+   "no": 48,
+   "bas": 1221.42,
+   "son": 1240.77,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Yani bu fabrikanın asıl maliyeti para değil, zaman ve sabır.",
+     "bas": 1221.42,
+     "son": 1224.94
+    },
+    {
+     "no": 2,
+     "metin": "İlk kurulum haftalarımı aldı.",
+     "bas": 1225.29,
+     "son": 1226.89
+    },
+    {
+     "no": 3,
+     "metin": "Yüzlerce deneme yaptım, yüzlerce şeyi beğenmedim.",
+     "bas": 1227.24,
+     "son": 1229.8
+    },
+    {
+     "no": 4,
+     "metin": "Ama bir kere kurulunca, bir video fikri artık günlerce değil, saatlerce sürüyor.",
+     "bas": 1230.15,
+     "son": 1234.95
+    },
+    {
+     "no": 5,
+     "metin": "Ve her yeni videoda sistem biraz daha iyi oluyor.",
+     "bas": 1235.3,
+     "son": 1238.34
+    },
+    {
+     "no": 6,
+     "metin": "Çünkü her hatayı bir kurala çeviriyorum.",
+     "bas": 1238.69,
+     "son": 1240.77
+    }
+   ]
+  },
+  {
+   "no": 49,
+   "bas": 1242.77,
+   "son": 1272.42,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Bu son cümle önemli, açayım.",
+     "bas": 1242.77,
+     "son": 1244.69
+    },
+    {
+     "no": 2,
+     "metin": "Klod bir hata yaptığında, ona sadece \"düzelt\" demiyorum.",
+     "bas": 1245.04,
+     "son": 1249.68
+    },
+    {
+     "no": 3,
+     "metin": "O hatayı bir kural olarak yazdırıyorum, nedeniyle birlikte.",
+     "bas": 1250.03,
+     "son": 1253.87
+    },
+    {
+     "no": 4,
+     "metin": "Mesela: \"Kullanıcı başla demeden kredi harcama.\"",
+     "bas": 1254.22,
+     "son": 1258.06
+    },
+    {
+     "no": 5,
+     "metin": "Ya da: \"Video için önceki videonun müziğini taşıma, her videoya sıfırdan başla.\"",
+     "bas": 1258.41,
+     "son": 1263.53
+    },
+    {
+     "no": 6,
+     "metin": "Bu kurallar bir dosyada birikiyor ve her yeni işin başında okunuyor.",
+     "bas": 1263.88,
+     "son": 1268.52
+    },
+    {
+     "no": 7,
+     "metin": "Aynı hata ikinci kez olmuyor.",
+     "bas": 1268.87,
+     "son": 1270.31
+    },
+    {
+     "no": 8,
+     "metin": "Fabrikanın hafızası bu.",
+     "bas": 1270.66,
+     "son": 1272.42
+    }
+   ]
+  },
+  {
+   "no": 50,
+   "bas": 1274.42,
+   "son": 1294.22,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Şimdi fabrikanın dışına çıkalım, çünkü video üretmek işin sadece yarısı.",
+     "bas": 1274.42,
+     "son": 1279.38
+    },
+    {
+     "no": 2,
+     "metin": "Diğer yarısı, ne üreteceğine karar vermek.",
+     "bas": 1279.73,
+     "son": 1281.97
+    },
+    {
+     "no": 3,
+     "metin": "Bunun için bir araç kullanıyorum, adı vid-ay-kyu.",
+     "bas": 1282.32,
+     "son": 1285.36
+    },
+    {
+     "no": 4,
+     "metin": "Yutup kanallarını, videoları, başlıkları analiz eden bir araç.",
+     "bas": 1285.71,
+     "son": 1289.71
+    },
+    {
+     "no": 5,
+     "metin": "Ve son zamanlarda en çok yaptığım şey, başka kanalları incelemek.",
+     "bas": 1290.06,
+     "son": 1294.22
+    }
+   ]
+  },
+  {
+   "no": 51,
+   "bas": 1296.22,
+   "son": 1312.24,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Geçenlerde yeni açılmış bir kanala denk geldim.",
+     "bas": 1296.22,
+     "son": 1298.62
+    },
+    {
+     "no": 2,
+     "metin": "Sekiz gün önce açılmış.",
+     "bas": 1298.97,
+     "son": 1300.25
+    },
+    {
+     "no": 3,
+     "metin": "On bir video yüklemiş.",
+     "bas": 1300.6,
+     "son": 1302.36
+    },
+    {
+     "no": 4,
+     "metin": "Beş yüzden fazla abonesi olmuş.",
+     "bas": 1302.71,
+     "son": 1304.47
+    },
+    {
+     "no": 5,
+     "metin": "Otuz bin izlenmeye yaklaşmış.",
+     "bas": 1304.82,
+     "son": 1306.58
+    },
+    {
+     "no": 6,
+     "metin": "Yeni bir kanal için bu çok iyi bir başlangıç.",
+     "bas": 1306.93,
+     "son": 1309.17
+    },
+    {
+     "no": 7,
+     "metin": "Ben de oturup bu kanalı parça parça inceledim.",
+     "bas": 1309.52,
+     "son": 1312.24
+    }
+   ]
+  },
+  {
+   "no": 52,
+   "bas": 1314.24,
+   "son": 1337.81,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "İlk baktığım şey, en çok izlenen videolar oldu.",
+     "bas": 1314.24,
+     "son": 1316.8
+    },
+    {
+     "no": 2,
+     "metin": "En çok izlenen iki uzun videonun ikisi de aynı kalıptaydı.",
+     "bas": 1317.15,
+     "son": 1320.19
+    },
+    {
+     "no": 3,
+     "metin": "\"Şu sorunu yaşadım, yapay zekâyla şunu kurdum.\"",
+     "bas": 1320.54,
+     "son": 1323.74
+    },
+    {
+     "no": 4,
+     "metin": "Yani bir ders değil, bir hikâye.",
+     "bas": 1324.09,
+     "son": 1325.85
+    },
+    {
+     "no": 5,
+     "metin": "İzleyici bir ürün tanıtımı izlemiyor, birinin bir sorunu nasıl çözdüğünü izliyor.",
+     "bas": 1326.2,
+     "son": 1330.2
+    },
+    {
+     "no": 6,
+     "metin": "Bu çok önemli bir fark.",
+     "bas": 1330.55,
+     "son": 1331.51
+    },
+    {
+     "no": 7,
+     "metin": "Ders anlatan video \"ne öğreneceğim\" diye izlenir.",
+     "bas": 1331.86,
+     "son": 1334.26
+    },
+    {
+     "no": 8,
+     "metin": "Hikâye anlatan video \"sonu ne olacak\" diye izlenir.",
+     "bas": 1334.61,
+     "son": 1337.81
+    }
+   ]
+  },
+  {
+   "no": 53,
+   "bas": 1339.81,
+   "son": 1368.47,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "İkinci baktığım şey, videoların içi oldu.",
+     "bas": 1339.81,
+     "son": 1342.05
+    },
+    {
+     "no": 2,
+     "metin": "Vid-ay-kyu'nun video izleme özelliği, bir videoyu baştan sona izleyip sahne sahne döküyor.",
+     "bas": 1342.4,
+     "son": 1348.16
+    },
+    {
+     "no": 3,
+     "metin": "Hangi saniyede ne var, hangi geçiş kullanılmış, yazı tipleri ne, müzik ne kadar yüksek.",
+     "bas": 1348.51,
+     "son": 1354.43
+    },
+    {
+     "no": 4,
+     "metin": "Çıkan tablo şuydu: görüntü her iki ila dört saniyede bir değişiyor.",
+     "bas": 1354.78,
+     "son": 1359.26
+    },
+    {
+     "no": 5,
+     "metin": "Hiçbir an ekran boş kalmıyor.",
+     "bas": 1359.61,
+     "son": 1361.53
+    },
+    {
+     "no": 6,
+     "metin": "Bir yazı geliyor, bir çizgi çiziliyor, bir damga vuruluyor.",
+     "bas": 1361.88,
+     "son": 1364.92
+    },
+    {
+     "no": 7,
+     "metin": "Ve hepsi, söylenen kelimeyle aynı anda.",
+     "bas": 1365.27,
+     "son": 1368.47
+    }
+   ]
+  },
+  {
+   "no": 54,
+   "bas": 1370.47,
+   "son": 1394.01,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Üçüncü baktığım şey, kanalın kimliği oldu.",
+     "bas": 1370.47,
+     "son": 1373.35
+    },
+    {
+     "no": 2,
+     "metin": "Bütün videolar aynı defterden çıkmış gibi.",
+     "bas": 1373.7,
+     "son": 1375.94
+    },
+    {
+     "no": 3,
+     "metin": "Aynı kâğıt dokusu, aynı mürekkep, aynı karakter.",
+     "bas": 1376.29,
+     "son": 1379.81
+    },
+    {
+     "no": 4,
+     "metin": "Bir videoyu izleyen, ikincisini gördüğünde hemen tanıyor.",
+     "bas": 1380.16,
+     "son": 1383.68
+    },
+    {
+     "no": 5,
+     "metin": "Ben de bu kanalı kurarken o biçimi aldım, ama kimliği kendim kurdum.",
+     "bas": 1384.03,
+     "son": 1387.87
+    },
+    {
+     "no": 6,
+     "metin": "Onların bir tarihi figürü vardı, benim de Sidis'im var.",
+     "bas": 1388.22,
+     "son": 1391.1
+    },
+    {
+     "no": 7,
+     "metin": "Biçimi öğrenmek serbest, kimliği kopyalamak değil.",
+     "bas": 1391.45,
+     "son": 1394.01
+    }
+   ]
+  },
+  {
+   "no": 55,
+   "bas": 1396.01,
+   "son": 1417.95,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Peki bu analiz kaça mal oldu?",
+     "bas": 1396.01,
+     "son": 1397.61
+    },
+    {
+     "no": 2,
+     "metin": "İki uzun video izletmek ve bir kısa video izletmek, toplam seksen kredi civarında.",
+     "bas": 1397.96,
+     "son": 1403.08
+    },
+    {
+     "no": 3,
+     "metin": "Bir rakip kanalı bir saatte çözmek için, bence ucuz.",
+     "bas": 1403.43,
+     "son": 1406.63
+    },
+    {
+     "no": 4,
+     "metin": "Bunu kendin yapmak istersen, şu üç soruyu sor.",
+     "bas": 1406.98,
+     "son": 1410.82
+    },
+    {
+     "no": 5,
+     "metin": "En çok izlenen videolar hangi kalıpta?",
+     "bas": 1411.17,
+     "son": 1413.25
+    },
+    {
+     "no": 6,
+     "metin": "Görüntü kaç saniyede bir değişiyor?",
+     "bas": 1413.6,
+     "son": 1415.2
+    },
+    {
+     "no": 7,
+     "metin": "Kanalı bir bakışta tanıtan şey ne?",
+     "bas": 1415.55,
+     "son": 1417.95
+    }
+   ]
+  },
+  {
+   "no": 56,
+   "bas": 1419.95,
+   "son": 1450.24,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Başlık ve kapak konusuna gelelim, çünkü en iyi video bile tıklanmazsa izlenmez.",
+     "bas": 1419.95,
+     "son": 1424.91
+    },
+    {
+     "no": 2,
+     "metin": "Ben başlığı en sona bırakmıyorum.",
+     "bas": 1425.26,
+     "son": 1427.34
+    },
+    {
+     "no": 3,
+     "metin": "Video fikri aklıma geldiği anda, önce başlığı yazıyorum.",
+     "bas": 1427.69,
+     "son": 1430.73
+    },
+    {
+     "no": 4,
+     "metin": "Eğer iyi bir başlık bulamıyorsam, fikir de muhtemelen yeterince net değil.",
+     "bas": 1431.08,
+     "son": 1434.76
+    },
+    {
+     "no": 5,
+     "metin": "Başlıkta bir sorun ve bir sonuç olsun istiyorum.",
+     "bas": 1435.11,
+     "son": 1437.83
+    },
+    {
+     "no": 6,
+     "metin": "Mesela: \"Sesimi klonladım, burnumdan konuşuyordum.\"",
+     "bas": 1438.18,
+     "son": 1441.7
+    },
+    {
+     "no": 7,
+     "metin": "Ya da: \"Hazır araç bulamadım, kendi video fabrikamı kurdum.\"",
+     "bas": 1442.05,
+     "son": 1445.89
+    },
+    {
+     "no": 8,
+     "metin": "Birinci kısım merak uyandırıyor, ikinci kısım bir hikâye vaat ediyor.",
+     "bas": 1446.24,
+     "son": 1450.24
+    }
+   ]
+  },
+  {
+   "no": 57,
+   "bas": 1452.24,
+   "son": 1480.1,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Kapakta ise kural basit.",
+     "bas": 1452.24,
+     "son": 1454.16
+    },
+    {
+     "no": 2,
+     "metin": "Başlığı tekrar etme, başlığı tamamla.",
+     "bas": 1454.51,
+     "son": 1457.07
+    },
+    {
+     "no": 3,
+     "metin": "Başlık ne olduğunu söylüyorsa, kapak neden izlemen gerektiğini söylesin.",
+     "bas": 1457.42,
+     "son": 1461.9
+    },
+    {
+     "no": 4,
+     "metin": "Kapakta en fazla üç dört kelime.",
+     "bas": 1462.25,
+     "son": 1464.65
+    },
+    {
+     "no": 5,
+     "metin": "Ve kapağı mutlaka telefonda, küçültülmüş hâlde kontrol et.",
+     "bas": 1465.0,
+     "son": 1468.84
+    },
+    {
+     "no": 6,
+     "metin": "Bilgisayarda güzel görünen kapak, telefonda okunmayan bir lekeye dönüşebiliyor.",
+     "bas": 1469.19,
+     "son": 1473.99
+    },
+    {
+     "no": 7,
+     "metin": "Benim kapaklarım da kanalın kimliğinde: gazete manşeti, kırmızı damga, tek bir büyük kelime.",
+     "bas": 1474.34,
+     "son": 1480.1
+    }
+   ]
+  },
+  {
+   "no": 58,
+   "bas": 1482.1,
+   "son": 1505.03,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Kısa video mu, uzun video mu?",
+     "bas": 1482.1,
+     "son": 1483.7
+    },
+    {
+     "no": 2,
+     "metin": "Bu soruyu çok soruyorlar.",
+     "bas": 1484.05,
+     "son": 1485.33
+    },
+    {
+     "no": 3,
+     "metin": "Benim cevabım: ikisi birden, ama farklı işler için.",
+     "bas": 1485.68,
+     "son": 1490.0
+    },
+    {
+     "no": 4,
+     "metin": "Kısa video keşfedilmek içindir.",
+     "bas": 1490.35,
+     "son": 1492.43
+    },
+    {
+     "no": 5,
+     "metin": "Kırk saniyede tek bir fikir, tek bir sahne, sonunda bir son vuruş.",
+     "bas": 1492.78,
+     "son": 1496.3
+    },
+    {
+     "no": 6,
+     "metin": "Uzun video ise güven içindir.",
+     "bas": 1496.65,
+     "son": 1498.09
+    },
+    {
+     "no": 7,
+     "metin": "Biri seni yarım saat dinlediyse, artık seni tanıyordur.",
+     "bas": 1498.44,
+     "son": 1501.48
+    },
+    {
+     "no": 8,
+     "metin": "Kısa video kapıyı çalar, uzun video içeri davet eder.",
+     "bas": 1501.83,
+     "son": 1505.03
+    }
+   ]
+  },
+  {
+   "no": 59,
+   "bas": 1507.03,
+   "son": 1539.43,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Benim kısa videolarımın kalıbı şu.",
+     "bas": 1507.03,
+     "son": 1508.79
+    },
+    {
+     "no": 2,
+     "metin": "Ekranda tek bir sahne var, hiç kesme yok.",
+     "bas": 1509.14,
+     "son": 1511.38
+    },
+    {
+     "no": 3,
+     "metin": "Üstte iki satırlık sabit bir başlık.",
+     "bas": 1511.73,
+     "son": 1513.81
+    },
+    {
+     "no": 4,
+     "metin": "Ortada karakterler ve küçük nesneler: bir konuşma balonu, bir sayaç, bir damga.",
+     "bas": 1514.16,
+     "son": 1519.28
+    },
+    {
+     "no": 5,
+     "metin": "Her bir buçuk, iki saniyede küçük bir şey değişiyor.",
+     "bas": 1519.63,
+     "son": 1523.79
+    },
+    {
+     "no": 6,
+     "metin": "Altta kelime kelime altyazı.",
+     "bas": 1524.14,
+     "son": 1526.54
+    },
+    {
+     "no": 7,
+     "metin": "Ve en önemlisi: sonda \"abone ol\" demiyorum.",
+     "bas": 1526.89,
+     "son": 1529.93
+    },
+    {
+     "no": 8,
+     "metin": "Video son vuruş ile bitiyor, izleyici başa dönüp bir daha izliyor.",
+     "bas": 1530.28,
+     "son": 1534.92
+    },
+    {
+     "no": 9,
+     "metin": "Bu tekrar izlemeler, algoritmaya videonun iyi olduğunu söylüyor.",
+     "bas": 1535.27,
+     "son": 1539.43
+    }
+   ]
+  },
+  {
+   "no": 60,
+   "bas": 1541.43,
+   "son": 1566.44,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Uzun videolarımın kalıbı ise şöyle.",
+     "bas": 1541.43,
+     "son": 1543.99
+    },
+    {
+     "no": 2,
+     "metin": "Önce bir hikâye ya da benzetme.",
+     "bas": 1544.34,
+     "son": 1546.42
+    },
+    {
+     "no": 3,
+     "metin": "Sonra sorun.",
+     "bas": 1546.77,
+     "son": 1547.73
+    },
+    {
+     "no": 4,
+     "metin": "Sonra denemeler, ve özellikle başarısız denemeler.",
+     "bas": 1548.08,
+     "son": 1551.76
+    },
+    {
+     "no": 5,
+     "metin": "İnsanlar başarısızlığı izlemeyi seviyor, çünkü kendilerini görüyorlar.",
+     "bas": 1552.11,
+     "son": 1555.95
+    },
+    {
+     "no": 6,
+     "metin": "Sonra çözüm ve sonuç.",
+     "bas": 1556.3,
+     "son": 1558.22
+    },
+    {
+     "no": 7,
+     "metin": "En sonda da ücretsiz bir şey: bir araç, bir şablon, bir kural dosyası.",
+     "bas": 1558.57,
+     "son": 1562.89
+    },
+    {
+     "no": 8,
+     "metin": "İzleyiciye bir şey verdiğinde, o da sana zamanını veriyor.",
+     "bas": 1563.24,
+     "son": 1566.44
+    }
+   ]
+  },
+  {
+   "no": 61,
+   "bas": 1568.44,
+   "son": 1587.41,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Şimdi biraz da hatalarımdan bahsedeyim, çünkü bu fabrikayı kurarken çok hata yaptım.",
+     "bas": 1568.44,
+     "son": 1573.72
+    },
+    {
+     "no": 2,
+     "metin": "Birinci hata: her şeyi tek seferde yaptırmaya çalışmak.",
+     "bas": 1574.07,
+     "son": 1576.95
+    },
+    {
+     "no": 3,
+     "metin": "\"Bana on beş dakikalık bir video yap\" dediğimde, ortaya ortalama bir şey çıkıyordu.",
+     "bas": 1577.3,
+     "son": 1582.9
+    },
+    {
+     "no": 4,
+     "metin": "Şimdi işi istasyonlara bölüyorum, her istasyonu ayrı kontrol ediyorum.",
+     "bas": 1583.25,
+     "son": 1587.41
+    }
+   ]
+  },
+  {
+   "no": 62,
+   "bas": 1589.41,
+   "son": 1610.01,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "İkinci hata: süreyi hesaplamamak.",
+     "bas": 1589.41,
+     "son": 1591.97
+    },
+    {
+     "no": 2,
+     "metin": "Bir senaryo yazdım, on beş dakika sandım, seslendirince on bir dakika çıktı.",
+     "bas": 1592.32,
+     "son": 1596.64
+    },
+    {
+     "no": 3,
+     "metin": "Çünkü yapay zekâ sesi, sandığımdan hızlı konuşuyordu.",
+     "bas": 1596.99,
+     "son": 1600.19
+    },
+    {
+     "no": 4,
+     "metin": "Şimdi her senaryoyu yazdıktan sonra, kelime sayısından süresini tahmin ediyorum.",
+     "bas": 1600.54,
+     "son": 1605.5
+    },
+    {
+     "no": 5,
+     "metin": "Kendi sesimde bir kelime yaklaşık yarım saniye sürüyor.",
+     "bas": 1605.85,
+     "son": 1610.01
+    }
+   ]
+  },
+  {
+   "no": 63,
+   "bas": 1612.01,
+   "son": 1631.62,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Üçüncü hata: kontrolsüz kredi harcamak.",
+     "bas": 1612.01,
+     "son": 1614.89
+    },
+    {
+     "no": 2,
+     "metin": "Bir fragman için binlerce kredi harcayıp, sonucu beğenmemek, insanın canını yakıyor.",
+     "bas": 1615.24,
+     "son": 1620.52
+    },
+    {
+     "no": 3,
+     "metin": "Şimdi kural şu: kredi harcayacak her adımdan önce toplam maliyeti yazıyorum ve onay vermeden hiçbir şey başlamıyor.",
+     "bas": 1620.87,
+     "son": 1628.55
+    },
+    {
+     "no": 4,
+     "metin": "Ucuz modelle başlıyorum, beğenirsem pahalıya geçiyorum.",
+     "bas": 1628.9,
+     "son": 1631.62
+    }
+   ]
+  },
+  {
+   "no": 64,
+   "bas": 1633.62,
+   "son": 1650.7,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Dördüncü hata: sesi dinlemeden yayınlamak.",
+     "bas": 1633.62,
+     "son": 1636.02
+    },
+    {
+     "no": 2,
+     "metin": "Yapay zekâ bana \"ses hazır\" dediğinde, ses gerçekten hazır değildi.",
+     "bas": 1636.37,
+     "son": 1640.37
+    },
+    {
+     "no": 3,
+     "metin": "Klod sesi kulağıyla dinleyemiyor.",
+     "bas": 1640.72,
+     "son": 1642.8
+    },
+    {
+     "no": 4,
+     "metin": "Yazıya çevirip kontrol edebiliyor, ama tonlamayı, heyecanı, boğukluğu yazı göstermiyor.",
+     "bas": 1643.15,
+     "son": 1648.43
+    },
+    {
+     "no": 5,
+     "metin": "O yüzden son dinleme her zaman benim.",
+     "bas": 1648.78,
+     "son": 1650.7
+    }
+   ]
+  },
+  {
+   "no": 65,
+   "bas": 1652.7,
+   "son": 1670.74,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Beşinci hata: her videoya bir önceki videonun ayarlarıyla başlamak.",
+     "bas": 1652.7,
+     "son": 1656.7
+    },
+    {
+     "no": 2,
+     "metin": "Bir müziği beğendim diye her videoya aynı müziği koydum.",
+     "bas": 1657.05,
+     "son": 1660.09
+    },
+    {
+     "no": 3,
+     "metin": "Bir süre sonra bütün videolar aynı hissettirmeye başladı.",
+     "bas": 1660.44,
+     "son": 1663.64
+    },
+    {
+     "no": 4,
+     "metin": "Şimdi her video sıfırdan başlıyor.",
+     "bas": 1663.99,
+     "son": 1666.07
+    },
+    {
+     "no": 5,
+     "metin": "Kimlik sabit, ama müzik, ritim, renk vurgusu her videoda yeniden seçiliyor.",
+     "bas": 1666.42,
+     "son": 1670.74
+    }
+   ]
+  },
+  {
+   "no": 66,
+   "bas": 1672.74,
+   "son": 1688.54,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Altıncı hata: bilgisayarı unutmak.",
+     "bas": 1672.74,
+     "son": 1675.14
+    },
+    {
+     "no": 2,
+     "metin": "Bir gece hem ses ürettim, hem video render ettim, hem de konuşma tanıma çalıştırdım.",
+     "bas": 1675.49,
+     "son": 1681.25
+    },
+    {
+     "no": 3,
+     "metin": "Ekran kartı taştı, işler yarıda kaldı.",
+     "bas": 1681.6,
+     "son": 1684.16
+    },
+    {
+     "no": 4,
+     "metin": "Şimdi ağır işleri sıraya koyuyorum.",
+     "bas": 1684.51,
+     "son": 1686.43
+    },
+    {
+     "no": 5,
+     "metin": "Biri bitmeden diğeri başlamıyor.",
+     "bas": 1686.78,
+     "son": 1688.54
+    }
+   ]
+  },
+  {
+   "no": 67,
+   "bas": 1690.54,
+   "son": 1707.14,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Yedinci hata: disk alanı.",
+     "bas": 1690.54,
+     "son": 1692.62
+    },
+    {
+     "no": 2,
+     "metin": "Video render etmek, arkada dev dosyalar bırakıyor.",
+     "bas": 1692.97,
+     "son": 1695.85
+    },
+    {
+     "no": 3,
+     "metin": "Bir gün baktım, diskimde yirmi yedi gigabayt yer kalmış.",
+     "bas": 1696.2,
+     "son": 1699.24
+    },
+    {
+     "no": 4,
+     "metin": "Tam yetmiş gigabayt geçici dosya birikmişti.",
+     "bas": 1699.59,
+     "son": 1702.79
+    },
+    {
+     "no": 5,
+     "metin": "Şimdi her iş bittikten sonra temizlik yapan küçük bir betiğim var.",
+     "bas": 1703.14,
+     "son": 1707.14
+    }
+   ]
+  },
+  {
+   "no": 68,
+   "bas": 1709.14,
+   "son": 1726.83,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Sekizinci hata: gizliliği düşünmemek.",
+     "bas": 1709.14,
+     "son": 1712.66
+    },
+    {
+     "no": 2,
+     "metin": "İlk ekran kayıtlarımda, ekranın kenarında adım ve eski sohbetlerim görünüyordu.",
+     "bas": 1713.01,
+     "son": 1717.49
+    },
+    {
+     "no": 3,
+     "metin": "Bir izleyici bunu fark etmese bile, ben fark ettim.",
+     "bas": 1717.84,
+     "son": 1720.24
+    },
+    {
+     "no": 4,
+     "metin": "Şimdi her ekran kaydı, kişisel bilgileri otomatik kesen ve bulanıklaştıran bir süzgeçten geçiyor.",
+     "bas": 1720.59,
+     "son": 1726.83
+    }
+   ]
+  },
+  {
+   "no": 69,
+   "bas": 1728.83,
+   "son": 1743.64,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Dokuzuncu hata: güvenlik doğrulamalarını aşmaya çalışmak.",
+     "bas": 1728.83,
+     "son": 1732.67
+    },
+    {
+     "no": 2,
+     "metin": "Bunu aslında yapmadım, ama aklımdan geçti.",
+     "bas": 1733.02,
+     "son": 1735.42
+    },
+    {
+     "no": 3,
+     "metin": "Bir site seni bot sanıyorsa, onu kandırmak yerine, kendi tarayıcını kullan.",
+     "bas": 1735.77,
+     "son": 1740.09
+    },
+    {
+     "no": 4,
+     "metin": "Hem daha dürüst, hem de daha az sorun çıkarıyor.",
+     "bas": 1740.44,
+     "son": 1743.64
+    }
+   ]
+  },
+  {
+   "no": 70,
+   "bas": 1745.64,
+   "son": 1763.84,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Onuncu hata: her şeyi kendim karar vermeye çalışmak.",
+     "bas": 1745.64,
+     "son": 1749.16
+    },
+    {
+     "no": 2,
+     "metin": "Bir noktadan sonra, teknik kararları yapay zekâya bıraktım.",
+     "bas": 1749.51,
+     "son": 1752.71
+    },
+    {
+     "no": 3,
+     "metin": "Hangi kütüphane, hangi ayar, hangi dosya biçimi, bunları o seçiyor.",
+     "bas": 1753.06,
+     "son": 1757.22
+    },
+    {
+     "no": 4,
+     "metin": "Ben sadece iki şeye karar veriyorum: ne anlatacağım ve nasıl hissettirecek.",
+     "bas": 1757.57,
+     "son": 1761.89
+    },
+    {
+     "no": 5,
+     "metin": "Gerisi fabrikanın işi.",
+     "bas": 1762.24,
+     "son": 1763.84
+    }
+   ]
+  },
+  {
+   "no": 71,
+   "bas": 1765.84,
+   "son": 1788.13,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Sidis'e dönelim.",
+     "bas": 1765.84,
+     "son": 1766.96
+    },
+    {
+     "no": 2,
+     "metin": "Harika çocuk büyüdü ve dünyanın beklediği büyük adam olmadı.",
+     "bas": 1767.31,
+     "son": 1770.83
+    },
+    {
+     "no": 3,
+     "metin": "Gazeteler bunu yıllarca alay konusu yaptı.",
+     "bas": 1771.18,
+     "son": 1773.58
+    },
+    {
+     "no": 4,
+     "metin": "Ama o, kimsenin ilgilenmediği küçük şeyleri biriktirmeye devam etti.",
+     "bas": 1773.93,
+     "son": 1778.09
+    },
+    {
+     "no": 5,
+     "metin": "Tramvay biletleri, notlar, dilleri, fikirleri.",
+     "bas": 1778.44,
+     "son": 1781.48
+    },
+    {
+     "no": 6,
+     "metin": "Bence bu kanalın da hikâyesi bu.",
+     "bas": 1781.83,
+     "son": 1783.91
+    },
+    {
+     "no": 7,
+     "metin": "Büyük bir hamle değil, küçük parçalar.",
+     "bas": 1784.26,
+     "son": 1786.02
+    },
+    {
+     "no": 8,
+     "metin": "Her video bir bilet.",
+     "bas": 1786.37,
+     "son": 1788.13
+    }
+   ]
+  },
+  {
+   "no": 72,
+   "bas": 1790.13,
+   "son": 1811.4,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Söz verdiğim gibi, bu sistemin kodunu ücretsiz veriyorum.",
+     "bas": 1790.13,
+     "son": 1793.65
+    },
+    {
+     "no": 2,
+     "metin": "Adı Otopilot.",
+     "bas": 1794.0,
+     "son": 1795.44
+    },
+    {
+     "no": 3,
+     "metin": "Açık kaynak, Githab'da duruyor, bağlantısı açıklamada.",
+     "bas": 1795.79,
+     "son": 1799.47
+    },
+    {
+     "no": 4,
+     "metin": "İçinde senaryo, ses motorları, telaffuz paketi, altyazı, video birleştirme, hepsi var.",
+     "bas": 1799.82,
+     "son": 1806.54
+    },
+    {
+     "no": 5,
+     "metin": "Kurulum adımları da yazılı.",
+     "bas": 1806.89,
+     "son": 1808.97
+    },
+    {
+     "no": 6,
+     "metin": "Kendi bilgisayarında çalıştırabilirsin.",
+     "bas": 1809.32,
+     "son": 1811.4
+    }
+   ]
+  },
+  {
+   "no": 73,
+   "bas": 1813.4,
+   "son": 1833.71,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Ama bir şey söyleyeyim.",
+     "bas": 1813.4,
+     "son": 1814.84
+    },
+    {
+     "no": 2,
+     "metin": "Bu sistem benim zevkime, benim kararlarıma göre kuruldu.",
+     "bas": 1815.19,
+     "son": 1818.71
+    },
+    {
+     "no": 3,
+     "metin": "Sen kurduktan sonra mutlaka kendi denemelerini yap.",
+     "bas": 1819.06,
+     "son": 1821.78
+    },
+    {
+     "no": 4,
+     "metin": "Beğendiklerini kurala yaz.",
+     "bas": 1822.13,
+     "son": 1823.57
+    },
+    {
+     "no": 5,
+     "metin": "Benim beğendiğim damga ile senin beğendiğin aynı olmak zorunda değil.",
+     "bas": 1823.92,
+     "son": 1827.6
+    },
+    {
+     "no": 6,
+     "metin": "Önemli olan, düğmeye basıp çıkanı paylaşmak yerine, üstüne kendi zevkini katman.",
+     "bas": 1827.95,
+     "son": 1833.71
+    }
+   ]
+  },
+  {
+   "no": 74,
+   "bas": 1835.71,
+   "son": 1852.44,
+   "cumleler": [
+    {
+     "no": 1,
+     "metin": "Bir sonraki videoda bu fabrikanın en zor istasyonuna gireceğiz: gerçek ekran kaydını, adım adım, sıfırdan kurmaya.",
+     "bas": 1835.71,
+     "son": 1843.55
+    },
+    {
+     "no": 2,
+     "metin": "Bu videoyu faydalı bulduysan, yorumlara hangi istasyonu daha detaylı görmek istediğini yaz.",
+     "bas": 1843.9,
+     "son": 1849.66
+    },
+    {
+     "no": 3,
+     "metin": "Ben de oradan devam edeyim.",
+     "bas": 1850.01,
+     "son": 1851.29
+    },
+    {
+     "no": 4,
+     "metin": "Görüşmek üzere.",
+     "bas": 1851.64,
+     "son": 1852.44
+    }
+   ]
+  }
+ ]
+}
