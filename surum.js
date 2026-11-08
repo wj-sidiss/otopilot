@@ -61,7 +61,8 @@ function yayinla(yeni) {
   if (git("tag", "-l", `v${yeni}`)) throw new Error(`v${yeni} etiketi zaten var`);
   const kapi = spawnSync(process.execPath, [P("kapi.js"), "--ilgili"], { cwd: KOK, stdio: "inherit" });   // degisen dosyalara bagli testler de kosar
   if (kapi.status !== 0) throw new Error("kapi kapali; yayin durdu");
-  const kirli = git("status", "--porcelain").split("\n").filter(Boolean).map((l) => l.slice(3));
+  // git() sonucu kirpar: ilk satirin bas boslugu gider ve dosya adi 1 harf kesilirdi; ham cikti kullanilir
+  const kirli = execFileSync("git", ["status", "--porcelain"], { cwd: KOK, encoding: "utf8" }).split(/\r?\n/).filter(Boolean).map((l) => l.slice(3));
   const bizim = ["package.json", "package-lock.json", "CHANGELOG.md"];
   const baska = kirli.filter((f) => !bizim.includes(f));
   if (baska.length) console.log("  not: su dosyalar commit'e GIRMEYECEK (baska is): " + baska.join(", "));
