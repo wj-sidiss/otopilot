@@ -2,6 +2,13 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.25.1] — 2026-11-08 — Sessizlik kesme düzeltmesi
+
+### Düzeltmeler
+- **`araclar/medya.js sessizlik` yeni ffmpeg'de çalışmıyordu:** 1.25.0'ın GitHub CI'ı kırmızıydı çünkü CI'daki ffmpeg `-filter_complex_script` seçeneğini tanımıyor ("Option not found"). Artık kısa filtre doğrudan `-filter_complex` ile verilir (her sürümde çalışır); 20 bin karakterden uzun filtre dosyadan verilir ve önce eski, olmazsa yeni (`-/filter_complex`) yazım denenir. Çok kesimli uzun filtre için de test eklendi.
+- **Sürüm aracı:** `git status` çıktısının ilk satırında dosya adının ilk harfi kesiliyordu (`CHANGELOG.md` → `HANGELOG.md`); yalnızca "commit'e girmeyecek dosyalar" notunu bozuyordu.
+- Dependabot, `@anthropic-ai/sdk` major sürümlerini artık önermez (1.x ile `claudeIste` testi kırılıyor; geçiş elle ve testle yapılır).
+
 ## [1.25.0] — 2026-11-08 — Medya araçları ve profesyonel depo
 
 ### Eklenenler
