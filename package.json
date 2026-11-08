@@ -1,6 +1,6 @@
 {
   "name": "otopilot",
-  "version": "1.25.1",
+  "version": "1.26.0",
   "description": "Video icerik otomasyon paneli (localhost) — YouTube, Shorts, Reels, TikTok",
   "license": "MIT",
   "repository": {
@@ -40,7 +40,8 @@
     "dil:yay": "node lib/dil-yay.js",
     "guncelle": "node lib/guncelle.js",
     "diksiyon": "node diksiyon.js",
-    "medya": "node araclar/medya.js"
+    "medya": "node araclar/medya.js",
+    "ses-denge": "node araclar/ses-denge.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",

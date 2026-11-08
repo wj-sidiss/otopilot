@@ -2,6 +2,17 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.26.0] — 2026-11-08 — Ses dengesi ve ince efektler
+
+### Eklenenler
+- **Ses dengesi, tek standart -14 LUFS:** `lib/ses-denge.js` yayın hedefini tek yerde tutar (entegre -14 LUFS, tepe ≤ -1,5 dBTP); ana hat (`video-yap`), `video-seslendir`, `vs-yap`, `geri-sayim` ve AI Stüdyo artık aynı değeri kullanır (eskiden -16 / -16 / -15 / -14 karışıktı).
+- **`node araclar/ses-denge.js` (`npm run ses-denge`):** `analiz` bitmiş videonun LUFS/tepe/LRA değerini ve konuşmanın üstüne çıkan **ses patlamalarını** (efekt, müzik tepeleri) zaman damgalı bulur; `duzelt` patlamaları tutar (sıkıştırma + limiter) ve iki geçişli ölçümle -14 LUFS'a hizalar, görüntüyü aynen kopyalar, girdiye dokunmaz. Sentetik kayıtta LRA 19,2 → 3,6 LU, patlamalar 3 → 0, seviye -14,4 LUFS.
+- **Ses efekti katmanı (`konu.json` → `sesEfektleri`, `lib/ses-efekt.js`):** yalnız ince `tik` ve `din`; `whoosh/swoosh/riser/boom/vuruş` kodla reddedilir (yapay zekâ videosunun en bilinen izi). En az 1,5 sn aralık, dakikada en çok 6 efekt. Efektler konuşmanın ~12 dB altında karışır ve konuşurken ayrıca kısılır (sidechain); render hattında `sesGrafi` yeni `efekt` girdisini destekler.
+- **Ajan kuralı:** `AGENTS.md` "SES" bölümü ve `docs/YAZIM-VE-CEKIM-REHBERI.md`: -14 LUFS, whoosh yok, çoğu videoda hiç efekt koymamak, teslimden önce `ses-denge analiz`; cinecode'un `sound.md` whoosh önerisi Otopilot'ta geçersiz.
+
+### Düzeltmeler
+- `test/duman.test.js` yerel `Filmler/` klasörünü taramıyor (zaten `.gitignore`'da; Windows kodlamalı yerel günlükler testi düşürüyordu).
+
 ## [1.25.1] — 2026-11-08 — Sessizlik kesme düzeltmesi
 
 ### Düzeltmeler
