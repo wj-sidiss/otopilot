@@ -25,3 +25,11 @@ Senaryo, anlatım ve çekim planı yazarken kısa kurallar. Fikirler [cinecode](
 ## Uzunluğa göre yapı
 - Kısa (15-60 sn): kanca → tek fikir → tek dönüş → tek eylem.
 - Uzun (2 dk+): her 60-90 saniyede yeni bir soru ya da dönüş; her bölüm, sonrakinin cevapladığı açık bir soruyla biter.
+
+
+## Ses: -14 LUFS ve "az efekt"
+
+- **Seviye:** tüm videolar **-14 LUFS** entegre, gerçek tepe **≤ -1,5 dBTP** (Shorts, Reels, TikTok, YouTube standardı). Konuşma hep efektlerin ve müziğin önündedir: müzik konuşmanın ~6 dB altında, efekt ~12 dB altında durur ve konuşurken ayrıca kısılır.
+- **Efekt ne zaman:** çoğu videoda **hiç koyma**. Koyacaksan yalnız ince bir `tik` (kısa, kuru) ya da `din` (yumuşak, tek nota), en az 1,5 sn arayla, dakikada en çok 6, yalnız anlamlı anlarda: başlık, rakam, bölüm geçişi.
+- **Neden:** her geçişe konan whoosh/riser/boom yığını videoyu "yapay zekâ ürünü" gibi gösterir (izleyici geri bildirimi: "slop kokusunu efektler veriyor"). Görüntü iyi kesilmişse geçiş zaten kendi ritmini taşır.
+- **Araçlar:** `node araclar/ses-denge.js analiz video.mp4` konuşmanın üstüne çıkan patlamaları zaman damgalı gösterir; `duzelt` patlamaları tutar ve -14 LUFS'a hizalar. `konu.json` → `sesEfektleri` (bkz. `KONU-JSON.md`) yalnız `tik`/`din` kabul eder.

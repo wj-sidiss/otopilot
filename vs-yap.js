@@ -9,7 +9,7 @@
 // geq ile yeniden hesaplaniyordu — 36 sn'lik video 10 dakika suruyordu.
 //
 // DAYANIKLILIK: yazilar lib/yazi.js (textfile; ozel karakter sorunu yok), kodlayici GPU->CPU yedekli,
-// her adim zaman asimli, cikti .part'a yazilip yeniden adlandirilir, muzik -16 LUFS (video-yap ile ayni).
+// her adim zaman asimli, cikti .part'a yazilip yeniden adlandirilir, muzik -14 LUFS (video-yap ile ayni, lib/ses-denge.js).
 "use strict";
 const fs = require("fs");
 const os = require("os");
@@ -129,7 +129,7 @@ function kurucular(tmp) {
 // ---- DOVUS MUZIGI ----------------------------------------------------------
 // Fon muzigi kucuk hoparlorde duyulmuyordu. Sebep sub-basta kalmasi.
 // Vurus bilerek ORTA banda tasindi: trampet gurultusu + 165-330 Hz riff.
-// Seviye video-yap.js ile AYNI hedefte: -16 LUFS (eskiden -14'tu), 48 kHz cikis.
+// Seviye video-yap.js ile AYNI hedefte: -14 LUFS (tek standart: lib/ses-denge.js), 48 kHz cikis.
 function muzik(sure) {
   const v = 60 / BPM;
   const m = `mod(t,${v})`, m2 = `mod(t,${v * 2})`, m4 = `mod(t,${v * 4})`;
@@ -143,7 +143,7 @@ function muzik(sure) {
     `+0.13*(random(0)*2-1)*exp(-mod(t,${v / 2})*150)`;                      // hi-hat
   return `aevalsrc='${ifade}':s=44100:d=${sure},` +
          `highpass=f=45,alimiter=level_in=1:level_out=0.92:limit=0.95,` +
-         `loudnorm=I=-16:TP=-1.5:LRA=9,aresample=48000`;
+         `loudnorm=I=-14:TP=-1.5:LRA=9,aresample=48000`;
 }
 
 // ---- AKIS ------------------------------------------------------------------

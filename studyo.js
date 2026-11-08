@@ -50,7 +50,7 @@ const GLB = /^[A-Za-z0-9._-]{1,100}\.glb$/;
 // Ses seviyesi (EBU R128, iki gecis): kisa video platformlari (Shorts/Reels/TikTok/YouTube) icin -14 LUFS, tepe <= -1.5 dBTP.
 // Yontem: motionforge tools/loudness.sh fikri (olc, sonra olculen degerlerle dogrusal kazanc); kod bize ait.
 function sesNormalle(girdi, cikti, hedef) {
-  const I = hedef || -14, TP = -1.5, LRA = 11;
+  const SD = require("./lib/ses-denge"), I = hedef || SD.HEDEF.I, TP = SD.HEDEF.TP, LRA = SD.HEDEF.LRA;
   const olc = spawnSync(ff().ffmpeg, ["-hide_banner", "-nostats", "-i", girdi, "-vn", "-af", "loudnorm=I=" + I + ":TP=" + TP + ":LRA=" + LRA + ":print_format=json", "-f", "null", "-"], { encoding: "utf8", windowsHide: true, maxBuffer: 1 << 26 });
   const m = /\{[^{}]*"input_i"[^{}]*\}/.exec(String(olc.stderr || ""));
   if (!m) throw hata("Ses seviyesi ölçülemedi.");

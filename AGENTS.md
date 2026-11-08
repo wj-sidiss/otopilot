@@ -208,6 +208,11 @@ Her kare başsız Chrome'da koddan çizilir (three.js 3B, 2B, kil, kâğıt, pik
 - Dış ses isteğe bağlıdır (kullanıcının Gemini/ElevenLabs anahtarı ya da ücretsiz Türkçe ses); anahtar yoksa film yine sesli olur (müzik ve efektler kodda).
 - Kaynak: [cinecode](https://github.com/sarpstar/cinecode) (Sarp Yıldız, MIT; stil kütüphanesinin bir kısmı LemoLab, MIT). En yeni sürüm: `npm run cinecode-guncelle`. Ayrıntı ve atıf: `docs/ATIF-cinecode.md`.
 
+**SES (tüm videolar için kural, hangi hattı kullanırsan kullan):**
+- **Seviye standardı: -14 LUFS** (entegre), gerçek tepe ≤ -1,5 dBTP; iki geçişli ölçüm. Tek kaynak `lib/ses-denge.js`; yeni bir betik ses seviyesini kendi kafasından seçmez.
+- **Ses efekti kuralı: whoosh/swoosh/riser/boom/vuruş YOK.** Her geçişe efekt koymak videoyu "yapay zekâ gibi" gösterir. Efekt gerekiyorsa yalnız ince bir `tik` ya da `din`, seyrek (en az 1,5 sn arayla, dakikada en çok 6), yalnız anlamlı anlarda (başlık, rakam, bölüm geçişi); çoğu videoda hiç efekt koymamak daha iyidir. Otopilot hattında `konu.json` → `sesEfektleri` (bkz. `KONU-JSON.md`); efektler konuşmanın ~12 dB altında karışır ve konuşurken kısılır. **cinecode filmlerinde de aynı kural geçerlidir:** `references/sound.md` whoosh önerse bile Otopilot'ta kullanma.
+- **Bitmiş videoda kontrol ve düzeltme:** `node araclar/ses-denge.js analiz video.mp4` (seviye, tepe, LRA ve konuşmanın üstüne çıkan patlamalar zaman damgalı); `node araclar/ses-denge.js duzelt video.mp4` patlamaları tutar ve -14 LUFS'a hizalar (girdiyi bozmaz, `-dengeli` kopya yazar). Teslim etmeden önce `analiz` çalıştır; sorun çıkarsa düzelt.
+
 ## 2. AI influencer (Ai Infapp) — HTTP API ile
 
 **Sunucu:** önce `GET http://127.0.0.1:4200/api/durum` dene; yanıt veriyorsa zaten çalışıyordur, yenisini başlatma.

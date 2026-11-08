@@ -54,6 +54,7 @@ Panel her yazmadan önce `konu.json.bak` yedeği alır. Bilinmeyen alanlar korun
 | `muzikDosyasi` | yol (proje köküne göre ya da mutlak) | — | Kendi telifsiz müziğin; döngülenir. Dosya yoksa render çıkış kodu 2 ile durur. |
 | `muzikRuhu` | `sakin` `gerilim` `umut` `enerjik` `otomatik` | `otomatik` | Sentetik müzik ön ayarı (`muzikDosyasi` yoksa). |
 | `muzikDucking` | true/false | true | Konuşma sırasında müziği kısar. |
+| `sesEfektleri` | liste | boş | İnce ses efektleri: `[{"t": 3.2, "tur": "din"}, {"t": 9.5, "tur": "tik", "guc": 0.7}]`. **Yalnız `tik` ve `din`**; `whoosh/riser/boom` reddedilir (yapay zekâ gibi durur). En az 1,5 sn aralık, dakikada en çok 6; efektler konuşmanın ~12 dB altında karışır ve konuşurken kısılır. Efekt koymak zorunlu değil: en iyisi çoğu videoda hiç koymamak, yalnız başlık/rakam/bölüm geçişi gibi anlamlı anlarda. |
 
 ## Dil ve ses
 

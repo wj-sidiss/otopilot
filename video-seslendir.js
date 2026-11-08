@@ -259,9 +259,9 @@ async function ana(argv, secenek) {
               "PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,Outline=2,Shadow=1,MarginV=48'");
     }
 
-    // SES SEVIYESI: loudnorm -16 LUFS (YouTube/TikTok ses seviyesi). loudnorm cikisi 192 kHz'e
+    // SES SEVIYESI: loudnorm -14 LUFS (YouTube/TikTok/Shorts/Reels standardi, lib/ses-denge.js). loudnorm cikisi 192 kHz'e
     // yukseltir; aresample + -ar ile 48 kHz'e geri alinir (ffprobe ile dogrulandi).
-    const SON_SES = "loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000";
+    const SON_SES = "loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000";
     const args = ["-i", VIDEO, "-i", anlatim];
     if (sesVar && ORIJINAL > 0) {
       args.push("-filter_complex",

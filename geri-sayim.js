@@ -99,7 +99,7 @@ async function main() {
     const aud = path.join(tmp, "ses.wav");
     // loudnorm ile yayin seviyesine getir — yoksa bip sesi duyulmuyor
     run(FF, ["-i", beeps, "-i", riser, "-filter_complex",
-         "[0]volume=1.0[b];[1]volume=0.55[r];[b][r]amix=inputs=2:duration=first,loudnorm=I=-15:TP=-1.5:LRA=11",
+         "[0]volume=1.0[b];[1]volume=0.55[r];[b][r]amix=inputs=2:duration=first,loudnorm=I=-14:TP=-1.5:LRA=11",
          "-ar", "48000", "-ac", "2", aud]);
 
     // --- video + ses (.part'a yaz, sonra yeniden adlandir) ---

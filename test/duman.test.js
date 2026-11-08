@@ -13,7 +13,7 @@ const { spawn, spawnSync } = require("child_process");
 const Module = require("module");
 
 const KOK = path.resolve(__dirname, "..");
-const ATLANAN_KLASOR = new Set(["node_modules", ".git", "uretim", "onizleme", "tmp-test", "indirilenler", "log", "marka", "coverage"]);
+const ATLANAN_KLASOR = new Set(["node_modules", ".git", "uretim", "onizleme", "tmp-test", "indirilenler", "log", "marka", "coverage", "Filmler", "Films"]);   // Filmler/ Films/: kodla film calisma klasorleri, .gitignore'da (repoya girmez)
 const KOD_UZ = new Set([".js", ".cjs", ".mjs"]);
 const METIN_UZ = new Set([".js", ".cjs", ".mjs", ".json", ".md", ".html", ".css", ".bat", ".cmd", ".sh", ".yml", ".yaml", ".txt", ".ornek", ".svg", ".upstream", ".gitignore", ".gitattributes"]);
 // Uzantisiz lisans metinleri de taranir (LICENSE, LICENSE.upstream)
