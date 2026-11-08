@@ -2,6 +2,16 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.25.0] — 2026-11-08 — Medya araçları ve profesyonel depo
+
+### Eklenenler
+- **Ücretsiz medya araçları (`araclar/medya.js`, `npm run medya`):** yalnız ffmpeg, ek kurulum ve kredi yok. `sessizlik`: konuşma kaydındaki sessiz boşlukları keser (kelime başı/sonu kırpılmasın diye kenarlarda `--pay` kadar ses kalır, `--rapor` yalnız ne keseceğini yazar). `sahneler`: plan değişimlerini bulur, `--kes` ile her sahneyi ayrı klip yapar. `yukselt`: resim/videoyu 2-4× büyütür (lanczos + hafif keskinleştirme; `REALESRGAN_KOK` tanımlıysa resimde Real-ESRGAN, bu yol denenmedi). Sentetik ses/video ile gerçek ffmpeg'de 9 testle denendi.
+- **Açık kaynak kataloğu (`docs/KAYNAKLAR.md`):** 8 Kasım 2026'da GitHub ve web taramasıyla çıkarılan adaylar (ACE-Step 1.5, Chatterbox Çok Dilli, Kokoro, LTX-Video, Wan 2.x, LatentSync, WhisperX ve dahası) lisanslarıyla; GPL/AGPL/NC uyarıları (OpenMontage AGPL, Remotion özel lisans, F5-TTS/XTTS/MusicGen ağırlıkları vb.) ve yeni kaynak ekleme kuralları.
+- **Depo hijyeni:** `SECURITY.md` (özel güvenlik bildirimi), `CODE_OF_CONDUCT.md`, `THIRD-PARTY-NOTICES.md` (tüm atıflar tek yerde), `docs/MIMARI.md` (klasör ve betik haritası), Dependabot (haftalık bağımlılık ve CI eylemi PR'ları, otomatik birleşmez), `.github/release.yml`, `package.json` üst verisi (lisans, depo, anahtar kelimeler).
+
+### Düzeltmeler
+- Depoya yanlışlıkla girmiş 6 KB'lık bozuk `-v` dosyası (ffmpeg çıktısı) kaldırıldı.
+
 ## [1.24.0] — 2026-11-07 — 3B model bulucu
 
 ### Eklenenler
