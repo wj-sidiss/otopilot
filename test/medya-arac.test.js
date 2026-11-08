@@ -88,3 +88,18 @@ test("komut satiri: kullanim 2 ile cikar, bilinmeyen komut 2", () => {
   const eski = console.log; console.log = () => {}; const e2 = console.error; console.error = () => {};
   try { assert.equal(main([]), 2); assert.equal(main(["yok", "x"]), 2); } finally { console.log = eski; console.error = e2; }
 });
+
+test("filtreArgumanlari: kisa filtre dogrudan, uzun filtre dosyadan (eski ve yeni ffmpeg icin iki secenek)", () => {
+  assert.deepEqual(M.filtreArgumanlari("kisa", "f.txt"), [["-filter_complex", "kisa"]]);
+  const uzun = M.filtreArgumanlari("x".repeat(20001), "f.txt");
+  assert.deepEqual(uzun, [["-filter_complex_script", "f.txt"], ["-/filter_complex", "f.txt"]]);
+});
+
+test("sessizlikKes: cok sayida kesimli uzun filtre de calisir (dosya yolu)", atla, () => {
+  const g = path.join(TMP, "cok.wav");
+  // 0.3 sn ses + 0.3 sn sessizlik, 120 tekrar -> ~240 parca, filtre 20 bin karakteri asar
+  uret(["-f", "lavfi", "-i", "sine=f=440:d=72", "-af", "volume='if(lt(mod(t,0.6),0.3),0.8,0)':eval=frame", g]);
+  const c = M.sessizlikKes(g, { sure: 0.2, pay: 0.02, cikti: path.join(TMP, "cok-kesik.wav") });
+  assert.ok(c.parca > 60, JSON.stringify(c));
+  assert.ok(fs.existsSync(c.cikti) && sure(c.cikti) < 60, "kesik dosya uretilmedi");
+});
