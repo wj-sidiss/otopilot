@@ -10,6 +10,10 @@ updates:
     groups:
       gelistirme-ve-yama:
         update-types: [minor, patch]
+    ignore:
+      # Anthropic SDK'nin major surumleri API'yi bozar (lib/ortak.js claudeIste); gecis elle ve testle yapilir
+      - dependency-name: "@anthropic-ai/sdk"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: weekly, day: monday }
