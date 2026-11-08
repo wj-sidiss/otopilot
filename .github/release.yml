@@ -1,0 +1,13 @@
+# GitHub "Generate release notes" duzeni: etiketlere gore bolumler.
+changelog:
+  exclude:
+    labels: [bagimlilik, ignore-for-release]
+  categories:
+    - title: "Yeni özellikler / Features"
+      labels: [ozellik, enhancement]
+    - title: "Düzeltmeler / Fixes"
+      labels: [hata, bug]
+    - title: "Belge ve kaynaklar / Docs & sources"
+      labels: [belge, documentation]
+    - title: "Diğer / Other"
+      labels: ["*"]

@@ -276,6 +276,8 @@ vidIQ'yu depodaki betikler de kullanır (`VIDIQ_KEY`, senaryo/başlık/trend/per
 
 ## 3. Diğer
 
+- **Ücretsiz medya araçları** (`araclar/medya.js`, yalnız ffmpeg, kredi harcamaz): kullanıcının kendi konuşma kaydını/videosunu hazırlarken. `node araclar/medya.js sessizlik <dosya> [--rapor] [--esik -35] [--sure 0.4] [--pay 0.08]` sessiz boşlukları keser (önce `--rapor` ile ne keseceğini göster); `node araclar/medya.js sahneler <video> [--esik 0.3] [--en-az 1] [--kes <klasör>] [--json]` plan değişimlerini bulur / sahne sahne klip yapar; `node araclar/medya.js yukselt <resim|video> [--olcek 2|3|4]` düşük çözünürlüklü görseli büyütür (varsayılan lanczos; kullanıcı `.env`'e `REALESRGAN_KOK` yazdıysa resimde Real-ESRGAN, bu yol denenmedi). Çıkış 2 = girdi hatası. Başkasının videosunu kesip yeniden yüklemek için KULLANMA (bölüm 4).
+- **Açık kaynak kataloğu:** yeni bir açık kaynak araç eklemeden önce `docs/KAYNAKLAR.md` (lisans uyarıları dahil) ve `docs/MIMARI.md` ("Yeni araç eklemek") oku; GPL/AGPL/NC kodu kopyalama.
 - **Video indirici** (`video-indirici/`, `node video-indirici/server.js`, 4190): yalnızca kullanıcının kendi ya da izinli içeriği için.
 - **Panel** (`node panel.js`, 4173): tarayıcıdan kullanmak isteyen kullanıcı içindir (AI Stüdyo sekmesi dahil); sen komut satırını kullan.
 - **W.J. Sidis video şablonu** (`araclar/sidis-video/`): gazete/daktilo kimlikli Remotion şablonu (30 dk uzun video + Shorts örneği); kurulum ve betikler `araclar/sidis-video/README.md`. Ayrı npm projesidir, ana hatta bağlı değildir.

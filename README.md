@@ -12,6 +12,8 @@
 > **No account, no tracking, no key required: it runs on your own computer.** Hand the repo to Claude Code or Codex and ask for a video. / **Hesap yok, izleme yok, anahtar şart değil: kendi bilgisayarında çalışır.** Depoyu Claude Code ya da Codex'e ver, video iste. · MIT
 > ⭐ Useful? A star helps others find it, and **Watch → Releases** tells you about new versions.
 
+<p align="center"><sub><a href="docs/MIMARI.md">Mimari</a> · <a href="docs/KAYNAKLAR.md">Açık kaynak kataloğu</a> · <a href="CONTRIBUTING.md">Katkı</a> · <a href="SECURITY.md">Güvenlik</a> · <a href="CODE_OF_CONDUCT.md">Davranış kuralları</a> · <a href="THIRD-PARTY-NOTICES.md">Üçüncü taraf bildirimleri</a> · <a href="CHANGELOG.md">Değişiklik geçmişi</a></sub></p>
+
 ## English (quick start)
 
 **Otopilot** turns a topic into a finished video: script → free stock images / museum art (CC0) / stock video → voice-over → edit → MP4 + subtitles + thumbnail + a YouTube publishing pack. It also builds short **series with characters, dialogue and AI clips** (`film.js`) and an AI-influencer studio (Ai Infapp). Everything runs **locally** (panel on `localhost` only); no account needed for the free path. The interface speaks **15 languages** (language box at the bottom right); command-line messages, this README's detailed sections and the training PDFs are Turkish, and your AI agent can translate them for you.
@@ -212,6 +214,7 @@ node yayin-paketi.js   <is-adi>      # açıklama, bölümler, atıflar (video-y
 | Stüdyo geçişleri | 13 ücretsiz geçiş (çözülme, siyaha kararma, whip pan, iris, zoom…); anlatım ve altyazı zamanları kaymaz |
 | `.claude/skills/cinecode/` | **Kodla film** ([cinecode](https://github.com/sarpstar/cinecode), Sarp Yıldız, MIT): kısa film, belgesel, reklam, müzik videosu; her kare koddan çizilir, ses kodda, kredi harcamaz. Claude Code'da "kodla film yap" de. Python 3.9+ ister; güncelleme `npm run cinecode-guncelle` |
 | `model-bul.js` + `lib/model-bul.js` | **3B model bulucu** (ücretsiz, açık lisans): Poly Haven (CC0, ~520 model), NASA 3D (~260), Smithsonian 3D müze taramaları, Sketchfab CC0/CC BY; tek `.glb`, lisans ve hazır atıf metniyle; Stüdyo'nun ürün sahnesine ve cinecode filmlerine girer |
+| `araclar/medya.js` + `lib/medya-arac.js` | **Ücretsiz medya araçları** (yalnız ffmpeg): `sessizlik` konuşma kaydındaki boşlukları keser, `sahneler` plan değişimlerini bulur (isteğe bağlı klip klip keser), `yukselt` resmi/videoyu 2-4× büyütür (lanczos; `REALESRGAN_KOK` ile resimde Real-ESRGAN). `npm run medya -- sessizlik kayit.mp4 --rapor` |
 | `lib/lensfun.js` | Stüdyo'da **gerçek lens profilleri** ([Lensfun](https://github.com/lensfun/lensfun), açık kaynak, CC BY-SA): ~1060 kamera/telefon, ~1580 lens; `node studyo.js lens-kur`, panelde "Lens profili". Telefonlarda yalnız bazı modeller (iPhone XS, Huawei, Nokia, LG, GoPro, DJI…) |
 | `klip-yerlestir.js` | vidiq-klip ile inen AI klipleri `KLIPLER.txt` sırasıyla sahne klasörlerine koyar (ücretsiz, tekrar çalıştırılabilir); sonra `video-yap.js --yeniden` |
 | `film.js` | karakterli/diyaloglu kısa dizi: `yeni`, `klipler`, `ses`, `kur [--dudak] [--yer-tutucu]` (AGENTS.md "1b") |
