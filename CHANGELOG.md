@@ -2,6 +2,12 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.27.0] — 2026-11-14 — Kurulum doktoru ve Codex rehberi
+
+### Eklenenler
+- **Kurulum doktoru (`node araclar/doktor.js`, `npm run doktor`):** Node 22, ffmpeg (libx264/aac), npm paketleri, yazma izni ve isteğe bağlı Python/Chrome/ekran kartı ile internet erişimini (ses ve görsel kaynakları tek tek) ölçer; eksik her şey için bu platforma uygun tam kurulum komutunu yazar. Çıkış 0 hazır, 2 zorunlu eksik, 3 yalnız internet sorunu. `--codex` Codex bulutu için kurulum betiği ve internet izin listesini verir, `--ag` yalnız ağı denetler, `--json` makine okur çıktı.
+- **`docs/CODEX.md`: Codex ve diğer ajanlarla kurulum.** Sıradan bir sohbet penceresinin komut çalıştıramadığını ("Otopilot'u kullandığımı söyleyemem" cevabı hata değil, sohbetin sınırı) ve hangi yolun ne işe yaradığını anlatır: yerel Codex/Claude Code (önerilen), Codex bulutu (sınırlı, internet varsayılan kapalı, izin listesi), sohbet (yalnız taslak). Sık sorunlar tablosu. README'ye uyarı eklendi; `AGENTS.md` ajana önce `doktor`'u çalıştırmasını ve komut çalıştıramıyorsa bunu açıkça söylemesini yazar.
+
 ## [1.26.0] — 2026-11-08 — Ses dengesi ve ince efektler
 
 ### Eklenenler
