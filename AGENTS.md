@@ -29,6 +29,7 @@ TikTok algoritması rehberi ve büyüme haritası, TikTok AI influencer rehberi.
 panel terminalde açılınca da bunu bir kez kendisi yapar. Kurulumda çalıştır, çıktıdaki klasör yolunu kullanıcıya söyle ve
 bu konularda soru gelirse PDF'lerin masaüstünde olduğunu hatırlat.
 
+- **İlk iş (kurulumdan emin değilsen): `node araclar/doktor.js`**; eksik her şey için tam komutu yazar (Codex bulutu için `--codex`). Komut çalıştıramıyorsan (düz sohbet) bunu açıkça söyle ve kullanıcıya `docs/CODEX.md`'yi göster; "Otopilot'u kullandım" deme.
 - ffmpeg yoksa kullanıcıya söyle ve **onay al**, sonra kur (`winget install Gyan.FFmpeg` | `brew install ffmpeg` | `sudo apt install ffmpeg`).
 - `PANEL.bat` çalıştırma: soru sorup bekler, ajan yanıtlayamaz. Panel gerekmez; her şey komut satırından yapılır.
 - API anahtarı **zorunlu değil**. `.env.ornek` → `.env` yalnızca isteğe bağlı gelişmiş özellikler içindir.

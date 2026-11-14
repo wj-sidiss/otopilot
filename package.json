@@ -41,7 +41,8 @@
     "guncelle": "node lib/guncelle.js",
     "diksiyon": "node diksiyon.js",
     "medya": "node araclar/medya.js",
-    "ses-denge": "node araclar/ses-denge.js"
+    "ses-denge": "node araclar/ses-denge.js",
+    "doktor": "node araclar/doktor.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
