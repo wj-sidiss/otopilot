@@ -15,7 +15,7 @@ const { spawnSync } = require("child_process");
 const KOK = path.join(__dirname, "..");
 const WIN = process.platform === "win32", MAC = process.platform === "darwin";
 const KURULUM = {
-  ffmpeg: WIN ? "winget install Gyan.FFmpeg   (sonra terminali KAPATIP yeniden aç)" : MAC ? "brew install ffmpeg" : "sudo apt-get update && sudo apt-get install -y ffmpeg",
+  ffmpeg: WIN ? "winget install Gyan.FFmpeg   (sonra terminali KAPATIP yeniden aç; winget yoksa: node araclar/ffmpeg-kur.js — taşınabilir, SHA256 doğrulamalı, yönetici istemez)" : MAC ? "brew install ffmpeg" : "sudo apt-get update && sudo apt-get install -y ffmpeg",
   node: WIN ? "winget install OpenJS.NodeJS.LTS" : MAC ? "brew install node" : "https://nodejs.org (Node 22 ya da üstü: nvm install 22)",
   python: WIN ? "winget install Python.Python.3.12" : MAC ? "brew install python" : "sudo apt-get install -y python3",
   espeak: "sudo apt-get install -y espeak-ng",
@@ -83,6 +83,13 @@ async function main(argv) {
     if (!WIN && !MAC) { const e = surum("espeak-ng", ["--version"]) || surum("espeak", ["--version"]); say(rapor.istege, "espeak-ng (Edge sesi kapanırsa yedek ses)", !!e, e || "", KURULUM.espeak); }
     const gpu = surum("nvidia-smi", ["--query-gpu=name,memory.total", "--format=csv,noheader"]);
     say(rapor.istege, "NVIDIA ekran kartı (VoxCPM2, MuseTalk, ACE-Step)", !!gpu, gpu || "", "gerekmez; yalnız yerel yapay zekâ modelleri için");
+    try {
+      const dn = require(path.join(KOK, "lib", "donanim.js"));
+      const p = dn.profilSec(dn.olc(), n => process.env[n]);
+      rapor.donanimProfili = p.ad;
+      say(rapor.istege, "Donanım profili: " + p.ad, true, p.neden, "");
+      if (!json) console.log("      ayrıntı: node araclar/donanim.js · model doğrulama: node araclar/sha256.js --modeller");
+    } catch (e) { /* olcum yapilamadi: doktor yine calisir */ }
     say(rapor.istege, ".env dosyası (anahtarlar)", fs.existsSync(path.join(KOK, ".env")), "", "anahtar gerekmez; isteğe bağlı: .env.ornek dosyasını .env olarak kopyala");
   }
 
