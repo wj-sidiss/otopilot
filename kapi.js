@@ -137,9 +137,19 @@ function ilgiliTestler() {
   else ok(r.secilen.length + " ilgili test dosyasi gecti");
 }
 
+// SHA256SUMS: depodaki ikili dosyalar (ses ornekleri, fontlar, PDF, gorseller) listeyle ayni mi? (araclar/sha256.js)
+function sha256Denetimi() {
+  const r = spawnSync(process.execPath, [path.join(KOK, "araclar", "sha256.js"), "--json"], { cwd: KOK, encoding: "utf8" });
+  let s;
+  try { s = JSON.parse(r.stdout); } catch { return uyari("SHA256SUMS denetlenemedi: " + String(r.stdout || r.stderr).split(/\r?\n/)[0]); }
+  const sorun = [...s.hatali.map(h => "degisti " + h.yol), ...s.eksik.map(e => "eksik " + e), ...s.yeni.map(y => "listede yok " + y)];
+  if (sorun.length) hata("SHA256SUMS guncel degil (" + sorun.slice(0, 3).join(", ") + (sorun.length > 3 ? " ..." : "") + "): node araclar/sha256.js --yaz");
+  else ok("SHA256SUMS: " + s.tamam.length + " ikili dosya dogru");
+}
+
 function main(argv) {
   const tam = argv.includes("--tam"), ilgili = argv.includes("--ilgili");
-  surumDenetimi(); sirDenetimi(); sozdizimi(); belgeDenetimi(); gitDurumu();
+  surumDenetimi(); sirDenetimi(); sozdizimi(); belgeDenetimi(); sha256Denetimi(); gitDurumu();
   if (argv.includes("--liste")) { const r = ilgiliTestDosyalari(); console.log(r.secilen.join("\n")); return 0; }
   if (ilgili && !tam) ilgiliTestler();
   else if (tam) {

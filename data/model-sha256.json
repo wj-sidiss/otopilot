@@ -1,0 +1,31 @@
+{
+  "_aciklama": "Otopilot'un kullandigi, depo DISINDA kurulan modellerin sabit SHA256 degerleri. Kaynak: alexturkey/voxcpm2-turkce-ses-tasarimi scripts/kur.ps1 (indirirken ayni degerleri dogrular). Otopilot kurulu dosyayi sonradan dogrular: node araclar/sha256.js --modeller",
+  "voxcpm2": {
+    "kaynak": "https://github.com/alexturkey/voxcpm2-turkce-ses-tasarimi/blob/main/scripts/kur.ps1",
+    "dosyalar": [
+      {
+        "ad": "VoxCPM2 modeli (q8_0, GGUF)",
+        "ayar": "model",
+        "dosyaAdi": "voxcpm2-q8_0.gguf",
+        "boyut": 2955000480,
+        "sha256": "c8e01ab4416011e12a28f24ede298a1aa5ce64b43f8e8aaad53b1e2fe7c96432",
+        "url": "https://huggingface.co/audio-cpp/audio.cpp-gguf/resolve/661a224e9d9adbd49c01626f85e426f5f425d771/VoxCPM2-GGUF/voxcpm2-q8_0.gguf"
+      },
+      {
+        "ad": "VoxCPM2 motoru (audiocpp_cli, CUDA 12.8, v0.1.1)",
+        "ayar": "motor",
+        "backend": "cuda",
+        "dosyaAdi": "audiocpp_cli.exe",
+        "sha256": "eb75f6e6de3440c5a6b3583ba7581d539adbf80d6c069bde6611d350c95747d4",
+        "not": "kur.ps1 -Derle ile kaynaktan derlenen motorun ozeti farklidir; o zaman 'bilinmeyen surum' uyarisi normaldir"
+      },
+      {
+        "ad": "VoxCPM2 motoru (audiocpp_cli, Vulkan, v0.1.1, deneysel)",
+        "ayar": "motor",
+        "backend": "vulkan",
+        "dosyaAdi": "audiocpp_cli.exe",
+        "sha256": "29fa97c8869369ca186f9bfceb7b307fa3d24181f7a3711da3e135ad7731645b"
+      }
+    ]
+  }
+}

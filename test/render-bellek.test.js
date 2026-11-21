@@ -23,6 +23,7 @@ const KL = require("../lib/render-klip");
 
 const GB = 1073741824;
 const asilFreemem = os.freemem;
+const asilTotalmem = os.totalmem;
 const asilUyari = ortak.uyari;
 const asilPlatform = Object.getOwnPropertyDescriptor(process, "platform");
 
@@ -32,6 +33,8 @@ function ortam(o) {
   const ayar = Object.assign({ bosGB: 8, env: undefined, gpu: null }, o || {});
   const uyarilar = [];
   os.freemem = () => ayar.bosGB * GB;
+  os.totalmem = () => (ayar.toplamGB || 16) * GB;   // donanim profili (lib/donanim.js) toplam bellege bakar
+  delete process.env.DONANIM_PROFIL;
   if (asilPlatform.value === "darwin") Object.defineProperty(process, "platform", { value: "linux", configurable: true });
   if (ayar.env === undefined) delete process.env.RENDER_DUSUK_BELLEK; else process.env.RENDER_DUSUK_BELLEK = ayar.env;
   ortak.uyari = m => uyarilar.push(String(m));
@@ -41,6 +44,7 @@ function ortam(o) {
 }
 test.afterEach(() => {
   os.freemem = asilFreemem;
+  os.totalmem = asilTotalmem;
   Object.defineProperty(process, "platform", asilPlatform);
   ortak.uyari = asilUyari;
   delete process.env.RENDER_DUSUK_BELLEK;

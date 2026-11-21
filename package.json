@@ -1,6 +1,6 @@
 {
   "name": "otopilot",
-  "version": "1.27.0",
+  "version": "1.28.0",
   "description": "Video icerik otomasyon paneli (localhost) — YouTube, Shorts, Reels, TikTok",
   "license": "MIT",
   "repository": {
@@ -32,6 +32,12 @@
     "test:indirici": "node --test \"video-indirici/test/**/*.test.js\"",
     "test:aiinfapp": "node --test \"ai-infapp/test/**/*.test.js\"",
     "kapi": "node kapi.js",
+    "donanim": "node araclar/donanim.js",
+    "sha256": "node araclar/sha256.js",
+    "olcum": "node araclar/olcum.js",
+    "piper-kur": "node araclar/piper-kur.js",
+    "ffmpeg-kur": "node araclar/ffmpeg-kur.js",
+    "en-kotu-pc": "node araclar/en-kotu-pc.js",
     "surum": "node surum.js",
     "cinecode-guncelle": "node araclar/cinecode-esitle.js",
     "egitim": "node lib/egitim.js",

@@ -1,0 +1,36 @@
+name: "Ölçüm paylaş / Share a benchmark"
+description: "Kendi bilgisayarında ölçtüğün sonucu ekle (özellikle eski/düşük kartlar) / Add a result measured on your own computer (old/low-end GPUs especially)"
+title: "[Ölçüm] "
+labels: ["olcum"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **TR:** Depo klasöründe `node araclar/olcum.js --ses` çalıştır (ses ölçümü VoxCPM2 kurulu değilse atlanır). Çıktının son satırını (tablo satırı) aşağıya yapıştır. Satırda kişisel bilgi yok: yalnız işlemci/ekran kartı modeli, bellek, sürücü ve sürümler. Sonuçlar `docs/OLCUMLER.md` tablosuna eklenir.
+
+        **EN:** Run `node araclar/olcum.js --ses` in the repo folder (the voice part is skipped if VoxCPM2 is not installed). Paste the last line of the output (the table row) below. It holds no personal data: only CPU/GPU model, memory, driver and versions. Results are added to `docs/OLCUMLER.md`.
+  - type: textarea
+    id: satir
+    attributes:
+      label: "Ölçüm satırı / Benchmark row"
+      description: "`| tarih | işlemci | bellek | ekran kartı | profil | ... |` ile başlayan satır / the row starting with `| date | cpu | ...`"
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: donanim
+    attributes:
+      label: "node araclar/donanim.js --json (isteğe bağlı / optional)"
+      render: json
+  - type: textarea
+    id: not
+    attributes:
+      label: "Not / Notes"
+      description: "Dizüstü/masaüstü, güç modu, aynı anda açık programlar… / Laptop or desktop, power mode, other apps running…"
+  - type: checkboxes
+    id: kontrol
+    attributes:
+      label: "Kontrol / Checklist"
+      options:
+        - label: "Satırı `node araclar/olcum.js` ile ölçtüm, elle yazmadım / I measured the row with `node araclar/olcum.js`, I did not type it by hand"
+          required: true

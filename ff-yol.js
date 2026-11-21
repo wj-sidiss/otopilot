@@ -14,7 +14,7 @@ const path = require("path");
 const { execFileSync } = require("child_process");
 const { OrtakHata, CIKIS, envOku } = require("./lib/ortak");
 
-const KURULUM_COZUMU = "ffmpeg'i kur: Windows'ta 'winget install Gyan.FFmpeg', Mac'te 'brew install ffmpeg', " +
+const KURULUM_COZUMU = "ffmpeg'i kur: Windows'ta 'winget install Gyan.FFmpeg' (winget yoksa 'node araclar/ffmpeg-kur.js'), Mac'te 'brew install ffmpeg', " +
   "Linux'ta 'sudo apt install ffmpeg'; kurduktan sonra terminali KAPATIP yeniden aç.";
 
 function adaylar(ad) {

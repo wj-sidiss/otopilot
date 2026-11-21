@@ -298,6 +298,32 @@ Ayrıntı: [ai-infapp/README.md](ai-infapp/README.md). Hazır sahne kayıtları 
 - CC BY / CC BY-SA / Pexels görsellerinin atıfını açıklamaya yapıştır (`ATIF.txt` / yayın paketi hazırlar).
 - Tüm videoların aynı görünmesi ve tamamen otomatik üretim, YouTube'un tekrarlayan/özgün olmayan içerik kurallarına takılabilir: kendi kişisel katkını (`kisiselKatki`) ekle, kaynak metni ver, çeşitlilik ayarını açık tut. Güncel kuralları YouTube Yardım'dan kontrol et.
 
+## Donanım, doğrulama ve ölçümler
+
+**Ekran kartı gerekmez, en kötü bilgisayarda da çalışır.** Her push'ta GitHub'da **1 çekirdek, 2 GB bellek, ekran kartı yok** bir konteynerde gerçek `video-yap.js` tam boyutlu bir Shorts kurar ([en-kotu-pc](.github/workflows/en-kotu-pc.yml)); geçmezse CI kırmızı olur.
+
+- **Ekran kartı olmasa da donanımla kodlama:** NVIDIA NVENC → AMD AMF → **Intel Quick Sync** (2012 sonrası hemen her Intel işlemcide) → Apple VideoToolbox → **Windows MediaFoundation** (her Windows 10/11) → işlemci. Ekran kartsız sıradan bir Intel dizüstü bile işlemcinin normal ayarından ~12 kat hızlı kodlar (ölçüldü); kodlayıcı hata verirse iş işlemciye geçer.
+- **Donanım profili** (`cok-dusuk` · `dusuk` · `orta` · `yuksek`): az bellekte render baştan düşük bellekle, tek tek ve gerekirse 720p; zayıf işlemcide hızlı ayar; zaman aşımları makineye göre uzar; VoxCPM2 sesi kart yetmiyorsa beklemeden yedeğe düşer. Konteyner sınırları doğru okunur.
+- **SHA256 her yerde:** depodaki ikili dosyalar (`SHA256SUMS`), kurulu VoxCPM2 modeli/motoru, Piper ve taşınabilir ffmpeg indirmeleri sürüme sabit ve doğrulamalı; tutmayan dosya diske yazılmaz.
+
+```bash
+npm run donanim              # işlemci, bellek, ekran kartı, profil, açık/kapalı özellikler
+npm run sha256               # depodaki ikili dosyaları SHA256SUMS'a karşı doğrula (--modeller: kurulu VoxCPM2)
+npm run olcum                # bu makinede her kodlayıcıyı ölç (--ses: VoxCPM2 ve Piper da)
+npm run piper-kur            # internetsiz yedek ses (Piper, işlemciyle; ~85 MB, SHA256 doğrulamalı)
+npm run ffmpeg-kur           # winget'siz eski Windows: taşınabilir ffmpeg (SHA256 doğrulamalı)
+npm run en-kotu-pc           # CI'daki uçtan uca testi bu makinede çalıştır
+```
+
+Ölçülmüş (tahmin değil; her biri 3 koşunun ortancası, ham sonuç `olcumler/`, tüm tablo [docs/OLCUMLER.md](docs/OLCUMLER.md)), 20 sn 1080x1920 video kodlama:
+
+| Makine | NVENC | Intel Quick Sync | Windows MediaFoundation | İşlemci hafif | İşlemci normal |
+|---|---|---|---|---|---|
+| i7-13620H, 16 GB, RTX 5060 Laptop 8 GB | **1,2 sn** | 4,1 sn | 4,4 sn | 12,8 sn | 52 sn |
+
+Elle doğrulama (Otopilot olmadan): `shasum -a 256 -c SHA256SUMS` (macOS/Linux) ya da `certutil -hashfile <dosya> SHA256` (Windows).
+Ayrıntı: [docs/DUSUK_DONANIM.md](docs/DUSUK_DONANIM.md) · hata mesajları: [docs/SORUN_TESHIS.md](docs/SORUN_TESHIS.md) · kendi ölçümünü **Ölçüm paylaş** konu şablonuyla gönder.
+
 ## Testler
 
 ```bash

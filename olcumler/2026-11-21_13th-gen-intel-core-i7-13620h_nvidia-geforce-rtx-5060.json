@@ -1,0 +1,118 @@
+{
+  "tarih": "2026-11-21",
+  "surum": "1.28.0",
+  "node": "24.14.0",
+  "ffmpeg": "8.1.2-full_build-www.gyan.dev",
+  "platform": "Windows_NT 10.0.26300",
+  "profil": "orta",
+  "donanim": {
+    "cpu": {
+      "ad": "13th Gen Intel(R) Core(TM) i7-13620H",
+      "cekirdek": 16
+    },
+    "ram": {
+      "toplamGB": 15.7
+    },
+    "kartlar": [
+      {
+        "marka": "nvidia",
+        "ad": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "vramGB": 8,
+        "surucu": "610.88"
+      },
+      {
+        "marka": "intel",
+        "ad": "Intel(R) UHD Graphics",
+        "vramGB": 2,
+        "surucu": "32.0.101.5972"
+      }
+    ]
+  },
+  "olcum": {
+    "sure": 20,
+    "kaynak": "testsrc2=s=1080x1920:r=30:d=20",
+    "suzgec": "noise=alls=24:allf=t+u,format=yuv420p",
+    "tekrar": "ortanca (3 kosu; uzun kodlayicida 2)"
+  },
+  "kodlama": [
+    {
+      "etiket": "nvidia",
+      "ok": true,
+      "saniye": 1.2,
+      "gercekZamanOrani": 16.73,
+      "boyutMB": 39.6,
+      "kosular": [
+        1.2,
+        1.2,
+        1.2
+      ],
+      "kodlayici": "NVIDIA NVENC",
+      "donanim": true
+    },
+    {
+      "etiket": "intel",
+      "ok": true,
+      "saniye": 4.1,
+      "gercekZamanOrani": 4.91,
+      "boyutMB": 220.1,
+      "kosular": [
+        4.1,
+        4.5,
+        4.1
+      ],
+      "kodlayici": "Intel Quick Sync",
+      "donanim": true
+    },
+    {
+      "etiket": "mf",
+      "ok": true,
+      "saniye": 4.4,
+      "gercekZamanOrani": 4.56,
+      "boyutMB": 400.6,
+      "kosular": [
+        5.8,
+        3.8,
+        4.4
+      ],
+      "kodlayici": "Windows MediaFoundation",
+      "donanim": true
+    },
+    {
+      "etiket": "cpu",
+      "ok": true,
+      "saniye": 52,
+      "gercekZamanOrani": 0.38,
+      "boyutMB": 298.5,
+      "kosular": [
+        52,
+        65.7
+      ],
+      "kodlayici": "libx264 medium"
+    },
+    {
+      "etiket": "cpu-hafif",
+      "ok": true,
+      "saniye": 12.8,
+      "gercekZamanOrani": 1.56,
+      "boyutMB": 203.5,
+      "kosular": [
+        12.5,
+        12.8,
+        12.8
+      ],
+      "kodlayici": "libx264 veryfast (hafif mod)"
+    }
+  ],
+  "ses": {
+    "ok": false,
+    "hata": "✗ Ses örneği üretilemedi: VoxCPM için bellek ayrılamadı (ekran kartı ya da sistem belleği; şu an boş sistem belleği 6.2 GB): E:\\b\\src\\external\\ggml\\src\\ggml.c:1618: GGML_ASSERT(ctx->mem_buffer != NULL) failed |   ↳ Bağlantını ve ses ayarlarını kontrol et; Kaynaklar sekmesinden başka bir ses motoru seçebilirsin."
+  },
+  "piper": {
+    "ok": true,
+    "motor": "piper",
+    "saniye": 0.9,
+    "sesSaniye": 8.5,
+    "gercekZamanOrani": 9,
+    "not": "program/model yükleme dahil"
+  }
+}

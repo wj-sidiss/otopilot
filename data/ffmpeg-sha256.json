@@ -1,0 +1,11 @@
+{
+ "_aciklama": "Tasinabilir ffmpeg (winget/yonetici yetkisi olmayan eski Windows icin). Surume sabit GyanD derlemesi + SHA256; node araclar/ffmpeg-kur.js indirirken dogrular, tutmazsa siler.",
+ "surum": "9.1",
+ "lisans": "GPL v3 (gyan.dev essentials build; FFmpeg: https://ffmpeg.org/legal.html)",
+ "win32-x64": {
+  "url": "https://github.com/GyanD/codexffmpeg/releases/download/9.1/ffmpeg-9.1-essentials_build.zip",
+  "boyut": 119467219,
+  "sha256": "b9bbbb3acece000cbeec994f856649354e52c773807841e78908374b24d658fd",
+  "klasor": "ffmpeg-9.1-essentials_build"
+ }
+}

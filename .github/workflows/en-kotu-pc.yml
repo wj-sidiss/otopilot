@@ -1,0 +1,41 @@
+name: en-kotu-pc
+
+# "En kotu PC" kaniti: her push/PR'da GERCEK video-yap.js, 1 cekirdek + 2 GB bellek + ekran karti YOK bir konteynerde
+# tam boyutlu dikey bir Shorts kurar (araclar/en-kotu-pc.js). Gecmezse degisiklik "dusuk donanimda calisir" iddiasini bozuyordur.
+# Sure ve en yuksek bellek kullanimi is ozetine yazilir.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  kisitli:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: 1 çekirdek, 2 GB bellek, ekran kartı yok
+        run: |
+          docker run --rm --cpuset-cpus=0 --cpus=1 --memory=2g --memory-swap=2g \
+            -v "$PWD":/w -w /w node:22-bookworm bash -c '
+              set -e
+              apt-get update -qq
+              apt-get install -y -qq --no-install-recommends ffmpeg fonts-dejavu-core time >/dev/null
+              npm ci --no-fund --ignore-scripts >/dev/null
+              node araclar/donanim.js
+              set +e
+              /usr/bin/time -v node araclar/en-kotu-pc.js --json-cikti en-kotu-pc.json 2> zaman.txt
+              k=$?
+              grep -E "Maximum resident set size|Elapsed \(wall clock\)" zaman.txt || true
+              cp zaman.txt zaman-ozet.txt
+              exit $k'
+      - name: Özet
+        if: always()
+        run: |
+          {
+            echo "### En kötü PC: 1 çekirdek, 2 GB bellek, ekran kartı yok"
+            echo '```json'; cat en-kotu-pc.json 2>/dev/null || echo "{}"; echo '```'
+            grep -E "Maximum resident set size|Elapsed \(wall clock\)" zaman-ozet.txt 2>/dev/null | sed 's/^\s*/- /' || true
+          } >> "$GITHUB_STEP_SUMMARY"

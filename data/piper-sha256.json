@@ -1,0 +1,59 @@
+{
+ "_aciklama": "Piper (rhasspy/piper, MIT) yerel ses motoru ve ses modelleri (rhasspy/piper-voices). Surume/etikete sabit URL + SHA256; node araclar/piper-kur.js indirirken dogrular, tutmazsa dosyayi siler.",
+ "surum": "2023.11.14-2",
+ "program": {
+  "win32-x64": {
+   "url": "https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_windows_amd64.zip",
+   "boyut": 22477236,
+   "sha256": "f3c58906402b24f3a96d92145f58acba6d86c9b5db896d207f78dc80811efcea"
+  },
+  "linux-x64": {
+   "url": "https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_x86_64.tar.gz",
+   "boyut": 26460462,
+   "sha256": "a50cb45f355b7af1f6d758c1b360717877ba0a398cc8cbe6d2a7a3a26e225992"
+  },
+  "darwin-arm64": {
+   "url": "https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_macos_aarch64.tar.gz",
+   "boyut": 19146957,
+   "sha256": "6b1eb03b3735946cb35216e063e7eebcc33a6bbf5dd96ec0217959bf1cdcb0cc"
+  },
+  "darwin-x64": {
+   "url": "https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_macos_x64.tar.gz",
+   "boyut": 19146927,
+   "sha256": "ced85c0a3df13945b1e623b878a48fdc2854d5c485b4b67f62857cf551deaf8b"
+  }
+ },
+ "sesler": {
+  "tr": {
+   "ad": "tr_TR-dfki-medium",
+   "lisans": "Veri seti dfki (marytts/dfki-ot-data): CC BY-NC-SA 4.0 — TİCARİ OLMAYAN kullanım",
+   "model": {
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/tr/tr_TR/dfki/medium/tr_TR-dfki-medium.onnx",
+    "boyut": 63201294,
+    "sha256": "2844717f524ab965d3fe86e60562cbb601d3e456836efcc2196cc3a14112a8fb"
+   },
+   "ayar": {
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/tr/tr_TR/dfki/medium/tr_TR-dfki-medium.onnx.json",
+    "boyut": 4960,
+    "sha256": "13ebd7810f1b61b5027583cf3131a0a233b6ea81c38f2200ebc4ff41c3cca039"
+   },
+   "modelKarti": "https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/tr/tr_TR/dfki/medium/MODEL_CARD"
+  },
+  "en": {
+   "ad": "en_US-lessac-medium",
+   "model": {
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx",
+    "boyut": 63201294,
+    "sha256": "5efe09e69902187827af646e1a6e9d269dee769f9877d17b16b1b46eeaaf019f"
+   },
+   "ayar": {
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json",
+    "boyut": 4885,
+    "sha256": "efe19c417bed055f2d69908248c6ba650fa135bc868b0e6abb3da181dab690a0"
+   },
+   "lisans": "Veri seti lessac (Blizzard 2013): araştırma lisansı — ticari kullanım için lisansa bak",
+   "modelKarti": "https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/lessac/medium/MODEL_CARD"
+  }
+ },
+ "programLisans": "Piper: MIT (https://github.com/rhasspy/piper)"
+}
