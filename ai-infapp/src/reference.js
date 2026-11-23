@@ -91,6 +91,21 @@ const ANGLES = [
   },
 ];
 
+
+// ACI-ONCE ACILIS: hizli/damitilmis modeller (Pollinations "sana" gibi) prompt'un ILK cumlesine agirlik verir; "pasaport vesikaligi"
+// cumlesi onde olunca ne yazarsan yaz tam karsidan yuz uretiyorlar (8 aci = ayni kare). Onden harici her aci kendi acisiyla acilir.
+const LEADS = {
+  sheet: 'A character model sheet photograph with three views of the same person.',
+  quarter_left: 'A three-quarter view studio portrait photograph, the head turned 45 degrees to the left so the right cheek is closer to the camera.',
+  quarter_right: 'A three-quarter view studio portrait photograph, the head turned 45 degrees to the right so the left cheek is closer to the camera.',
+  profile_left: 'A side-profile studio portrait photograph, seen exactly from the side: only one side of the face is visible, the nose points to the left edge of the frame, one eye visible.',
+  profile_right: 'A side-profile studio portrait photograph, seen exactly from the side: only one side of the face is visible, the nose points to the right edge of the frame, one eye visible.',
+  tilt_up: 'A studio portrait photograph taken from slightly below eye level, the chin raised.',
+  tilt_down: 'A studio portrait photograph taken from slightly above eye level, the chin lowered.',
+  back_quarter: 'A studio portrait photograph taken from behind, the back of the head and the neck visible, the face turned away from the camera.',
+};
+const NO_FRONT_SHOT = 'a head-and-shoulders studio portrait, plain background';
+
 const BY_KEY = new Map(ANGLES.map((a) => [a.key, a]));
 
 /** Bir acinin promptcraft'a verilecek sahne nesnesi. */
@@ -105,9 +120,12 @@ function sceneFor(angleKey) {
     categoryLabel: `Vesikalik · ${angle.label}`,
     pose: angle.pose,
     aspect: angle.aspect || BASE_SCENE.aspect,
+    // onden disindaki acilarda "pasaport vesikaligi / yuz kadrajin cogunu doldurur" ifadesi KALKAR: profil istenirken
+    // "karsidan, yuz kadrajda" demek modele celisen sinyal verip karsidan yuz urettiriyordu.
     shot: angle.isSheet
       ? 'a character model sheet with three head-and-shoulders views of the same person side by side'
-      : BASE_SCENE.shot,
+      : (angle.key === 'front' ? BASE_SCENE.shot : NO_FRONT_SHOT),
+    lead: LEADS[angle.key] || '',
     // Her aciya kimlikten turetilmis FARKLI bir seed verilir.
     // Ayni seed + ayni kalip = model aci talimatini yok sayip birebir ayni
     // kareyi tekrar uretiyor; 8 kare yerine 1 kareyi 8 kez almis oluyorduk.

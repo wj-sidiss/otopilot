@@ -228,6 +228,14 @@ Aynı yüzü her seferinde yakalamak dört katmandır:
 > yerel ComfyUI (IPAdapter FaceID) veya karakter referansı destekleyen bir servis.
 > Panel, bağlı platform bu ikisini desteklemiyorsa seni açıkça uyarır.
 
+**Açılar ve "Yeniden üret":** vesikalıkta önden dışındaki her açı kendi açısıyla başlar
+("side-profile… seen exactly from the side"); "pasaport vesikalığı" önyargısı yalnız `front` açısındadır.
+Aynı kareyi tekrar üretmek (**Yeniden üret**) her seferinde tohumu kaydırır: aynı prompt + aynı tohum
+birebir aynı fotoğrafı verir, bu yüzden galeride aynı prompt'tan kare varsa tohum otomatik değişir
+(kimlik prompt'ta durduğu için yüz tarifi aynı kalır, poz/kompozisyon değişir).
+Referanssız sağlayıcıda (Pollinations) açılar artık **farklı** çıkar, ama aynı kişinin açılar arası
+yüz/saç tutarlılığı garanti değildir; tutarlı bir yüz için yukarıdaki referans destekleyen platformlardan birini bağla.
+
 ## Çözünürlük ve büyütme — "4K" meselesi
 
 **Hiçbir ücretsiz API doğrudan 4K üretmiyor**, ve bu cimrilik değil mimari: difüzyon modelleri ~1 MP'de

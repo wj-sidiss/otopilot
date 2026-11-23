@@ -700,7 +700,7 @@ function buildReferencePrompt(identity, scene, dialect) {
     // Sira onemli: once format (arka plani sabitler), hemen ardindan KISI
     // (kimligi yuksek agirlikta tutar), en sonda aci ve teknik detaylar.
     return [
-      'A studio passport identification photograph taken against a plain, seamless light grey background.',
+      scene.lead ? `${scene.lead} Plain, seamless light grey background.` : 'A studio passport identification photograph taken against a plain, seamless light grey background.',
       `The subject is a ${core}.`,
       // "yukarida tarif edildigi gibi" satiri, yuz geometrisi yokken bos bir
       // soze isaret ediyordu. Artik gercekten tarif edilen bir sey var.
@@ -719,7 +719,7 @@ function buildReferencePrompt(identity, scene, dialect) {
 
   // Etiket tabanli araclar (Midjourney, SDXL): format kelimeleri yine basta.
   return [
-    'passport ID photograph', 'plain seamless light grey studio backdrop',
+    scene.lead ? scene.pose : 'passport ID photograph', 'plain seamless light grey studio backdrop',
     scene.shot, scene.pose,
     core,
     split.face,
@@ -865,8 +865,9 @@ function build(character, scene = {}, dialect = 'generic') {
   const aspect = { ...aspectBase, wh: wide ? aspectBase.wideWh : aspectBase.wh };
   // Vesikalik acilarinda seed kaydirilir (bkz. reference.sceneFor): ayni seed
   // ile model aci talimatini yok sayip ayni kareyi tekrar uretiyor.
-  const seed = scene.seedOffset
-    ? (character.seed + scene.seedOffset) % 2147483647
+  // reroll: ayni prompt'un N. yeniden denemesi; tohum her denemede kayar (yoksa "yeniden uret" ayni kareyi verir).
+  const seed = (scene.seedOffset || scene.reroll)
+    ? (character.seed + (scene.seedOffset || 0) + (Number(scene.reroll) || 0) * 104729) % 2147483647
     : character.seed;
   const words = sceneWords(scene);
   const real = realismOf(scene);

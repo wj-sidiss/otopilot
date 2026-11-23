@@ -378,11 +378,20 @@ async function generateScene(character, scene, count = 1) {
   // Seed kaydirmasi SADECE referans gercekten gidiyorsa dogru: orada kimligi
   // referans tutar, seed yalnizca kompozisyonu degistirir. Referans gitmiyorsa
   // seed'i kaydirmak kimligi de degistirir.
-  const effectiveScene = (scene.seedOffset && !referenceLive)
+  let effectiveScene = (scene.seedOffset && !referenceLive)
     ? { ...scene, seedOffset: 0 }
     : scene;
 
-  const built = promptcraft.build(character, effectiveScene, dialect);
+  let built = promptcraft.build(character, effectiveScene, dialect);
+  // "YENIDEN URET" HEP AYNI FOTOGRAFI VERIYORDU: ayni prompt + ayni seed = modelden birebir ayni kare (Pollinations onbellekler).
+  // Galeride AYNI prompt'la uretilmis kare varsa bu bir yeniden denemedir: tohum her denemede kaydirilir (kimlik prompt'ta, kompozisyon tohumda).
+  try {
+    const onceki = store.getGallery().filter((g) => g && g.prompt === built.prompt).length;
+    if (onceki > 0 && !scene.reroll) {
+      effectiveScene = { ...effectiveScene, reroll: onceki };
+      built = promptcraft.build(character, effectiveScene, dialect);
+    }
+  } catch (err) { /* galeri okunamazsa ilk deneme gibi davran */ }
   const aspectMeta = promptcraft.ASPECT[built.aspect];
 
   if (spec.id === 'manual') {
