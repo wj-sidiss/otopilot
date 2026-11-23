@@ -2,7 +2,7 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
-## [Yayınlanmamış]
+## [1.27.2] — 2026-11-23 — Vesikalık sağ-sol açıları ve alttan-üstten çekim
 
 ### Düzeltmeler
 - **Ai Infapp vesikalık: sol ve sağ açılar aynı yöne bakıyordu.** Küçük model "sol/sağ" ayrımını dinlemiyor: sol çeyrek ile sağ çeyrek neredeyse aynı kare, iki profil de aynı tarafa bakıyordu. Artık **sağ çeyrek ve sağ profil, sol karelerin yatay çevrilmiş (ayna) halinden** üretilir (`src/ayna.js`, ffmpeg `hflip`): kesin zıt yön, aynı kişi ve aynı saç, ikinci model çağrısı yok (daha hızlı). Sol kare yoksa önce o üretilir; ffmpeg yoksa eski yola (model) düşer. Bedeli: yüzdeki doğal asimetri (ben, fark) aynalanır; filigran da aynalanır (filigransız sağlayıcıda sorun olmaz).
