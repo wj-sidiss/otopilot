@@ -2,6 +2,13 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [1.27.1] — 2026-11-23 — Ai Infapp açı ve yeniden üret düzeltmesi
+
+### Düzeltmeler
+- **Ai Infapp: vesikalık açıları hep aynı (karşıdan) fotoğraf çıkıyordu.** Neden: tüm açılar "pasaport vesikalığı, yüz kadrajı dolduruyor" cümlesiyle başlıyordu ve açı talimatı prompt'un ortasında kalıyordu; Pollinations'ın şu an sunduğu damıtılmış "sana" modeli ilk cümleye uyup 90° profil istenince bile tam karşıdan yüz üretiyordu. Artık önden dışındaki her açı **kendi açısıyla açılır** ("side-profile studio portrait… seen exactly from the side"), önyargılı "pasaport / yüz kadrajı doldurur" ifadesi yalnız `front` açısında kalır. Gerçek Pollinations çağrısıyla denendi: aynı model ve aynı karakter, profil istenen karede gerçek yan profil çıktı.
+- **Ai Infapp: "Yeniden üret" her seferinde birebir aynı fotoğrafı veriyordu.** Aynı prompt + aynı tohum = aynı kare (Pollinations önbellekler). Galeride aynı prompt'la üretilmiş kare varsa tohum her denemede kaydırılır (`reroll`); kimlik prompt'ta kaldığı için yüz tarifi değişmez, yalnız kompozisyon/poz değişir. Hem vesikalık açıları hem normal sahneler için geçerli.
+- Yeni test: `ai-infapp/test/referans-aci.test.js` (açı acilişleri, tohum kayması, tag lehçesi).
+
 ## [1.27.0] — 2026-11-14 — Kurulum doktoru ve Codex rehberi
 
 ### Eklenenler
