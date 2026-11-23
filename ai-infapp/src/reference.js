@@ -75,13 +75,13 @@ const ANGLES = [
     key: 'tilt_up',
     label: 'Alttan aci',
     order: 6,
-    pose: 'facing the camera with the chin slightly raised, photographed from slightly below eye level, neutral expression with the mouth closed',
+    pose: 'the head tilted back with the chin raised, photographed from below eye level looking up, neutral expression with the mouth closed',
   },
   {
     key: 'tilt_down',
     label: 'Ustten aci',
     order: 7,
-    pose: 'facing the camera with the chin slightly lowered, photographed from slightly above eye level, neutral expression with the mouth closed',
+    pose: 'the head tilted forward with the chin lowered, photographed from above eye level looking down, eyes looking up at the camera, neutral expression with the mouth closed',
   },
   {
     key: 'back_quarter',
@@ -100,8 +100,8 @@ const LEADS = {
   quarter_right: 'A three-quarter view studio portrait photograph, the head turned 45 degrees to the right so the left cheek is closer to the camera.',
   profile_left: 'A side-profile studio portrait photograph, seen exactly from the side: only one side of the face is visible, the nose points to the left edge of the frame, one eye visible.',
   profile_right: 'A side-profile studio portrait photograph, seen exactly from the side: only one side of the face is visible, the nose points to the right edge of the frame, one eye visible.',
-  tilt_up: 'A studio portrait photograph taken from slightly below eye level, the chin raised.',
-  tilt_down: 'A studio portrait photograph taken from slightly above eye level, the chin lowered.',
+  tilt_up: 'An extreme low-angle studio portrait, the camera below her face looking up: the underside of the chin and jaw and the nostrils are visible, the head tilted back.',
+  tilt_down: 'A high-angle studio portrait, the camera above the head looking down: the forehead and hairline appear large, the eyes look up at the camera, the chin looks small and far.',
   back_quarter: 'A studio portrait photograph taken from behind, the back of the head and the neck visible, the face turned away from the camera.',
 };
 const NO_FRONT_SHOT = 'a head-and-shoulders studio portrait, plain background';

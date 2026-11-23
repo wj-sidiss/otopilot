@@ -68,3 +68,20 @@ test('R-04: aci tohumu + reroll toplanir; tag lehcesinde de aci acilisi onde', (
   assert.doesNotMatch(mj.slice(0, 40), /passport/i);
   assert.match(promptcraft.build(character, reference.sceneFor('front'), 'midjourney').prompt, /^passport ID photograph/);
 });
+
+test('R-05: alttan/ustten acilar kamera yuksekligini acik soyler', () => {
+  assert.match(prompt('tilt_up').prompt.slice(0, 220), /low-angle.*below|looking up/i);
+  assert.match(prompt('tilt_down').prompt.slice(0, 220), /high-angle.*above|looking down/i);
+  assert.notEqual(prompt('tilt_up').prompt.split('.')[0], prompt('tilt_down').prompt.split('.')[0]);
+});
+
+test('R-06: sag taraf acilari sol karenin aynasindan uretilir (model sol/sag ayrimini dinlemiyor)', () => {
+  const ayna = require('../src/ayna');
+  assert.deepEqual({ ...ayna.KAYNAK }, { quarter_right: 'quarter_left', profile_right: 'profile_left' });
+  // gercek yatay cevirme (ffmpeg varsa): 2x1 gorselde sol/sag piksel yer degistirir
+  const sol = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAIAAAB7QOjdAAAAEklEQVR4nGP8z8Dwn4GBgYEBAA0SAgF4gm0YAAAAAElFTkSuQmCC', 'base64');
+  const r = ayna.cevir(sol, 'png');
+  if (r) { assert.ok(r.buffer.length > 20); assert.notDeepEqual(r.buffer, sol); assert.equal(r.ext, 'png'); }
+  assert.equal(ayna.cevir(Buffer.alloc(0), 'png'), null);
+  assert.equal(ayna.cevir(null, 'png'), null);
+});

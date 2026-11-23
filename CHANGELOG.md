@@ -2,6 +2,13 @@
 
 Biçim: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/). Sürümler [SemVer](https://semver.org/lang/tr/).
 
+## [Yayınlanmamış]
+
+### Düzeltmeler
+- **Ai Infapp vesikalık: sol ve sağ açılar aynı yöne bakıyordu.** Küçük model "sol/sağ" ayrımını dinlemiyor: sol çeyrek ile sağ çeyrek neredeyse aynı kare, iki profil de aynı tarafa bakıyordu. Artık **sağ çeyrek ve sağ profil, sol karelerin yatay çevrilmiş (ayna) halinden** üretilir (`src/ayna.js`, ffmpeg `hflip`): kesin zıt yön, aynı kişi ve aynı saç, ikinci model çağrısı yok (daha hızlı). Sol kare yoksa önce o üretilir; ffmpeg yoksa eski yola (model) düşer. Bedeli: yüzdeki doğal asimetri (ben, fark) aynalanır; filigran da aynalanır (filigransız sağlayıcıda sorun olmaz).
+- **Alttan ve üstten açılar önden gibi çıkıyordu.** Açı cümleleri kamera yüksekliğini açıkça söyler: "extreme low-angle… camera below her face looking up, nostrils visible" / "high-angle… camera above looking down, forehead large". Gerçek çağrıyla denendi; küçük "sana" modelinin sınırı nedeniyle eğim hafif kalır (aşağıdaki sınıra bak).
+- Testler: `referans-aci.test.js` R-05 (kamera yüksekliği ifadeleri), R-06 (ayna eşlemesi + gerçek ffmpeg çevirme).
+
 ## [1.27.1] — 2026-11-23 — Ai Infapp açı ve yeniden üret düzeltmesi
 
 ### Düzeltmeler

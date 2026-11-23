@@ -233,6 +233,7 @@ Aynı yüzü her seferinde yakalamak dört katmandır:
 Aynı kareyi tekrar üretmek (**Yeniden üret**) her seferinde tohumu kaydırır: aynı prompt + aynı tohum
 birebir aynı fotoğrafı verir, bu yüzden galeride aynı prompt'tan kare varsa tohum otomatik değişir
 (kimlik prompt'ta durduğu için yüz tarifi aynı kalır, poz/kompozisyon değişir).
+Sağ çeyrek ve sağ profil, sol karelerin **aynadaki görüntüsüdür** (model sol/sağ ayrımını dinlemiyor); alttan/üstten açılar kamera yüksekliğini açıkça söyler ama küçük modelde eğim hafif kalır.
 Referanssız sağlayıcıda (Pollinations) açılar artık **farklı** çıkar, ama aynı kişinin açılar arası
 yüz/saç tutarlılığı garanti değildir; tutarlı bir yüz için yukarıdaki referans destekleyen platformlardan birini bağla.
 

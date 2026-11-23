@@ -23,6 +23,7 @@ const traits = require('./src/traits');
 const promptcraft = require('./src/promptcraft');
 const scenes = require('./src/scenes');
 const reference = require('./src/reference');
+const ayna = require('./src/ayna');
 const brief = require('./src/brief');
 const welcome = require('./src/welcome');
 const caption = require('./src/caption');
@@ -1025,7 +1026,31 @@ const routes = {
     const scene = reference.sceneFor(body.angle);
     if (!scene) throw badRequest('Bilinmeyen aci.');
 
-    const out = await generateScene(character, scene, 1);
+    // SAG TARAF ACILARI AYNADAN: model "sol/sag" ayrimini dinlemiyor (iki ceyrek ve iki profil ayni yone bakiyordu). Sag ceyrek ve sag profil,
+    // sol karelerin yatay cevrilmis halidir: kesin zit yon, ayni kisi/ayni sac. Kaynak kare yoksa once o uretilir; ffmpeg yoksa normal uretime duser.
+    let out = null;
+    const kaynakAci = ayna.KAYNAK[body.angle];
+    if (kaynakAci) {
+      let kaynak = (character.referenceSet || {})[kaynakAci];
+      if (!(kaynak && kaynak.filename)) {
+        await routes['POST /api/referans/uret']({ angle: kaynakAci });
+        kaynak = (store.getCharacter().referenceSet || {})[kaynakAci];
+      }
+      const buf = kaynak && kaynak.filename ? store.readImageBuffer(kaynak.filename) : null;
+      const cevrik = buf ? ayna.cevir(buf, path.extname(kaynak.filename).slice(1)) : null;
+      if (cevrik) {
+        const t0 = Date.now(), dosya = store.saveImageBuffer(cevrik.buffer, cevrik.ext);
+        const item = {
+          id: dosya.id, filename: dosya.filename, url: dosya.url, createdAt: new Date().toISOString(),
+          provider: 'ayna', providerLabel: 'Sol karenin yatay cevrilmis hali', dialect: 'flux',
+          prompt: kaynak.prompt || '', negative: '', seed: null, scene, category: scene.categoryLabel || scene.category || null, upscaled: null, isGolden: false,
+        };
+        store.addGalleryItem(item);
+        out = { images: [item], built: { prompt: item.prompt }, tookMs: Date.now() - t0, export: null,
+          reference: { state: 'ayna', used: false, file: null, reason: 'Sol karenin aynasi (model cagrisi yok).' } };
+      }
+    }
+    if (!out) out = await generateScene(character, scene, 1);
     const image = out.images[0];
     if (!image) throw new Error('Vesikalik uretilemedi.');
 
